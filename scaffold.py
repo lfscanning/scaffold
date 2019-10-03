@@ -9,9 +9,9 @@ import sys
 
 from tabulate import tabulate
 
-from config import loadConfig
-from configjson import ConfigJSONEncoder
+from config import loadConfig, saveConfig
 import datefuncs
+from runners import doNextThing
 
 def printUsage():
     print(f"")
@@ -20,6 +20,7 @@ def printUsage():
     print(f"Commands:")
     print(f"  status:  Print status for all subprojects")
     print(f"  run:     Run next steps for all subprojects")
+    print(f"  cleared: Flag cleared in Fossology for [sub]project")
     print(f"")
 
 def status(projects):
@@ -57,21 +58,24 @@ if __name__ == "__main__":
     cfg = loadConfig(cfg_file)
     print(f"config: {cfg}")
 
-    status(cfg._projects)
-
-    js = json.dumps(cfg, cls=ConfigJSONEncoder, indent=4)
-    print(js)
-
     if len(sys.argv) == 3:
         month = sys.argv[1]
         command = sys.argv[2]
 
         if command == "status":
             ran_command = True
-
+            status(cfg._projects)
 
         elif command == "run":
             ran_command = True
+            # FIXME determine whether all, one project or one subproject
+
+            # run commands
+            doNextThing(cfg)
+
+            # save modified config file
+            saveConfig(SCAFFOLD_HOME, cfg)
+            print(f"Saved new config.json as version {cfg._version}")
 
     if ran_command == False:
         printUsage()

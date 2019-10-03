@@ -2,8 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
+import os
+from shutil import copyfile
 
 from datatypes import Config, Project, ProjectRepoType, Status, Subproject
+
+def getConfigFilename(scaffoldHome, month):
+    return os.path.join(scaffoldHome, month, "config.json")
 
 def loadConfig(configFilename):
     cfg = Config()
@@ -120,6 +125,8 @@ def loadConfig(configFilename):
                                 sp._repos = github_dict.get('repos', [])
                                 # and if no repos-ignore specified, that's fine too
                                 sp._github_repos_ignore = github_dict.get('repos-ignore', [])
+                                # and if no repos-pending specified, that's fine too
+                                sp._github_repos_pending = github_dict.get('repos-pending', [])
 
                             # and add subprojects to the project's dictionary
                             prj._subprojects[sp_name] = sp
@@ -137,3 +144,84 @@ def loadConfig(configFilename):
     except json.decoder.JSONDecodeError as e:
         print(f'Error loading or parsing {configFilename}: {str(e)}')
         return {}
+
+class ConfigJSONEncoder(json.JSONEncoder):
+    def default(self, o): # pylint: disable=method-hidden
+        if isinstance(o, Config):
+            return {
+                "config": {
+                    "storepath": o._storepath,
+                    "month": o._month,
+                    "version": o._version,
+                },
+                "projects": o._projects,
+            }
+
+        elif isinstance(o, Project):
+            if o._repotype == ProjectRepoType.GITHUB:
+                return {
+                    "type": "github",
+                    "subprojects": o._subprojects,
+                }
+            elif o._repotype == ProjectRepoType.GERRIT:
+                return {
+                    "type": "gerrit",
+                    "status": o._status.name,
+                    "gerrit": {
+                        "apiurl": o._gerrit_apiurl,
+                        "repos-ignore": o._gerrit_repos_ignore,
+                    },
+                    "subprojects": o._subprojects,
+                }
+            else:
+                return {
+                    "type": "unknown"
+                }
+
+        elif isinstance(o, Subproject):
+            if o._repotype == ProjectRepoType.GITHUB:
+                js = {
+                    "status": o._status.name,
+                    "github": {
+                        "org": o._github_org,
+                        "ziporg": o._github_ziporg,
+                        "repos": o._repos,
+                        "repos-ignore": o._github_repos_ignore,
+                    }
+                }
+                if len(o._github_repos_pending) > 0:
+                    js["github"]["repos-pending"] = o._github_repos_pending
+                return js
+            elif o._repotype == ProjectRepoType.GERRIT:
+                return {
+                    "status": o._status.name,
+                    "gerrit": {
+                        "repos": o._repos,
+                    }
+                }
+            else:
+                return {
+                    "type": "unknown"
+                }
+
+        else:
+            return {'__{}__'.format(o.__class__.__name__): o.__dict__}
+
+def saveConfig(scaffoldHome, cfg):
+    configFilename = getConfigFilename(scaffoldHome, cfg._month)
+
+    # first, if existing file is present, copy to backup
+    if os.path.isfile(configFilename):
+        backupDir = os.path.join(scaffoldHome, cfg._month, "backup")
+        backupFilename = os.path.join(backupDir, f"config-{cfg._version}.json")
+
+        if not os.path.exists(backupDir):
+            os.makedirs(backupDir)
+        copyfile(configFilename, backupFilename)
+
+    # now, increment the config version
+    cfg._version += 1
+
+    # and save it out as json
+    with open(configFilename, "w") as f:
+        json.dump(cfg, f, indent=4, cls=ConfigJSONEncoder)

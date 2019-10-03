@@ -65,6 +65,7 @@ class Subproject:
         self._github_org = ""
         self._github_ziporg = ""
         self._github_repos_ignore = []
+        self._github_repos_pending = []
 
     def __repr__(self):
         is_ok = "OK"
@@ -72,7 +73,7 @@ class Subproject:
             is_ok = "NOT OK"
 
         if self._repotype == ProjectRepoType.GITHUB:
-            return f"{self._name} ({is_ok}): {self._repotype.name}, {self._github_org}, {self._github_ziporg}, {self._repos}, IGNORE: {self._github_repos_ignore}"
+            return f"{self._name} ({is_ok}): {self._repotype.name}, {self._github_org}, {self._github_ziporg}, {self._repos}, IGNORE: {self._github_repos_ignore}, PENDING: {self._github_repos_pending}"
         else:
             return f"{self._name} ({is_ok}): {self._repotype.name}, {self._repos}"
 
