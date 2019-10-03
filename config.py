@@ -17,6 +17,14 @@ def loadConfig(configFilename):
             if config_dict == {}:
                 print(f'No config section found in config file')
                 return cfg
+            cfg._month = config_dict.get('month', "")
+            if cfg._month == "":
+                print(f'No valid month found in config section')
+                return cfg
+            cfg._version = config_dict.get('version', -1)
+            if cfg._version == -1:
+                print(f'No valid version found in config section')
+                return cfg
             cfg._storepath = config_dict.get('storepath', "")
             if cfg._storepath == "":
                 print(f'No valid storepath found in config section')

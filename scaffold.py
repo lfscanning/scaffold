@@ -1,11 +1,16 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
 
+import json
 from pathlib import Path
+from operator import itemgetter
 import os
 import sys
 
+from tabulate import tabulate
+
 from config import loadConfig
+from configjson import ConfigJSONEncoder
 import datefuncs
 
 def printUsage():
@@ -16,6 +21,18 @@ def printUsage():
     print(f"  status:  Print status for all subprojects")
     print(f"  run:     Run next steps for all subprojects")
     print(f"")
+
+def status(projects):
+    headers = ["Project", "Subproject", "Status"]
+    table = []
+
+    for prj in projects.values():
+        for sp in prj._subprojects.values():
+            row = [prj._name, sp._name, sp._status.name]
+            table.append(row)
+
+    table = sorted(table, key=itemgetter(0, 1))
+    print(tabulate(table, headers=headers))
 
 if __name__ == "__main__":
     # check and parse year-month
@@ -39,8 +56,11 @@ if __name__ == "__main__":
     cfg_file = os.path.join(MONTH_DIR, "config.json")
     cfg = loadConfig(cfg_file)
     print(f"config: {cfg}")
-    # for name, prj in projects.items():
-    #     print(f"{name}: {prj}")
+
+    status(cfg._projects)
+
+    js = json.dumps(cfg, cls=ConfigJSONEncoder, indent=4)
+    print(js)
 
     if len(sys.argv) == 3:
         month = sys.argv[1]
@@ -48,6 +68,7 @@ if __name__ == "__main__":
 
         if command == "status":
             ran_command = True
+
 
         elif command == "run":
             ran_command = True

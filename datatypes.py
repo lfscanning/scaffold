@@ -84,6 +84,8 @@ class Config:
         self._ok = False
         self._storepath = ""
         self._projects = {}
+        self._month = ""
+        self._version = 0
     
     def __repr__(self):
         is_ok = "OK"
