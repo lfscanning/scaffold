@@ -22,6 +22,6 @@ def parseOrgJSONData(rj):
     repos.sort()
     return repos
 
-def getRepoList(org):
+def getGithubRepoList(org):
     rj = getOrgJSONData(org)
     return parseOrgJSONData(rj)

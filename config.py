@@ -185,18 +185,18 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "github": {
                         "org": o._github_org,
                         "ziporg": o._github_ziporg,
-                        "repos": o._repos,
-                        "repos-ignore": o._github_repos_ignore,
+                        "repos": sorted(o._repos),
+                        "repos-ignore": sorted(o._github_repos_ignore),
                     }
                 }
                 if len(o._github_repos_pending) > 0:
-                    js["github"]["repos-pending"] = o._github_repos_pending
+                    js["github"]["repos-pending"] = sorted(o._github_repos_pending)
                 return js
             elif o._repotype == ProjectRepoType.GERRIT:
                 return {
                     "status": o._status.name,
                     "gerrit": {
-                        "repos": o._repos,
+                        "repos": sorted(o._repos),
                     }
                 }
             else:

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from datatypes import ProjectRepoType, Status
-from github import getRepoList
+from github import getGithubRepoList
 
 def doNextThing(cfg):
     for prj in cfg._projects.values():
@@ -36,7 +36,7 @@ def doNextThingForProject(cfg, prj):
             return False
 
         else:
-            print(f"Invalid status for {prj._name}: status")
+            print(f"Invalid status for {prj._name}: {prj._status}")
             return False
 
 # Tries to do the next thing for this subproject. Returns True if
@@ -50,19 +50,19 @@ def doNextThingForSubproject(cfg, prj, sp):
         return doRepoListingForSubproject(cfg, prj, sp)
 
     else:
-        print(f"Invalid status for {prj._name}: status")
+        print(f"Invalid status for {sp._name}: {sp._status}")
         return False
 
 
 # Runner for START in GitHub
 def doRepoListingForSubproject(cfg, prj, sp):
-    allrepos = getRepoList(sp._github_org)
+    allrepos = getGithubRepoList(sp._github_org)
 
     # first, figure out what repos need to be added
     for r in allrepos:
         if r not in sp._repos and r not in sp._github_repos_ignore and r not in sp._github_repos_pending:
             sp._github_repos_pending.append(r)
-            print(f"{prj}/{sp}: new pending repo: {r}")
+            print(f"{prj._name}/{sp._name}: new pending repo: {r}")
 
     # then, figure out what repos need to be removed
     repos_to_remove = []
@@ -71,7 +71,7 @@ def doRepoListingForSubproject(cfg, prj, sp):
             repos_to_remove.append(r)
     for r in repos_to_remove:
         sp._repos.remove(r)
-        print(f"{prj}/{sp}: removed {r} from repos")
+        print(f"{prj._name}/{sp._name}: removed {r} from repos")
 
     repos_ignore_to_remove = []
     for r in sp._github_repos_ignore:
@@ -79,11 +79,11 @@ def doRepoListingForSubproject(cfg, prj, sp):
             repos_ignore_to_remove.append(r)
     for r in repos_ignore_to_remove:
         sp._github_repos_ignore.remove(r)
-        print(f"{prj}/{sp}: removed {r} from repos-ignore")
+        print(f"{prj._name}/{sp._name}: removed {r} from repos-ignore")
 
     # finally, throw a "fail" if any new repos are pending
     if len(sp._github_repos_pending) > 0:
-        print(f"{prj}/{sp}: stopped, need to assign repos-pending")
+        print(f"{prj._name}/{sp._name}: stopped, need to assign repos-pending")
         return False
     else:
         # success - advance state
