@@ -1,27 +1,36 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
 
+from datetime import datetime
+import os
+import shutil
+import zipfile
+
+import git
+
+from config import saveConfig
 from datatypes import ProjectRepoType, Status
 from github import getGithubRepoList
 
-def doNextThing(cfg):
+def doNextThing(scaffold_home, cfg):
     for prj in cfg._projects.values():
         retval = True
         while retval:
-            retval = doNextThingForProject(cfg, prj)
+            retval = doNextThingForProject(scaffold_home, cfg, prj)
 
 # Tries to do the next thing for this project. Returns True if
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
-def doNextThingForProject(cfg, prj):
+def doNextThingForProject(scaffold_home, cfg, prj):
     # if GitHub project, go to subprojects
     if prj._repotype == ProjectRepoType.GITHUB:
         did_something = False
         for sp in prj._subprojects.values():
             retval = True
             while retval:
-                retval = doNextThingForSubproject(cfg, prj, sp)
+                retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                saveConfig(scaffold_home, cfg)
                 if retval:
                     did_something = True
         return did_something
@@ -43,11 +52,14 @@ def doNextThingForProject(cfg, prj):
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
-def doNextThingForSubproject(cfg, prj, sp):
+def doNextThingForSubproject(scaffold_home, cfg, prj, sp):
     status = sp._status
     if status == Status.START:
         # get repo listing and see if we're good
         return doRepoListingForSubproject(cfg, prj, sp)
+    elif status == Status.GOTLISTING:
+        # get code and see if we're good
+        return doGetRepoCodeForSubproject(cfg, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
@@ -89,3 +101,45 @@ def doRepoListingForSubproject(cfg, prj, sp):
         # success - advance state
         sp._status = Status.GOTLISTING
         return True
+
+# Runner for GOTLISTING in GitHub
+def doGetRepoCodeForSubproject(cfg, prj, sp):
+    # first, get path and make directory (if doesn't exist) for collecting code
+    sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
+    ziporg_path = os.path.join(sp_path, sp._github_ziporg)
+    # clear contents if it's already there
+    if os.path.exists(ziporg_path):
+        shutil.rmtree(ziporg_path)
+    # and create it if it isn't
+    if not os.path.exists(ziporg_path):
+        os.makedirs(ziporg_path)
+
+    # clone each repo and remove its .git directory
+    for repo in sp._repos:
+        git_url = f"git@github.com:{sp._github_org}/{repo}.git"
+        print(f"{prj._name}/{sp._name}: cloning {git_url}")
+        git.Git(ziporg_path).clone(git_url)
+        dotgit_path = os.path.join(ziporg_path, repo, ".git")
+        shutil.rmtree(dotgit_path)
+
+    # now zip it all together
+    today = datetime.today().strftime("%Y-%m-%d")
+    zf_path = os.path.join(sp_path, f"{ziporg_path}-{today}.zip")
+    print(f"{prj._name}/{sp._name}: zipping into {zf_path}")
+    if os.path.exists(zf_path):
+        os.remove(zf_path)
+    zf = zipfile.ZipFile(zf_path, 'w', compression=zipfile.ZIP_DEFLATED)
+    for root, _, files in os.walk(ziporg_path):
+        for f in files:
+            fpath = os.path.join(root, f)
+            rpath = os.path.relpath(fpath, ziporg_path)
+            if not os.path.islink(fpath):
+                zf.write(fpath, arcname=rpath)
+    zf.close()
+
+    # and finally, remove the original unzipped directory
+    shutil.rmtree(ziporg_path)
+
+    # success - advance state
+    sp._status = Status.GOTCODE
+    return True

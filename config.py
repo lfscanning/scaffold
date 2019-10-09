@@ -207,10 +207,10 @@ class ConfigJSONEncoder(json.JSONEncoder):
         else:
             return {'__{}__'.format(o.__class__.__name__): o.__dict__}
 
-def saveConfig(scaffoldHome, cfg):
+def saveBackupConfig(scaffoldHome, cfg):
     configFilename = getConfigFilename(scaffoldHome, cfg._month)
 
-    # first, if existing file is present, copy to backup
+    # if existing file is present, copy to backup
     if os.path.isfile(configFilename):
         backupDir = os.path.join(scaffoldHome, cfg._month, "backup")
         backupFilename = os.path.join(backupDir, f"config-{cfg._version}.json")
@@ -222,6 +222,14 @@ def saveConfig(scaffoldHome, cfg):
     # now, increment the config version
     cfg._version += 1
 
-    # and save it out as json
+    # don't save it back to disk yet -- we'll do that later (repeatedly)
+
+def saveConfig(scaffoldHome, cfg):
+    configFilename = getConfigFilename(scaffoldHome, cfg._month)
+
+    # don't increment the config version -- we should have done that
+    # by saving a backup
+
+    # save the config file out as json
     with open(configFilename, "w") as f:
         json.dump(cfg, f, indent=4, cls=ConfigJSONEncoder)

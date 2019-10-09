@@ -9,7 +9,7 @@ import sys
 
 from tabulate import tabulate
 
-from config import loadConfig, saveConfig
+from config import loadConfig, saveBackupConfig, saveConfig
 import datefuncs
 from runners import doNextThing
 
@@ -67,14 +67,15 @@ if __name__ == "__main__":
 
         elif command == "run":
             ran_command = True
+            saveBackupConfig(SCAFFOLD_HOME, cfg)
+
             # FIXME determine whether all, one project or one subproject
 
             # run commands
-            doNextThing(cfg)
+            doNextThing(SCAFFOLD_HOME, cfg)
 
             # save modified config file
             saveConfig(SCAFFOLD_HOME, cfg)
-            print(f"Saved new config.json as version {cfg._version}")
 
     if ran_command == False:
         printUsage()
