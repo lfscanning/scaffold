@@ -35,6 +35,27 @@ def doNextThingForProject(scaffold_home, cfg, prj):
                     did_something = True
         return did_something
 
+    # if GITHUB_SHARED project, check state to decide when to go to subprojects
+    elif prj._repotype == ProjectRepoType.GITHUB_SHARED:
+        did_something = False
+        retval_prj = True
+        while retval_prj:
+            if prj._status == Status.START:
+                # get repo listing at project level and see if we're good
+                retval_prj = doRepoListingForProject(cfg, prj)
+                saveConfig(scaffold_home, cfg)
+                if retval_prj:
+                    did_something = True
+            else:
+                for sp in prj._subprojects.values():
+                    retval = True
+                    while retval:
+                        retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                        saveConfig(scaffold_home, cfg)
+                        if retval:
+                            did_something = True
+        return did_something
+
     else:
         # or if Gerrit project, do everything here
         status = prj._status
@@ -102,11 +123,66 @@ def doRepoListingForSubproject(cfg, prj, sp):
         sp._status = Status.GOTLISTING
         return True
 
-# Runner for GOTLISTING in GitHub
+# Runner for START in GITHUB-SHARED
+def doRepoListingForProject(cfg, prj):
+    if prj._repotype == ProjectRepoType.GITHUB_SHARED:
+        # collect all configured repos, and what subprojects they're in
+        allcfgrepos = {}
+        for sp_name, sp in prj._subprojects.items():
+            for r in sp._repos:
+                allcfgrepos[r] = sp_name
+
+        # collect all real repos currently on GitHub
+        allrealrepos = getGithubRepoList(prj._github_shared_org)
+
+        # first, figure out what repos need to be added
+        for r in allrealrepos:
+            config_sp = allcfgrepos.get(r, "")
+            if config_sp == "" and r not in prj._github_shared_repos_ignore and r not in prj._github_shared_repos_pending:
+                prj._github_shared_repos_pending.append(r)
+                print(f"{prj._name}: new pending repo: {r}")
+
+        # then, figure out what repos need to be removed
+        for sp_name, sp in prj._subprojects.items():
+            repos_to_remove = []
+            for r in sp._repos:
+                if r not in allrealrepos:
+                    repos_to_remove.append(r)
+            for r in repos_to_remove:
+                sp._repos.remove(r)
+                print(f"{prj._name}/{sp._name}: removed {r} from repos")
+
+        repos_ignore_to_remove = []
+        for r in prj._github_shared_repos_ignore:
+            if r not in allrealrepos:
+                repos_ignore_to_remove.append(r)
+        for r in repos_ignore_to_remove:
+            prj._github_shared_repos_ignore.remove(r)
+            print(f"{prj._name}: removed {r} from repos-ignore")
+
+        # finally, throw a "fail" if any new repos are pending
+        if len(prj._github_shared_repos_pending) > 0:
+            print(f"{prj._name}: stopped, need to assign repos-pending")
+            return False
+        else:
+            # success - advance state
+            prj._status = Status.GOTLISTING
+            for _, sp in prj._subprojects.items():
+                sp._status = Status.GOTLISTING
+            return True
+
+# Runner for GOTLISTING in GITHUB and GITHUB_SHARED
 def doGetRepoCodeForSubproject(cfg, prj, sp):
     # first, get path and make directory (if doesn't exist) for collecting code
     sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
-    ziporg_path = os.path.join(sp_path, sp._github_ziporg)
+    org = ""
+    ziporg_path = ""
+    if sp._repotype == ProjectRepoType.GITHUB_SHARED:
+        org = prj._github_shared_org
+        ziporg_path = os.path.join(sp_path, sp._name)
+    elif sp._repotype == ProjectRepoType.GITHUB:
+        org = sp._github_org
+        ziporg_path = os.path.join(sp_path, sp._github_ziporg)
     # clear contents if it's already there
     if os.path.exists(ziporg_path):
         shutil.rmtree(ziporg_path)
@@ -116,7 +192,7 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
 
     # clone each repo and remove its .git directory
     for repo in sp._repos:
-        git_url = f"git@github.com:{sp._github_org}/{repo}.git"
+        git_url = f"git@github.com:{org}/{repo}.git"
         print(f"{prj._name}/{sp._name}: cloning {git_url}")
         git.Git(ziporg_path).clone(git_url)
         dotgit_path = os.path.join(ziporg_path, repo, ".git")

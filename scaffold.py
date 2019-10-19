@@ -57,9 +57,6 @@ if __name__ == "__main__":
     cfg_file = os.path.join(MONTH_DIR, "config.json")
     cfg = loadConfig(cfg_file)
 
-    print(cfg)
-    sys.exit(1)
-
     if len(sys.argv) == 3:
         month = sys.argv[1]
         command = sys.argv[2]
