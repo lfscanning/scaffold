@@ -89,6 +89,49 @@ def loadConfig(configFilename):
                             # and add subprojects to the project's dictionary
                             prj._subprojects[sp_name] = sp
 
+                elif pt == "github-shared":
+                    prj._repotype = ProjectRepoType.GITHUB_SHARED
+                    github_shared_dict = prj_dict.get('github-shared', {})
+                    if github_shared_dict == {}:
+                        print(f'Project {prj_name} has no github-shared data')
+                        prj._ok = False
+                    else:
+                        prj._github_shared_org = github_shared_dict.get('org', '')
+                        if prj._github_shared_org == '':
+                            print(f'Project {prj_name} has no org data')
+                            prj._ok = False
+                        # if repos-ignore is absent, that's fine
+                        prj._github_shared_repos_ignore = github_shared_dict.get('repos-ignore', [])
+                        # if repos-pending is absent, that's fine
+                        prj._github_shared_repos_pending = github_shared_dict.get('repos-pending', [])
+                    # now load subprojects, if any are listed; it's okay if none are
+                    sps = prj_dict.get('subprojects', {})
+                    if sps != {}:
+                        for sp_name, sp_dict in sps.items():
+                            sp = Subproject()
+                            sp._name = sp_name
+                            sp._repotype = ProjectRepoType.GITHUB_SHARED
+                            sp._ok = True
+
+                            # get subproject status
+                            status_str = sp_dict.get('status', '')
+                            if status_str == '':
+                                sp._status = Status.UNKNOWN
+                            else:
+                                sp._status = Status[status_str]
+
+                            # get subproject github-shared details, including repos
+                            gs_sp_shared_dict = sp_dict.get('github-shared', {})
+                            if gs_sp_shared_dict == {}:
+                                print(f'Subproject {sp_name} in project {prj_name} has no github-shared data')
+                                prj._ok = False
+                            else:
+                                # if no repos specified, that's fine, we'll find them later
+                                sp._repos = gs_sp_shared_dict.get('repos', [])
+
+                            # and add subprojects to the project's dictionary
+                            prj._subprojects[sp_name] = sp
+
                 elif pt == "github":
                     prj._repotype = ProjectRepoType.GITHUB
                     sps = prj_dict.get('subprojects', {})
@@ -173,6 +216,17 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     },
                     "subprojects": o._subprojects,
                 }
+            elif o._repotype == ProjectRepoType.GITHUB_SHARED:
+                return {
+                    "type": "github-shared",
+                    "status": o._status.name,
+                    "github-shared": {
+                        "org": o._github_shared_org,
+                        "repos-ignore": o._github_shared_repos_ignore,
+                        "repos-pending": o._github_shared_repos_pending,
+                    },
+                    "subprojects": o._subprojects,
+                }
             else:
                 return {
                     "type": "unknown"
@@ -192,6 +246,13 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 if len(o._github_repos_pending) > 0:
                     js["github"]["repos-pending"] = sorted(o._github_repos_pending)
                 return js
+            elif o._repotype == ProjectRepoType.GITHUB_SHARED:
+                return {
+                    "status": o._status.name,
+                    "gerrit": {
+                        "repos": sorted(o._repos),
+                    }
+                }
             elif o._repotype == ProjectRepoType.GERRIT:
                 return {
                     "status": o._status.name,

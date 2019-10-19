@@ -7,6 +7,7 @@ class ProjectRepoType(Enum):
     UNKNOWN = 0
     GERRIT = 1
     GITHUB = 2
+    GITHUB_SHARED = 3
 
 class Status(Enum):
     UNKNOWN = 0
@@ -38,6 +39,11 @@ class Project:
         # only if Gerrit
         self._gerrit_apiurl = ""
         self._gerrit_repos_ignore = []
+
+        # only if GITHUB_SHARED
+        self._github_shared_org = ""
+        self._github_shared_repos_ignore = []
+        self._github_shared_repos_pending = []
     
     def __repr__(self):
         is_ok = "OK"
@@ -46,6 +52,8 @@ class Project:
 
         if self._repotype == ProjectRepoType.GERRIT:
             return f"{self._name} ({is_ok}): {self._repotype.name}, {self._gerrit_apiurl}, IGNORE: {self._gerrit_repos_ignore}, SUBPROJECTS: {self._subprojects}"
+        elif self._repotype == ProjectRepoType.GITHUB_SHARED:
+            return f"{self._name} ({is_ok}): {self._repotype.name}, {self._github_shared_org}, IGNORE: {self._github_shared_repos_ignore}, PENDING: {self._github_shared_repos_pending}, SUBPROJECTS: {self._subprojects}"
         else:
             return f"{self._name} ({is_ok}): {self._repotype.name}, SUBPROJECTS: {self._subprojects}"
 
