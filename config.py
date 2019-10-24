@@ -249,7 +249,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
             elif o._repotype == ProjectRepoType.GITHUB_SHARED:
                 return {
                     "status": o._status.name,
-                    "gerrit": {
+                    "github-shared": {
                         "repos": sorted(o._repos),
                     }
                 }

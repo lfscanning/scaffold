@@ -12,27 +12,29 @@ from config import saveConfig
 from datatypes import ProjectRepoType, Status
 from github import getGithubRepoList
 
-def doNextThing(scaffold_home, cfg):
+def doNextThing(scaffold_home, cfg, prj_only, sp_only):
     for prj in cfg._projects.values():
-        retval = True
-        while retval:
-            retval = doNextThingForProject(scaffold_home, cfg, prj)
+        if prj_only == "" or prj_only == prj._name:
+            retval = True
+            while retval:
+                retval = doNextThingForProject(scaffold_home, cfg, prj, sp_only)
 
 # Tries to do the next thing for this project. Returns True if
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
-def doNextThingForProject(scaffold_home, cfg, prj):
+def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
     # if GitHub project, go to subprojects
     if prj._repotype == ProjectRepoType.GITHUB:
         did_something = False
         for sp in prj._subprojects.values():
-            retval = True
-            while retval:
-                retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
-                saveConfig(scaffold_home, cfg)
-                if retval:
-                    did_something = True
+            if sp_only == "" or sp_only == sp._name:
+                retval = True
+                while retval:
+                    retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                    saveConfig(scaffold_home, cfg)
+                    if retval:
+                        did_something = True
         return did_something
 
     # if GITHUB_SHARED project, check state to decide when to go to subprojects
@@ -47,13 +49,18 @@ def doNextThingForProject(scaffold_home, cfg, prj):
                 if retval_prj:
                     did_something = True
             else:
+                retval_sp_all = False
                 for sp in prj._subprojects.values():
-                    retval = True
-                    while retval:
-                        retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
-                        saveConfig(scaffold_home, cfg)
-                        if retval:
-                            did_something = True
+                    if sp_only == "" or sp_only == sp._name:
+                        retval = True
+                        while retval:
+                            retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                            saveConfig(scaffold_home, cfg)
+                            if retval:
+                                did_something = True
+                                retval_sp_all = True
+                if not retval_sp_all:
+                    break
         return did_something
 
     else:

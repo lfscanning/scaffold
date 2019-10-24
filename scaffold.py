@@ -15,7 +15,7 @@ from runners import doNextThing
 
 def printUsage():
     print(f"")
-    print(f"Usage: {sys.argv[0]} <month> <command>")
+    print(f"Usage: {sys.argv[0]} <month> <command> [<project>] [<subproject>]")
     print(f"Month: in format YYYY-MM")
     print(f"Commands:")
     print(f"  status:  Print status for all subprojects")
@@ -23,14 +23,16 @@ def printUsage():
     print(f"  cleared: Flag cleared in Fossology for [sub]project")
     print(f"")
 
-def status(projects):
+def status(projects, prj_only, sp_only):
     headers = ["Project", "Subproject", "Status"]
     table = []
 
     for prj in projects.values():
-        for sp in prj._subprojects.values():
-            row = [prj._name, sp._name, sp._status.name]
-            table.append(row)
+        if prj_only == "" or prj_only == prj._name:
+            for sp in prj._subprojects.values():
+                if sp_only == "" or sp_only == sp._name:
+                    row = [prj._name, sp._name, sp._status.name]
+                    table.append(row)
 
     table = sorted(table, key=itemgetter(0, 1))
     print(tabulate(table, headers=headers))
@@ -57,22 +59,28 @@ if __name__ == "__main__":
     cfg_file = os.path.join(MONTH_DIR, "config.json")
     cfg = loadConfig(cfg_file)
 
-    if len(sys.argv) == 3:
+    # we'll check if added optional args limit to one prj / sp
+    prj_only = ""
+    sp_only = ""
+
+    if len(sys.argv) >= 3:
         month = sys.argv[1]
         command = sys.argv[2]
+        if len(sys.argv) >= 4:
+            prj_only = sys.argv[3]
+            if len(sys.argv) >= 5:
+                sp_only = sys.argv[4]
 
         if command == "status":
             ran_command = True
-            status(cfg._projects)
+            status(cfg._projects, prj_only, sp_only)
 
         elif command == "run":
             ran_command = True
             saveBackupConfig(SCAFFOLD_HOME, cfg)
 
-            # FIXME determine whether all, one project or one subproject
-
             # run commands
-            doNextThing(SCAFFOLD_HOME, cfg)
+            doNextThing(SCAFFOLD_HOME, cfg, prj_only, sp_only)
 
             # save modified config file
             saveConfig(SCAFFOLD_HOME, cfg)
