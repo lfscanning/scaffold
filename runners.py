@@ -395,6 +395,7 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
 # Runner for GOTLISTING in GERRIT
 def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
     # first, get path and make directory (if doesn't exist) for collecting code
+    today = datetime.today().strftime("%Y-%m-%d")
     sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
     ziporg_path = os.path.join(sp_path, sp._name)
     # clear contents if it's already there
@@ -417,8 +418,20 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
         dotgit_path = os.path.join(dstFolder, ".git")
         shutil.rmtree(dotgit_path)
 
+    # before zipping it all together, check and see whether it actually has any files
+    for _, _, files in os.walk(dstFolder):
+        if not files:
+            print(f"{prj._name}/{sp._name}: skipping, no files found")
+            sp._code_anyfiles = False
+            # still advance state because we checked for code
+            sp._status = Status.GOTCODE
+            sp._code_pulled = today
+            return True
+
+    # great, there are files, so keep going
+    sp._code_anyfiles = True
+
     # now zip it all together
-    today = datetime.today().strftime("%Y-%m-%d")
     zf_path = os.path.join(sp_path, f"{ziporg_path}-{today}.zip")
     print(f"{prj._name}/{sp._name}: zipping into {zf_path}")
     if os.path.exists(zf_path):

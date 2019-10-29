@@ -73,6 +73,7 @@ class Subproject:
         self._repos = []
 
         self._code_pulled = ""
+        self._code_anyfiles = False
 
         # only if GitHub
         self._github_org = ""

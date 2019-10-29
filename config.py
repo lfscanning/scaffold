@@ -92,8 +92,10 @@ def loadConfig(configFilename):
                             code_dict = sp_dict.get('code', {})
                             if code_dict == {}:
                                 sp._code_pulled = ""
+                                sp._code_anyfiles = False
                             else:
                                 sp._code_pulled = code_dict.get('pulled', "")
+                                sp._code_anyfiles = code_dict.get('anyfiles', "")
 
                             sp_gerrit_dict = sp_dict.get('gerrit', {})
                             if sp_gerrit_dict == {}:
@@ -140,8 +142,10 @@ def loadConfig(configFilename):
                             code_dict = sp_dict.get('code', {})
                             if code_dict == {}:
                                 sp._code_pulled = ""
+                                sp._code_anyfiles = False
                             else:
                                 sp._code_pulled = code_dict.get('pulled', "")
+                                sp._code_anyfiles = code_dict.get('anyfiles', "")
 
                             # get subproject github-shared details, including repos
                             gs_sp_shared_dict = sp_dict.get('github-shared', {})
@@ -179,8 +183,10 @@ def loadConfig(configFilename):
                             code_dict = sp_dict.get('code', {})
                             if code_dict == {}:
                                 sp._code_pulled = ""
+                                sp._code_anyfiles = False
                             else:
                                 sp._code_pulled = code_dict.get('pulled', "")
+                                sp._code_anyfiles = code_dict.get('anyfiles', "")
 
                             # get subproject github details
                             github_dict = sp_dict.get('github', {})
@@ -268,6 +274,9 @@ class ConfigJSONEncoder(json.JSONEncoder):
             if o._repotype == ProjectRepoType.GITHUB:
                 js = {
                     "status": o._status.name,
+                    "code": {
+                        "anyfiles": o._code_anyfiles,
+                    },
                     "github": {
                         "org": o._github_org,
                         "ziporg": o._github_ziporg,
@@ -276,29 +285,35 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     }
                 }
                 if o._code_pulled != "":
-                    js["code"] = {"pulled": o._code_pulled}
+                    js["code"]["pulled"] = o._code_pulled
                 if len(o._github_repos_pending) > 0:
                     js["github"]["repos-pending"] = sorted(o._github_repos_pending)
                 return js
             elif o._repotype == ProjectRepoType.GITHUB_SHARED:
                 js = {
                     "status": o._status.name,
+                    "code": {
+                        "anyfiles": o._code_anyfiles,
+                    },
                     "github-shared": {
                         "repos": sorted(o._repos),
                     }
                 }
                 if o._code_pulled != "":
-                    js["code"] = {"pulled": o._code_pulled}
+                    js["code"]["pulled"] = o._code_pulled
                 return js
             elif o._repotype == ProjectRepoType.GERRIT:
                 js = {
                     "status": o._status.name,
+                    "code": {
+                        "anyfiles": o._code_anyfiles,
+                    },
                     "gerrit": {
                         "repos": sorted(o._repos),
                     }
                 }
                 if o._code_pulled != "":
-                    js["code"] = {"pulled": o._code_pulled}
+                    js["code"]["pulled"] = o._code_pulled
                 return js
             else:
                 return {
