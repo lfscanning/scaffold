@@ -23,6 +23,7 @@ class Status(Enum):
     ADDEDCOMMENTS = 10
     DELIVERED = 11
     UPLOADEDSPDX = 12
+    MAX = 99
 
 class Project:
 
@@ -70,6 +71,8 @@ class Subproject:
         self._repotype = ProjectRepoType.UNKNOWN
         self._status = Status.UNKNOWN
         self._repos = []
+
+        self._code_pulled = ""
 
         # only if GitHub
         self._github_org = ""

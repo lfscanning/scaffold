@@ -20,6 +20,13 @@ def doNextThing(scaffold_home, cfg, prj_only, sp_only):
             while retval:
                 retval = doNextThingForProject(scaffold_home, cfg, prj, sp_only)
 
+def updateProjectStatusToSubprojectMin(cfg, prj):
+    minStatus = Status.MAX
+    for sp in prj._subprojects.values():
+        if sp._status.value < minStatus.value:
+            minStatus = sp._status
+    prj._status = minStatus
+
 # Tries to do the next thing for this project. Returns True if
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
@@ -33,6 +40,7 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
                 retval = True
                 while retval:
                     retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                    updateProjectStatusToSubprojectMin(cfg, prj)
                     saveConfig(scaffold_home, cfg)
                     if retval:
                         did_something = True
@@ -56,6 +64,7 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
                         retval = True
                         while retval:
                             retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                            updateProjectStatusToSubprojectMin(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
                                 did_something = True
@@ -71,6 +80,7 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
             if prj._status == Status.START:
                 # get repo listing at project level and see if we're good
                 retval_prj = doRepoListingForGerritProject(cfg, prj)
+                updateProjectStatusToSubprojectMin(cfg, prj)
                 saveConfig(scaffold_home, cfg)
                 if retval_prj:
                     did_something = True
@@ -81,6 +91,7 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
                         retval = True
                         while retval:
                             retval = doNextThingForGerritSubproject(scaffold_home, cfg, prj, sp)
+                            updateProjectStatusToSubprojectMin(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
                                 did_something = True
@@ -105,6 +116,22 @@ def doNextThingForSubproject(scaffold_home, cfg, prj, sp):
     elif status == Status.GOTLISTING:
         # get code and see if we're good
         return doGetRepoCodeForSubproject(cfg, prj, sp)
+
+    else:
+        print(f"Invalid status for {sp._name}: {sp._status}")
+        return False
+
+
+# Tries to do the next thing for this Gerrit subproject. Returns True if
+# accomplished something (meaning that we could call this again and possibly do
+# the next-next thing), or False if accomplished nothing (meaning that we
+# probably need to intervene). Does not handle START case because that is
+# handled at the project level.
+def doNextThingForGerritSubproject(scaffold_home, cfg, prj, sp):
+    status = sp._status
+    if status == Status.GOTLISTING:
+        # get code and see if we're good
+        return doGetRepoCodeForGerritSubproject(cfg, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
@@ -362,4 +389,53 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
 
     # success - advance state
     sp._status = Status.GOTCODE
+    sp._code_pulled = today
+    return True
+
+# Runner for GOTLISTING in GERRIT
+def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
+    # first, get path and make directory (if doesn't exist) for collecting code
+    sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
+    ziporg_path = os.path.join(sp_path, sp._name)
+    # clear contents if it's already there
+    if os.path.exists(ziporg_path):
+        shutil.rmtree(ziporg_path)
+    # and create it if it isn't
+    if not os.path.exists(ziporg_path):
+        os.makedirs(ziporg_path)
+
+    # clone each repo and remove its .git directory
+    for repo in sp._repos:
+        # parse repo name
+        dashName = repo.replace("/", "-")
+        dstFolder = os.path.join(ziporg_path, dashName)
+        gitAddress = os.path.join(prj._gerrit_apiurl, repo)
+        # get repo
+        print(f"{prj._name}/{sp._name}: cloning {gitAddress}")
+        git.Repo.clone_from(gitAddress, dstFolder)
+        # remove .git/
+        dotgit_path = os.path.join(dstFolder, ".git")
+        shutil.rmtree(dotgit_path)
+
+    # now zip it all together
+    today = datetime.today().strftime("%Y-%m-%d")
+    zf_path = os.path.join(sp_path, f"{ziporg_path}-{today}.zip")
+    print(f"{prj._name}/{sp._name}: zipping into {zf_path}")
+    if os.path.exists(zf_path):
+        os.remove(zf_path)
+    zf = zipfile.ZipFile(zf_path, 'w', compression=zipfile.ZIP_DEFLATED)
+    for root, _, files in os.walk(ziporg_path):
+        for f in files:
+            fpath = os.path.join(root, f)
+            rpath = os.path.relpath(fpath, ziporg_path)
+            if not os.path.islink(fpath):
+                zf.write(fpath, arcname=rpath)
+    zf.close()
+
+    # and finally, remove the original unzipped directory
+    shutil.rmtree(ziporg_path)
+
+    # success - advance state
+    sp._status = Status.GOTCODE
+    sp._code_pulled = today
     return True

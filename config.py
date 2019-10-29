@@ -88,6 +88,13 @@ def loadConfig(configFilename):
                             else:
                                 sp._status = Status[status_str]
                             
+                            # get code section
+                            code_dict = sp_dict.get('code', {})
+                            if code_dict == {}:
+                                sp._code_pulled = ""
+                            else:
+                                sp._code_pulled = code_dict.get('pulled', "")
+
                             sp_gerrit_dict = sp_dict.get('gerrit', {})
                             if sp_gerrit_dict == {}:
                                 sp._repos = []
@@ -129,6 +136,13 @@ def loadConfig(configFilename):
                             else:
                                 sp._status = Status[status_str]
 
+                            # get code section
+                            code_dict = sp_dict.get('code', {})
+                            if code_dict == {}:
+                                sp._code_pulled = ""
+                            else:
+                                sp._code_pulled = code_dict.get('pulled', "")
+
                             # get subproject github-shared details, including repos
                             gs_sp_shared_dict = sp_dict.get('github-shared', {})
                             if gs_sp_shared_dict == {}:
@@ -160,6 +174,13 @@ def loadConfig(configFilename):
                                 sp._status = Status.UNKNOWN
                             else:
                                 sp._status = Status[status_str]
+
+                            # get code section
+                            code_dict = sp_dict.get('code', {})
+                            if code_dict == {}:
+                                sp._code_pulled = ""
+                            else:
+                                sp._code_pulled = code_dict.get('pulled', "")
 
                             # get subproject github details
                             github_dict = sp_dict.get('github', {})
@@ -254,23 +275,31 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos-ignore": sorted(o._github_repos_ignore),
                     }
                 }
+                if o._code_pulled != "":
+                    js["code"] = {"pulled": o._code_pulled}
                 if len(o._github_repos_pending) > 0:
                     js["github"]["repos-pending"] = sorted(o._github_repos_pending)
                 return js
             elif o._repotype == ProjectRepoType.GITHUB_SHARED:
-                return {
+                js = {
                     "status": o._status.name,
                     "github-shared": {
                         "repos": sorted(o._repos),
                     }
                 }
+                if o._code_pulled != "":
+                    js["code"] = {"pulled": o._code_pulled}
+                return js
             elif o._repotype == ProjectRepoType.GERRIT:
-                return {
+                js = {
                     "status": o._status.name,
                     "gerrit": {
                         "repos": sorted(o._repos),
                     }
                 }
+                if o._code_pulled != "":
+                    js["code"] = {"pulled": o._code_pulled}
+                return js
             else:
                 return {
                     "type": "unknown"
