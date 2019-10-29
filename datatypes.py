@@ -38,7 +38,9 @@ class Project:
 
         # only if Gerrit
         self._gerrit_apiurl = ""
+        self._gerrit_subproject_config = "manual"
         self._gerrit_repos_ignore = []
+        self._gerrit_repos_pending = []
 
         # only if GITHUB_SHARED
         self._github_shared_org = ""
@@ -82,6 +84,8 @@ class Subproject:
 
         if self._repotype == ProjectRepoType.GITHUB:
             return f"{self._name} ({is_ok}): {self._repotype.name}, {self._github_org}, {self._github_ziporg}, {self._repos}, IGNORE: {self._github_repos_ignore}, PENDING: {self._github_repos_pending}"
+        elif self._repotype == ProjectRepoType.GERRIT:
+            return f"{self._name} ({is_ok}): STATUS: {self._status}, {self._repotype.name}, {self._repos}"
         else:
             return f"{self._name} ({is_ok}): {self._repotype.name}, {self._repos}"
 

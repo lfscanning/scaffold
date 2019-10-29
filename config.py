@@ -66,8 +66,12 @@ def loadConfig(configFilename):
                         if prj._gerrit_apiurl == '':
                             print(f'Project {prj_name} has no apiurl data')
                             prj._ok = False
+                        # if subproject-config is absent, treat it as manual
+                        prj._gerrit_subproject_config = gerrit_dict.get('subproject-config', "manual")
                         # if repos-ignore is absent, that's fine
                         prj._gerrit_repos_ignore = gerrit_dict.get('repos-ignore', [])
+                        # if repos-pending is absent, that's fine
+                        prj._gerrit_repos_pending = gerrit_dict.get('repos-pending', [])
                     # now load subprojects, if any are listed; it's okay if none are
                     sps = prj_dict.get('subprojects', {})
                     if sps != {}:
@@ -84,7 +88,12 @@ def loadConfig(configFilename):
                             else:
                                 sp._status = Status[status_str]
                             
-                            # FIXME we'll probably want a gerrit-specific block here
+                            sp_gerrit_dict = sp_dict.get('gerrit', {})
+                            if sp_gerrit_dict == {}:
+                                sp._repos = []
+                            else:
+                                # if repos is absent, that's fine
+                                sp._repos = sp_gerrit_dict.get('repos', [])
 
                             # and add subprojects to the project's dictionary
                             prj._subprojects[sp_name] = sp
@@ -212,7 +221,9 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "status": o._status.name,
                     "gerrit": {
                         "apiurl": o._gerrit_apiurl,
+                        "subproject-config": o._gerrit_subproject_config,
                         "repos-ignore": o._gerrit_repos_ignore,
+                        "repos-pending": o._gerrit_repos_pending,
                     },
                     "subprojects": o._subprojects,
                 }

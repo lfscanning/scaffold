@@ -9,8 +9,9 @@ import zipfile
 import git
 
 from config import saveConfig
-from datatypes import ProjectRepoType, Status
+from datatypes import ProjectRepoType, Status, Subproject
 from github import getGithubRepoList
+from gerrit import getGerritRepoDict
 
 def doNextThing(scaffold_home, cfg, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -63,18 +64,34 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
                     break
         return did_something
 
-    else:
-        # or if Gerrit project, do everything here
-        status = prj._status
-        if status == Status.START:
-            # get repo listing and see if we're good
-            # FIXME figure out handling this for Gerrit
-            #return doRepoListingForProject(prj)
-            return False
+    elif prj._repotype == ProjectRepoType.GERRIT:
+        did_something = False
+        retval_prj = True
+        while retval_prj:
+            if prj._status == Status.START:
+                # get repo listing at project level and see if we're good
+                retval_prj = doRepoListingForGerritProject(cfg, prj)
+                saveConfig(scaffold_home, cfg)
+                if retval_prj:
+                    did_something = True
+            else:
+                retval_sp_all = False
+                for sp in prj._subprojects.values():
+                    if sp_only == "" or sp_only == sp._name:
+                        retval = True
+                        while retval:
+                            retval = doNextThingForGerritSubproject(scaffold_home, cfg, prj, sp)
+                            saveConfig(scaffold_home, cfg)
+                            if retval:
+                                did_something = True
+                                retval_sp_all = True
+                if not retval_sp_all:
+                    break
+        return did_something
 
-        else:
-            print(f"Invalid status for {prj._name}: {prj._status}")
-            return False
+    else:
+        print(f"Invalid project repotype for {prj._name}: {prj._repotype}")
+        return False
 
 # Tries to do the next thing for this subproject. Returns True if
 # accomplished something (meaning that we could call this again
@@ -177,6 +194,126 @@ def doRepoListingForProject(cfg, prj):
             for _, sp in prj._subprojects.items():
                 sp._status = Status.GOTLISTING
             return True
+
+# Runner for START in GERRIT
+def doRepoListingForGerritProject(cfg, prj):
+    if prj._gerrit_subproject_config == "auto":
+        doRepoListingForGerritAutoProject(cfg, prj)
+    elif prj._gerrit_subproject_config == "one":
+        doRepoListingForGerritOneProject(cfg, prj)
+    elif prj._gerrit_subproject_config == "manual":
+        print(f"{prj._name}: subproject-config value of 'manual' not yet implemented")
+        return False
+    else:
+        print(f"{prj._name}: invalid subproject-config value: {prj._gerrit_subproject_config}")
+        return False
+
+# Runner for START in GERRIT where subproject-config is auto
+def doRepoListingForGerritAutoProject(cfg, prj):
+    # get the sorted dictionary of repos by top-level grouping, if any
+    rd = getGerritRepoDict(prj._gerrit_apiurl)
+
+    # now, figure out which repos to assign to which subprojects
+    # and create subprojects where needed
+    groupings_seen = []
+    for grouping, repos in rd.items():
+        if grouping not in prj._gerrit_repos_ignore:
+            groupings_seen.append(grouping)
+            sp = prj._subprojects.get(grouping, None)
+            if sp == None:
+                sp = Subproject()
+                sp._name = grouping
+                sp._repotype = ProjectRepoType.GERRIT
+                sp._status = Status.START
+                prj._subprojects[grouping] = sp
+            # now, figure out which new repos in this grouping we need to add
+            repos_seen = []
+            repos_to_remove = []
+            for repo in repos:
+                repos_seen.append(repo)
+                if repo not in sp._repos:
+                    sp._repos.append(repo)
+                    print(f"{prj._name}/{sp._name}: added {repo} to repos")
+            # and which old repos we need to remove
+            for repo in sp._repos:
+                if repo not in repos_seen:
+                    repos_to_remove.append(repo)
+            for repo in repos_to_remove:
+                sp._repos.remove(repo)
+                print(f"{prj._name}/{sp._name}: removed {repo} from repos")
+
+    # now, finally, figure out which old subprojects we need to remove
+    subprojects_to_remove = []
+    for sp_name in prj._subprojects.keys():
+        if sp_name not in groupings_seen:
+            subprojects_to_remove.append(sp_name)
+    for sp_name in subprojects_to_remove:
+        prj._subprojects.remove(sp_name)
+        print(f"{prj._name}: removed subproject {sp_name}")
+
+    # finally, update status for remaining subprojects
+    for sp in prj._subprojects.values():
+        sp._status = Status.GOTLISTING
+    prj._status = Status.GOTLISTING
+
+    return True
+
+# Runner for START in GERRIT where subproject-config is one
+def doRepoListingForGerritOneProject(cfg, prj):
+    # check that there's only one subproject and that it has the right name
+    if len(prj._subprojects) > 1:
+        print(f"{prj._name}: subproject-config value is 'one' but more than one subproject exists")
+        return False
+    if len(prj._subprojects) == 1:
+        # should only be one but we'll iterate to get the first one
+        for sp_name in prj._subprojects.keys():
+            if sp_name != prj._name:
+                print(f"{prj._name}: subproject-config value is 'one' but subproject has different name from project: {sp_name}")
+                return False
+    # or if no subprojects, create new subproject for this gerrit org overall
+    if len(prj._subprojects) == 0:
+        sp = Subproject()
+        sp._name = prj._name
+        sp._repotype = ProjectRepoType.GERRIT
+        sp._status = Status.START
+        prj._subprojects[prj._name] = sp
+
+    # get the sorted dictionary of repos by top-level grouping, if any
+    rd = getGerritRepoDict(prj._gerrit_apiurl)
+
+    # now, figure out which repos to add
+    repos_seen = []
+    sp = prj._subprojects.get(prj._name, None)
+    if sp == None:
+        print(f"{prj._name}: unable to get subproject {prj._name}")
+        return False
+    for grouping, repos in rd.items():
+        if grouping not in prj._gerrit_repos_ignore:
+            for repo in repos:
+                repos_seen.append(repo)
+                if repo not in sp._repos:
+                    sp._repos.append(repo)
+                    print(f"{prj._name}/{sp._name}: added {repo} to repos")
+    # and which ones to remove
+    repos_to_remove = []
+    for repo in sp._repos:
+        if repo not in repos_seen:
+            repos_to_remove.append(repo)
+    for repo in repos_to_remove:
+        sp._repos.remove(repo)
+        print(f"{prj._name}/{sp._name}: removed {repo} from repos")
+
+    # finally, update status for remaining subprojects
+    sp._status = Status.GOTLISTING
+    prj._status = Status.GOTLISTING
+
+    return True
+
+# Runner for START in GERRIT where subproject-config is manual
+def doRepoListingForGerritManualProject(cfg, prj):
+    # not yet implemented; need to account for grouping vs. flat repo names
+    # could have same repo names in different groupings
+    return False
 
 # Runner for GOTLISTING in GITHUB and GITHUB_SHARED
 def doGetRepoCodeForSubproject(cfg, prj, sp):
