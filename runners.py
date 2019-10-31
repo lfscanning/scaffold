@@ -9,13 +9,14 @@ from config import saveConfig
 from datatypes import ProjectRepoType, Status, Subproject
 from repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
 from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
+from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 
-def doNextThing(scaffold_home, cfg, prj_only, sp_only):
+def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
         if prj_only == "" or prj_only == prj._name:
             retval = True
             while retval:
-                retval = doNextThingForProject(scaffold_home, cfg, prj, sp_only)
+                retval = doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only)
 
 def updateProjectStatusToSubprojectMin(cfg, prj):
     minStatus = Status.MAX
@@ -28,7 +29,7 @@ def updateProjectStatusToSubprojectMin(cfg, prj):
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
-def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
+def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
     # if GitHub project, go to subprojects
     if prj._repotype == ProjectRepoType.GITHUB:
         did_something = False
@@ -36,7 +37,7 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
             if sp_only == "" or sp_only == sp._name:
                 retval = True
                 while retval:
-                    retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                    retval = doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp)
                     updateProjectStatusToSubprojectMin(cfg, prj)
                     saveConfig(scaffold_home, cfg)
                     if retval:
@@ -54,13 +55,20 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
                 saveConfig(scaffold_home, cfg)
                 if retval_prj:
                     did_something = True
+            # elif prj._status == Status.GOTCODE:
+            #     # upload code to Fossology server
+            #     retval_prj = doUploadCodeForProject(cfg, fdServer, prj)
+            #     updateProjectStatusToSubprojectMin(cfg, prj)
+            #     saveConfig(scaffold_home, cfg)
+            #     if retval_prj:
+            #         did_something = True
             else:
                 retval_sp_all = False
                 for sp in prj._subprojects.values():
                     if sp_only == "" or sp_only == sp._name:
                         retval = True
                         while retval:
-                            retval = doNextThingForSubproject(scaffold_home, cfg, prj, sp)
+                            retval = doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp)
                             updateProjectStatusToSubprojectMin(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
@@ -81,6 +89,13 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
                 saveConfig(scaffold_home, cfg)
                 if retval_prj:
                     did_something = True
+            # elif prj._status == Status.GOTCODE:
+            #     # upload code to Fossology server
+            #     retval_prj = doUploadCodeForProject(cfg, fdServer, prj)
+            #     updateProjectStatusToSubprojectMin(cfg, prj)
+            #     saveConfig(scaffold_home, cfg)
+            #     if retval_prj:
+            #         did_something = True
             else:
                 retval_sp_all = False
                 for sp in prj._subprojects.values():
@@ -105,7 +120,7 @@ def doNextThingForProject(scaffold_home, cfg, prj, sp_only):
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
-def doNextThingForSubproject(scaffold_home, cfg, prj, sp):
+def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     status = sp._status
     if status == Status.START:
         # get repo listing and see if we're good
@@ -113,6 +128,9 @@ def doNextThingForSubproject(scaffold_home, cfg, prj, sp):
     elif status == Status.GOTLISTING:
         # get code and see if we're good
         return doGetRepoCodeForSubproject(cfg, prj, sp)
+    elif status == Status.GOTCODE:
+        # upload code and see if we're good
+        return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")

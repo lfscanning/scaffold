@@ -23,6 +23,7 @@ class Status(Enum):
     ADDEDCOMMENTS = 10
     DELIVERED = 11
     UPLOADEDSPDX = 12
+    STOPPED = 90
     MAX = 99
 
 class Project:

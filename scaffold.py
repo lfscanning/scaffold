@@ -9,6 +9,9 @@ import sys
 
 from tabulate import tabulate
 
+from fossdriver.config import FossConfig
+from fossdriver.server import FossServer
+
 from config import loadConfig, saveBackupConfig, saveConfig
 import datefuncs
 from runners import doNextThing
@@ -37,6 +40,19 @@ def status(projects, prj_only, sp_only):
     table = sorted(table, key=itemgetter(0, 1))
     print(tabulate(table, headers=headers))
 
+def fossdriverSetup():
+    config = FossConfig()
+    configPath = os.path.join(str(Path.home()), ".fossdriver", "fossdriverrc.json")
+    retval = config.configure(configPath)
+    if not retval:
+        print(f"Error: Could not load config file from {configPath}")
+        return False
+
+    server = FossServer(config)
+    server.Login()
+
+    return server
+
 if __name__ == "__main__":
     # check and parse year-month
     if len(sys.argv) < 2:
@@ -59,6 +75,12 @@ if __name__ == "__main__":
     cfg_file = os.path.join(MONTH_DIR, "config.json")
     cfg = loadConfig(cfg_file)
 
+    # set up fossdriver server connection
+    fdServer = fossdriverSetup()
+    if not fdServer:
+        print(f"Unable to connect to Fossology server with fossdriver")
+        sys.exit(1)
+
     # we'll check if added optional args limit to one prj / sp
     prj_only = ""
     sp_only = ""
@@ -80,7 +102,7 @@ if __name__ == "__main__":
             saveBackupConfig(SCAFFOLD_HOME, cfg)
 
             # run commands
-            doNextThing(SCAFFOLD_HOME, cfg, prj_only, sp_only)
+            doNextThing(SCAFFOLD_HOME, cfg, fdServer, prj_only, sp_only)
 
             # save modified config file
             saveConfig(SCAFFOLD_HOME, cfg)
