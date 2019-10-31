@@ -10,6 +10,7 @@ from datatypes import ProjectRepoType, Status, Subproject
 from repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
 from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
+from runagents import doRunAgentsForSubproject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -102,7 +103,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                     if sp_only == "" or sp_only == sp._name:
                         retval = True
                         while retval:
-                            retval = doNextThingForGerritSubproject(scaffold_home, cfg, prj, sp)
+                            retval = doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp)
                             updateProjectStatusToSubprojectMin(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
@@ -131,6 +132,9 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.GOTCODE:
         # upload code and see if we're good
         return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.UPLOADEDCODE:
+        # upload code and see if we're good
+        return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
@@ -142,11 +146,17 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
 # the next-next thing), or False if accomplished nothing (meaning that we
 # probably need to intervene). Does not handle START case because that is
 # handled at the project level.
-def doNextThingForGerritSubproject(scaffold_home, cfg, prj, sp):
+def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     status = sp._status
     if status == Status.GOTLISTING:
         # get code and see if we're good
         return doGetRepoCodeForGerritSubproject(cfg, prj, sp)
+    elif status == Status.GOTCODE:
+        # upload code and see if we're good
+        return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.UPLOADEDCODE:
+        # upload code and see if we're good
+        return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")

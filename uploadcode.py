@@ -4,20 +4,16 @@
 import os
 from pathlib import Path
 
-
 from datatypes import Status, ProjectRepoType
 
-from fossdriver.tasks import CreateFolder, Upload, Scanners, Copyright, Reuse, BulkTextMatch, SPDXTV
-
-# FIXME consider whether it should be possible to target just a single
-# FIXME subproject for uploading code
+from fossdriver.tasks import CreateFolder, Upload
 
 def doUploadCodeForProject(cfg, fdServer, prj):
     # create top-level folder for project, if it doesn't already exist
     t = CreateFolder(fdServer, prj._name, "Software Repository")
     retval = t.run()
     if not retval:
-        print(f"Error: Could not create folder {prj._name}")
+        print(f"{prj._name}: Could not create folder {prj._name}")
         return False
 
     # create one project-level folder for this month, and
@@ -26,7 +22,7 @@ def doUploadCodeForProject(cfg, fdServer, prj):
     t = CreateFolder(fdServer, dstFolder, prj._name)
     retval = t.run()
     if not retval:
-        print(f"Error: Could not create folder {dstFolder}")
+        print(f"{prj._name}: Could not create folder {dstFolder}")
         return False
 
     # and now cycle through each subproject and upload the code here
@@ -59,7 +55,7 @@ def doUploadCodeForSubproject(cfg, fdServer, prj, sp):
     t = CreateFolder(fdServer, prj._name, "Software Repository")
     retval = t.run()
     if not retval:
-        print(f"Error: Could not create folder {prj._name}")
+        print(f"{prj._name}/{sp._name}: Could not create folder {prj._name}")
         return False
 
     # create one project-level folder for this month, and
@@ -68,7 +64,7 @@ def doUploadCodeForSubproject(cfg, fdServer, prj, sp):
     t = CreateFolder(fdServer, dstFolder, prj._name)
     retval = t.run()
     if not retval:
-        print(f"Error: Could not create folder {dstFolder}")
+        print(f"{prj._name}/{sp._name}: Could not create folder {dstFolder}")
         return False
 
     # make sure the subproject has not already had its code uploaded
