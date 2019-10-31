@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     # load configuration file for this month
     cfg_file = os.path.join(MONTH_DIR, "config.json")
-    cfg = loadConfig(cfg_file)
+    cfg = loadConfig(cfg_file, SCAFFOLD_HOME)
 
     # set up fossdriver server connection
     fdServer = fossdriverSetup()

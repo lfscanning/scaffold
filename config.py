@@ -5,12 +5,59 @@ import json
 import os
 from shutil import copyfile
 
-from datatypes import Config, Project, ProjectRepoType, Status, Subproject
+from datatypes import Config, MatchText, Project, ProjectRepoType, Status, Subproject
 
 def getConfigFilename(scaffoldHome, month):
     return os.path.join(scaffoldHome, month, "config.json")
 
-def loadConfig(configFilename):
+def getMatchesProjectFilename(scaffoldHome, month, prj_name):
+    return os.path.join(scaffoldHome, month, f"matches-{prj_name}.json")
+
+def loadMatches(matchesFilename):
+    matches = []
+
+    try:
+        with open(matchesFilename, 'r') as f:
+            js = json.load(f)
+
+            # expecting array of match objects
+            for j in js:
+                m = MatchText()
+                m._text = j.get('text', "")
+                if m._text == "":
+                    print(f'No text value found in match section')
+                    return []
+                # comments can be empty string or absent
+                m._comment = j.get('comment', "")
+                actions = j.get('actions', [])
+                if actions == []:
+                    if m._comment == "":
+                        print(f'No actions found in match section')
+                    else:
+                        print(f'No actions found in match section with comment {m._comment}')
+                    return []
+                # parse and add actions
+                m._actions = []
+                for a in actions:
+                    ac = a.get('action', "")
+                    if ac != "add" and ac != "remove":
+                        print(f'Invalid action type {ac} in match')
+                        return []
+                    lic = a.get('license', "")
+                    if lic == "":
+                        print(f'Invalid empty string for license in match')
+                        return []
+                    actionTup = (ac, lic)
+                    m._actions.append(actionTup)
+                # and now add it in
+                matches.append(m)
+        return matches
+
+    except json.decoder.JSONDecodeError as e:
+        print(f'Error loading or parsing {matchesFilename}: {str(e)}')
+        return []
+
+def loadConfig(configFilename, scaffoldHome):
     cfg = Config()
 
     try:
@@ -220,6 +267,13 @@ def loadConfig(configFilename):
                     print(f'Project {prj_name} has invalid or no repo type')
                     prj._repotype = ProjectRepoType.UNKNOWN
                     prj._ok = False
+
+                # also add in matches if a matches-{prj_name}.json file exists
+                matchesFilename = getMatchesProjectFilename(scaffoldHome, cfg._month, prj._name)
+                if os.path.isfile(matchesFilename):
+                    prj._matches = loadMatches(matchesFilename)
+                else:
+                    prj._matches = []
 
                 # and add project to the dictionary
                 cfg._projects[prj_name] = prj

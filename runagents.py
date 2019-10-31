@@ -61,6 +61,24 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
     else:
         print(f"{prj._name}/{sp._name}: no prior upload found, skipping reuser")
     
+    # run bulk matches if the project has any
+    if prj._matches != []:
+        for m in prj._matches:
+            t = BulkTextMatch(fdServer, uploadName, uploadFolder, m._text)
+            for (action, licName) in m._actions:
+                if action == "add":
+                    t.add(licName)
+                elif action == "remove":
+                    t.remove(licName)
+            if m._comment == "":
+                print(f"{prj._name}/{sp._name}: running bulk text match")
+            else:
+                print(f"{prj._name}/{sp._name}: running bulk text match for {m._comment}")
+            retval = t.run()
+            if not retval:
+                print(f"{prj._name}/{sp._name}: error running bulk text match")
+                return False
+
     # once we get here, the agents have been run
     sp._status = Status.RANAGENTS
     

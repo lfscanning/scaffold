@@ -26,6 +26,15 @@ class Status(Enum):
     STOPPED = 90
     MAX = 99
 
+class MatchText:
+
+    def __init__(self):
+        super(MatchText, self).__init__()
+
+        self._text = ""
+        self._comment = ""
+        self._actions = []
+
 class Project:
 
     def __init__(self):
@@ -37,6 +46,8 @@ class Project:
         self._status = Status.UNKNOWN
 
         self._subprojects = {}
+
+        self._matches = []
 
         # only if Gerrit
         self._gerrit_apiurl = ""
