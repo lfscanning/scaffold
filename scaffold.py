@@ -32,6 +32,8 @@ def status(projects, prj_only, sp_only):
 
     for prj in projects.values():
         if prj_only == "" or prj_only == prj._name:
+            row = [prj._name, "", prj._status.name]
+            table.append(row)
             for sp in prj._subprojects.values():
                 if sp_only == "" or sp_only == sp._name:
                     row = [prj._name, sp._name, sp._status.name]

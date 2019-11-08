@@ -14,7 +14,7 @@ def priorUploadExists(fdServer, priorUploadFolder, priorUploadName):
     oldFolderNum = fdServer.GetFolderNum(priorUploadFolder)
     if oldFolderNum is None or oldFolderNum == -1:
         return False
-    oldUploadNum = fdServer.GetUploadNum(oldFolderNum, priorUploadName)
+    oldUploadNum = fdServer.GetUploadNum(oldFolderNum, priorUploadName, False)
     if oldUploadNum is None or oldUploadNum == -1:
         return False
     # if we get here, the old scan exists
@@ -54,6 +54,7 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
     if priorUploadExists(fdServer, priorFolder, priorUploadFragment):
         print(f"{prj._name}/{sp._name}: running reuser")
         t = Reuse(fdServer, uploadName, uploadFolder, priorUploadFragment, priorFolder)
+        t.exact = False
         retval = t.run()
         if not retval:
             print(f"{prj._name}/{sp._name}: error running reuse from {priorUploadFragment} in {priorFolder}")

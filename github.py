@@ -5,15 +5,15 @@ import requests
 
 GITHUB_API_URL = "https://api.github.com"
 
-def getOrgJSONData(org):
-    url = f"{GITHUB_API_URL}/orgs/{org}/repos?per_page=100"
+def getOrgJSONData(org, page):
+    url = f"{GITHUB_API_URL}/orgs/{org}/repos?page={page}&per_page=100"
     r = requests.get(url)
     if r.status_code == 200:
         return r.json()
 
     # if r is 404, then this might be a user, not an org -- try that instead
     if r.status_code == 404:
-        user_url = f"{GITHUB_API_URL}/users/{org}/repos?per_page=100"
+        user_url = f"{GITHUB_API_URL}/users/{org}/repos?{page}&per_page=100"
         r2 = requests.get(user_url)
         if r2.status_code == 200:
             return r2.json()
@@ -34,5 +34,18 @@ def parseOrgJSONData(rj):
     return repos
 
 def getGithubRepoList(org):
-    rj = getOrgJSONData(org)
-    return parseOrgJSONData(rj)
+    repos = []
+    stillSomeRepos = True
+    page = 1
+    while stillSomeRepos:
+        rj = getOrgJSONData(org, page)
+        gotRepos = parseOrgJSONData(rj)
+        if len(gotRepos) <= 0:
+            stillSomeRepos = False
+            break
+        else:
+            for r in gotRepos:
+                repos.append(r)
+            page += 1
+
+    return repos

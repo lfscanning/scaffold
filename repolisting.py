@@ -3,7 +3,7 @@
 
 from datatypes import ProjectRepoType, Status, Subproject
 from github import getGithubRepoList
-from gerrit import getGerritRepoDict
+from gerrit import getGerritRepoDict, getGerritRepoList
 
 # Runner for START in GitHub
 def doRepoListingForSubproject(cfg, prj, sp):
@@ -92,12 +92,11 @@ def doRepoListingForProject(cfg, prj):
 # Runner for START in GERRIT
 def doRepoListingForGerritProject(cfg, prj):
     if prj._gerrit_subproject_config == "auto":
-        doRepoListingForGerritAutoProject(cfg, prj)
+        return doRepoListingForGerritAutoProject(cfg, prj)
     elif prj._gerrit_subproject_config == "one":
-        doRepoListingForGerritOneProject(cfg, prj)
+        return doRepoListingForGerritOneProject(cfg, prj)
     elif prj._gerrit_subproject_config == "manual":
-        print(f"{prj._name}: subproject-config value of 'manual' not yet implemented")
-        return False
+        return doRepoListingForGerritManualProject(cfg, prj)
     else:
         print(f"{prj._name}: invalid subproject-config value: {prj._gerrit_subproject_config}")
         return False
@@ -205,6 +204,47 @@ def doRepoListingForGerritOneProject(cfg, prj):
 
 # Runner for START in GERRIT where subproject-config is manual
 def doRepoListingForGerritManualProject(cfg, prj):
-    # not yet implemented; need to account for grouping vs. flat repo names
-    # could have same repo names in different groupings
-    return False
+    # collect all configured repos, and what subprojects they're in
+    allcfgrepos = {}
+    for sp_name, sp in prj._subprojects.items():
+        for r in sp._repos:
+            allcfgrepos[r] = sp_name
+
+    # collect all real repos currently on Gerrit
+    allrealrepos = getGerritRepoList(prj._gerrit_apiurl)
+
+    # first, figure out what repos need to be added
+    for r in allrealrepos:
+        config_sp = allcfgrepos.get(r, "")
+        if config_sp == "" and r not in prj._gerrit_repos_ignore and r not in prj._gerrit_repos_pending:
+            prj._gerrit_repos_pending.append(r)
+            print(f"{prj._name}: new pending repo: {r}")
+
+    # then, figure out what repos need to be removed
+    for sp_name, sp in prj._subprojects.items():
+        repos_to_remove = []
+        for r in sp._repos:
+            if r not in allrealrepos:
+                repos_to_remove.append(r)
+        for r in repos_to_remove:
+            sp._repos.remove(r)
+            print(f"{prj._name}/{sp._name}: removed {r} from repos")
+
+    repos_ignore_to_remove = []
+    for r in prj._gerrit_repos_ignore:
+        if r not in allrealrepos:
+            repos_ignore_to_remove.append(r)
+    for r in repos_ignore_to_remove:
+        prj._gerrit_repos_ignore.remove(r)
+        print(f"{prj._name}: removed {r} from repos-ignore")
+
+    # finally, throw a "fail" if any new repos are pending
+    if len(prj._gerrit_repos_pending) > 0:
+        print(f"{prj._name}: stopped, need to assign repos-pending")
+        return False
+    else:
+        # success - advance state
+        prj._status = Status.GOTLISTING
+        for _, sp in prj._subprojects.items():
+            sp._status = Status.GOTLISTING
+        return True

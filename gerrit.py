@@ -39,3 +39,8 @@ def getGerritRepoDict(apiurl):
     repos = parseRepoJSONData(rj)
     repodict = splitReposToDict(repos['active'])
     return dict(repodict)
+
+def getGerritRepoList(apiurl):
+    rj = getRepoJSONData(apiurl)
+    repos = parseRepoJSONData(rj)
+    return repos['active']
