@@ -415,3 +415,10 @@ def saveConfig(scaffoldHome, cfg):
     # save the config file out as json
     with open(configFilename, "w") as f:
         json.dump(cfg, f, indent=4, cls=ConfigJSONEncoder)
+
+def updateProjectStatusToSubprojectMin(cfg, prj):
+    minStatus = Status.MAX
+    for sp in prj._subprojects.values():
+        if sp._status.value < minStatus.value:
+            minStatus = sp._status
+    prj._status = minStatus

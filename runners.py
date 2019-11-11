@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 import shutil
 
-from config import saveConfig
+from config import saveConfig, updateProjectStatusToSubprojectMin
 from datatypes import ProjectRepoType, Status, Subproject
 from repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
 from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
@@ -18,13 +18,6 @@ def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
             retval = True
             while retval:
                 retval = doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only)
-
-def updateProjectStatusToSubprojectMin(cfg, prj):
-    minStatus = Status.MAX
-    for sp in prj._subprojects.values():
-        if sp._status.value < minStatus.value:
-            minStatus = sp._status
-    prj._status = minStatus
 
 # Tries to do the next thing for this project. Returns True if
 # accomplished something (meaning that we could call this again
@@ -135,6 +128,10 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.UPLOADEDCODE:
         # upload code and see if we're good
         return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.RANAGENTS:
+        # needs manual clearing
+        print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action in scaffold")
+        return False
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
@@ -157,6 +154,10 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.UPLOADEDCODE:
         # upload code and see if we're good
         return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.RANAGENTS:
+        # needs manual clearing
+        print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action in scaffold")
+        return False
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")

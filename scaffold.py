@@ -15,6 +15,7 @@ from fossdriver.server import FossServer
 from config import loadConfig, saveBackupConfig, saveConfig
 import datefuncs
 from runners import doNextThing
+from clearing import doCleared
 
 def printUsage():
     print(f"")
@@ -23,7 +24,7 @@ def printUsage():
     print(f"Commands:")
     print(f"  status:  Print status for all subprojects")
     print(f"  run:     Run next steps for all subprojects")
-    print(f"  cleared: Flag cleared in Fossology for [sub]project")
+    print(f"  clear: Flag cleared in Fossology for [sub]project")
     print(f"")
 
 def status(projects, prj_only, sp_only):
@@ -107,6 +108,16 @@ if __name__ == "__main__":
             doNextThing(SCAFFOLD_HOME, cfg, fdServer, prj_only, sp_only)
 
             # save modified config file
+            saveConfig(SCAFFOLD_HOME, cfg)
+
+        elif command == "clear":
+            ran_command = True
+            saveBackupConfig(SCAFFOLD_HOME, cfg)
+
+            # clear if in RANAGENTS state
+            doCleared(SCAFFOLD_HOME, cfg, prj_only, sp_only)
+
+            # save config file, even if not modified (b/c saved backup)
             saveConfig(SCAFFOLD_HOME, cfg)
 
     if ran_command == False:
