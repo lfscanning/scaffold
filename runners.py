@@ -11,6 +11,7 @@ from repolisting import doRepoListingForProject, doRepoListingForGerritProject, 
 from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 from runagents import doRunAgentsForSubproject
+from getspdx import doGetSPDXForSubproject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -132,6 +133,9 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # needs manual clearing
         print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action in scaffold")
         return False
+    elif status == Status.CLEARED:
+        # get SPDX tag-value file
+        return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
@@ -158,6 +162,9 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # needs manual clearing
         print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action in scaffold")
         return False
+    elif status == Status.CLEARED:
+        # get SPDX tag-value file
+        return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
