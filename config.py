@@ -421,4 +421,6 @@ def updateProjectStatusToSubprojectMin(cfg, prj):
     for sp in prj._subprojects.values():
         if sp._status.value < minStatus.value:
             minStatus = sp._status
+    if minStatus == Status.MAX:
+        minStatus = Status.START
     prj._status = minStatus
