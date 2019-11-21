@@ -103,6 +103,7 @@ class Subproject:
         self._slm_prj = ""  # only if project's _slm_shared == False
         self._slm_sp = ""
         self._slm_scan_id = -1
+        self._slm_pending_lics = []
 
     def __repr__(self):
         is_ok = "OK"
@@ -126,7 +127,7 @@ class Config:
         self._projects = {}
         self._month = ""
         self._version = 0
-        self._slmhome = ""
+        self._slm_home = ""
 
     def __repr__(self):
         is_ok = "OK"

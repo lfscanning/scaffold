@@ -12,6 +12,7 @@ from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
+from importscan import doImportScanForSubproject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -136,6 +137,9 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.CLEARED:
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.GOTSPDX:
+        # import SPDX tag-value file into SLM
+        return doImportScanForSubproject(cfg, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
@@ -165,6 +169,9 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.CLEARED:
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.GOTSPDX:
+        # import SPDX tag-value file into SLM
+        return doImportScanForSubproject(cfg, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")

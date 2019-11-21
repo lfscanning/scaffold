@@ -87,8 +87,8 @@ def loadConfig(configFilename, scaffoldHome):
             if slm_dict == {}:
                 print(f'No slm section found in config section')
                 return cfg
-            cfg._slmhome = slm_dict.get('home', "")
-            if cfg._slmhome == "":
+            cfg._slm_home = slm_dict.get('home', "")
+            if cfg._slm_home == "":
                 print(f'No valid home found in slm section')
                 return cfg
 
@@ -353,18 +353,20 @@ def parseSubprojectSLMConfig(sp_dict, prj, sp):
         # and either way we assume defaults for the other values
         sp._slm_sp = sp._name
         sp._slm_scan_id = -1
+        sp._slm_pending_lics = []
     else:
         # we did get an slm section, so we'll parse it
         sp._slm_prj = sp_slm_dict.get('prj', "")
         if prj._slm_shared == True:
-            if sp._slm_prj == "":
-                sp._slm_prj = sp._name
-        else:
             if sp._slm_prj != "":
                 print(f'Project {prj._name} has slm:shared == True but subproject {sp._name} specifies slm:prj')
                 sp._ok = False
+        else:
+            if sp._slm_prj == "":
+                sp._slm_prj = sp._name
         sp._slm_sp = sp_slm_dict.get('sp', sp._name)
-        sp._slm_scan_id = sp_slm_dict.get('scan_id', sp._slm_scan_id)
+        sp._slm_scan_id = sp_slm_dict.get('scan_id', -1)
+        sp._slm_pending_lics = sp_slm_dict.get('licenses-pending', [])
 
 class ConfigJSONEncoder(json.JSONEncoder):
     def default(self, o): # pylint: disable=method-hidden
@@ -375,7 +377,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "month": o._month,
                     "version": o._version,
                     "slm": {
-                        "home": o._slmhome,
+                        "home": o._slm_home,
                     }
                 },
                 "projects": o._projects,
@@ -438,6 +440,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 slm_section["prj"] = o._slm_prj
             if o._slm_scan_id != -1:
                 slm_section["scan_id"] = o._slm_scan_id
+            if o._slm_pending_lics != []:
+                slm_section["licenses-pending"] = o._slm_pending_lics
 
             if o._repotype == ProjectRepoType.GITHUB:
                 js = {
