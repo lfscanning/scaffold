@@ -81,6 +81,18 @@ def loadConfig(configFilename, scaffoldHome):
             if cfg._storepath == "":
                 print(f'No valid storepath found in config section')
                 return cfg
+
+            # load slm data
+            slm_dict = config_dict.get('slm', {})
+            if slm_dict == {}:
+                print(f'No slm section found in config section')
+                return cfg
+            cfg._slmhome = slm_dict.get('home', "")
+            if cfg._slmhome == "":
+                print(f'No valid home found in slm section')
+                return cfg
+
+            # if we get here, main config is at least valid
             cfg._ok = True
 
             # load projects
@@ -119,6 +131,10 @@ def loadConfig(configFilename, scaffoldHome):
                         prj._gerrit_repos_ignore = gerrit_dict.get('repos-ignore', [])
                         # if repos-pending is absent, that's fine
                         prj._gerrit_repos_pending = gerrit_dict.get('repos-pending', [])
+
+                    # now load SLM project data
+                    parseProjectSLMConfig(prj_dict, prj)
+
                     # now load subprojects, if any are listed; it's okay if none are
                     sps = prj_dict.get('subprojects', {})
                     if sps != {}:
@@ -146,6 +162,9 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_path = code_dict.get('path', "")
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
 
+                            # now load SLM subproject data
+                            parseSubprojectSLMConfig(sp_dict, prj, sp)
+
                             sp_gerrit_dict = sp_dict.get('gerrit', {})
                             if sp_gerrit_dict == {}:
                                 sp._repos = []
@@ -171,6 +190,10 @@ def loadConfig(configFilename, scaffoldHome):
                         prj._github_shared_repos_ignore = github_shared_dict.get('repos-ignore', [])
                         # if repos-pending is absent, that's fine
                         prj._github_shared_repos_pending = github_shared_dict.get('repos-pending', [])
+
+                    # now load SLM project data
+                    parseProjectSLMConfig(prj_dict, prj)
+
                     # now load subprojects, if any are listed; it's okay if none are
                     sps = prj_dict.get('subprojects', {})
                     if sps != {}:
@@ -198,6 +221,9 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_path = code_dict.get('path', "")
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
 
+                            # now load SLM subproject data
+                            parseSubprojectSLMConfig(sp_dict, prj, sp)
+
                             # get subproject github-shared details, including repos
                             gs_sp_shared_dict = sp_dict.get('github-shared', {})
                             if gs_sp_shared_dict == {}:
@@ -212,6 +238,10 @@ def loadConfig(configFilename, scaffoldHome):
 
                 elif pt == "github":
                     prj._repotype = ProjectRepoType.GITHUB
+
+                    # now load SLM project data
+                    parseProjectSLMConfig(prj_dict, prj)
+
                     sps = prj_dict.get('subprojects', {})
                     if sps == {}:
                         print(f'Project {prj_name} has no subprojects specified')
@@ -240,6 +270,9 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_pulled = code_dict.get('pulled', "")
                                 sp._code_path = code_dict.get('path', "")
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
+
+                            # now load SLM subproject data
+                            parseSubprojectSLMConfig(sp_dict, prj, sp)
 
                             # get subproject github details
                             github_dict = sp_dict.get('github', {})
@@ -284,6 +317,55 @@ def loadConfig(configFilename, scaffoldHome):
         print(f'Error loading or parsing {configFilename}: {str(e)}')
         return {}
 
+def parseProjectSLMConfig(prj_dict, prj):
+    prj_slm_dict = prj_dict.get('slm', {})
+    if prj_slm_dict == {}:
+        print(f'Project {prj._name} has no slm data')
+        prj._ok = False
+    else:
+        prj._slm_shared = prj_slm_dict.get('shared', True)
+
+        prj._slm_prj = prj_slm_dict.get('prj', None)
+        if prj._slm_shared == False:
+            if prj._slm_prj != None:
+                print(f"Project {prj._name} has slm:shared == False but also specifies slm:prj")
+                prj._ok = False
+        else:
+            if prj._slm_prj == "" and prj._slm_shared == True:
+                print(f"Project {prj._name} has slm:shared == True but explicitly has empty string for slm:prj")
+                prj._ok = False
+            # default to using project name if none was specified
+            if prj._slm_prj == None:
+                prj._slm_prj = prj._name
+
+        prj._slm_combined_report = prj_slm_dict.get('combinedReport', False)
+        if prj._slm_combined_report == True and prj._slm_shared == False:
+            print(f"Project {prj._name} has slm:shared == False but also has slm:combinedReport == True")
+            prj._ok = False
+
+def parseSubprojectSLMConfig(sp_dict, prj, sp):
+    sp_slm_dict = sp_dict.get('slm', {})
+    if sp_slm_dict == {}:
+        # if project IS NOT shared SLM, then we assume _slm_prj is the sp name
+        # if project IS shared SLM, then we ignore _slm_prj
+        if prj._slm_shared == False:
+            sp._slm_prj = sp._name
+        # and either way we assume defaults for the other values
+        sp._slm_sp = sp._name
+        sp._slm_scan_id = -1
+    else:
+        # we did get an slm section, so we'll parse it
+        sp._slm_prj = sp_slm_dict.get('prj', "")
+        if prj._slm_shared == True:
+            if sp._slm_prj == "":
+                sp._slm_prj = sp._name
+        else:
+            if sp._slm_prj != "":
+                print(f'Project {prj._name} has slm:shared == True but subproject {sp._name} specifies slm:prj')
+                sp._ok = False
+        sp._slm_sp = sp_slm_dict.get('sp', sp._name)
+        sp._slm_scan_id = sp_slm_dict.get('scan_id', sp._slm_scan_id)
+
 class ConfigJSONEncoder(json.JSONEncoder):
     def default(self, o): # pylint: disable=method-hidden
         if isinstance(o, Config):
@@ -292,19 +374,37 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "storepath": o._storepath,
                     "month": o._month,
                     "version": o._version,
+                    "slm": {
+                        "home": o._slmhome,
+                    }
                 },
                 "projects": o._projects,
             }
 
         elif isinstance(o, Project):
+            # build SLM data
+            slm_section = {}
+            if o._slm_shared == True:
+                slm_section = {
+                    "shared": True,
+                    "prj": o._slm_prj,
+                    "combinedReport": o._slm_combined_report,
+                }
+            else:
+                slm_section = {
+                    "shared": False,
+                }
+
             if o._repotype == ProjectRepoType.GITHUB:
                 return {
                     "type": "github",
+                    "slm": slm_section,
                     "subprojects": o._subprojects,
                 }
             elif o._repotype == ProjectRepoType.GERRIT:
                 return {
                     "type": "gerrit",
+                    "slm": slm_section,
                     "status": o._status.name,
                     "gerrit": {
                         "apiurl": o._gerrit_apiurl,
@@ -317,6 +417,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
             elif o._repotype == ProjectRepoType.GITHUB_SHARED:
                 return {
                     "type": "github-shared",
+                    "slm": slm_section,
                     "status": o._status.name,
                     "github-shared": {
                         "org": o._github_shared_org,
@@ -331,9 +432,17 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 }
 
         elif isinstance(o, Subproject):
+            # build SLM data
+            slm_section = {"sp": o._slm_sp}
+            if o._slm_prj != "":
+                slm_section["prj"] = o._slm_prj
+            if o._slm_scan_id != -1:
+                slm_section["scan_id"] = o._slm_scan_id
+
             if o._repotype == ProjectRepoType.GITHUB:
                 js = {
                     "status": o._status.name,
+                    "slm": slm_section,
                     "code": {
                         "anyfiles": o._code_anyfiles,
                     },
@@ -354,6 +463,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
             elif o._repotype == ProjectRepoType.GITHUB_SHARED:
                 js = {
                     "status": o._status.name,
+                    "slm": slm_section,
                     "code": {
                         "anyfiles": o._code_anyfiles,
                     },
@@ -369,6 +479,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
             elif o._repotype == ProjectRepoType.GERRIT:
                 js = {
                     "status": o._status.name,
+                    "slm": slm_section,
                     "code": {
                         "anyfiles": o._code_anyfiles,
                     },
