@@ -16,15 +16,17 @@ from config import loadConfig, saveBackupConfig, saveConfig
 import datefuncs
 from runners import doNextThing
 from clearing import doCleared
+from newmonth import copyToNextMonth
 
 def printUsage():
     print(f"")
     print(f"Usage: {sys.argv[0]} <month> <command> [<project>] [<subproject>]")
     print(f"Month: in format YYYY-MM")
     print(f"Commands:")
-    print(f"  status:  Print status for all subprojects")
-    print(f"  run:     Run next steps for all subprojects")
-    print(f"  clear: Flag cleared in Fossology for [sub]project")
+    print(f"  status:   Print status for all subprojects")
+    print(f"  newmonth: Begin a new month and reset status for all projects")
+    print(f"  run:      Run next steps for all subprojects")
+    print(f"  clear:    Flag cleared in Fossology for [sub]project")
     print(f"")
 
 def status(projects, prj_only, sp_only):
@@ -99,6 +101,10 @@ if __name__ == "__main__":
         if command == "status":
             ran_command = True
             status(cfg._projects, prj_only, sp_only)
+
+        elif command == "newmonth":
+            ran_command = True
+            copyToNextMonth(SCAFFOLD_HOME, cfg)
 
         elif command == "run":
             ran_command = True
