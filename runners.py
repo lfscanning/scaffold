@@ -12,6 +12,8 @@ from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
+from importscan import doImportScanForSubproject
+from createreports import doCreateReportForProject, doCreateReportForSubproject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -33,7 +35,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                 retval = True
                 while retval:
                     retval = doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp)
-                    updateProjectStatusToSubprojectMin(cfg, prj)
+                    updateProjectPostSubproject(cfg, prj)
                     saveConfig(scaffold_home, cfg)
                     if retval:
                         did_something = True
@@ -64,7 +66,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                         retval = True
                         while retval:
                             retval = doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp)
-                            updateProjectStatusToSubprojectMin(cfg, prj)
+                            updateProjectPostSubproject(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
                                 did_something = True
@@ -98,7 +100,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                         retval = True
                         while retval:
                             retval = doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp)
-                            updateProjectStatusToSubprojectMin(cfg, prj)
+                            updateProjectPostSubproject(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
                                 did_something = True
@@ -136,6 +138,12 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.CLEARED:
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.GOTSPDX:
+        # import SPDX tag-value file into SLM
+        return doImportScanForSubproject(cfg, prj, sp)
+    elif status == Status.IMPORTEDSCAN:
+        # create report for subproject
+        return doCreateReportForSubproject(cfg, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
@@ -165,9 +173,38 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.CLEARED:
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
+    elif status == Status.GOTSPDX:
+        # import SPDX tag-value file into SLM
+        return doImportScanForSubproject(cfg, prj, sp)
+    elif status == Status.IMPORTEDSCAN:
+        # create report for subproject
+        return doCreateReportForSubproject(cfg, prj, sp)
 
     else:
         print(f"Invalid status for {sp._name}: {sp._status}")
         return False
 
+# For some steps, after all subprojects have reached a particular
+# point, sometimes a step needs to be taken at the project level
+# before the status is advanced. This includes (if appropriate)
+# advancing the status of the project.
+def updateProjectPostSubproject(cfg, prj):
+    # if all subprojects have either created reports or are
+    # stopped, then we should check whether we need to create
+    # a combined project report as well
+    if prj._slm_combined_report == True and prj._status == Status.IMPORTEDSCAN:
+        readyForReport = True
+        for sp in prj._subprojects.values():
+            if sp._status != Status.CREATEDREPORTS and sp._status != Status.STOPPED:
+                readyForReport = False
+                break
+        if readyForReport:
+            # try to build the report, and exit without updating
+            # status if we fail
+            retval = doCreateReportForProject(cfg, prj)
+            if retval == False:
+                return
 
+    # and, if appropriate, advance the status of the project to
+    # be the minimum of all its subprojects
+    updateProjectStatusToSubprojectMin(cfg, prj)
