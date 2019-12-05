@@ -17,6 +17,7 @@ import datefuncs
 from runners import doNextThing
 from clearing import doCleared
 from newmonth import copyToNextMonth
+from commenting import doCommented
 
 def printUsage():
     print(f"")
@@ -27,6 +28,7 @@ def printUsage():
     print(f"  newmonth: Begin a new month and reset status for all projects")
     print(f"  run:      Run next steps for all subprojects")
     print(f"  clear:    Flag cleared in Fossology for [sub]project")
+    print(f"  comment:  Flag commented in report for [sub]project")
     print(f"")
 
 def status(projects, prj_only, sp_only):
@@ -122,6 +124,16 @@ if __name__ == "__main__":
 
             # clear if in RANAGENTS state
             doCleared(SCAFFOLD_HOME, cfg, prj_only, sp_only)
+
+            # save config file, even if not modified (b/c saved backup)
+            saveConfig(SCAFFOLD_HOME, cfg)
+
+        elif command == "comment":
+            ran_command = True
+            saveBackupConfig(SCAFFOLD_HOME, cfg)
+
+            # clear if in CREATEDREPORTS state
+            doCommented(SCAFFOLD_HOME, cfg, prj_only, sp_only)
 
             # save config file, even if not modified (b/c saved backup)
             saveConfig(SCAFFOLD_HOME, cfg)

@@ -144,6 +144,10 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.IMPORTEDSCAN:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
+    elif status == Status.CREATEDREPORTS:
+        # needs manual commenting
+        print(f"{prj._name}/{sp._name}: status is CREATEDREPORTS; add comments to report then run `comment` action in scaffold")
+        return False
 
     else:
         return False
@@ -178,6 +182,10 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.IMPORTEDSCAN:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
+    elif status == Status.CREATEDREPORTS:
+        # needs manual commenting
+        print(f"{prj._name}/{sp._name}: status is CREATEDREPORTS; add comments to report then run `comment` action in scaffold")
+        return False
 
     else:
         return False
