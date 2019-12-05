@@ -146,7 +146,6 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         return doCreateReportForSubproject(cfg, prj, sp)
 
     else:
-        print(f"Invalid status for {sp._name}: {sp._status}")
         return False
 
 
@@ -181,7 +180,6 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         return doCreateReportForSubproject(cfg, prj, sp)
 
     else:
-        print(f"Invalid status for {sp._name}: {sp._status}")
         return False
 
 # For some steps, after all subprojects have reached a particular
