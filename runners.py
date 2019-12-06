@@ -14,6 +14,7 @@ from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
 from importscan import doImportScanForSubproject
 from createreports import doCreateReportForProject, doCreateReportForSubproject
+from uploadspdx import doUploadSPDXForSubproject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -148,6 +149,9 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # needs manual commenting
         print(f"{prj._name}/{sp._name}: status is CREATEDREPORTS; add comments to report then run `comment` action in scaffold")
         return False
+    elif status == Status.ADDEDCOMMENTS:
+        # upload SPDX file to GitHub org
+        return doUploadSPDXForSubproject(cfg, prj, sp)
 
     else:
         return False
@@ -186,6 +190,9 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # needs manual commenting
         print(f"{prj._name}/{sp._name}: status is CREATEDREPORTS; add comments to report then run `comment` action in scaffold")
         return False
+    elif status == Status.ADDEDCOMMENTS:
+        # upload SPDX file to GitHub org
+        return doUploadSPDXForSubproject(cfg, prj, sp)
 
     else:
         return False

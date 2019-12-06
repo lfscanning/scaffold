@@ -128,6 +128,8 @@ class Config:
         self._month = ""
         self._version = 0
         self._slm_home = ""
+        self._spdx_github_org = ""
+        self._spdx_github_signoff = ""
 
     def __repr__(self):
         is_ok = "OK"

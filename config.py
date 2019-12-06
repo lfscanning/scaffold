@@ -81,6 +81,14 @@ def loadConfig(configFilename, scaffoldHome):
             if cfg._storepath == "":
                 print(f'No valid storepath found in config section')
                 return cfg
+            cfg._spdx_github_org = config_dict.get('spdxGithubOrg', "")
+            if cfg._spdx_github_org == "":
+                print(f'No valid spdxGithubOrg found in config section')
+                return cfg
+            cfg._spdx_github_signoff = config_dict.get('spdxGithubSignoff', "")
+            if cfg._spdx_github_signoff == "":
+                print(f'No valid spdxGithubSignoff found in config section')
+                return cfg
 
             # load slm data
             slm_dict = config_dict.get('slm', {})
@@ -378,7 +386,9 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "version": o._version,
                     "slm": {
                         "home": o._slm_home,
-                    }
+                    },
+                    "spdxGithubOrg": o._spdx_github_org,
+                    "spdxGithubSignoff": o._spdx_github_signoff,
                 },
                 "projects": o._projects,
             }
