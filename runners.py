@@ -152,6 +152,16 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.ADDEDCOMMENTS:
         # upload SPDX file to GitHub org
         return doUploadSPDXForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDSPDX:
+        # needs manual delivering
+        print(f"{prj._name}/{sp._name}: status is UPLOADEDSPDX; deliver report then run `deliver` action in scaffold")
+        return False
+    elif status == Status.DELIVERED:
+        # we are done
+        return False
+    elif status == Status.STOPPED:
+        # we aren't going any further
+        return False
 
     else:
         return False
@@ -193,6 +203,16 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.ADDEDCOMMENTS:
         # upload SPDX file to GitHub org
         return doUploadSPDXForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDSPDX:
+        # needs manual delivering
+        print(f"{prj._name}/{sp._name}: status is UPLOADEDSPDX; deliver report then run `deliver` action in scaffold")
+        return False
+    elif status == Status.DELIVERED:
+        # we are done
+        return False
+    elif status == Status.STOPPED:
+        # we aren't going any further
+        return False
 
     else:
         return False

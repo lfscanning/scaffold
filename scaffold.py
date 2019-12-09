@@ -18,6 +18,7 @@ from runners import doNextThing
 from clearing import doCleared
 from newmonth import copyToNextMonth
 from commenting import doCommented
+from delivering import doDelivered
 
 def printUsage():
     print(f"")
@@ -29,6 +30,7 @@ def printUsage():
     print(f"  run:      Run next steps for all subprojects")
     print(f"  clear:    Flag cleared in Fossology for [sub]project")
     print(f"  comment:  Flag commented in report for [sub]project")
+    print(f"  deliver:  Flag delivered report for [sub]project")
     print(f"")
 
 def status(projects, prj_only, sp_only):
@@ -82,12 +84,6 @@ if __name__ == "__main__":
     cfg_file = os.path.join(MONTH_DIR, "config.json")
     cfg = loadConfig(cfg_file, SCAFFOLD_HOME)
 
-    # set up fossdriver server connection
-    fdServer = fossdriverSetup()
-    if not fdServer:
-        print(f"Unable to connect to Fossology server with fossdriver")
-        sys.exit(1)
-
     # we'll check if added optional args limit to one prj / sp
     prj_only = ""
     sp_only = ""
@@ -112,6 +108,12 @@ if __name__ == "__main__":
             ran_command = True
             saveBackupConfig(SCAFFOLD_HOME, cfg)
 
+            # set up fossdriver server connection
+            fdServer = fossdriverSetup()
+            if not fdServer:
+                print(f"Unable to connect to Fossology server with fossdriver")
+                sys.exit(1)
+
             # run commands
             doNextThing(SCAFFOLD_HOME, cfg, fdServer, prj_only, sp_only)
 
@@ -134,6 +136,16 @@ if __name__ == "__main__":
 
             # clear if in CREATEDREPORTS state
             doCommented(SCAFFOLD_HOME, cfg, prj_only, sp_only)
+
+            # save config file, even if not modified (b/c saved backup)
+            saveConfig(SCAFFOLD_HOME, cfg)
+
+        elif command == "deliver":
+            ran_command = True
+            saveBackupConfig(SCAFFOLD_HOME, cfg)
+
+            # clear if in UPLOADEDSPDX state
+            doDelivered(SCAFFOLD_HOME, cfg, prj_only, sp_only)
 
             # save config file, even if not modified (b/c saved backup)
             saveConfig(SCAFFOLD_HOME, cfg)
