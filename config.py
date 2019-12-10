@@ -165,10 +165,12 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_pulled = ""
                                 sp._code_path = ""
                                 sp._code_anyfiles = False
+                                sp._code_repos = {}
                             else:
                                 sp._code_pulled = code_dict.get('pulled', "")
                                 sp._code_path = code_dict.get('path', "")
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
+                                sp._code_repos = code_dict.get('repos', {})
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -224,10 +226,12 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_pulled = ""
                                 sp._code_path = ""
                                 sp._code_anyfiles = False
+                                sp._code_repos = {}
                             else:
                                 sp._code_pulled = code_dict.get('pulled', "")
                                 sp._code_path = code_dict.get('path', "")
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
+                                sp._code_repos = code_dict.get('repos', {})
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -274,10 +278,12 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_pulled = ""
                                 sp._code_path = ""
                                 sp._code_anyfiles = False
+                                sp._code_repos = {}
                             else:
                                 sp._code_pulled = code_dict.get('pulled', "")
                                 sp._code_path = code_dict.get('path', "")
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
+                                sp._code_repos = code_dict.get('repos', {})
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -391,6 +397,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "spdxGithubSignoff": o._spdx_github_signoff,
                 },
                 "projects": o._projects,
+                # DO NOT OUTPUT _GH_OAUTH_TOKEN TO CONFIG.JSON
             }
 
         elif isinstance(o, Project):
@@ -471,6 +478,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
                     js["code"]["path"] = o._code_path
+                if o._code_repos != {}:
+                    js["code"]["repos"] = o._code_repos
                 if len(o._github_repos_pending) > 0:
                     js["github"]["repos-pending"] = sorted(o._github_repos_pending)
                 return js
@@ -489,6 +498,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
                     js["code"]["path"] = o._code_path
+                if o._code_repos != {}:
+                    js["code"]["repos"] = o._code_repos
                 return js
             elif o._repotype == ProjectRepoType.GERRIT:
                 js = {
@@ -505,6 +516,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
                     js["code"]["path"] = o._code_path
+                if o._code_repos != {}:
+                    js["code"]["repos"] = o._code_repos
                 return js
             else:
                 return {

@@ -14,15 +14,16 @@ class Status(Enum):
     START = 1
     GOTLISTING = 2
     GOTCODE = 3
-    UPLOADEDCODE = 4
-    RANAGENTS = 5
-    CLEARED = 6
-    GOTSPDX = 7
-    IMPORTEDSCAN = 8
-    CREATEDREPORTS = 9
-    ADDEDCOMMENTS = 10
-    UPLOADEDSPDX = 11
-    DELIVERED = 12
+    ZIPPEDCODE = 4
+    UPLOADEDCODE = 5
+    RANAGENTS = 6
+    CLEARED = 7
+    GOTSPDX = 8
+    IMPORTEDSCAN = 9
+    CREATEDREPORTS = 10
+    ADDEDCOMMENTS = 11
+    UPLOADEDSPDX = 12
+    DELIVERED = 13
     STOPPED = 90
     MAX = 99
 
@@ -92,6 +93,8 @@ class Subproject:
         self._code_pulled = ""
         self._code_path = ""
         self._code_anyfiles = False
+        # mapping of repo name to pulled commit hash
+        self._code_repos = {}
 
         # only if GitHub
         self._github_org = ""
@@ -130,6 +133,8 @@ class Config:
         self._slm_home = ""
         self._spdx_github_org = ""
         self._spdx_github_signoff = ""
+        # DO NOT OUTPUT THIS TO CONFIG.JSON
+        self._gh_oauth_token = ""
 
     def __repr__(self):
         is_ok = "OK"

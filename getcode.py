@@ -36,6 +36,12 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         print(f"{prj._name}/{sp._name}: cloning {git_url}")
         git.Git(ziporg_path).clone(git_url)
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
+        # also record the top commit
+        r = git.Repo(dotgit_path)
+        cmts = list(r.iter_commits('master'))
+        if len(cmts) > 0:
+            sp._code_repos[repo] = cmts[0].hexsha
+        # and now remove .git directory
         shutil.rmtree(dotgit_path)
 
     # before zipping it all together, check and see whether it actually has any files
