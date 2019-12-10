@@ -41,10 +41,8 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         cmts = list(r.iter_commits('master'))
         if len(cmts) > 0:
             sp._code_repos[repo] = cmts[0].hexsha
-        # and now remove .git directory
-        shutil.rmtree(dotgit_path)
 
-    # before zipping it all together, check and see whether it actually has any files
+    # before finishing, check and see whether it actually has any files
     anyfiles = False
     for _, _, files in os.walk(ziporg_path):
         if files:
@@ -61,27 +59,9 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
     # great, there are files, so keep going
     sp._code_anyfiles = True
 
-    # now zip it all together
-    zf_path = os.path.join(sp_path, f"{ziporg_path}-{today}.zip")
-    print(f"{prj._name}/{sp._name}: zipping into {zf_path}")
-    if os.path.exists(zf_path):
-        os.remove(zf_path)
-    zf = zipfile.ZipFile(zf_path, 'w', compression=zipfile.ZIP_DEFLATED)
-    for root, _, files in os.walk(ziporg_path):
-        for f in files:
-            fpath = os.path.join(root, f)
-            rpath = os.path.relpath(fpath, ziporg_path)
-            if not os.path.islink(fpath):
-                zf.write(fpath, arcname=rpath)
-    zf.close()
-
-    # and finally, remove the original unzipped directory
-    shutil.rmtree(ziporg_path)
-
     # success - advance state
     sp._status = Status.GOTCODE
     sp._code_pulled = today
-    sp._code_path = zf_path
     return True
 
 # Runner for GOTLISTING in GERRIT
@@ -106,9 +86,12 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
         # get repo
         print(f"{prj._name}/{sp._name}: cloning {gitAddress}")
         git.Repo.clone_from(gitAddress, dstFolder)
-        # remove .git/
+        # also record the top commit
         dotgit_path = os.path.join(dstFolder, ".git")
-        shutil.rmtree(dotgit_path)
+        r = git.Repo(dotgit_path)
+        cmts = list(r.iter_commits('master'))
+        if len(cmts) > 0:
+            sp._code_repos[repo] = cmts[0].hexsha
 
     # before zipping it all together, check and see whether it actually has any files
     anyfiles = False
@@ -127,25 +110,7 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
     # great, there are files, so keep going
     sp._code_anyfiles = True
 
-    # now zip it all together
-    zf_path = os.path.join(sp_path, f"{ziporg_path}-{today}.zip")
-    print(f"{prj._name}/{sp._name}: zipping into {zf_path}")
-    if os.path.exists(zf_path):
-        os.remove(zf_path)
-    zf = zipfile.ZipFile(zf_path, 'w', compression=zipfile.ZIP_DEFLATED)
-    for root, _, files in os.walk(ziporg_path):
-        for f in files:
-            fpath = os.path.join(root, f)
-            rpath = os.path.relpath(fpath, ziporg_path)
-            if not os.path.islink(fpath):
-                zf.write(fpath, arcname=rpath)
-    zf.close()
-
-    # and finally, remove the original unzipped directory
-    shutil.rmtree(ziporg_path)
-
     # success - advance state
     sp._status = Status.GOTCODE
     sp._code_pulled = today
-    sp._code_path = zf_path
     return True

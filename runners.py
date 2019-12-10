@@ -9,6 +9,7 @@ from config import saveConfig, updateProjectStatusToSubprojectMin
 from datatypes import ProjectRepoType, Status, Subproject
 from repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
 from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
+from zipcode import doZipRepoCodeForSubproject, doZipRepoCodeForGerritSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
@@ -124,13 +125,16 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # get repo listing and see if we're good
         return doRepoListingForSubproject(cfg, prj, sp)
     elif status == Status.GOTLISTING:
-        # get code and see if we're good
+        # get code
         return doGetRepoCodeForSubproject(cfg, prj, sp)
     elif status == Status.GOTCODE:
-        # upload code and see if we're good
+        # delete .git folder and zip code
+        return doZipRepoCodeForSubproject(cfg, prj, sp)
+    elif status == Status.ZIPPEDCODE:
+        # upload code
         return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.UPLOADEDCODE:
-        # upload code and see if we're good
+        # run agents
         return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.RANAGENTS:
         # needs manual clearing
@@ -175,13 +179,16 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
 def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     status = sp._status
     if status == Status.GOTLISTING:
-        # get code and see if we're good
+        # get code
         return doGetRepoCodeForGerritSubproject(cfg, prj, sp)
     elif status == Status.GOTCODE:
-        # upload code and see if we're good
+        # delete .git folder and zip code
+        return doZipRepoCodeForGerritSubproject(cfg, prj, sp)
+    elif status == Status.ZIPPEDCODE:
+        # upload code
         return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.UPLOADEDCODE:
-        # upload code and see if we're good
+        # run agents
         return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.RANAGENTS:
         # needs manual clearing
