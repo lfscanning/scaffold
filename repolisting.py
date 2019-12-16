@@ -141,7 +141,7 @@ def doRepoListingForGerritAutoProject(cfg, prj):
         if sp_name not in groupings_seen:
             subprojects_to_remove.append(sp_name)
     for sp_name in subprojects_to_remove:
-        prj._subprojects.remove(sp_name)
+        del prj._subprojects[sp_name]
         print(f"{prj._name}: removed subproject {sp_name}")
 
     # finally, update status for remaining subprojects
