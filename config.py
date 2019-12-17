@@ -5,13 +5,18 @@ import json
 import os
 from shutil import copyfile
 
-from datatypes import Config, MatchText, Project, ProjectRepoType, Status, Subproject
+import yaml
+
+from datatypes import Config, Finding, MatchText, Priority, Project, ProjectRepoType, Status, Subproject
 
 def getConfigFilename(scaffoldHome, month):
     return os.path.join(scaffoldHome, month, "config.json")
 
 def getMatchesProjectFilename(scaffoldHome, month, prj_name):
     return os.path.join(scaffoldHome, month, f"matches-{prj_name}.json")
+
+def getFindingsProjectFilename(scaffoldHome, month, prj_name):
+    return os.path.join(scaffoldHome, month, f"findings-{prj_name}.yaml")
 
 def loadMatches(matchesFilename):
     matches = []
@@ -56,6 +61,50 @@ def loadMatches(matchesFilename):
     except json.decoder.JSONDecodeError as e:
         print(f'Error loading or parsing {matchesFilename}: {str(e)}')
         return []
+
+# parses findings template file and returns arrays, first with findings and
+# second with flagged categories
+def loadFindings(findingsFilename):
+    try:
+        with open(findingsFilename, "r") as f:
+            yd = yaml.safe_load(f)
+
+            # expecting object with flagCategories and findings arrays
+            flag_categories = yd.get("flagCategories", [])
+            if flag_categories == []:
+                print(f'No flagged categories specified in {findingsFilename}')
+                return [], []
+
+            findings_arr = yd.get("findings", [])
+            if findings_arr == []:
+                print(f'No findings specified in {findingsFilename}')
+                return [], []
+
+            findings = []
+            count = 0
+            for fd in findings_arr:
+                count += 1
+                finding = Finding()
+                finding._matches_path = fd.get('matches-path', [])
+                finding._matches_license = fd.get('matches-license', [])
+                if finding._matches_path == [] and finding._matches_license == []:
+                    print(f'Finding {count} in {findingsFilename} has no entries for either matches-path or matches-license')
+                    return [], []
+                prstr = fd.get("priority", "")
+                try:
+                    finding._priority = Priority[prstr.upper()]
+                except KeyError:
+                    print(f'Invalid priority value for finding {count} in {findingsFilename} with paths {finding._matches_path}, licenses {finding._matches_license}')
+                    return [], []
+
+                findings.append(finding)
+
+            return findings, flag_categories
+
+    except yaml.YAMLError as e:
+        print(f'Error loading or parsing {findingsFilename}: {str(e)}')
+        return [], []
+
 
 def loadConfig(configFilename, scaffoldHome):
     cfg = Config()
@@ -321,6 +370,13 @@ def loadConfig(configFilename, scaffoldHome):
                     prj._matches = loadMatches(matchesFilename)
                 else:
                     prj._matches = []
+
+                # also add in findings templates if a findings-{prj_name}.json file exists
+                findingsFilename = getFindingsProjectFilename(scaffoldHome, cfg._month, prj._name)
+                if os.path.isfile(findingsFilename):
+                    prj._findings, prj._flag_categories = loadFindings(findingsFilename)
+                else:
+                    prj._findings, prj._flag_categories = [], []
 
                 # and add project to the dictionary
                 cfg._projects[prj_name] = prj

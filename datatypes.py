@@ -21,11 +21,19 @@ class Status(Enum):
     GOTSPDX = 8
     IMPORTEDSCAN = 9
     CREATEDREPORTS = 10
-    ADDEDCOMMENTS = 11
-    UPLOADEDSPDX = 12
-    DELIVERED = 13
+    MADEDRAFTFINDINGS = 11
+    MADEFINALFINDINGS = 12
+    UPLOADEDSPDX = 13
+    DELIVERED = 14
     STOPPED = 90
     MAX = 99
+
+class Priority(Enum):
+    UNKNOWN = 0
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    VERYHIGH = 4
 
 class MatchText:
 
@@ -35,6 +43,21 @@ class MatchText:
         self._text = ""
         self._comment = ""
         self._actions = []
+
+class Finding:
+
+    def __init__(self):
+        super(Finding, self).__init__()
+
+        # loaded from findings file
+        self._priority = Priority.UNKNOWN
+        self._matches_path = []
+        self._matches_license = []
+        self._text = ""
+
+        # determined based on analysis
+        self._is_present = False
+        self._files = []
 
 class Project:
 
@@ -49,6 +72,8 @@ class Project:
         self._subprojects = {}
 
         self._matches = []
+        self._findings = []
+        self._flag_categories = []
 
         # only if Gerrit
         self._gerrit_apiurl = ""
