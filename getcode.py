@@ -38,7 +38,7 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
         # also record the top commit
         r = git.Repo(dotgit_path)
-        cmts = list(r.iter_commits('master'))
+        cmts = list(r.iter_commits())
         if len(cmts) > 0:
             sp._code_repos[repo] = cmts[0].hexsha
 
@@ -89,9 +89,10 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
         # also record the top commit
         dotgit_path = os.path.join(dstFolder, ".git")
         r = git.Repo(dotgit_path)
-        cmts = list(r.iter_commits('master'))
-        if len(cmts) > 0:
-            sp._code_repos[repo] = cmts[0].hexsha
+        if len(r.refs) > 0:
+            cmts = list(r.iter_commits())
+            if len(cmts) > 0:
+                sp._code_repos[repo] = cmts[0].hexsha
 
     # before zipping it all together, check and see whether it actually has any files
     anyfiles = False
