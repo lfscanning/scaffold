@@ -22,9 +22,10 @@ class Status(Enum):
     IMPORTEDSCAN = 9
     CREATEDREPORTS = 10
     MADEDRAFTFINDINGS = 11
-    MADEFINALFINDINGS = 12
-    UPLOADEDSPDX = 13
-    DELIVERED = 14
+    APPROVEDFINDINGS = 12
+    MADEFINALFINDINGS = 13
+    UPLOADEDSPDX = 14
+    DELIVERED = 15
     STOPPED = 90
     MAX = 99
 
@@ -55,8 +56,15 @@ class Finding:
         self._matches_license = []
         self._text = ""
 
+class FindingsInstance:
+
+    def __init__(self):
+        super(FindingsInstance, self).__init__()
+
+        # parent Finding that this refers to
+        self._finding = Finding()
+
         # determined based on analysis
-        self._is_present = False
         self._files = []
 
 class Project:
@@ -73,6 +81,7 @@ class Project:
 
         self._matches = []
         self._findings = []
+        self._findingsInstances = []
         self._flag_categories = []
 
         # only if Gerrit
@@ -114,6 +123,8 @@ class Subproject:
         self._repotype = ProjectRepoType.UNKNOWN
         self._status = Status.UNKNOWN
         self._repos = []
+
+        self._findingsInstances = []
 
         self._code_pulled = ""
         self._code_path = ""

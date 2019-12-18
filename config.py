@@ -85,6 +85,7 @@ def loadFindings(findingsFilename):
             for fd in findings_arr:
                 count += 1
                 finding = Finding()
+                finding._text = fd.get('text', [])
                 finding._matches_path = fd.get('matches-path', [])
                 finding._matches_license = fd.get('matches-license', [])
                 if finding._matches_path == [] and finding._matches_license == []:

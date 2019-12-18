@@ -17,7 +17,7 @@ import datefuncs
 from runners import doNextThing
 from clearing import doCleared
 from newmonth import copyToNextMonth
-from commenting import doCommented
+from approving import doApprove
 from delivering import doDelivered
 
 def printUsage():
@@ -29,7 +29,7 @@ def printUsage():
     print(f"  newmonth: Begin a new month and reset status for all projects")
     print(f"  run:      Run next steps for all subprojects")
     print(f"  clear:    Flag cleared in Fossology for [sub]project")
-    print(f"  comment:  Flag commented in report for [sub]project")
+    print(f"  approve:  Flag approved auto-generated findings in report for [sub]project")
     print(f"  deliver:  Flag delivered report for [sub]project")
     print(f"")
 
@@ -145,12 +145,12 @@ if __name__ == "__main__":
             # save config file, even if not modified (b/c saved backup)
             saveConfig(SCAFFOLD_HOME, cfg)
 
-        elif command == "comment":
+        elif command == "approve":
             ran_command = True
             saveBackupConfig(SCAFFOLD_HOME, cfg)
 
-            # clear if in CREATEDREPORTS state
-            doCommented(SCAFFOLD_HOME, cfg, prj_only, sp_only)
+            # approve if in MADEDRAFTFINDINGS state
+            doApprove(SCAFFOLD_HOME, cfg, prj_only, sp_only)
 
             # save config file, even if not modified (b/c saved backup)
             saveConfig(SCAFFOLD_HOME, cfg)
