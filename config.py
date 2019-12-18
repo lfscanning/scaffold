@@ -150,6 +150,20 @@ def loadConfig(configFilename, scaffoldHome):
                 print(f'No valid home found in slm section')
                 return cfg
 
+            # load web server data
+            cfg._web_server = config_dict.get('webServer', "")
+            if cfg._web_server == "":
+                print(f"No valid webServer found in config section")
+                return cfg
+            cfg._web_reports_path = config_dict.get('webReportsPath', "")
+            if cfg._web_reports_path == "":
+                print(f"No valid webReportsPath found in config section")
+                return cfg
+            cfg._web_reports_url = config_dict.get('webReportsUrl', "")
+            if cfg._web_reports_url == "":
+                print(f"No valid webReportsUrl found in config section")
+                return cfg
+
             # if we get here, main config is at least valid
             cfg._ok = True
 
@@ -222,6 +236,17 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
                                 sp._code_repos = code_dict.get('repos', {})
 
+                            # get web data
+                            web_dict = sp_dict.get('web', {})
+                            if web_dict == {}:
+                                sp._web_uuid = ""
+                                sp._web_html_url = ""
+                                sp._web_xlsx_url = ""
+                            else:
+                                sp._web_uuid = web_dict.get('uuid', "")
+                                sp._web_html_url = web_dict.get('htmlurl', "")
+                                sp._web_xlsx_url = web_dict.get('xlsxurl', "")
+
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
 
@@ -283,6 +308,17 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
                                 sp._code_repos = code_dict.get('repos', {})
 
+                            # get web data
+                            web_dict = sp_dict.get('web', {})
+                            if web_dict == {}:
+                                sp._web_uuid = ""
+                                sp._web_html_url = ""
+                                sp._web_xlsx_url = ""
+                            else:
+                                sp._web_uuid = web_dict.get('uuid', "")
+                                sp._web_html_url = web_dict.get('htmlurl', "")
+                                sp._web_xlsx_url = web_dict.get('xlsxurl', "")
+
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
 
@@ -334,6 +370,17 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._code_path = code_dict.get('path', "")
                                 sp._code_anyfiles = code_dict.get('anyfiles', "")
                                 sp._code_repos = code_dict.get('repos', {})
+
+                            # get web data
+                            web_dict = sp_dict.get('web', {})
+                            if web_dict == {}:
+                                sp._web_uuid = ""
+                                sp._web_html_url = ""
+                                sp._web_xlsx_url = ""
+                            else:
+                                sp._web_uuid = web_dict.get('uuid', "")
+                                sp._web_html_url = web_dict.get('htmlurl', "")
+                                sp._web_xlsx_url = web_dict.get('xlsxurl', "")
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -452,6 +499,9 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     },
                     "spdxGithubOrg": o._spdx_github_org,
                     "spdxGithubSignoff": o._spdx_github_signoff,
+                    "webServer": o._web_server,
+                    "webReportsPath": o._web_reports_path,
+                    "webReportsUrl": o._web_reports_url,
                 },
                 "projects": o._projects,
                 # DO NOT OUTPUT _GH_OAUTH_TOKEN TO CONFIG.JSON
@@ -524,6 +574,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "code": {
                         "anyfiles": o._code_anyfiles,
                     },
+                    "web": {},
                     "github": {
                         "org": o._github_org,
                         "ziporg": o._github_ziporg,
@@ -537,6 +588,12 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["path"] = o._code_path
                 if o._code_repos != {}:
                     js["code"]["repos"] = o._code_repos
+                if o._web_html_url != "":
+                    js["web"]["htmlurl"] = o._web_html_url
+                if o._web_xlsx_url != "":
+                    js["web"]["xlsxurl"] = o._web_xlsx_url
+                if o._web_uuid != "":
+                    js["web"]["uuid"] = o._web_uuid
                 if len(o._github_repos_pending) > 0:
                     js["github"]["repos-pending"] = sorted(o._github_repos_pending)
                 return js
@@ -544,6 +601,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 js = {
                     "status": o._status.name,
                     "slm": slm_section,
+                    "web": {},
                     "code": {
                         "anyfiles": o._code_anyfiles,
                     },
@@ -557,11 +615,18 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["path"] = o._code_path
                 if o._code_repos != {}:
                     js["code"]["repos"] = o._code_repos
+                if o._web_html_url != "":
+                    js["web"]["htmlurl"] = o._web_html_url
+                if o._web_xlsx_url != "":
+                    js["web"]["xlsxurl"] = o._web_xlsx_url
+                if o._web_uuid != "":
+                    js["web"]["uuid"] = o._web_uuid
                 return js
             elif o._repotype == ProjectRepoType.GERRIT:
                 js = {
                     "status": o._status.name,
                     "slm": slm_section,
+                    "web": {},
                     "code": {
                         "anyfiles": o._code_anyfiles,
                     },
@@ -575,6 +640,12 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["path"] = o._code_path
                 if o._code_repos != {}:
                     js["code"]["repos"] = o._code_repos
+                if o._web_html_url != "":
+                    js["web"]["htmlurl"] = o._web_html_url
+                if o._web_xlsx_url != "":
+                    js["web"]["xlsxurl"] = o._web_xlsx_url
+                if o._web_uuid != "":
+                    js["web"]["uuid"] = o._web_uuid
                 return js
             else:
                 return {

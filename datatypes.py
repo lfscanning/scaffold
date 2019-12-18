@@ -25,7 +25,8 @@ class Status(Enum):
     APPROVEDFINDINGS = 12
     MADEFINALFINDINGS = 13
     UPLOADEDSPDX = 14
-    DELIVERED = 15
+    UPLOADEDREPORTS = 15
+    DELIVERED = 16
     STOPPED = 90
     MAX = 99
 
@@ -144,6 +145,11 @@ class Subproject:
         self._slm_scan_id = -1
         self._slm_pending_lics = []
 
+        # web upload vars
+        self._web_uuid = ""
+        self._web_html_url = ""
+        self._web_xlsx_url = ""
+
     def __repr__(self):
         is_ok = "OK"
         if self._ok == False:
@@ -169,6 +175,9 @@ class Config:
         self._slm_home = ""
         self._spdx_github_org = ""
         self._spdx_github_signoff = ""
+        self._web_server = ""
+        self._web_reports_path = ""
+        self._web_reports_url = ""
         # DO NOT OUTPUT THIS TO CONFIG.JSON
         self._gh_oauth_token = ""
 

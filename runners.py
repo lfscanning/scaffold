@@ -18,6 +18,7 @@ from createreports import doCreateReportForProject, doCreateReportForSubproject
 from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject
 from approving import doApprove
 from uploadspdx import doUploadSPDXForSubproject
+from uploadreport import doUploadReportsForSubproject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -161,8 +162,11 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # upload SPDX file to GitHub org
         return doUploadSPDXForSubproject(cfg, prj, sp)
     elif status == Status.UPLOADEDSPDX:
+        # upload findings report to unique URL
+        return doUploadReportsForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDREPORTS:
         # needs manual delivering
-        print(f"{prj._name}/{sp._name}: status is UPLOADEDSPDX; deliver report then run `deliver` action")
+        print(f"{prj._name}/{sp._name}: status is UPLOADEDREPORTS; deliver report then run `deliver` action")
         return False
     elif status == Status.DELIVERED:
         # we are done
@@ -217,8 +221,11 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # upload SPDX file to GitHub org
         return doUploadSPDXForSubproject(cfg, prj, sp)
     elif status == Status.UPLOADEDSPDX:
+        # upload findings report to unique URL
+        return doUploadReportsForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDREPORTS:
         # needs manual delivering
-        print(f"{prj._name}/{sp._name}: status is UPLOADEDSPDX; deliver report then run `deliver` action")
+        print(f"{prj._name}/{sp._name}: status is UPLOADEDREPORTS; deliver report then run `deliver` action")
         return False
     elif status == Status.DELIVERED:
         # we are done
