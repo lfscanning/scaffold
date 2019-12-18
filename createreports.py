@@ -16,6 +16,7 @@ def doCreateReportForSubproject(cfg, prj, sp):
     # set report path
     reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
     reportFilename = f"{sp._name}-{sp._code_pulled}.xlsx"
+    jsonFilename = f"{sp._name}-{sp._code_pulled}.json"
 
     # create report directory for project if it doesn't already exist
     if not os.path.exists(reportFolder):
@@ -43,7 +44,7 @@ def doCreateReportForSubproject(cfg, prj, sp):
 
     # was it successful?
     if cp.returncode != 0:
-        print(f"""{prj._name}/{sp._name}: report creation failed with error code {cp.returncode}:
+        print(f"""{prj._name}/{sp._name}: XLSX report creation failed with error code {cp.returncode}:
 ----------
 output:
 {cp.stdout}
@@ -56,6 +57,28 @@ errors:
 
     # success!
     print(f"{prj._name}/{sp._name}: created xlsx report")
+
+    # also create JSON report
+    cmd = [
+        "slm",
+        "create-report",
+        f"--scan_id={sp._slm_scan_id}",
+        f"--report_path={os.path.join(reportFolder, jsonFilename)}",
+        f"--report_format=json",
+    ]
+    cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+    if cp.returncode != 0:
+        print(f"""{prj._name}/{sp._name}: JSON report creation failed with error code {cp.returncode}:
+----------
+output:
+{cp.stdout}
+----------
+errors:
+{cp.stderr}
+----------
+""")
+        return False
+    print(f"{prj._name}/{sp._name}: created json report")
 
     # once we get here, the report has been created
     sp._status = Status.CREATEDREPORTS

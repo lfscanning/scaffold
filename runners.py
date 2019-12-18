@@ -15,7 +15,10 @@ from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
 from importscan import doImportScanForSubproject
 from createreports import doCreateReportForProject, doCreateReportForSubproject
+from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject
+from approving import doApprove
 from uploadspdx import doUploadSPDXForSubproject
+from uploadreport import doUploadReportsForSubproject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -138,7 +141,7 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.RANAGENTS:
         # needs manual clearing
-        print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action in scaffold")
+        print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action")
         return False
     elif status == Status.CLEARED:
         # get SPDX tag-value file
@@ -149,16 +152,21 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.IMPORTEDSCAN:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
-    elif status == Status.CREATEDREPORTS:
-        # needs manual commenting
-        print(f"{prj._name}/{sp._name}: status is CREATEDREPORTS; add comments to report then run `comment` action in scaffold")
-        return False
-    elif status == Status.ADDEDCOMMENTS:
+    elif status == Status.CREATEDREPORTS or status == Status.MADEDRAFTFINDINGS:
+        # create draft of findings report for subproject, if none yet
+        return doMakeDraftFindingsIfNoneForSubproject(cfg, prj, sp)
+    elif status == Status.APPROVEDFINDINGS:
+        # create final draft of findings report for subproject
+        return doMakeFinalFindingsForSubproject(cfg, prj, sp)
+    elif status == Status.MADEFINALFINDINGS:
         # upload SPDX file to GitHub org
         return doUploadSPDXForSubproject(cfg, prj, sp)
     elif status == Status.UPLOADEDSPDX:
+        # upload findings report to unique URL
+        return doUploadReportsForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDREPORTS:
         # needs manual delivering
-        print(f"{prj._name}/{sp._name}: status is UPLOADEDSPDX; deliver report then run `deliver` action in scaffold")
+        print(f"{prj._name}/{sp._name}: status is UPLOADEDREPORTS; deliver report then run `deliver` action")
         return False
     elif status == Status.DELIVERED:
         # we are done
@@ -192,7 +200,7 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.RANAGENTS:
         # needs manual clearing
-        print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action in scaffold")
+        print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action")
         return False
     elif status == Status.CLEARED:
         # get SPDX tag-value file
@@ -203,16 +211,21 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
     elif status == Status.IMPORTEDSCAN:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
-    elif status == Status.CREATEDREPORTS:
-        # needs manual commenting
-        print(f"{prj._name}/{sp._name}: status is CREATEDREPORTS; add comments to report then run `comment` action in scaffold")
-        return False
-    elif status == Status.ADDEDCOMMENTS:
+    elif status == Status.CREATEDREPORTS or status == Status.MADEDRAFTFINDINGS:
+        # create draft of findings report for subproject, if none yet
+        return doMakeDraftFindingsIfNoneForSubproject(cfg, prj, sp)
+    elif status == Status.APPROVEDFINDINGS:
+        # create final draft of findings report for subproject
+        return doMakeFinalFindingsForSubproject(cfg, prj, sp)
+    elif status == Status.MADEFINALFINDINGS:
         # upload SPDX file to GitHub org
         return doUploadSPDXForSubproject(cfg, prj, sp)
     elif status == Status.UPLOADEDSPDX:
+        # upload findings report to unique URL
+        return doUploadReportsForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDREPORTS:
         # needs manual delivering
-        print(f"{prj._name}/{sp._name}: status is UPLOADEDSPDX; deliver report then run `deliver` action in scaffold")
+        print(f"{prj._name}/{sp._name}: status is UPLOADEDREPORTS; deliver report then run `deliver` action")
         return False
     elif status == Status.DELIVERED:
         # we are done

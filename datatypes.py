@@ -21,11 +21,21 @@ class Status(Enum):
     GOTSPDX = 8
     IMPORTEDSCAN = 9
     CREATEDREPORTS = 10
-    ADDEDCOMMENTS = 11
-    UPLOADEDSPDX = 12
-    DELIVERED = 13
+    MADEDRAFTFINDINGS = 11
+    APPROVEDFINDINGS = 12
+    MADEFINALFINDINGS = 13
+    UPLOADEDSPDX = 14
+    UPLOADEDREPORTS = 15
+    DELIVERED = 16
     STOPPED = 90
     MAX = 99
+
+class Priority(Enum):
+    UNKNOWN = 0
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    VERYHIGH = 4
 
 class MatchText:
 
@@ -35,6 +45,28 @@ class MatchText:
         self._text = ""
         self._comment = ""
         self._actions = []
+
+class Finding:
+
+    def __init__(self):
+        super(Finding, self).__init__()
+
+        # loaded from findings file
+        self._priority = Priority.UNKNOWN
+        self._matches_path = []
+        self._matches_license = []
+        self._text = ""
+
+class FindingsInstance:
+
+    def __init__(self):
+        super(FindingsInstance, self).__init__()
+
+        # parent Finding that this refers to
+        self._finding = Finding()
+
+        # determined based on analysis
+        self._files = []
 
 class Project:
 
@@ -49,6 +81,9 @@ class Project:
         self._subprojects = {}
 
         self._matches = []
+        self._findings = []
+        self._findingsInstances = []
+        self._flag_categories = []
 
         # only if Gerrit
         self._gerrit_apiurl = ""
@@ -90,6 +125,8 @@ class Subproject:
         self._status = Status.UNKNOWN
         self._repos = []
 
+        self._findingsInstances = []
+
         self._code_pulled = ""
         self._code_path = ""
         self._code_anyfiles = False
@@ -107,6 +144,11 @@ class Subproject:
         self._slm_sp = ""
         self._slm_scan_id = -1
         self._slm_pending_lics = []
+
+        # web upload vars
+        self._web_uuid = ""
+        self._web_html_url = ""
+        self._web_xlsx_url = ""
 
     def __repr__(self):
         is_ok = "OK"
@@ -133,6 +175,9 @@ class Config:
         self._slm_home = ""
         self._spdx_github_org = ""
         self._spdx_github_signoff = ""
+        self._web_server = ""
+        self._web_reports_path = ""
+        self._web_reports_url = ""
         # DO NOT OUTPUT THIS TO CONFIG.JSON
         self._gh_oauth_token = ""
 

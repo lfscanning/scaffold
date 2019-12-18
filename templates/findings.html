@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8"/>
+    <title>LF License Scan report: {{ prjName }} {{ spName }}</title>
+    <style>
+        body { 
+            background-color: #80a0e6;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        a {
+            color: #000000;
+        }
+        #mainbox {
+            background-color: #f0f0f0;
+            box-shadow: 3px 2px 2px #999999;
+        }
+        #mainboxContents {
+            margin: 15px;
+            padding: 5px;
+        }
+        #bottomMatter {
+            font-size: smaller;
+        }
+        .findingTable {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid gray;
+            width: 95%;
+            background-color: #f5f5f5;
+        }
+        .showlink {
+            color: #999999;
+            font-size: smaller;
+        }
+        .repos {
+            font-family:'Courier New', Courier, monospace;
+            font-size: smaller;
+            margin-left: 20px;
+        }
+        .reposhidden {
+            display: none;
+        }
+        .files {
+            font-family:'Courier New', Courier, monospace;
+            font-size: smaller;
+            margin-left: 20px;
+        }
+        .fileshidden {
+            display: none;
+        }
+        .description {
+            margin-left: 20px;
+            margin-right: 10px;
+        }
+        .priorityveryhigh {
+            background-color: rgb(238, 77, 77);
+            font-weight: bold;
+            padding: 2px;
+        }
+        .priorityhigh {
+            background-color: rgb(238, 149, 77);
+            font-weight: bold;
+            padding: 2px;
+        }
+        .prioritymedium {
+            background-color: rgba(227, 238, 77, 0.904);
+            font-weight: bold;
+            padding: 2px;
+        }
+        .prioritylow {
+            background-color: rgba(152, 141, 245, 0.904);
+            font-weight: bold;
+            padding: 2px;
+        }
+    </style>
+    <script>
+        function toggleRepo(elt) {
+            var repolist = document.getElementById("repolist");
+            if (repolist.className == "reposhidden") {
+                repolist.className = "repos";
+                elt.innerHTML = "(hide repos)"
+            } else {
+                repolist.className = "reposhidden";
+                elt.innerHTML = "(show repos)"
+            }
+        }
+
+        function toggleFile(elt, findingNum) {
+            var findingListID = "filelist" + findingNum
+            var filelist = document.getElementById(findingListID);
+            if (filelist.className == "fileshidden") {
+                filelist.className = "files";
+                elt.innerHTML = "(hide files)"
+            } else {
+                filelist.className = "fileshidden";
+                elt.innerHTML = "(show files)"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="mainbox">
+        <div id="mainboxContents">
+            <div id="topMatter">
+                <h1>Linux Foundation License Scan report</h1>
+                <div>
+                    Project: <strong>{{ prjName }}</strong><br />
+                    Subproject: <strong>{{ spName }}</strong><br />
+                    Snapshot on: <strong>{{ codeDate }}</strong> 
+                        <span class="showlink" onclick="toggleRepo(this)">(show repos)</span><br />
+                    <div id="repolist" class="reposhidden">
+                        <table>
+                            {% for rd in repoData %}
+                            <tr><td>{{ rd[0] }}</td> <td>{{ rd[1] }}</td></tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                <hr />
+            </div>
+
+            <div id="main">
+                {% for fd in findingData %}
+                <table class="findingTable">
+                    <tr>
+                        <td>Finding #{{ loop.index }}</td>
+                    </tr>
+                    <tr>
+                        <td>Priority: <span class="priority{{ fd.priorityShort }}">{{ fd.priorityFull }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="description">
+                                {{ fd.description | replace("\n", "<br>") }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>
+                            {{ fd.numFiles }} {% if fd.numFiles != 1 %} files {% else %} file {% endif %}
+                        </strong>
+                        <span class="showlink" onclick="toggleFile(this, {{ loop.index }})">(show files)</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="filelist{{ loop.index }}" class="fileshidden">
+                                {% for filename in fd.files %}
+                                {{ filename }}<br />
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                {% endfor %}
+
+            </div>
+
+            <div id="bottomMatter">
+                <hr />
+                <p>Please contact Steve Winslow (<a href="mailto:swinslow@linuxfoundation.org">swinslow@linuxfoundation.org</a>) with any questions, comments, etc. regarding this report.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
