@@ -24,3 +24,25 @@ def nextMonth(year, month):
         return year+1, 1
     return year, month+1
 
+# get year-month as text output
+def getTextYM(s):
+    year, month = parseYM(s)
+    if year == 0 or month == 0:
+        return None
+
+    months = [
+        "Jan.",
+        "Feb.",
+        "Mar.",
+        "Apr.",
+        "May",
+        "June",
+        "July",
+        "Aug.",
+        "Sept.",
+        "Oct.",
+        "Nov.",
+        "Dec.",
+    ]
+
+    return f"{months[month - 1]} {year}"

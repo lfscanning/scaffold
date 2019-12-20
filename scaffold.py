@@ -18,6 +18,7 @@ from runners import doNextThing
 from clearing import doCleared
 from newmonth import copyToNextMonth
 from approving import doApprove
+from emailing import printEmail
 from delivering import doDelivered
 
 def printUsage():
@@ -25,12 +26,13 @@ def printUsage():
     print(f"Usage: {sys.argv[0]} <month> <command> [<project>] [<subproject>]")
     print(f"Month: in format YYYY-MM")
     print(f"Commands:")
-    print(f"  status:   Print status for all subprojects")
-    print(f"  newmonth: Begin a new month and reset status for all projects")
-    print(f"  run:      Run next steps for all subprojects")
-    print(f"  clear:    Flag cleared in Fossology for [sub]project")
-    print(f"  approve:  Flag approved auto-generated findings in report for [sub]project")
-    print(f"  deliver:  Flag delivered report for [sub]project")
+    print(f"  status:     Print status for all subprojects")
+    print(f"  newmonth:   Begin a new month and reset status for all projects")
+    print(f"  run:        Run next steps for all subprojects")
+    print(f"  clear:      Flag cleared in Fossology for [sub]project")
+    print(f"  approve:    Flag approved auto-generated findings in report for [sub]project")
+    print(f"  printemail: Print email with links to reports for [sub]project")
+    print(f"  deliver:    Flag delivered report for [sub]project")
     print(f"")
 
 def status(projects, prj_only, sp_only):
@@ -154,6 +156,12 @@ if __name__ == "__main__":
 
             # save config file, even if not modified (b/c saved backup)
             saveConfig(SCAFFOLD_HOME, cfg)
+
+        elif command == "printemail":
+            ran_command = True
+
+            # print email details if in UPLOADEDREPORTS state
+            printEmail(cfg, prj_only, sp_only)
 
         elif command == "deliver":
             ran_command = True
