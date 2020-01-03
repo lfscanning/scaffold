@@ -10,6 +10,7 @@ from datatypes import Status
 import datefuncs
 
 def copyToNextMonth(scaffold_home, cfg):
+    existing_ym = cfg._month
     # make sure there isn't already a folder for the next month
     year, month = datefuncs.parseYM(cfg._month)
     if year == 0 or month == 0:
@@ -44,11 +45,19 @@ def copyToNextMonth(scaffold_home, cfg):
     print(f"Saved new config file for month {cfg._month}")
 
     # copy matches files
-    existing_matches = glob.glob(os.path.join(scaffold_home, cfg._month, "matches*.json"))
+    existing_matches = glob.glob(os.path.join(scaffold_home, existing_ym, "matches*.json"))
     for em in existing_matches:
         new_filename = os.path.basename(em)
         new_dst = os.path.join(newMonthDir, new_filename)
         shutil.copyfile(em, new_dst)
         print(f"Copied matches file to {new_dst}")
+
+    # copy findings files
+    existing_findings = glob.glob(os.path.join(scaffold_home, existing_ym, "findings*.yaml"))
+    for em in existing_findings:
+        new_filename = os.path.basename(em)
+        new_dst = os.path.join(newMonthDir, new_filename)
+        shutil.copyfile(em, new_dst)
+        print(f"Copied findings file to {new_dst}")
 
     return True
