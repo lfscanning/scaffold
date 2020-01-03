@@ -17,13 +17,14 @@ def copyToNextMonth(scaffold_home, cfg):
         print(f"Unable to parse current year-month from config object; bailing")
         return False
     newYear, newMonth = datefuncs.nextMonth(year, month)
-    newMonthDir = os.path.join(scaffold_home, f"{newYear}-{newMonth}")
+    newYM = datefuncs.getYMStr(newYear, newMonth)
+    newMonthDir = os.path.join(scaffold_home, f"{newYM}")
     if os.path.exists(newMonthDir):
         print(f"Directory for next month already exists at {newMonthDir}; bailing")
         return False
 
     # update the config object
-    cfg._month = f"{newYear}-{newMonth}"
+    cfg._month = newYM
     cfg._version = 1
 
     # update the config object's projects and subprojects

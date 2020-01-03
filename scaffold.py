@@ -100,7 +100,7 @@ if __name__ == "__main__":
     SCAFFOLD_HOME = os.getenv('SCAFFOLD_HOME')
     if SCAFFOLD_HOME == None:
         SCAFFOLD_HOME = os.path.join(Path.home(), "scaffold")
-    MONTH_DIR = os.path.join(SCAFFOLD_HOME, f"{year}-{month}")
+    MONTH_DIR = os.path.join(SCAFFOLD_HOME, datefuncs.getYMStr(year, month))
 
     ran_command = False
 

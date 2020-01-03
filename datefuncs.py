@@ -24,6 +24,13 @@ def nextMonth(year, month):
         return year+1, 1
     return year, month+1
 
+# get year-month as zero-padded string
+def getYMStr(year, month):
+    if month < 10:
+        return f"{year}-0{month}"
+    else:
+        return f"{year}-{month}"
+
 # get year-month as text output
 def getTextYM(s):
     year, month = parseYM(s)

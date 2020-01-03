@@ -7,7 +7,7 @@ from pathlib import Path
 from fossdriver.tasks import Scanners, Copyright, Reuse, BulkTextMatch
 
 from datatypes import Status, ProjectRepoType
-from datefuncs import parseYM, priorMonth
+from datefuncs import parseYM, priorMonth, getYMStr
 
 def priorUploadExists(fdServer, priorUploadFolder, priorUploadName):
     # first, get the old scan's folder and upload ID
@@ -54,21 +54,22 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
     foundPrior = False
     while numTries > 0:
         pYear, pMonth = priorMonth(pYear, pMonth)
-        priorUploadFragment = f"{sp._name}-{pYear}-{pMonth}"
-        priorFolder = f"{prj._name}-{pYear}-{pMonth}"
+        pYM = getYMStr(pYear, pMonth)
+        priorUploadFragment = f"{sp._name}-{pYM}"
+        priorFolder = f"{prj._name}-{pYM}"
 
         if priorUploadExists(fdServer, priorFolder, priorUploadFragment):
             foundPrior = True
-            print(f"{prj._name}/{sp._name}: running reuser")
+            print(f"{prj._name}/{sp._name}: running reuser from {pYM}")
             t = Reuse(fdServer, uploadName, uploadFolder, priorUploadFragment, priorFolder)
             t.exact = False
             retval = t.run()
             if not retval:
                 # keep going anyway, don't fail
                 print(f"{prj._name}/{sp._name}: error running reuse from {priorUploadFragment} in {priorFolder}, skipping reuser")
-            continue
+            break
         else:
-            print(f"{prj._name}/{sp._name}: didn't find prior upload for {pYear}-{pMonth}")
+            print(f"{prj._name}/{sp._name}: didn't find prior upload for {pYM}")
             numTries -= 1
 
     if not foundPrior:
