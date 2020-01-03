@@ -23,12 +23,9 @@ def priorUploadExists(fdServer, priorUploadFolder, priorUploadName):
 
 def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
     year, month = parseYM(cfg._month)
-    pYear, pMonth = priorMonth(year, month)
 
     uploadName = os.path.basename(sp._code_path)
     uploadFolder = f"{prj._name}-{cfg._month}"
-    priorUploadFragment = f"{sp._name}-{pYear}-{pMonth}"
-    priorFolder = f"{prj._name}-{pYear}-{pMonth}"
 
     if uploadName == "":
         print(f"{prj._name}/{sp._name}: no code path in config, so no upload name; not running agents")
@@ -50,17 +47,32 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
         print(f"{prj._name}/{sp._name}: error running copyright scanner")
         return False
     
-    # run reuser agent if prior upload exists
-    if priorUploadExists(fdServer, priorFolder, priorUploadFragment):
-        print(f"{prj._name}/{sp._name}: running reuser")
-        t = Reuse(fdServer, uploadName, uploadFolder, priorUploadFragment, priorFolder)
-        t.exact = False
-        retval = t.run()
-        if not retval:
-            print(f"{prj._name}/{sp._name}: error running reuse from {priorUploadFragment} in {priorFolder}")
-            return False
-    else:
-        print(f"{prj._name}/{sp._name}: no prior upload found, skipping reuser")
+    # run reuser agent if prior upload exists, checking up to 3 prior months
+    pYear = year
+    pMonth = month
+    numTries = 3
+    foundPrior = False
+    while numTries > 0:
+        pYear, pMonth = priorMonth(pYear, pMonth)
+        priorUploadFragment = f"{sp._name}-{pYear}-{pMonth}"
+        priorFolder = f"{prj._name}-{pYear}-{pMonth}"
+
+        if priorUploadExists(fdServer, priorFolder, priorUploadFragment):
+            foundPrior = True
+            print(f"{prj._name}/{sp._name}: running reuser")
+            t = Reuse(fdServer, uploadName, uploadFolder, priorUploadFragment, priorFolder)
+            t.exact = False
+            retval = t.run()
+            if not retval:
+                # keep going anyway, don't fail
+                print(f"{prj._name}/{sp._name}: error running reuse from {priorUploadFragment} in {priorFolder}, skipping reuser")
+            continue
+        else:
+            print(f"{prj._name}/{sp._name}: didn't find prior upload for {pYear}-{pMonth}")
+            numTries -= 1
+
+    if not foundPrior:
+        print(f"{prj._name}/{sp._name}: no prior upload found in preceding 3 months, skipping reuser")
     
     # run bulk matches if the project has any
     if prj._matches != []:
