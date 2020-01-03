@@ -18,22 +18,30 @@ from runners import doNextThing
 from clearing import doCleared
 from newmonth import copyToNextMonth
 from approving import doApprove
-from emailing import printEmail
+from emailing import printEmail, printAllLinks, printReportLinks
 from delivering import doDelivered
 
 def printUsage():
-    print(f"")
-    print(f"Usage: {sys.argv[0]} <month> <command> [<project>] [<subproject>]")
-    print(f"Month: in format YYYY-MM")
-    print(f"Commands:")
-    print(f"  status:     Print status for all subprojects")
-    print(f"  newmonth:   Begin a new month and reset status for all projects")
-    print(f"  run:        Run next steps for all subprojects")
-    print(f"  clear:      Flag cleared in Fossology for [sub]project")
-    print(f"  approve:    Flag approved auto-generated findings in report for [sub]project")
-    print(f"  printemail: Print email with links to reports for [sub]project")
-    print(f"  deliver:    Flag delivered report for [sub]project")
-    print(f"")
+    print(f"""
+Usage: {sys.argv[0]} <month> <command> [<project>] [<subproject>]
+Month: in format YYYY-MM
+
+Commands:
+
+  Running:
+    newmonth:   Begin a new month and reset status for all projects
+    run:        Run next steps for all subprojects
+    clear:      Flag cleared in Fossology for [sub]project
+    approve:    Flag approved auto-generated findings in report for [sub]project
+    deliver:    Flag delivered report for [sub]project
+
+  Printing:
+    status:           Print status for all subprojects
+    printemail:       Print email with links to reports for [sub]project
+    printlinks:       Print links to all reports for [sub]project
+    printreportlinks: Print only findings link(s) for [sub]project
+
+""")
 
 def status(projects, prj_only, sp_only):
     headers = ["Project", "Subproject", "Status"]
@@ -162,6 +170,18 @@ if __name__ == "__main__":
 
             # print email details if in UPLOADEDREPORTS state
             printEmail(cfg, prj_only, sp_only)
+
+        elif command == "printlinks":
+            ran_command = True
+
+            # print report link details if in UPLOADEDREPORTS state
+            printAllLinks(cfg, prj_only, sp_only)
+
+        elif command == "printreportlinks":
+            ran_command = True
+
+            # print report link details if in UPLOADEDREPORTS state
+            printReportLinks(cfg, prj_only, sp_only)
 
         elif command == "deliver":
             ran_command = True
