@@ -97,6 +97,7 @@ def printAllLinksForSubproject(cfg, prj, sp):
         print(f"  - report: {sp._web_html_url}")
     print(f"  - xlsx:   {sp._web_xlsx_url}")
     print(f"  - spdx:   https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}/{sp._name}-{sp._code_pulled}.spdx")
+    print(f"")
 
 def printReportLinks(cfg, prj_only="", sp_only=""):
     if prj_only == "":

@@ -21,7 +21,7 @@ def doDelivered(scaffold_home, cfg, prj_only="", sp_only=""):
             if sp._status == Status.DELIVERED:
                 print(f"{prj._name}/{sp._name}: already marked as DELIVERED, not changing")
                 ran_command = True
-            elif sp._status == Status.UPLOADEDSPDX:
+            elif sp._status == Status.UPLOADEDREPORTS:
                 sp._status = Status.DELIVERED
                 print(f"{prj._name}/{sp._name}: updated status to DELIVERED")
                 ran_command = True
