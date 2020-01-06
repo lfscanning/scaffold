@@ -155,6 +155,10 @@
 
             <div id="main">
                 <h2>Key findings:</h2>
+                {% if findingData == [] %}
+                <p>No key findings were identified that currently require action.</p>
+
+                {% else %}
                 {% for fd in findingData %}
                 <table class="findingTable">
                     <tr>
@@ -187,6 +191,7 @@
                     </tr>
                 </table>
                 {% endfor %}
+                {% endif %}
 
             </div>
 

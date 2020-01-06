@@ -255,13 +255,7 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
         if os.path.exists(reviewFilePath):
             os.remove(reviewFilePath)
 
-    # gather findings instances data
-    if instances == []:
-        # no instances found, either means no findings template or no instances of findings
-        print(f"{prj._name}/{sp._name}: no instances (or no findings) found, skipping")
-        return "", reviewReportWrittenPath
-
-    # if we got here, there were instances of existing findings
+    # if no instances, that's fine, we'll still want to create the report
 
     # get license summary data
     cats, totalCount, noLicThird, noLicEmpty, noLicExt, noLicRest = getLicenseSummaryDetails(cfg, slmJsonPath)
