@@ -78,6 +78,35 @@
             font-weight: bold;
             padding: 2px;
         }
+        .licSummaryTable {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left: 20px;
+            margin-right: auto;
+            border: 1px solid gray;
+            width: 450px;
+            background-color: #f5f5f5;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .licSummaryCategory {
+            font-weight: bold;
+            font-size: small;
+        }
+        .licSummaryCategoryCount {
+            font-weight: bold;
+            font-size: small;
+            text-align: right;
+        }
+        .licSummaryLicense {
+            font-weight: lighter;
+            font-size: small;
+        }
+        .licSummaryLicenseCount {
+            font-weight: lighter;
+            font-size: small;
+            text-align: right;
+        }
     </style>
     <script>
         function toggleRepo(elt) {
@@ -165,28 +194,67 @@
                 <hr />
 
                 <h2>License summary:</h2>
-                {% for cat in licenseSummary.cats %}
-                {{ cat[0] }}:<br />
+                <table class="licSummaryTable">
+                    {% for cat in licenseSummary.cats %}
+                    <tr>
+                        <td class="licSummaryCategory" colspan="2">{{ cat[0] }}:</td>
+                    </tr>
                     {% if cat[0] == "No license found" %}
                         {% if licenseSummary.noLicRest > 0 %}
-                        ==> No license found in file: {{ licenseSummary.noLicRest }}<br />
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicense">No license found in file</td>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicenseCount">{{ licenseSummary.noLicRest }}</td>
+                        </tr>
                         {% endif %}
+
                         {% if licenseSummary.noLicExt > 0 %}
-                        ==> No license found in file - excluded file extension: {{ licenseSummary.noLicExt }}<br />
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicense">No license found in file - excluded file extension</td>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicenseCount">{{ licenseSummary.noLicExt }}</td>
+                        </tr>
                         {% endif %}
+
                         {% if licenseSummary.noLicEmpty > 0 %}
-                        ==> No license found in file - empty file: {{ licenseSummary.noLicEmpty }}<br />
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicense">No license found in file - empty file</td>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicenseCount">{{ licenseSummary.noLicEmpty }}</td>
+                        </tr>
                         {% endif %}
+
                         {% if licenseSummary.noLicThird > 0 %}
-                        ==> No license found in file - third party directory: {{ licenseSummary.noLicThird }}<br />
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicense">No license found in file - third party directory</td>
+                            <td>&nbsp;</td>
+                            <td class="licSummaryLicenseCount">{{ licenseSummary.noLicThird }}</td>
+                        </tr>
                         {% endif %}
+
                     {% else %}
                         {% for lic in cat[1] %}
-                            ==> {{ lic[0] }}: {{ lic[1] }}<br />
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td class="licSummaryLicense">{{ lic[0] }}</td>
+                        <td>&nbsp;</td>
+                        <td class="licSummaryLicenseCount">{{ lic[1] }}</td>
+                    </tr>
                         {% endfor %}
                     {% endif %}
-                {% endfor %}
-                TOTAL: {{ licenseSummary.totalCount }}<br />
+                    {% endfor %}
+
+                    <tr>
+                        <td class="licSummaryCategory" colspan="2">TOTAL</td>
+                        <td>&nbsp;</td>
+                        <td class="licSummaryCategoryCount">{{ licenseSummary.totalCount }}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
                 <p class="minorNote">Counts are numbers of files detected in the scanned repos.</p>
             </div>
 
