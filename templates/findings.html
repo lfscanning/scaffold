@@ -34,6 +34,10 @@
             color: #999999;
             font-size: smaller;
         }
+        .minorNote {
+            color: #999999;
+            font-size: smaller;
+        }
         .repos {
             font-family:'Courier New', Courier, monospace;
             font-size: smaller;
@@ -121,6 +125,7 @@
             </div>
 
             <div id="main">
+                <h2>Key findings:</h2>
                 {% for fd in findingData %}
                 <table class="findingTable">
                     <tr>
@@ -154,6 +159,35 @@
                 </table>
                 {% endfor %}
 
+            </div>
+
+            <div id="licenseSummary">
+                <hr />
+
+                <h2>License summary:</h2>
+                {% for cat in licenseSummary.cats %}
+                {{ cat[0] }}:<br />
+                    {% if cat[0] == "No license found" %}
+                        {% if licenseSummary.noLicRest > 0 %}
+                        ==> No license found in file: {{ licenseSummary.noLicRest }}<br />
+                        {% endif %}
+                        {% if licenseSummary.noLicExt > 0 %}
+                        ==> No license found in file - excluded file extension: {{ licenseSummary.noLicExt }}<br />
+                        {% endif %}
+                        {% if licenseSummary.noLicEmpty > 0 %}
+                        ==> No license found in file - empty file: {{ licenseSummary.noLicEmpty }}<br />
+                        {% endif %}
+                        {% if licenseSummary.noLicThird > 0 %}
+                        ==> No license found in file - third party directory: {{ licenseSummary.noLicThird }}<br />
+                        {% endif %}
+                    {% else %}
+                        {% for lic in cat[1] %}
+                            ==> {{ lic[0] }}: {{ lic[1] }}<br />
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                TOTAL: {{ licenseSummary.totalCount }}<br />
+                <p class="minorNote">Counts are numbers of files detected in the scanned repos.</p>
             </div>
 
             <div id="bottomMatter">

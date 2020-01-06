@@ -95,7 +95,71 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
 
     return instances, needReview
 
-    
+# Helper for calculating category/license summary file counts.
+# Returns (cats, totalCount, noLicThird, noLicEmpty, noLicExt) tuple
+#   cats = (name, list of (lics, catTotalCount) tuples)
+#     lics = list of (license, licCount) tuples
+#   totalCount = total number of files overall
+#   noLicThird = total "No license found" files in third-party dirs
+#   noLicEmpty = total "No license found" empty files (prefers noLicThird)
+#   noLicExt   = total "No license found" files with "ignore" extensions
+#                  (prefers noLicExt)
+#   noLicRest  = total "No license found" not falling into other categories
+# Zero count lics / cats are ignored and not returned.
+def getLicenseSummaryDetails(cfg, slmJsonFilename):
+    cats = []
+    totalCount = 0
+    noLicThird = 0
+    noLicEmpty = 0
+    noLicExt = 0
+    noLicRest = 0
+
+    # walk through SLM JSON file and prepare summary count details
+    try:
+        with open(slmJsonFilename, "r") as f:
+            # not using "get" below b/c we want it to crash if JSON is malformed
+            # should be array of category objects
+            cat_arr = json.load(f)
+            for cat_dict in cat_arr:
+                cat_numFiles = cat_dict["numFiles"]
+                # ignore categories with no files
+                if cat_numFiles == 0:
+                    continue
+                totalCount += cat_numFiles
+                cat_name = cat_dict["name"]
+                # get licenses and file counts
+                lics = []
+                for lic_dict in cat_dict["licenses"]:
+                    lic_numFiles = lic_dict["numFiles"]
+                    # ignore licenses with no files
+                    if lic_numFiles == 0:
+                        continue
+                    lic = (lic_dict["name"], lic_numFiles)
+                    lics.append(lic)
+                    # also do further processing if this is "No license found"
+                    if lic_dict["name"] == "No license found":
+                        for file_dict in lic_dict["files"]:
+                            findings_dict = file_dict.get("findings", {})
+                            if findings_dict.get("thirdparty", "no") == "yes":
+                                noLicThird += 1
+                                continue
+                            if findings_dict.get("emptyfile", "no") == "yes":
+                                noLicEmpty += 1
+                                continue
+                            if findings_dict.get("extension", "no") == "yes":
+                                noLicExt += 1
+                                continue
+                            noLicRest += 1
+                # add these licenses to the cats array
+                cat = (cat_name, lics, cat_numFiles)
+                cats.append(cat)
+
+        return (cats, totalCount, noLicThird, noLicEmpty, noLicExt, noLicRest)
+
+    except json.decoder.JSONDecodeError as e:
+        print(f'Error loading or parsing {slmJsonFilename}: {str(e)}')
+        return []
+
 # Helper to load SLM JSON document, and return a list of (category, license, filename) tuples
 def loadSLMJSON(slmJsonFilename):
     catLicFiles = []
@@ -199,6 +263,9 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
 
     # if we got here, there were instances of existing findings
 
+    # get license summary data
+    cats, totalCount, noLicThird, noLicEmpty, noLicExt, noLicRest = getLicenseSummaryDetails(cfg, slmJsonPath)
+
     # build template data fillers
     repoData = []
     for repoName, commit in sp._code_repos.items():
@@ -223,6 +290,14 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
         "codeDate": sp._code_pulled,
         "repoData": repoData,
         "findingData": findingData,
+        "licenseSummary": {
+            "cats": cats,
+            "totalCount": totalCount,
+            "noLicThird": noLicThird,
+            "noLicEmpty": noLicEmpty,
+            "noLicExt": noLicExt,
+            "noLicRest": noLicRest,
+        },
     }
 
     # and render it!
