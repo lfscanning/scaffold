@@ -101,17 +101,12 @@ class Project:
         self._slm_prj = ""
         self._slm_combined_report = False
     
-    def __repr__(self):
-        is_ok = "OK"
-        if self._ok == False:
-            is_ok = "NOT OK"
+    def resetNewMonth(self):
+        self._status = Status.START
 
-        if self._repotype == ProjectRepoType.GERRIT:
-            return f"{self._name} ({is_ok}): {self._repotype.name}, {self._gerrit_apiurl}, IGNORE: {self._gerrit_repos_ignore}, SUBPROJECTS: {self._subprojects}"
-        elif self._repotype == ProjectRepoType.GITHUB_SHARED:
-            return f"{self._name} ({is_ok}): {self._repotype.name}, {self._github_shared_org}, IGNORE: {self._github_shared_repos_ignore}, PENDING: {self._github_shared_repos_pending}, SUBPROJECTS: {self._subprojects}"
-        else:
-            return f"{self._name} ({is_ok}): {self._repotype.name}, SUBPROJECTS: {self._subprojects}"
+        # tell subprojects to reset
+        for sp in self._subprojects.values():
+            sp.resetNewMonth()
 
 
 class Subproject:
@@ -150,17 +145,23 @@ class Subproject:
         self._web_html_url = ""
         self._web_xlsx_url = ""
 
-    def __repr__(self):
-        is_ok = "OK"
-        if self._ok == False:
-            is_ok = "NOT OK"
+    def resetNewMonth(self):
+        self._status = Status.START
 
-        if self._repotype == ProjectRepoType.GITHUB:
-            return f"{self._name} ({is_ok}): {self._repotype.name}, {self._github_org}, {self._github_ziporg}, {self._repos}, IGNORE: {self._github_repos_ignore}, PENDING: {self._github_repos_pending}"
-        elif self._repotype == ProjectRepoType.GERRIT:
-            return f"{self._name} ({is_ok}): STATUS: {self._status}, {self._repotype.name}, {self._repos}"
-        else:
-            return f"{self._name} ({is_ok}): {self._repotype.name}, {self._repos}"
+        # reset code retrieval vars
+        self._code_pulled = ""
+        self._code_path = ""
+        self._code_anyfiles = False
+        self._code_repos = {}
+
+        # reset scan-dependent SLM vars
+        self._slm_scan_id = -1
+        self._slm_pending_lics = []
+
+        # reset web upload vars
+        self._web_uuid = ""
+        self._web_html_url = ""
+        self._web_xlsx_url = ""
 
 class Config:
 

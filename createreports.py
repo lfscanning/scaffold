@@ -135,6 +135,7 @@ def doCreateReportForProject(cfg, prj):
     # set report path
     reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
     reportFilename = f"{prj._name}-{cfg._month}.xlsx"
+    jsonFilename = f"{prj._name}-{cfg._month}.json"
 
     # create report directory for project if it doesn't already exist
     if not os.path.exists(reportFolder):
@@ -178,6 +179,30 @@ errors:
 
     # success!
     print(f"{prj._name}: created xlsx report")
+
+    # also create JSON report
+    cmd = [
+        "slm",
+        "create-report",
+        f"--scan_ids={scan_ids_string}",
+        f"--report_path={os.path.join(reportFolder, jsonFilename)}",
+        f"--report_format=json",
+    ]
+    cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+
+    # was it successful?
+    if cp.returncode != 0:
+        print(f"""{prj._name}: JSON report creation failed with error code {cp.returncode}:
+----------
+output:
+{cp.stdout}
+----------
+errors:
+{cp.stderr}
+----------
+""")
+        return False
+    print(f"{prj._name}: created json report")
 
     # once we get here, the project combined report has been created
     prj._status = Status.CREATEDREPORTS

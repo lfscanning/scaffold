@@ -29,16 +29,7 @@ def copyToNextMonth(scaffold_home, cfg):
 
     # update the config object's projects and subprojects
     for prj in cfg._projects.values():
-        prj._status = Status.START
-        for sp in prj._subprojects.values():
-            sp._status = Status.START
-            # reset code retrieval vars
-            sp._code_pulled = ""
-            sp._code_path = ""
-            sp._code_anyfiles = False
-            # reset scan-dependent SLM vars
-            sp._slm_scan_id = -1
-            sp._slm_pending_lics = []
+        prj.resetNewMonth()
 
     # create the new directory and save out the config object
     os.makedirs(newMonthDir)

@@ -15,7 +15,7 @@ from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
 from importscan import doImportScanForSubproject
 from createreports import doCreateReportForProject, doCreateReportForSubproject
-from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject
+from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject, doMakeDraftFindingsIfNoneForProject, doMakeFinalFindingsForProject
 from approving import doApprove
 from uploadspdx import doUploadSPDXForSubproject
 from uploadreport import doUploadReportsForSubproject
@@ -255,6 +255,38 @@ def updateProjectPostSubproject(cfg, prj):
             # try to build the report, and exit without updating
             # status if we fail
             retval = doCreateReportForProject(cfg, prj)
+            if retval == False:
+                return
+
+    # if all subprojects have either created draft findings or
+    # are stopped, then we should check whether we need to create
+    # combined draft project findings as well
+    elif prj._slm_combined_report == True and prj._status == Status.CREATEDREPORTS:
+        readyForDraftFindings = True
+        for sp in prj._subprojects.values():
+            if sp._status != Status.MADEDRAFTFINDINGS and sp._status != Status.STOPPED:
+                readyForDraftFindings = False
+                break
+        if readyForDraftFindings:
+            # try to build the report, and exit without updating
+            # status if we fail
+            retval = doMakeDraftFindingsIfNoneForProject(cfg, prj)
+            if retval == False:
+                return
+
+    # if all subprojects have either created final findings or
+    # are stopped, then we should check whether we need to create
+    # combined final project findings as well
+    elif prj._slm_combined_report == True and prj._status == Status.APPROVEDFINDINGS:
+        readyForFinalFindings = True
+        for sp in prj._subprojects.values():
+            if sp._status != Status.MADEFINALFINDINGS and sp._status != Status.STOPPED:
+                readyForFinalFindings = False
+                break
+        if readyForFinalFindings:
+            # try to build the report, and exit without updating
+            # status if we fail
+            retval = doMakeFinalFindingsForProject(cfg, prj)
             if retval == False:
                 return
 
