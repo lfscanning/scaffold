@@ -93,7 +93,7 @@ def getScanIdsString(cfg, prj):
     min_id = 999999999999
     max_id = 0
     for sp in prj._subprojects.values():
-        if sp._status == Status.CREATEDREPORTS:
+        if sp._status.value >= Status.CREATEDREPORTS.value and sp._status != Status.STOPPED:
             ids_set.add(sp._slm_scan_id)
             if min_id > sp._slm_scan_id:
                 min_id = sp._slm_scan_id

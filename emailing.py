@@ -79,10 +79,10 @@ def printAllLinks(cfg, prj_only="", sp_only=""):
     ran_command = False
     for sp in prj._subprojects.values():
         if sp_only == "" or sp_only == sp._name:
-            if sp._status.value >= Status.UPLOADEDREPORTS.value:
+            if sp._status.value >= Status.UPLOADEDREPORTS.value and sp._status != Status.STOPPED:
                 printAllLinksForSubproject(cfg, prj, sp)
                 ran_command = True
-            else:
+            elif sp._status != Status.STOPPED:
                 print(f"{prj._name}/{sp._name}: need to upload reports before printing links")
 
     return ran_command
@@ -91,10 +91,7 @@ def printAllLinksForSubproject(cfg, prj, sp):
     spdxRepoName = f"spdx-{prj._name}"
 
     print(f"{prj._name}/{sp._name}, code pulled {sp._code_pulled}")
-    if sp._web_html_url == "":
-        print(f"  - report: N/A (no significant findings)")
-    else:
-        print(f"  - report: {sp._web_html_url}")
+    print(f"  - report: {sp._web_html_url}")
     print(f"  - xlsx:   {sp._web_xlsx_url}")
     print(f"  - spdx:   https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}/{sp._name}-{sp._code_pulled}.spdx")
     print(f"")
@@ -113,13 +110,14 @@ def printReportLinks(cfg, prj_only="", sp_only=""):
     ran_command = False
     for sp in prj._subprojects.values():
         if sp_only == "" or sp_only == sp._name:
-            if sp._status.value >= Status.UPLOADEDREPORTS.value:
-                if sp._web_html_url == "":
-                    print(f"{prj._name}/{sp._name}: N/A (no significant findings)")
-                else:
-                    print(f"{prj._name}/{sp._name}: {sp._web_html_url}")
+            if sp._status.value >= Status.UPLOADEDREPORTS.value and sp._status != Status.STOPPED:
+                print(f"{prj._name}/{sp._name}: {sp._web_html_url}")
                 ran_command = True
-            else:
+            elif sp._status != Status.STOPPED:
                 print(f"{prj._name}/{sp._name}: need to upload reports before printing links")
+
+    # also print for main project if combined
+    if prj._slm_combined_report == True:
+        print()
 
     return ran_command

@@ -352,13 +352,10 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
         if os.path.exists(reviewFilePath):
             os.remove(reviewFilePath)
 
-    # gather findings instances data
-    if instances == []:
-        # no instances found, either means no findings template or no instances of findings
-        print(f"{prj._name}: no instances (or no findings) found, skipping")
-        return "", reviewReportWrittenPath
+    # if no instances, that's fine, we'll still want to create the report
 
-    # if we got here, there were instances of existing findings
+    # get license summary data
+    cats, totalCount, noLicThird, noLicEmpty, noLicExt, noLicRest = getLicenseSummaryDetails(cfg, slmJsonPath)
 
     # build template data fillers
     repoData = []
@@ -385,6 +382,14 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
         "codeDate": cfg._month,
         "repoData": repoData,
         "findingData": findingData,
+        "licenseSummary": {
+            "cats": cats,
+            "totalCount": totalCount,
+            "noLicThird": noLicThird,
+            "noLicEmpty": noLicEmpty,
+            "noLicExt": noLicExt,
+            "noLicRest": noLicRest,
+        },
     }
 
     # and render it!
@@ -396,9 +401,9 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
         report_f.write(renderedHtml)
 
     if isDraft:
-        print(f"{prj._name}/{sp._name}: DRAFT findings written to {htmlFilename}")
+        print(f"{prj._name}: DRAFT findings written to {htmlFilename}")
     else:
-        print(f"{prj._name}/{sp._name}: FINAL findings written to {htmlFilename}")
+        print(f"{prj._name}: FINAL findings written to {htmlFilename}")
 
     return htmlPath, reviewReportWrittenPath
 

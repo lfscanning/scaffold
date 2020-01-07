@@ -248,7 +248,7 @@ def updateProjectPostSubproject(cfg, prj):
     if prj._slm_combined_report == True and prj._status == Status.IMPORTEDSCAN:
         readyForReport = True
         for sp in prj._subprojects.values():
-            if sp._status != Status.CREATEDREPORTS and sp._status != Status.STOPPED:
+            if sp._status.value < Status.CREATEDREPORTS.value:
                 readyForReport = False
                 break
         if readyForReport:
@@ -261,10 +261,10 @@ def updateProjectPostSubproject(cfg, prj):
     # if all subprojects have either created draft findings or
     # are stopped, then we should check whether we need to create
     # combined draft project findings as well
-    elif prj._slm_combined_report == True and prj._status == Status.CREATEDREPORTS:
+    elif prj._slm_combined_report == True and (prj._status == Status.CREATEDREPORTS or prj._status == Status.MADEDRAFTFINDINGS):
         readyForDraftFindings = True
         for sp in prj._subprojects.values():
-            if sp._status != Status.MADEDRAFTFINDINGS and sp._status != Status.STOPPED:
+            if sp._status.value < Status.MADEDRAFTFINDINGS.value:
                 readyForDraftFindings = False
                 break
         if readyForDraftFindings:
@@ -280,7 +280,7 @@ def updateProjectPostSubproject(cfg, prj):
     elif prj._slm_combined_report == True and prj._status == Status.APPROVEDFINDINGS:
         readyForFinalFindings = True
         for sp in prj._subprojects.values():
-            if sp._status != Status.MADEFINALFINDINGS and sp._status != Status.STOPPED:
+            if sp._status.value < Status.MADEFINALFINDINGS.value:
                 readyForFinalFindings = False
                 break
         if readyForFinalFindings:
