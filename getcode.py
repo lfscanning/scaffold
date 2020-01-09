@@ -44,8 +44,8 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
 
     # before finishing, check and see whether it actually has any files
     anyfiles = False
-    for _, _, files in os.walk(ziporg_path):
-        if files:
+    for dirpath, _, files in os.walk(ziporg_path):
+        if files and ".git/" not in dirpath and not dirpath.endswith(".git"):
             anyfiles = True
             break
     if not anyfiles:
@@ -96,8 +96,8 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
 
     # before zipping it all together, check and see whether it actually has any files
     anyfiles = False
-    for _, _, files in os.walk(ziporg_path):
-        if files:
+    for dirpath, _, files in os.walk(ziporg_path):
+        if files and ".git/" not in dirpath and not dirpath.endswith(".git"):
             anyfiles = True
             break
     if not anyfiles:
