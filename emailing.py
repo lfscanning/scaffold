@@ -85,6 +85,14 @@ def printAllLinks(cfg, prj_only="", sp_only=""):
             elif sp._status != Status.STOPPED:
                 print(f"{prj._name}/{sp._name}: need to upload reports before printing links")
 
+    # also print for main project if combined
+    if sp_only == "" and prj._slm_combined_report == True:
+        print(f"= = = = =")
+        print(f"{prj._name} combined:")
+        print(f"  - report: {prj._web_combined_html_url}")
+        print(f"  - xlsx:   {prj._web_combined_xlsx_url}")
+        print(f"")
+
     return ran_command
 
 def printAllLinksForSubproject(cfg, prj, sp):
@@ -117,7 +125,8 @@ def printReportLinks(cfg, prj_only="", sp_only=""):
                 print(f"{prj._name}/{sp._name}: need to upload reports before printing links")
 
     # also print for main project if combined
-    if prj._slm_combined_report == True:
-        print()
+    if sp_only == "" and prj._slm_combined_report == True:
+        print(f"= = = = =")
+        print(f"{prj._name} combined: {prj._web_combined_html_url}")
 
     return ran_command

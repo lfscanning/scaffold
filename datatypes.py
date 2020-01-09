@@ -100,6 +100,11 @@ class Project:
         self._slm_shared = True
         self._slm_prj = ""
         self._slm_combined_report = False
+
+        # web upload vars, only for combined reports
+        self._web_combined_uuid = ""
+        self._web_combined_html_url = ""
+        self._web_combined_xlsx_url = ""
     
     def resetNewMonth(self):
         self._status = Status.START

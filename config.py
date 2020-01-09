@@ -207,6 +207,9 @@ def loadConfig(configFilename, scaffoldHome):
                     # now load SLM project data
                     parseProjectSLMConfig(prj_dict, prj)
 
+                    # now load project web data, where applicable
+                    parseProjectWebConfig(prj_dict, prj)
+
                     # now load subprojects, if any are listed; it's okay if none are
                     sps = prj_dict.get('subprojects', {})
                     if sps != {}:
@@ -279,6 +282,9 @@ def loadConfig(configFilename, scaffoldHome):
                     # now load SLM project data
                     parseProjectSLMConfig(prj_dict, prj)
 
+                    # now load project web data, where applicable
+                    parseProjectWebConfig(prj_dict, prj)
+
                     # now load subprojects, if any are listed; it's okay if none are
                     sps = prj_dict.get('subprojects', {})
                     if sps != {}:
@@ -339,6 +345,9 @@ def loadConfig(configFilename, scaffoldHome):
 
                     # now load SLM project data
                     parseProjectSLMConfig(prj_dict, prj)
+
+                    # now load project web data, where applicable
+                    parseProjectWebConfig(prj_dict, prj)
 
                     sps = prj_dict.get('subprojects', {})
                     if sps == {}:
@@ -461,6 +470,21 @@ def parseProjectSLMConfig(prj_dict, prj):
             print(f"Project {prj._name} has slm:shared == False but also has slm:combinedReport == True")
             prj._ok = False
 
+def parseProjectWebConfig(prj_dict, prj):
+    prj_web_dict = prj_dict.get('web', {})
+    # it's okay if there's no web report data; possible we just haven't created it yet
+    # but if there is data for a project without a combined report, that's wrong
+    if prj._slm_combined_report == False and prj_web_dict != {}:
+        print(f'Project {prj._name} has web report data but has slm:combinedReport == False')
+        prj._ok = False
+        return
+
+    # load data -- fine if it's missing or empty, since we might not
+    # be at the report creation stage yet
+    prj._web_combined_uuid = prj_web_dict.get('uuid', "")
+    prj._web_combined_html_url = prj_web_dict.get('htmlurl', "")
+    prj._web_combined_xlsx_url = prj_web_dict.get('xlsxurl', "")
+
 def parseSubprojectSLMConfig(sp_dict, prj, sp):
     sp_slm_dict = sp_dict.get('slm', {})
     if sp_slm_dict == {}:
@@ -508,8 +532,9 @@ class ConfigJSONEncoder(json.JSONEncoder):
             }
 
         elif isinstance(o, Project):
+            retval = {}
+
             # build SLM data
-            slm_section = {}
             if o._slm_shared == True:
                 slm_section = {
                     "shared": True,
@@ -520,38 +545,42 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 slm_section = {
                     "shared": False,
                 }
+            retval["slm"] = slm_section
+
+            if o._slm_combined_report == True:
+                if o._web_combined_uuid != "" or o._web_combined_html_url != "" or o._web_combined_xlsx_url!= "":
+                    web_section = {
+                        "uuid": o._web_combined_uuid,
+                        "htmlurl": o._web_combined_html_url,
+                        "xlsxurl": o._web_combined_xlsx_url,
+                    }
+                    retval["web"] = web_section
 
             if o._repotype == ProjectRepoType.GITHUB:
-                return {
-                    "type": "github",
-                    "slm": slm_section,
-                    "subprojects": o._subprojects,
-                }
+                retval["type"] = "github"
+                retval["subprojects"] = o._subprojects
+                return retval
             elif o._repotype == ProjectRepoType.GERRIT:
-                return {
-                    "type": "gerrit",
-                    "slm": slm_section,
-                    "status": o._status.name,
-                    "gerrit": {
-                        "apiurl": o._gerrit_apiurl,
-                        "subproject-config": o._gerrit_subproject_config,
-                        "repos-ignore": o._gerrit_repos_ignore,
-                        "repos-pending": o._gerrit_repos_pending,
-                    },
-                    "subprojects": o._subprojects,
+                retval["type"] = "gerrit"
+                retval["status"] = o._status.name
+                retval["gerrit"] = {
+                    "apiurl": o._gerrit_apiurl,
+                    "subproject-config": o._gerrit_subproject_config,
+                    "repos-ignore": o._gerrit_repos_ignore,
+                    "repos-pending": o._gerrit_repos_pending,
                 }
+                retval["subprojects"] = o._subprojects
+                return retval
             elif o._repotype == ProjectRepoType.GITHUB_SHARED:
-                return {
-                    "type": "github-shared",
-                    "slm": slm_section,
-                    "status": o._status.name,
-                    "github-shared": {
-                        "org": o._github_shared_org,
-                        "repos-ignore": o._github_shared_repos_ignore,
-                        "repos-pending": o._github_shared_repos_pending,
-                    },
-                    "subprojects": o._subprojects,
+                retval["type"] = "github-shared"
+                retval["status"] = o._status.name
+                retval["github-shared"] = {
+                    "org": o._github_shared_org,
+                    "repos-ignore": o._github_shared_repos_ignore,
+                    "repos-pending": o._github_shared_repos_pending,
                 }
+                retval["subprojects"] = o._subprojects
+                return retval
             else:
                 return {
                     "type": "unknown"

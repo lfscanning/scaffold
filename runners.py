@@ -18,7 +18,7 @@ from createreports import doCreateReportForProject, doCreateReportForSubproject
 from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject, doMakeDraftFindingsIfNoneForProject, doMakeFinalFindingsForProject
 from approving import doApprove
 from uploadspdx import doUploadSPDXForSubproject
-from uploadreport import doUploadReportsForSubproject
+from uploadreport import doUploadReportsForSubproject, doUploadReportsForProject
 
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
@@ -287,6 +287,22 @@ def updateProjectPostSubproject(cfg, prj):
             # try to build the report, and exit without updating
             # status if we fail
             retval = doMakeFinalFindingsForProject(cfg, prj)
+            if retval == False:
+                return
+
+    # if all subprojects have finished uploading their reports or
+    # are stopped, then we should check whether we need to upload
+    # project-wide findings as well
+    elif prj._slm_combined_report == True and prj._status == Status.UPLOADEDSPDX:
+        readyForUpload = True
+        for sp in prj._subprojects.values():
+            if sp._status.value < Status.UPLOADEDREPORTS.value:
+                readyForUpload = False
+                break
+        if readyForUpload:
+            # try to upload the report, and exit without updating
+            # status if we fail
+            retval = doUploadReportsForProject(cfg, prj)
             if retval == False:
                 return
 
