@@ -507,6 +507,10 @@ def parseSubprojectSLMConfig(sp_dict, prj, sp):
             if sp._slm_prj == "":
                 sp._slm_prj = sp._name
         sp._slm_sp = sp_slm_dict.get('sp', sp._name)
+        # if it's present in config but was empty string, replace it
+        # with the subproject name
+        if sp._slm_sp == "":
+            sp._slm_sp = sp._name
         sp._slm_scan_id = sp_slm_dict.get('scan_id', -1)
         sp._slm_pending_lics = sp_slm_dict.get('licenses-pending', [])
 
