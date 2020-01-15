@@ -175,18 +175,35 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><strong>
-                            {{ fd.numFiles }} {% if fd.numFiles != 1 %} files {% else %} file {% endif %}
-                        </strong>
-                        <span class="showlink" onclick="toggleFile(this, {{ loop.index }})">(show files)</span></td>
+                        <td>
+                            {% if fd.files != [] %}
+                            <strong>
+                                {{ fd.numFiles }} {% if fd.numFiles != 1 %} files {% else %} file {% endif %}
+                            </strong>
+                            <span class="showlink" onclick="toggleFile(this, {{ loop.index }})">(show files)</span>
+                            {% elif fd.subprojects != [] %}
+                            <strong>
+                                {{ fd.numSubprojects }} {% if fd.numSubprojects != 1 %} subprojects {% else %} subproject {% endif %}
+                            </strong>
+                            <span class="showlink" onclick="toggleFile(this, {{ loop.index }})">(show subprojects)</span>
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td>
+                            {% if fd.files != [] %}
                             <div id="filelist{{ loop.index }}" class="fileshidden">
                                 {% for filename in fd.files %}
                                 {{ filename }}<br />
                                 {% endfor %}
                             </div>
+                            {% elif fd.subprojects != [] %}
+                            <div id="filelist{{ loop.index }}" class="fileshidden">
+                                {% for spName in fd.subprojects %}
+                                {{ spName }}<br />
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </td>
                     </tr>
                 </table>

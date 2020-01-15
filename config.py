@@ -88,14 +88,15 @@ def loadFindings(findingsFilename):
                 finding._text = fd.get('text', [])
                 finding._matches_path = fd.get('matches-path', [])
                 finding._matches_license = fd.get('matches-license', [])
-                if finding._matches_path == [] and finding._matches_license == []:
-                    print(f'Finding {count} in {findingsFilename} has no entries for either matches-path or matches-license')
+                finding._matches_subproject = fd.get('matches-subproject', [])
+                if finding._matches_path == [] and finding._matches_license == [] and finding._matches_subproject == []:
+                    print(f'Finding {count} in {findingsFilename} has no entries for either matches-path, matches-license or matches-subproject')
                     return [], []
                 prstr = fd.get("priority", "")
                 try:
                     finding._priority = Priority[prstr.upper()]
                 except KeyError:
-                    print(f'Invalid priority value for finding {count} in {findingsFilename} with paths {finding._matches_path}, licenses {finding._matches_license}')
+                    print(f'Invalid priority value for finding {count} in {findingsFilename} with paths {finding._matches_path}, licenses {finding._matches_license}, subprojects {finding._matches_subproject}, ')
                     return [], []
 
                 findings.append(finding)

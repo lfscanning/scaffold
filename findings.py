@@ -33,11 +33,27 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
     for fi in prj._findings:
         inst = FindingsInstance()
         foundAny = False
+
+        # for now, skip over subproject-only findings
+        if fi._matches_subproject != [] and fi._matches_path == [] and fi._matches_license == []:
+            continue
+
         # for this finding template, walk through each cat/lic/file tuple and see whether it applies
         for catName, licName, fileName in catLicFiles:
+            matchesSubproject = False
             matchesPath = False
             matchesLic = False
             failedMatch = False
+
+            # if the finding requires a subproject match, does it (contains) match any?
+            if fi._matches_subproject != []:
+                # requires subproject match, so check each one
+                for p in fi._matches_subproject:
+                    if p in fileName:
+                        matchesSubproject = True
+                if not matchesSubproject:
+                    # failed the subproject match, so go on to the next lic/file pair
+                    failedMatch = True
 
             # if the finding requires a path match, does it (contains) match any?
             if fi._matches_path != []:
@@ -90,6 +106,17 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
                 clfTuple = (catName, licName, fileName)
                 needReview.append(clfTuple)
     
+    # also, if there are any matches which list a subproject and NEITHER paths
+    # nor licenses, then make sure we add that one for the subproject, if
+    # applies to this subproject
+    for fi in prj._findings:
+        if fi._matches_subproject != [] and fi._matches_path == [] and fi._matches_license == [] and (spName == "COMBINED" or spName in fi._matches_subproject):
+            inst = FindingsInstance()
+            inst._finding = fi
+            if spName == "COMBINED":
+                inst._subprojects = fi._matches_subproject
+            instances.append(inst)
+
     # finally, sort instances by finding priority
     instances.sort(key=lambda inst: inst._finding._priority.value, reverse=True)
 
@@ -275,6 +302,7 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
             "description": inst._finding._text,
             "numFiles": len(inst._files),
             "files": inst._files,
+            "subprojects": inst._subprojects,
         }
         findingData.append(fd)
 
@@ -373,6 +401,8 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
             "description": inst._finding._text,
             "numFiles": len(inst._files),
             "files": inst._files,
+            "numSubprojects": len(inst._subprojects),
+            "subprojects": inst._subprojects,
         }
         findingData.append(fd)
 

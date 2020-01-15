@@ -55,6 +55,7 @@ class Finding:
         self._priority = Priority.UNKNOWN
         self._matches_path = []
         self._matches_license = []
+        self._matches_subproject = []
         self._text = ""
 
 class FindingsInstance:
@@ -67,6 +68,9 @@ class FindingsInstance:
 
         # determined based on analysis
         self._files = []
+
+        # or just the subproject(s) names, if not saying specific files
+        self._subprojects = []
 
 class Project:
 
