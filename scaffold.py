@@ -20,6 +20,7 @@ from newmonth import copyToNextMonth
 from approving import doApprove
 from emailing import printEmail, printAllLinks, printReportLinks
 from delivering import doDelivered
+from metrics import printMetrics
 
 def printUsage():
     print(f"""
@@ -40,6 +41,7 @@ Commands:
     printemail:       Print email with links to reports for [sub]project
     printlinks:       Print links to all reports for [sub]project
     printreportlinks: Print only findings link(s) for [sub]project
+    metrics:          Print metrics for overall current status
 
 """)
 
@@ -192,6 +194,10 @@ if __name__ == "__main__":
 
             # save config file, even if not modified (b/c saved backup)
             saveConfig(SCAFFOLD_HOME, cfg)
+
+        elif command == "metrics":
+            ran_command = True
+            printMetrics(cfg)
 
     if ran_command == False:
         printUsage()
