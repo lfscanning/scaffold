@@ -52,6 +52,7 @@ class Finding:
         super(Finding, self).__init__()
 
         # loaded from findings file
+        self._id = -1
         self._priority = Priority.UNKNOWN
         self._matches_path = []
         self._matches_license = []
