@@ -59,19 +59,38 @@ class Finding:
         self._matches_subproject = []
         self._text = ""
 
-class FindingsInstance:
+class Instance:
 
     def __init__(self):
-        super(FindingsInstance, self).__init__()
+        super(Instance, self).__init__()
 
-        # parent Finding that this refers to
-        self._finding = Finding()
+        # ID of parent Finding that this refers to
+        self._finding_id = -1
 
         # determined based on analysis
         self._files = []
 
-        # or just the subproject(s) names, if not saying specific files
-        self._subprojects = []
+        # year-month where this instance was first reported for this project
+        self._first = ""
+
+        # is this a new instance (true) or a repeat instance (false)?
+        self._isnew = True
+
+        # if using JIRA, what is the JIRA ticket ID?
+        self._jira_id = ""
+
+
+class SPInstanceSet:
+
+    def __init__(self):
+        super(SPInstanceSet, self).__init__()
+
+        # list of instances that are flagged
+        self._flagged = []
+
+        # list of files that are unflagged
+        self._unflagged = []
+
 
 class Project:
 
