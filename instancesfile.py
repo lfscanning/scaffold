@@ -20,6 +20,7 @@ def loadInstances(instancesFilename):
                 inst._subprojects = i.get("subprojects", [])
                 inst._first = i.get("first", "")
                 inst._isnew = i.get("new", True)
+                inst._files_changed = i.get("filesChanged", False)
                 inst._jira_id = i.get("jira", "")
                 instSet._flagged.append(inst)
             # and add the unflagged files
@@ -49,6 +50,8 @@ class InstanceSetJSONEncoder(json.JSONEncoder):
                 "first": o._first,
                 "new": o._isnew,
             }
+            if not o._isnew:
+                retval["filesChanged"] = o._files_changed
             if o._jira_id != "":
                 retval["jira"] = o._jira_id
             return retval

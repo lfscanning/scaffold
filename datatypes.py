@@ -84,6 +84,9 @@ class Instance:
         # is this a new instance (true) or a repeat instance (false)?
         self._isnew = True
 
+        # if not new, did the list of files change? ignore if new
+        self._files_changed = False
+
         # if using JIRA, what is the JIRA ticket ID?
         self._jira_id = ""
 

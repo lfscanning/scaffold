@@ -145,8 +145,6 @@ def getPriorInstancesSet(cfg, prj, spName):
         wantFile = f"{prj._name}-instances-{priorYM}.json"
     else:
         wantFile = f"{spName}-instances-{priorYM}-??.json"
-    print(f"===> priorReportFolder is {priorReportFolder}")
-    print(f"===> wantFile is {wantFile}")
     filenames = glob.glob(os.path.join(priorReportFolder, wantFile))
     filenames.sort()
     if len(filenames) == 0:
@@ -185,6 +183,7 @@ def comparePriorInstances(cfg, prj, spName, currentInstanceSet):
         else:
             ci._first = pi._first
             ci._isnew = False
+            ci._files_changed = (sorted(pi._files) != sorted(ci._files))
             ci._jira_id = pi._jira_id
 
 # Helper for calculating category/license summary file counts.
