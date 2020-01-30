@@ -67,8 +67,16 @@ class Instance:
         # ID of parent Finding that this refers to
         self._finding_id = -1
 
+        # Priority of finding
+        # FIXME this is temporary, for purposes of sorting in findings.py
+        # FIXME should find a different solution
+        self._priority = Priority.UNKNOWN
+
         # determined based on analysis
         self._files = []
+
+        # determined based on analysis, for subprojects w/out specific files
+        self._subprojects = []
 
         # year-month where this instance was first reported for this project
         self._first = ""
@@ -80,10 +88,10 @@ class Instance:
         self._jira_id = ""
 
 
-class SPInstanceSet:
+class InstanceSet:
 
     def __init__(self):
-        super(SPInstanceSet, self).__init__()
+        super(InstanceSet, self).__init__()
 
         # list of instances that are flagged
         self._flagged = []
@@ -106,7 +114,6 @@ class Project:
 
         self._matches = []
         self._findings = []
-        self._findingsInstances = []
         self._flag_categories = []
 
         # only if Gerrit
@@ -148,8 +155,6 @@ class Subproject:
         self._repotype = ProjectRepoType.UNKNOWN
         self._status = Status.UNKNOWN
         self._repos = []
-
-        self._findingsInstances = []
 
         self._code_pulled = ""
         self._code_path = ""
