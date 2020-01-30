@@ -87,6 +87,9 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
                 else:
                     # this is the first one for this instance, so initialize it
                     inst._finding_id = fi._id
+                    # we'll add a "priority" field so it can be used to sort below
+                    # FIXME this isn't ideal, might be a way to pull priority during the sort
+                    inst._priority = fi._priority
                     inst._files = [fileName]
                     foundAny = True
 
