@@ -74,6 +74,7 @@ def fossdriverSetup():
 
     return server
 
+# FIXME move this into secrets file
 def githubOauthSetup():
     scaffoldrc = os.path.join(Path.home(), ".scaffoldrc")
     try:

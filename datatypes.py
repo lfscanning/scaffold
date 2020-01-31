@@ -57,6 +57,7 @@ class Finding:
         self._matches_path = []
         self._matches_license = []
         self._matches_subproject = []
+        self._title = ""
         self._text = ""
 
 class Instance:
@@ -139,7 +140,7 @@ class Project:
         self._web_combined_uuid = ""
         self._web_combined_html_url = ""
         self._web_combined_xlsx_url = ""
-    
+
     def resetNewMonth(self):
         self._status = Status.START
 
@@ -200,6 +201,27 @@ class Subproject:
         self._web_html_url = ""
         self._web_xlsx_url = ""
 
+class JiraSecret:
+
+    def __init__(self):
+        super(JiraSecret, self).__init__()
+
+        self._project_name = ""
+        self._jira_project = ""
+        self._server = ""
+        self._username = ""
+        self._password = ""
+
+
+class Secrets:
+
+    def __init__(self):
+        super(Secrets, self).__init__()
+
+        # mapping of project name to jira server details
+        self._jira = {}
+
+
 class Config:
 
     def __init__(self):
@@ -216,8 +238,9 @@ class Config:
         self._web_server = ""
         self._web_reports_path = ""
         self._web_reports_url = ""
-        # DO NOT OUTPUT THIS TO CONFIG.JSON
+        # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._gh_oauth_token = ""
+        self._secrets = None
 
     def __repr__(self):
         is_ok = "OK"
