@@ -8,7 +8,7 @@ from shutil import copyfile
 
 import yaml
 
-from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, Status, Subproject
+from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, Status, Subproject, TicketType
 
 def getConfigFilename(scaffoldHome, month):
     return os.path.join(scaffoldHome, month, "config.json")
@@ -88,7 +88,7 @@ def loadFindings(findingsFilename):
                 finding = Finding()
                 finding._id = fd.get('id', [])
                 finding._text = fd.get('text', "")
-                finding._text = fd.get('title', "")
+                finding._title = fd.get('title', "")
                 finding._matches_path = fd.get('matches-path', [])
                 finding._matches_license = fd.get('matches-license', [])
                 finding._matches_subproject = fd.get('matches-subproject', [])
@@ -216,6 +216,13 @@ def loadConfig(configFilename, scaffoldHome):
                     prj._status = Status.UNKNOWN
                 else:
                     prj._status = Status[status_str]
+
+                # get project ticket type
+                ticket_type = prj_dict.get('ticket-type', '')
+                if ticket_type == "jira":
+                    prj._ticket_type = TicketType.JIRA
+                else:
+                    prj._ticket_type = TicketType.NONE
 
                 pt = prj_dict.get('type', '')
                 if pt == "gerrit":
@@ -569,6 +576,10 @@ class ConfigJSONEncoder(json.JSONEncoder):
 
         elif isinstance(o, Project):
             retval = {}
+
+            # build ticket data, if any
+            if o._ticket_type == TicketType.JIRA:
+                retval["ticket-type"] = "jira"
 
             # build SLM data
             if o._slm_shared == True:

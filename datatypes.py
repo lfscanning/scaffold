@@ -26,7 +26,8 @@ class Status(Enum):
     MADEFINALFINDINGS = 13
     UPLOADEDSPDX = 14
     UPLOADEDREPORTS = 15
-    DELIVERED = 16
+    FILEDTICKETS = 16
+    DELIVERED = 17
     STOPPED = 90
     MAX = 99
 
@@ -36,6 +37,10 @@ class Priority(Enum):
     MEDIUM = 2
     HIGH = 3
     VERYHIGH = 4
+
+class TicketType(Enum):
+    NONE = 0
+    JIRA = 1
 
 class MatchText:
 
@@ -140,6 +145,9 @@ class Project:
         self._web_combined_uuid = ""
         self._web_combined_html_url = ""
         self._web_combined_xlsx_url = ""
+
+        # ticketing type
+        self._ticket_type = TicketType.NONE
 
     def resetNewMonth(self):
         self._status = Status.START
