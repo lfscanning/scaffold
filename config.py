@@ -3,11 +3,12 @@
 
 import json
 import os
+from pathlib import Path
 from shutil import copyfile
 
 import yaml
 
-from datatypes import Config, Finding, MatchText, Priority, Project, ProjectRepoType, Status, Subproject
+from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, Status, Subproject, TicketType
 
 def getConfigFilename(scaffoldHome, month):
     return os.path.join(scaffoldHome, month, "config.json")
@@ -85,7 +86,9 @@ def loadFindings(findingsFilename):
             for fd in findings_arr:
                 count += 1
                 finding = Finding()
-                finding._text = fd.get('text', [])
+                finding._id = fd.get('id', [])
+                finding._text = fd.get('text', "")
+                finding._title = fd.get('title', "")
                 finding._matches_path = fd.get('matches-path', [])
                 finding._matches_license = fd.get('matches-license', [])
                 finding._matches_subproject = fd.get('matches-subproject', [])
@@ -107,6 +110,31 @@ def loadFindings(findingsFilename):
         print(f'Error loading or parsing {findingsFilename}: {str(e)}')
         return [], []
 
+# parses secrets file; always looks in ~/.scaffold-secrets.json
+def loadSecrets():
+    secretsFile = os.path.join(Path.home(), ".scaffold-secrets.json")
+    try:
+        with open(secretsFile, 'r') as f:
+            js = json.load(f)
+
+            # expecting mapping of prj name to JiraSecret data
+            secrets = Secrets()
+            for prj, jira_dict in js.items():
+                jira_secret = JiraSecret()
+
+                jira_secret._project_name = prj
+                jira_secret._jira_project = jira_dict.get("board", "")
+                jira_secret._server = jira_dict.get("server", "")
+                jira_secret._username = jira_dict.get("username", "")
+                jira_secret._password = jira_dict.get("password", "")
+
+                secrets._jira[prj] = jira_secret
+
+        return secrets
+
+    except json.decoder.JSONDecodeError as e:
+        print(f'Error loading or parsing {secretsFile}: {str(e)}')
+        return None
 
 def loadConfig(configFilename, scaffoldHome):
     cfg = Config()
@@ -165,6 +193,9 @@ def loadConfig(configFilename, scaffoldHome):
                 print(f"No valid webReportsUrl found in config section")
                 return cfg
 
+            # load secrets
+            cfg._secrets = loadSecrets()
+
             # if we get here, main config is at least valid
             cfg._ok = True
 
@@ -185,6 +216,13 @@ def loadConfig(configFilename, scaffoldHome):
                     prj._status = Status.UNKNOWN
                 else:
                     prj._status = Status[status_str]
+
+                # get project ticket type
+                ticket_type = prj_dict.get('ticket-type', '')
+                if ticket_type == "jira":
+                    prj._ticket_type = TicketType.JIRA
+                else:
+                    prj._ticket_type = TicketType.NONE
 
                 pt = prj_dict.get('type', '')
                 if pt == "gerrit":
@@ -538,6 +576,10 @@ class ConfigJSONEncoder(json.JSONEncoder):
 
         elif isinstance(o, Project):
             retval = {}
+
+            # build ticket data, if any
+            if o._ticket_type == TicketType.JIRA:
+                retval["ticket-type"] = "jira"
 
             # build SLM data
             if o._slm_shared == True:

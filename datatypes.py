@@ -26,7 +26,8 @@ class Status(Enum):
     MADEFINALFINDINGS = 13
     UPLOADEDSPDX = 14
     UPLOADEDREPORTS = 15
-    DELIVERED = 16
+    FILEDTICKETS = 16
+    DELIVERED = 17
     STOPPED = 90
     MAX = 99
 
@@ -36,6 +37,10 @@ class Priority(Enum):
     MEDIUM = 2
     HIGH = 3
     VERYHIGH = 4
+
+class TicketType(Enum):
+    NONE = 0
+    JIRA = 1
 
 class MatchText:
 
@@ -52,25 +57,57 @@ class Finding:
         super(Finding, self).__init__()
 
         # loaded from findings file
+        self._id = -1
         self._priority = Priority.UNKNOWN
         self._matches_path = []
         self._matches_license = []
         self._matches_subproject = []
+        self._title = ""
         self._text = ""
 
-class FindingsInstance:
+class Instance:
 
     def __init__(self):
-        super(FindingsInstance, self).__init__()
+        super(Instance, self).__init__()
 
-        # parent Finding that this refers to
-        self._finding = Finding()
+        # ID of parent Finding that this refers to
+        self._finding_id = -1
+
+        # Priority of finding
+        # FIXME this is temporary, for purposes of sorting in findings.py
+        # FIXME should find a different solution
+        self._priority = Priority.UNKNOWN
 
         # determined based on analysis
         self._files = []
 
-        # or just the subproject(s) names, if not saying specific files
+        # determined based on analysis, for subprojects w/out specific files
         self._subprojects = []
+
+        # year-month where this instance was first reported for this project
+        self._first = ""
+
+        # is this a new instance (true) or a repeat instance (false)?
+        self._isnew = True
+
+        # if not new, did the list of files change? ignore if new
+        self._files_changed = False
+
+        # if using JIRA, what is the JIRA ticket ID?
+        self._jira_id = ""
+
+
+class InstanceSet:
+
+    def __init__(self):
+        super(InstanceSet, self).__init__()
+
+        # list of instances that are flagged
+        self._flagged = []
+
+        # list of files that are unflagged
+        self._unflagged = []
+
 
 class Project:
 
@@ -86,7 +123,6 @@ class Project:
 
         self._matches = []
         self._findings = []
-        self._findingsInstances = []
         self._flag_categories = []
 
         # only if Gerrit
@@ -109,7 +145,10 @@ class Project:
         self._web_combined_uuid = ""
         self._web_combined_html_url = ""
         self._web_combined_xlsx_url = ""
-    
+
+        # ticketing type
+        self._ticket_type = TicketType.NONE
+
     def resetNewMonth(self):
         self._status = Status.START
 
@@ -128,8 +167,6 @@ class Subproject:
         self._repotype = ProjectRepoType.UNKNOWN
         self._status = Status.UNKNOWN
         self._repos = []
-
-        self._findingsInstances = []
 
         self._code_pulled = ""
         self._code_path = ""
@@ -172,6 +209,27 @@ class Subproject:
         self._web_html_url = ""
         self._web_xlsx_url = ""
 
+class JiraSecret:
+
+    def __init__(self):
+        super(JiraSecret, self).__init__()
+
+        self._project_name = ""
+        self._jira_project = ""
+        self._server = ""
+        self._username = ""
+        self._password = ""
+
+
+class Secrets:
+
+    def __init__(self):
+        super(Secrets, self).__init__()
+
+        # mapping of project name to jira server details
+        self._jira = {}
+
+
 class Config:
 
     def __init__(self):
@@ -188,8 +246,9 @@ class Config:
         self._web_server = ""
         self._web_reports_path = ""
         self._web_reports_url = ""
-        # DO NOT OUTPUT THIS TO CONFIG.JSON
+        # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._gh_oauth_token = ""
+        self._secrets = None
 
     def __repr__(self):
         is_ok = "OK"

@@ -1,18 +1,21 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
 
+import glob
 import json
 import os
 
 from jinja2 import Template
 
-from datatypes import FindingsInstance, Priority, Status
+from datatypes import Instance, Priority, Status, InstanceSet
+from datefuncs import getYMStr, parseYM, priorMonth
+from instancesfile import loadInstances, saveInstances
 
 # Helper for calculating findings instances and review categories
 # Call with spName == "COMBINED" for combined report (should only
 #   be used in print statements anyway)
-# Returns lists of instances and review tuples
-# Returns [], [] if no findings templates, or None, None if error
+# Returns InstanceSet for instance findings
+# Returns None if no findings templates or other error
 def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
     instances = []
     needReview = []
@@ -20,18 +23,18 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
     # confirm whether this project has any findings templates
     if prj._findings == []:
         print(f'{prj._name}/{spName}: No findings template, skipping analysis')
-        return [], []
+        return None
 
     # get SLM JSON analysis details
     catLicFiles = loadSLMJSON(slmJsonFilename)
     if catLicFiles == []:
         print(f'{prj._name}/{spName}: Could not get any SLM category/license/file results; bailing')
-        return None, None
+        return None
 
     # walk through each finding template, and determine whether it has any instances
     # for this subproject
     for fi in prj._findings:
-        inst = FindingsInstance()
+        inst = Instance()
         foundAny = False
 
         # for now, skip over subproject-only findings
@@ -83,7 +86,10 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
                     inst._files.append(fileName)
                 else:
                     # this is the first one for this instance, so initialize it
-                    inst._finding = fi
+                    inst._finding_id = fi._id
+                    # we'll add a "priority" field so it can be used to sort below
+                    # FIXME this isn't ideal, might be a way to pull priority during the sort
+                    inst._priority = fi._priority
                     inst._files = [fileName]
                     foundAny = True
 
@@ -103,24 +109,85 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
                     found = True
             if not found:
                 # it wasn't, so add it to the review list
-                clfTuple = (catName, licName, fileName)
-                needReview.append(clfTuple)
+                clf = [catName, licName, fileName]
+                needReview.append(clf)
     
     # also, if there are any matches which list a subproject and NEITHER paths
     # nor licenses, then make sure we add that one for the subproject, if
     # applies to this subproject
     for fi in prj._findings:
         if fi._matches_subproject != [] and fi._matches_path == [] and fi._matches_license == [] and (spName == "COMBINED" or spName in fi._matches_subproject):
-            inst = FindingsInstance()
-            inst._finding = fi
+            inst = Instance()
+            inst._finding_id = fi._id
+            # we'll add a "priority" field so it can be used to sort below
+            # FIXME this isn't ideal, might be a way to pull priority during the sort
+            inst._priority = fi._priority
             if spName == "COMBINED":
                 inst._subprojects = fi._matches_subproject
             instances.append(inst)
 
     # finally, sort instances by finding priority
-    instances.sort(key=lambda inst: inst._finding._priority.value, reverse=True)
+    instances.sort(key=lambda inst: inst._priority.value, reverse=True)
 
-    return instances, needReview
+    instSet = InstanceSet()
+    instSet._flagged = instances
+    instSet._unflagged = needReview
+
+    return instSet
+
+# Helper to find prior month's instances file, load it, and return the instances set.
+# FIXME rather than glob searching, really we should probably look at the prior month's
+# FIXME config file and pull out the specific file that we want.
+def getPriorInstancesSet(cfg, prj, spName):
+    curYear, curMonth = parseYM(cfg._month)
+    pYear, pMonth = priorMonth(curYear, curMonth)
+    priorYM = getYMStr(pYear, pMonth)
+    priorReportFolder = os.path.join(cfg._storepath, priorYM, "report", prj._name)
+    # search for file with the right prefix and extension
+    if spName == "COMBINED":
+        wantFile = f"{prj._name}-instances-{priorYM}.json"
+    else:
+        wantFile = f"{spName}-instances-{priorYM}-??.json"
+    filenames = glob.glob(os.path.join(priorReportFolder, wantFile))
+    filenames.sort()
+    if len(filenames) == 0:
+        return None
+
+    # FIXME if multiple are present, we'll use the first one
+    return loadInstances(filenames[0])
+
+# Helper to load prior month's instances, compare what we've got, and annotate them.
+def comparePriorInstances(cfg, prj, spName, currentInstanceSet):
+    # load prior month's instances, if any
+    priorInstanceSet = getPriorInstancesSet(cfg, prj, spName)
+    if priorInstanceSet is None:
+        print(f"{prj._name}/{spName}: no instances file found for prior month")
+        # flag all as new
+        for inst in currentInstanceSet._flagged:
+            inst._first = cfg._month
+            inst._isnew = True
+            inst._jira_id = ""
+        return
+
+    # create lookup table for last month's instances
+    priorInstancesDict = {}
+    for pi in priorInstanceSet._flagged:
+        priorInstancesDict[pi._finding_id] = pi
+
+    # now, walk through each current instance, determining whether it is new
+    # (and, if it isn't, filling in prior details)
+    pi = None
+    for ci in currentInstanceSet._flagged:
+        pi = priorInstancesDict.get(ci._finding_id, None)
+        if pi is None:
+            ci._first = cfg._month
+            ci._isnew = True
+            ci._jira_id = ""
+        else:
+            ci._first = pi._first
+            ci._isnew = False
+            ci._files_changed = (sorted(pi._files) != sorted(ci._files))
+            ci._jira_id = pi._jira_id
 
 # Helper for calculating category/license summary file counts.
 # Returns (cats, totalCount, noLicThird, noLicEmpty, noLicExt) tuple
@@ -239,6 +306,13 @@ def getFullPriorityString(p):
         return "Unspecified"
 
 
+# Helper to extract a particular Finding by ID.
+def getFindingByID(prj, finding_id):
+    for f in prj._findings:
+        if finding_id == f._id:
+            return f
+    return None
+
 # Helper for creating subproject findings document, whether draft or final
 # Returns path to findings report (or "" if not written) and path to
 # review report (or "" if not written)
@@ -252,9 +326,10 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
 
     # calculate paths; report folder would have been created in doCreateReport stage
     reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+    instancesJsonFilename = f"{sp._name}-instances-{sp._code_pulled}.json"
+    instancesJsonPath = os.path.join(reportFolder, instancesJsonFilename)
     slmJsonFilename = f"{sp._name}-{sp._code_pulled}.json"
     slmJsonPath = os.path.join(reportFolder, slmJsonFilename)
-    reviewFilename = f"{sp._name}-{sp._code_pulled}-REVIEW.txt"
     if isDraft:
         htmlFilename = f"{sp._name}-{sp._code_pulled}-DRAFT.html"
     else:
@@ -267,20 +342,13 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
         return "", ""
 
     # get analysis results
-    instances, needReview = analyzeFindingsInstances(cfg, prj, sp._name, slmJsonPath)
+    spInstances = analyzeFindingsInstances(cfg, prj, sp._name, slmJsonPath)
 
-    # build review doc if needed
-    reviewFilePath = os.path.join(reportFolder, reviewFilename)
-    if needReview != [] and includeReview:
-        with open(reviewFilePath, "w") as review_f:
-            for catName, licName, fileName in needReview:
-                review_f.write(f"{catName}: {licName}: {fileName}\n")
-        print(f"{prj._name}/{sp._name}: REVIEW file written to {reviewFilename}")
-        reviewReportWrittenPath = reviewFilePath
-    else:
-        # delete review doc if there's an old one there
-        if os.path.exists(reviewFilePath):
-            os.remove(reviewFilePath)
+    # compare to prior month's instances and annotate instances with results
+    comparePriorInstances(cfg, prj, sp._name, spInstances)
+
+    # save instances to disk
+    saveInstances(instancesJsonPath, spInstances)
 
     # if no instances, that's fine, we'll still want to create the report
 
@@ -295,11 +363,13 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
     repoData.sort(key=lambda tup: tup[0])
 
     findingData = []
-    for inst in instances:
+    for inst in spInstances._flagged:
+        finding = getFindingByID(prj, inst._finding_id)
         fd = {
-            "priorityShort": getShortPriorityString(inst._finding._priority),
-            "priorityFull": getFullPriorityString(inst._finding._priority),
-            "description": inst._finding._text,
+            "findingID": finding._id,
+            "priorityShort": getShortPriorityString(finding._priority),
+            "priorityFull": getFullPriorityString(finding._priority),
+            "description": finding._text,
             "numFiles": len(inst._files),
             "files": inst._files,
             "subprojects": inst._subprojects,
@@ -350,9 +420,10 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
 
     # calculate paths; report folder would have been created in doCreateReport stage
     reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+    instancesJsonFilename = f"{prj._name}-instances-{cfg._month}.json"
+    instancesJsonPath = os.path.join(reportFolder, instancesJsonFilename)
     slmJsonFilename = f"{prj._name}-{cfg._month}.json"
     slmJsonPath = os.path.join(reportFolder, slmJsonFilename)
-    reviewFilename = f"{prj._name}-{cfg._month}-REVIEW.txt"
     if isDraft:
         htmlFilename = f"{prj._name}-{cfg._month}-DRAFT.html"
     else:
@@ -365,20 +436,13 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
         return "", ""
 
     # get analysis results
-    instances, needReview = analyzeFindingsInstances(cfg, prj, "COMBINED", slmJsonPath)
+    prjInstances = analyzeFindingsInstances(cfg, prj, "COMBINED", slmJsonPath)
 
-    # build review doc if needed
-    reviewFilePath = os.path.join(reportFolder, reviewFilename)
-    if needReview != [] and includeReview:
-        with open(reviewFilePath, "w") as review_f:
-            for catName, licName, fileName in needReview:
-                review_f.write(f"{catName}: {licName}: {fileName}\n")
-        print(f"{prj._name}: REVIEW file written to {reviewFilename}")
-        reviewReportWrittenPath = reviewFilePath
-    else:
-        # delete review doc if there's an old one there
-        if os.path.exists(reviewFilePath):
-            os.remove(reviewFilePath)
+    # compare to prior month's instances and annotate instances with results
+    comparePriorInstances(cfg, prj, "COMBINED", prjInstances)
+
+    # save instances to disk
+    saveInstances(instancesJsonPath, prjInstances)
 
     # if no instances, that's fine, we'll still want to create the report
 
@@ -394,11 +458,13 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
     repoData.sort(key=lambda tup: tup[0])
 
     findingData = []
-    for inst in instances:
+    for inst in prjInstances._flagged:
+        finding = getFindingByID(prj, inst._finding_id)
         fd = {
-            "priorityShort": getShortPriorityString(inst._finding._priority),
-            "priorityFull": getFullPriorityString(inst._finding._priority),
-            "description": inst._finding._text,
+            "findingID": finding._id,
+            "priorityShort": getShortPriorityString(finding._priority),
+            "priorityFull": getFullPriorityString(finding._priority),
+            "description": finding._text,
             "numFiles": len(inst._files),
             "files": inst._files,
             "numSubprojects": len(inst._subprojects),

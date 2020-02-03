@@ -9,7 +9,7 @@ def doDelivered(scaffold_home, cfg, prj_only="", sp_only=""):
         print(f"Error: `deliver` command requires specifying only one project (and optionally only one subproject)")
         return False
 
-    # update status to DELIVERED if was UPLOADEDSPDX, otherwise don't
+    # update status to DELIVERED if was FILEDTICKETS, otherwise don't
     prj = cfg._projects.get(prj_only, None)
     if not prj:
         print(f"{prj_only}: Project not found in config")
@@ -21,7 +21,7 @@ def doDelivered(scaffold_home, cfg, prj_only="", sp_only=""):
             if sp._status == Status.DELIVERED:
                 print(f"{prj._name}/{sp._name}: already marked as DELIVERED, not changing")
                 ran_command = True
-            elif sp._status == Status.UPLOADEDREPORTS:
+            elif sp._status == Status.FILEDTICKETS:
                 sp._status = Status.DELIVERED
                 print(f"{prj._name}/{sp._name}: updated status to DELIVERED")
                 ran_command = True
