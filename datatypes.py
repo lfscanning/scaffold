@@ -109,6 +109,40 @@ class InstanceSet:
         self._unflagged = []
 
 
+# represents a set of metrics for a single subproject in one monthly pull
+class Metrics:
+
+    def __init__(self):
+        super(Metrics, self).__init__()
+
+        # project name
+        self._prj_name = ""
+
+        # subproject name
+        self._sp_name = ""
+
+        # categorized state
+        # one of "inproc", "analyzed", "uploaded", "delivered", "unknown"
+        self._state_category = ""
+
+        # total number of unpacked files
+        self._unpacked_files = 0
+
+        # total number of repos
+        self._num_repos = 0
+
+        # total number of instances by priority
+        self._instances_veryhigh = 0
+        self._instances_high = 0
+        self._instances_medium = 0
+        self._instances_low = 0
+        # and corresponding file counts
+        self._files_veryhigh = 0
+        self._files_high = 0
+        self._files_medium = 0
+        self._files_low = 0
+
+
 class Project:
 
     def __init__(self):
