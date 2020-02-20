@@ -47,7 +47,8 @@ def printMetrics(metricsFilename):
                 counts_delivered[2] += sp_metrics._unpacked_files
 
             else:
-                print(f"{sp_metrics._prj_name}/{sp_metrics._sp_name}: Invalid status category for metrics: {sp_metrics._state_category}")
+                if sp_metrics._state_category != "stopped":
+                    print(f"{sp_metrics._prj_name}/{sp_metrics._sp_name}: Invalid status category for metrics: {sp_metrics._state_category}")
 
             # also get instance and file counts by priority
             counts_instances[0] += sp_metrics._instances_veryhigh
@@ -103,12 +104,14 @@ def getMetrics(cfg, fdServer):
             st = sp._status.value
             if st >= Status.START.value and st <= Status.RANAGENTS.value:
                 sp_metrics._state_category = "inproc"
-            elif st > Status.RANAGENTS.value and st <= Status.MADEDRAFTFINDINGS.value or st == Status.STOPPED.value:
+            elif st > Status.RANAGENTS.value and st <= Status.MADEDRAFTFINDINGS.value:
                 sp_metrics._state_category = "analyzed"
-            elif st > Status.MADEDRAFTFINDINGS.value and st <= Status.UPLOADEDREPORTS.value:
+            elif st > Status.MADEDRAFTFINDINGS.value and st <= Status.FILEDTICKETS.value:
                 sp_metrics._state_category = "uploaded"
-            elif st > Status.UPLOADEDREPORTS.value and st <= Status.DELIVERED.value:
+            elif st > Status.FILEDTICKETS.value and st <= Status.DELIVERED.value:
                 sp_metrics._state_category = "delivered"
+            elif st == Status.STOPPED.value:
+                sp_metrics._state_category = "stopped"
             else:
                 sp_metrics._state_category = "unknown"
 

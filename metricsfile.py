@@ -33,7 +33,7 @@ def loadMetrics(metricsFilename):
                     sp_metrics._files_low = sp_metrics_dict.get("files-low", 0)
 
                     # validate state category
-                    if sp_metrics._state_category not in ["unknown", "inproc", "analyzed", "uploaded", "delivered"]:
+                    if sp_metrics._state_category not in ["unknown", "inproc", "analyzed", "uploaded", "delivered", "stopped"]:
                         sp_metrics._state_category = "unknown"
 
                     prj_metrics[sp_name] = sp_metrics

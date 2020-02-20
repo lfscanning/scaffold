@@ -122,7 +122,7 @@ class Metrics:
         self._sp_name = ""
 
         # categorized state
-        # one of "inproc", "analyzed", "uploaded", "delivered", "unknown"
+        # one of "inproc", "analyzed", "uploaded", "delivered", "stopped", "unknown"
         self._state_category = ""
 
         # total number of unpacked files
