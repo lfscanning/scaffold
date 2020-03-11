@@ -148,9 +148,6 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.GOTSPDX:
-        # import SPDX tag-value file into SLM
-        return doImportScanForSubproject(cfg, prj, sp)
-    elif status == Status.IMPORTEDSCAN:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
     elif status == Status.CREATEDREPORTS or status == Status.MADEDRAFTFINDINGS:
@@ -210,9 +207,6 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.GOTSPDX:
-        # import SPDX tag-value file into SLM
-        return doImportScanForSubproject(cfg, prj, sp)
-    elif status == Status.IMPORTEDSCAN:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
     elif status == Status.CREATEDREPORTS or status == Status.MADEDRAFTFINDINGS:
@@ -252,7 +246,7 @@ def updateProjectPostSubproject(cfg, prj):
     # if all subprojects have either created reports or are
     # stopped, then we should check whether we need to create
     # a combined project report as well
-    if prj._slm_combined_report == True and prj._status == Status.IMPORTEDSCAN:
+    if prj._slm_combined_report == True and prj._status == Status.GOTSPDX:
         readyForReport = True
         for sp in prj._subprojects.values():
             if sp._status.value < Status.CREATEDREPORTS.value:
