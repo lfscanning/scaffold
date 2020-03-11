@@ -18,13 +18,13 @@ def printEmail(cfg, prj_only="", sp_only=""):
     ran_command = False
     for sp in prj._subprojects.values():
         if sp_only == "" or sp_only == sp._name:
-            if sp._status == Status.UPLOADEDREPORTS:
+            if sp._status == Status.FILEDTICKETS:
                 printEmailForSubproject(cfg, prj, sp)
                 ran_command = True
             elif sp._status == Status.DELIVERED:
                 print(f"{prj._name}/{sp._name}: reports already delivered")
             else:
-                print(f"{prj._name}/{sp._name}: need to upload reports before printing email")
+                print(f"{prj._name}/{sp._name}: need to upload reports / file tickets before printing email")
 
     return ran_command
 
@@ -79,11 +79,11 @@ def printAllLinks(cfg, prj_only="", sp_only=""):
     ran_command = False
     for sp in prj._subprojects.values():
         if sp_only == "" or sp_only == sp._name:
-            if sp._status.value >= Status.UPLOADEDREPORTS.value and sp._status != Status.STOPPED:
+            if sp._status.value >= Status.FILEDTICKETS.value and sp._status != Status.STOPPED:
                 printAllLinksForSubproject(cfg, prj, sp)
                 ran_command = True
             elif sp._status != Status.STOPPED:
-                print(f"{prj._name}/{sp._name}: need to upload reports before printing links")
+                print(f"{prj._name}/{sp._name}: need to upload reports / file tickets before printing links")
 
     # also print for main project if combined
     if sp_only == "" and prj._slm_combined_report == True:
@@ -118,11 +118,11 @@ def printReportLinks(cfg, prj_only="", sp_only=""):
     ran_command = False
     for sp in prj._subprojects.values():
         if sp_only == "" or sp_only == sp._name:
-            if sp._status.value >= Status.UPLOADEDREPORTS.value and sp._status != Status.STOPPED:
+            if sp._status.value >= Status.FILEDTICKETS.value and sp._status != Status.STOPPED:
                 print(f"{prj._name}/{sp._name}: {sp._web_html_url}")
                 ran_command = True
             elif sp._status != Status.STOPPED:
-                print(f"{prj._name}/{sp._name}: need to upload reports before printing links")
+                print(f"{prj._name}/{sp._name}: need to upload reports / file tickets before printing links")
 
     # also print for main project if combined
     if sp_only == "" and prj._slm_combined_report == True:
