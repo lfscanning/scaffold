@@ -19,6 +19,7 @@ class Status(Enum):
     RANAGENTS = 6
     CLEARED = 7
     GOTSPDX = 8
+    PARSEDSPDX = 9
     CREATEDREPORTS = 10
     MADEDRAFTFINDINGS = 11
     APPROVEDFINDINGS = 12
@@ -142,6 +143,53 @@ class Metrics:
         self._files_low = 0
 
 
+class SLMLicenseConfig:
+
+    def __init__(self):
+        super(SLMLicenseConfig, self).__init__()
+
+        self._name = ""
+        self._aliases = []
+
+
+class SLMCategoryConfig:
+
+    def __init__(self):
+        super(SLMCategoryConfig, self).__init__()
+
+        self._name = ""
+        self._license_configs = []
+
+
+class SLMFile:
+
+    def __init__(self):
+        super(SLMFile, self).__init__()
+
+        self._path = ""
+        self._findings = {}
+
+
+class SLMLicense:
+
+    def __init__(self):
+        super(SLMLicense, self).__init__()
+
+        self._name = ""
+        self._files = []
+        self._numfiles = 0
+
+
+class SLMCategory:
+
+    def __init__(self):
+        super(SLMCategory, self).__init__()
+
+        self._name = ""
+        self._licenses = []
+        self._numfiles = 0
+
+
 class Project:
 
     def __init__(self):
@@ -170,9 +218,11 @@ class Project:
         self._github_shared_repos_pending = []
 
         # SLM vars
-        self._slm_shared = True
-        self._slm_prj = ""
         self._slm_combined_report = False
+        # list of SLMCategoryConfigs
+        self._slm_category_configs = []
+        self._slm_extensions_skip = []
+        self._slm_thirdparty_dirs = []
 
         # web upload vars, only for combined reports
         self._web_combined_uuid = ""
@@ -214,9 +264,8 @@ class Subproject:
         self._github_repos_pending = []
 
         # SLM vars
-        self._slm_prj = ""  # only if project's _slm_shared == False
-        self._slm_sp = ""
-        self._slm_scan_id = -1
+        self._slm_report_xlsx = ""
+        self._slm_report_json = ""
         self._slm_pending_lics = []
 
         # web upload vars
@@ -234,7 +283,8 @@ class Subproject:
         self._code_repos = {}
 
         # reset scan-dependent SLM vars
-        self._slm_scan_id = -1
+        self._slm_report_xlsx = ""
+        self._slm_report_json = ""
         self._slm_pending_lics = []
 
         # reset web upload vars
@@ -273,7 +323,6 @@ class Config:
         self._projects = {}
         self._month = ""
         self._version = 0
-        self._slm_home = ""
         self._spdx_github_org = ""
         self._spdx_github_signoff = ""
         self._web_server = ""

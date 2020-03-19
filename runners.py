@@ -13,7 +13,7 @@ from zipcode import doZipRepoCodeForSubproject, doZipRepoCodeForGerritSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
-from importscan import doImportScanForSubproject
+from parsespdx import doParseSPDXForSubproject
 from createreports import doCreateReportForProject, doCreateReportForSubproject
 from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject, doMakeDraftFindingsIfNoneForProject, doMakeFinalFindingsForProject
 from approving import doApprove
@@ -148,6 +148,9 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.GOTSPDX:
+        # parse SPDX tag-value file
+        return doParseSPDXForSubproject(cfg, prj, sp)
+    elif status == Status.PARSEDSPDX:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
     elif status == Status.CREATEDREPORTS or status == Status.MADEDRAFTFINDINGS:
@@ -207,6 +210,9 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # get SPDX tag-value file
         return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.GOTSPDX:
+        # parse SPDX tag-value file
+        return doParseSPDXForSubproject(cfg, prj, sp)
+    elif status == Status.PARSEDSPDX:
         # create report for subproject
         return doCreateReportForSubproject(cfg, prj, sp)
     elif status == Status.CREATEDREPORTS or status == Status.MADEDRAFTFINDINGS:
@@ -246,7 +252,7 @@ def updateProjectPostSubproject(cfg, prj):
     # if all subprojects have either created reports or are
     # stopped, then we should check whether we need to create
     # a combined project report as well
-    if prj._slm_combined_report == True and prj._status == Status.GOTSPDX:
+    if prj._slm_combined_report == True and prj._status == Status.PARSEDSPDX:
         readyForReport = True
         for sp in prj._subprojects.values():
             if sp._status.value < Status.CREATEDREPORTS.value:

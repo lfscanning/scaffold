@@ -9,7 +9,7 @@ from datatypes import Status
 
 def doCreateReportForSubproject(cfg, prj, sp):
     # make sure we're at the right stage
-    if sp._status != Status.GOTSPDX:
+    if sp._status != Status.PARSEDSPDX:
         print(f"{prj._name}/{sp._name}: status is {sp._status}, won't create report now")
         return False
 
@@ -128,7 +128,7 @@ def getScanIdsString(cfg, prj):
 
 def doCreateReportForProject(cfg, prj):
     # make sure we're at the right stage
-    if prj._status != Status.GOTSPDX:
+    if prj._status != Status.PARSEDSPDX:
         print(f"{prj._name}: status is {prj._status}, won't create combined report now")
         return False
 
