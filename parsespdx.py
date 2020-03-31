@@ -3,9 +3,10 @@
 
 import os
 
-from datatypes import Status
-from .slm.tvReader import TVReader
-from .slm.tvParser import TVParser
+from datatypes import SLMCategory, SLMFile, SLMLicense, Status
+from slmjson import saveSLMCategories
+from slm.tvReader import TVReader
+from slm.tvParser import TVParser
 
 MD5_EMPTY_FILE = "d41d8cd98f00b204e9800998ecf8427e"
 
@@ -44,19 +45,55 @@ def doParseSPDXForSubproject(cfg, prj, sp):
     # check for errors
     if parser.isError():
         print(f"{prj._name}/{sp._name}: error parsing SPDX file: {parser.errorMessage}")
+        return False
     # empty list means no file data found
     if fdList == []:
         print(f"{prj._name}/{sp._name}: error parsing SPDX file: no file data found")
+        return False
 
     # apply adjustments
     applyAliases(cfg, prj, fdList)
     applyNoLicenseFoundFindings(cfg, prj, fdList)
 
+    # create one category for each SLMCategoryConfig, so they're in
+    # the correct order; same for licenses in each category
+    # we'll later drop any that don't have files
+    cats = buildCategories(cfg, prj)
+
     # reformulate into category/license/file structure, and/or error out
     # if any are missing
-    cats = []
+    missing_lics = []
     for fd in fdList:
+        cat_name = getCategoryForLicense(cfg, prj, fd.license)
+        if cat_name:
+            retval = addToLicense(cats, cat_name, fd)
+            if not retval:
+                print(f"{prj._name}/{sp._name}: error adding file path {fd.path} for license {fd.license}")
+                return False
+        else:
+            # license isn't categorized
+            if fd.license not in missing_lics:
+                missing_lics.append(fd.license)
 
+    # check for missing licenses
+    if len(missing_lics) > 0:
+        sp._slm_pending_lics = missing_lics
+        print(f"{prj._name}/{sp._name}: need to add licenses to categories, see licenses-pending")
+        return False
+    else:
+        sp._slm_pending_lics = []
+
+    # and prune out any categories / licenses with zero files
+    cats = pruneCategories(cats)
+
+    # finally, save categories out to JSON
+    # create report directory for project if it doesn't already exist
+    reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+    if not os.path.exists(reportFolder):
+        os.makedirs(reportFolder)
+    slmJsonFilename = f"{sp._name}-{sp._code_pulled}.json"
+    slmJsonPath = os.path.join(reportFolder, slmJsonFilename)
+    saveSLMCategories(cats, slmJsonPath)
 
     # once we get here, the SPDX file has been parsed into JSON
     sp._status = Status.PARSEDSPDX
@@ -119,8 +156,49 @@ def applyNoLicenseFoundFindings(cfg, prj, fdList):
                 fd.finding_emptyfile = "yes"
 
 def getCategoryForLicense(cfg, prj, lic):
-    for cat in prj._slm_category_configs:
-        if lic in cat._license_configs:
-            return cat._name
+    for cat_cfg in prj._slm_category_configs:
+        for lic_cfg in cat_cfg._license_configs:
+            if lic_cfg._name == lic:
+                return cat_cfg._name
 
     return None
+
+def buildCategories(cfg, prj):
+    cats = []
+    for cc in prj._slm_category_configs:
+        cat = SLMCategory()
+        cat._name = cc._name
+        for lc in cc._license_configs:
+            lic = SLMLicense()
+            lic._name = lc._name
+            cat._licenses.append(lic)
+        cats.append(cat)
+    return cats
+
+def pruneCategories(cats):
+    cats = [cat for cat in cats if cat._numfiles > 0]
+    for cat in cats:
+        cat._licenses = [lic for lic in cat._licenses if lic._numfiles > 0]
+    return cats
+
+def addToLicense(cats, cat_name, fd):
+    # find the category
+    for cat in cats:
+        if cat._name == cat_name:
+            # find the license
+            for lic in cat._licenses:
+                if lic._name == fd.license:
+                    # add it
+                    f = SLMFile()
+                    f._path = fd.path
+                    if fd.finding_extensions != "":
+                        f._findings["extension"] = fd.finding_extensions
+                    if fd.finding_thirdparty != "":
+                        f._findings["thirdparty"] = fd.finding_thirdparty
+                    if fd.finding_emptyfile != "":
+                        f._findings["emptyfile"] = fd.finding_emptyfile
+                    lic._numfiles += 1
+                    cat._numfiles += 1
+                    lic._files.append(f)
+                    return True
+    return False
