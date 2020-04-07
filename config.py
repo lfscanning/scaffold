@@ -8,7 +8,7 @@ from shutil import copyfile
 
 import yaml
 
-from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, Status, Subproject, TicketType
+from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, SLMCategoryConfig, SLMLicenseConfig, Status, Subproject, TicketType
 
 def getConfigFilename(scaffoldHome, month):
     return os.path.join(scaffoldHome, month, "config.json")
@@ -167,16 +167,6 @@ def loadConfig(configFilename, scaffoldHome):
             cfg._spdx_github_signoff = config_dict.get('spdxGithubSignoff', "")
             if cfg._spdx_github_signoff == "":
                 print(f'No valid spdxGithubSignoff found in config section')
-                return cfg
-
-            # load slm data
-            slm_dict = config_dict.get('slm', {})
-            if slm_dict == {}:
-                print(f'No slm section found in config section')
-                return cfg
-            cfg._slm_home = slm_dict.get('home', "")
-            if cfg._slm_home == "":
-                print(f'No valid home found in slm section')
                 return cfg
 
             # load web server data
@@ -489,25 +479,30 @@ def parseProjectSLMConfig(prj_dict, prj):
         print(f'Project {prj._name} has no slm data')
         prj._ok = False
     else:
-        prj._slm_shared = prj_slm_dict.get('shared', True)
-
-        prj._slm_prj = prj_slm_dict.get('prj', None)
-        if prj._slm_shared == False:
-            if prj._slm_prj != None:
-                print(f"Project {prj._name} has slm:shared == False but also specifies slm:prj")
-                prj._ok = False
-        else:
-            if prj._slm_prj == "" and prj._slm_shared == True:
-                print(f"Project {prj._name} has slm:shared == True but explicitly has empty string for slm:prj")
-                prj._ok = False
-            # default to using project name if none was specified
-            if prj._slm_prj == None:
-                prj._slm_prj = prj._name
-
         prj._slm_combined_report = prj_slm_dict.get('combinedReport', False)
-        if prj._slm_combined_report == True and prj._slm_shared == False:
-            print(f"Project {prj._name} has slm:shared == False but also has slm:combinedReport == True")
+        prj._slm_extensions_skip = prj_slm_dict.get('extensions-skip', [])
+        prj._slm_thirdparty_dirs = prj_slm_dict.get('thirdparty-dirs', [])
+
+    # build category configs
+    prj._slm_category_configs = []
+    categories = prj_slm_dict.get('categories', [])
+    for category_dict in categories:
+        cat = SLMCategoryConfig()
+        cat._name = category_dict.get('name', "")
+        if cat._name == "":
+            print(f'SLM category in project {prj._name} has no name')
             prj._ok = False
+        cat._license_configs = []
+        licenses = category_dict.get('licenses', [])
+        for license_dict in licenses:
+            lic = SLMLicenseConfig()
+            lic._name = license_dict.get('name', "")
+            if lic._name == "":
+                print(f'SLM license in project {prj._name}, category {cat._name} has no name')
+                prj._ok = False
+            lic._aliases = license_dict.get('aliases', [])
+            cat._license_configs.append(lic)
+        prj._slm_category_configs.append(cat)
 
 def parseProjectWebConfig(prj_dict, prj):
     prj_web_dict = prj_dict.get('web', {})
@@ -527,30 +522,13 @@ def parseProjectWebConfig(prj_dict, prj):
 def parseSubprojectSLMConfig(sp_dict, prj, sp):
     sp_slm_dict = sp_dict.get('slm', {})
     if sp_slm_dict == {}:
-        # if project IS NOT shared SLM, then we assume _slm_prj is the sp name
-        # if project IS shared SLM, then we ignore _slm_prj
-        if prj._slm_shared == False:
-            sp._slm_prj = sp._name
-        # and either way we assume defaults for the other values
-        sp._slm_sp = sp._name
-        sp._slm_scan_id = -1
+        sp._slm_report_xlsx = []
+        sp._slm_report_json = []
         sp._slm_pending_lics = []
     else:
         # we did get an slm section, so we'll parse it
-        sp._slm_prj = sp_slm_dict.get('prj', "")
-        if prj._slm_shared == True:
-            if sp._slm_prj != "":
-                print(f'Project {prj._name} has slm:shared == True but subproject {sp._name} specifies slm:prj')
-                sp._ok = False
-        else:
-            if sp._slm_prj == "":
-                sp._slm_prj = sp._name
-        sp._slm_sp = sp_slm_dict.get('sp', sp._name)
-        # if it's present in config but was empty string, replace it
-        # with the subproject name
-        if sp._slm_sp == "":
-            sp._slm_sp = sp._name
-        sp._slm_scan_id = sp_slm_dict.get('scan_id', -1)
+        sp._slm_report_xlsx = sp_slm_dict.get('report-xlsx', "")
+        sp._slm_report_json = sp_slm_dict.get('report-json', "")
         sp._slm_pending_lics = sp_slm_dict.get('licenses-pending', [])
 
 class ConfigJSONEncoder(json.JSONEncoder):
@@ -561,9 +539,6 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "storepath": o._storepath,
                     "month": o._month,
                     "version": o._version,
-                    "slm": {
-                        "home": o._slm_home,
-                    },
                     "spdxGithubOrg": o._spdx_github_org,
                     "spdxGithubSignoff": o._spdx_github_signoff,
                     "webServer": o._web_server,
@@ -582,16 +557,12 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 retval["ticket-type"] = "jira"
 
             # build SLM data
-            if o._slm_shared == True:
-                slm_section = {
-                    "shared": True,
-                    "prj": o._slm_prj,
-                    "combinedReport": o._slm_combined_report,
-                }
-            else:
-                slm_section = {
-                    "shared": False,
-                }
+            slm_section = {
+                "categories": o._slm_category_configs,
+                "combinedReport": o._slm_combined_report,
+                "extensions-skip": o._slm_extensions_skip,
+                "thirdparty-dirs": o._slm_thirdparty_dirs,
+            }
             retval["slm"] = slm_section
 
             if o._slm_combined_report == True:
@@ -635,11 +606,11 @@ class ConfigJSONEncoder(json.JSONEncoder):
 
         elif isinstance(o, Subproject):
             # build SLM data
-            slm_section = {"sp": o._slm_sp}
-            if o._slm_prj != "":
-                slm_section["prj"] = o._slm_prj
-            if o._slm_scan_id != -1:
-                slm_section["scan_id"] = o._slm_scan_id
+            slm_section = {}
+            if o._slm_report_json != "":
+                slm_section["report-json"] = o._slm_report_json
+            if o._slm_report_xlsx != "":
+                slm_section["report-xlsx"] = o._slm_report_xlsx
             if o._slm_pending_lics != []:
                 slm_section["licenses-pending"] = o._slm_pending_lics
 
@@ -727,6 +698,18 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 return {
                     "type": "unknown"
                 }
+
+        elif isinstance(o, SLMCategoryConfig):
+            return {
+                "name": o._name,
+                "licenses": o._license_configs,
+            }
+
+        elif isinstance(o, SLMLicenseConfig):
+            return {
+                "name": o._name,
+                "aliases": o._aliases,
+            }
 
         else:
             return {'__{}__'.format(o.__class__.__name__): o.__dict__}
