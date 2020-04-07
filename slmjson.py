@@ -7,7 +7,13 @@ import os
 from datatypes import SLMCategory, SLMFile, SLMLicense
 
 # returns list of SLMCategories
+# sp only used for ._name, use sp == None for combined reports
 def loadSLMCategories(prj, sp, jsonFilename):
+    if sp == None:
+        spname = "COMBINED"
+    else:
+        spname = sp._name
+
     try:
         with open(jsonFilename, 'r') as f:
             js = json.load(f)
@@ -18,7 +24,7 @@ def loadSLMCategories(prj, sp, jsonFilename):
                 cat = SLMCategory()
                 cat._name = cat_dict.get("name", "")
                 if cat._name == "":
-                    print(f'{prj._name}/{sp._name}: SLM category has no name')
+                    print(f'{prj._name}/{spname}: SLM category has no name')
                     return []
                 cat._numfiles = cat_dict.get("numFiles", 0)
                 cat._licenses = []
@@ -27,7 +33,7 @@ def loadSLMCategories(prj, sp, jsonFilename):
                     lic = SLMLicense()
                     lic._name = lic_dict.get("name", "")
                     if lic._name == "":
-                        print(f'{prj._name}/{sp._name}: SLM license in category {cat._name} has no name')
+                        print(f'{prj._name}/{spname}: SLM license in category {cat._name} has no name')
                         return []
                     lic._numfiles = lic_dict.get("numFiles", 0)
                     lic._files = []
@@ -36,7 +42,7 @@ def loadSLMCategories(prj, sp, jsonFilename):
                         fi = SLMFile()
                         fi._path = file_dict.get("path")
                         if fi._path == "":
-                            print(f'{prj._name}/{sp._name}: SLM file in license {lic._name} has no path')
+                            print(f'{prj._name}/{spname}: SLM file in license {lic._name} has no path')
                             return []
                         fi._findings = file_dict.get("findings", {})
                         lic._files.append(fi)

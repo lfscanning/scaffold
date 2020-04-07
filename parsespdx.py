@@ -4,7 +4,7 @@
 import os
 
 from datatypes import SLMCategory, SLMFile, SLMLicense, Status
-from slmjson import saveSLMCategories
+from slmjson import loadSLMCategories, saveSLMCategories
 from slm.tvReader import TVReader
 from slm.tvParser import TVParser
 
@@ -96,6 +96,8 @@ def doParseSPDXForSubproject(cfg, prj, sp):
     saveSLMCategories(cats, slmJsonPath)
 
     # once we get here, the SPDX file has been parsed into JSON
+    sp._slm_report_json = slmJsonPath
+    print(f"{prj._name}/{sp._name}: imported SPDX and created json data")
     sp._status = Status.PARSEDSPDX
 
     # and when we return, the runner framework should update the project's
@@ -202,3 +204,84 @@ def addToLicense(cats, cat_name, fd):
                     lic._files.append(f)
                     return True
     return False
+
+def doCreateCombinedSLMJSONForProject(cfg, prj):
+    # confirm we're at the right stages
+    if prj._status != Status.GOTSPDX:
+        print(f"{prj._name}/COMBINED: status is {prj._status}, won't make combined JSON now")
+        return False
+    for sp in prj._subprojects.values():
+        if sp._status.value < Status.PARSEDSPDX.value and sp._status != Status.STOPPED:
+            print(f"{prj._name}/COMBINED: status for subproject {sp._name} is {sp._status}, won't make combined JSON now")
+            return False
+
+    allCategories = []
+    # initiate with config categories and licenses
+    for configCat in prj._slm_category_configs:
+        newCat = SLMCategory()
+        newCat._name = configCat._name
+        allCategories.append(newCat)
+        for configLic in configCat._license_configs:
+            newLic = SLMLicense()
+            newLic._name = configLic._name
+            newCat._licenses.append(newLic)
+    # load each subproject's JSON file, and incorporate its data into this combined one
+    for sp in prj._subprojects.values():
+        # skip those that are stopped
+        if sp._status != Status.STOPPED:
+            jsonPath = sp._slm_report_json
+            if jsonPath == "":
+                print(f"{prj._name}/COMBINED: no JSON report path for subproject {sp._name}, won't make combined JSON now")
+                return False
+            spCategories = loadSLMCategories(prj, sp, jsonPath)
+            combineCategories(allCategories, spCategories)
+
+    # and save it
+    reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+    slmJsonFilename = f"{prj._name}-{cfg._month}.json"
+    slmJsonPath = os.path.join(reportFolder, slmJsonFilename)
+    saveSLMCategories(allCategories, slmJsonPath)
+
+    # once we get here, the combined JSON file should be done too
+    print(f"{prj._name}/COMBINED: imported SPDX and created json data")
+    prj._status = Status.PARSEDSPDX
+
+    # and when we return, the runner framework should update the project's
+    # status to reflect the min of its subprojects
+    return True
+
+# Incorporate all category, license and file data from source categories into
+# destination categories.
+# Assumes (without checking) that e.g. any licenses will be in the same
+# categories for both sets.
+def combineCategories(dstCategories, srcCategories):
+    for srcCat in srcCategories:
+        # find matching dst category
+        catMatch = None
+        for dstCat in dstCategories:
+            if dstCat._name == srcCat._name:
+                catMatch = dstCat
+                break
+        if catMatch == None:
+            # didn't find it, so create a new one
+            catMatch = SLMCategory()
+            catMatch._name = srcCat._name
+            dstCategories.append(catMatch)
+        # now go through and look for each license
+        for srcLic in srcCat._licenses:
+            # find matching dst license in this category
+            licMatch = None
+            for dstLic in catMatch._licenses:
+                if dstLic._name == srcLic._name:
+                    licMatch = dstLic
+                    break
+            if licMatch == None:
+                # didn't find it, so create a new one
+                licMatch = SLMLicense()
+                licMatch._name = srcLic._name
+                catMatch._licenses.append(licMatch)
+            # now go through and add each file
+            for fi in srcLic._files:
+                licMatch._files.append(fi)
+                licMatch._numfiles += 1
+                catMatch._numfiles += 1

@@ -13,7 +13,7 @@ from zipcode import doZipRepoCodeForSubproject, doZipRepoCodeForGerritSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
-from parsespdx import doParseSPDXForSubproject
+from parsespdx import doParseSPDXForSubproject, doCreateCombinedSLMJSONForProject
 from createreports import doCreateReportForProject, doCreateReportForSubproject
 from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject, doMakeDraftFindingsIfNoneForProject, doMakeFinalFindingsForProject
 from approving import doApprove
@@ -249,6 +249,22 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
 # before the status is advanced. This includes (if appropriate)
 # advancing the status of the project.
 def updateProjectPostSubproject(cfg, prj):
+    # if all subprojects have either parsed SPDX into JSON or are
+    # stopped, then we should check whether we need to prepare
+    # a combined project JSON as well
+    if prj._slm_combined_report == True and prj._status == Status.GOTSPDX:
+        readyForJSON = True
+        for sp in prj._subprojects.values():
+            if sp._status.value < Status.PARSEDSPDX.value:
+                readyForJSON = False
+                break
+        if readyForJSON:
+            # try to build the report, and exit without updating
+            # status if we fail
+            retval = doCreateCombinedSLMJSONForProject(cfg, prj)
+            if retval == False:
+                return
+
     # if all subprojects have either created reports or are
     # stopped, then we should check whether we need to create
     # a combined project report as well
