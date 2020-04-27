@@ -47,10 +47,10 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
         print(f"{prj._name}/{sp._name}: error running copyright scanner")
         return False
     
-    # run reuser agent if prior upload exists, checking up to 3 prior months
+    # run reuser agent if prior upload exists, checking up to 6 prior months
     pYear = year
     pMonth = month
-    numTries = 3
+    numTries = 6
     foundPrior = False
     while numTries > 0:
         pYear, pMonth = priorMonth(pYear, pMonth)
@@ -73,7 +73,7 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
             numTries -= 1
 
     if not foundPrior:
-        print(f"{prj._name}/{sp._name}: no prior upload found in preceding 3 months, skipping reuser")
+        print(f"{prj._name}/{sp._name}: no prior upload found in preceding 6 months, skipping reuser")
     
     # run bulk matches if the project has any
     if prj._matches != []:

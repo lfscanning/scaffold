@@ -139,22 +139,31 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
 # FIXME rather than glob searching, really we should probably look at the prior month's
 # FIXME config file and pull out the specific file that we want.
 def getPriorInstancesSet(cfg, prj, spName):
-    curYear, curMonth = parseYM(cfg._month)
-    pYear, pMonth = priorMonth(curYear, curMonth)
-    priorYM = getYMStr(pYear, pMonth)
-    priorReportFolder = os.path.join(cfg._storepath, priorYM, "report", prj._name)
-    # search for file with the right prefix and extension
-    if spName == "COMBINED":
-        wantFile = f"{prj._name}-instances-{priorYM}.json"
-    else:
-        wantFile = f"{spName}-instances-{priorYM}-??.json"
-    filenames = glob.glob(os.path.join(priorReportFolder, wantFile))
-    filenames.sort()
-    if len(filenames) == 0:
-        return None
+    pYear, pMonth = parseYM(cfg._month)
+    numTries = 6
+    while numTries > 0:
+        pYear, pMonth = priorMonth(pYear, pMonth)
+        priorYM = getYMStr(pYear, pMonth)
+        priorReportFolder = os.path.join(cfg._storepath, priorYM, "report", prj._name)
+        # search for file with the right prefix and extension
+        if spName == "COMBINED":
+            wantFile = f"{prj._name}-instances-{priorYM}.json"
+        else:
+            wantFile = f"{spName}-instances-{priorYM}-??.json"
+        filenames = glob.glob(os.path.join(priorReportFolder, wantFile))
+        filenames.sort()
+        if len(filenames) == 0:
+            print(f"{prj._name}/{spName}: didn't find prior instances for {priorYM}")
+            numTries -= 1
+            continue
 
-    # FIXME if multiple are present, we'll use the first one
-    return loadInstances(filenames[0])
+        # FIXME if multiple are present, we'll use the first one
+        print(f"{prj._name}/{spName}: using prior instances for {priorYM}")
+        return loadInstances(filenames[0])
+
+    # if we get here, we never found a match
+    print(f"{prj._name}/{spName}: no prior upload found in preceding 6 months")
+    return None
 
 # Helper to load prior month's instances, compare what we've got, and annotate them.
 def comparePriorInstances(cfg, prj, spName, currentInstanceSet):
