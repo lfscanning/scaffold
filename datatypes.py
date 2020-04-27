@@ -190,6 +190,16 @@ class SLMCategory:
         self._numfiles = 0
 
 
+class SLMPolicy:
+
+    def __init__(self):
+        super(SLMPolicy, self).__init__()
+
+        self._name = ""
+        # list of SLMCategoryConfigs for this policy
+        self._category_configs = []
+
+
 class Project:
 
     def __init__(self):
@@ -219,8 +229,8 @@ class Project:
 
         # SLM vars
         self._slm_combined_report = False
-        # list of SLMCategoryConfigs
-        self._slm_category_configs = []
+        # map of names to SLMPolicies
+        self._slm_policies = {}
         self._slm_extensions_skip = []
         self._slm_thirdparty_dirs = []
 
@@ -234,6 +244,11 @@ class Project:
 
     def resetNewMonth(self):
         self._status = Status.START
+
+        # reset this-month-only variables
+        self._web_combined_uuid = ""
+        self._web_combined_html_url = ""
+        self._web_combined_xlsx_url = ""
 
         # tell subprojects to reset
         for sp in self._subprojects.values():
@@ -264,6 +279,7 @@ class Subproject:
         self._github_repos_pending = []
 
         # SLM vars
+        self._slm_policy_name = ""
         self._slm_report_xlsx = ""
         self._slm_report_json = ""
         self._slm_pending_lics = []
@@ -291,6 +307,7 @@ class Subproject:
         self._web_uuid = ""
         self._web_html_url = ""
         self._web_xlsx_url = ""
+
 
 class JiraSecret:
 
