@@ -198,6 +198,7 @@ class SLMPolicy:
         self._name = ""
         # list of SLMCategoryConfigs for this policy
         self._category_configs = []
+        self._flag_categories = []
 
 
 class Project:
@@ -214,7 +215,6 @@ class Project:
 
         self._matches = []
         self._findings = []
-        self._flag_categories = []
 
         # only if Gerrit
         self._gerrit_apiurl = ""

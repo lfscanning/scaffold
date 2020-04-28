@@ -20,6 +20,12 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
     instances = []
     needReview = []
 
+    # get policy for this project and subproject/COMBINED
+    policy = getPolicy(cfg, prj, spName)
+    if policy is None:
+        print(f'{prj._name}/{spName}: Unable to get policy for findings; skipping analysis')
+        return None
+
     # confirm whether this project has any findings templates
     if prj._findings == []:
         print(f'{prj._name}/{spName}: No findings template, skipping analysis')
@@ -102,7 +108,7 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
     # the review list
     for catName, licName, fileName in catLicFiles:
         found = False
-        if catName in prj._flag_categories:
+        if catName in policy._flag_categories:
             # check if this file is in any instance
             for inst in instances:
                 if fileName in inst._files:
@@ -352,6 +358,9 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
 
     # get analysis results
     spInstances = analyzeFindingsInstances(cfg, prj, sp._name, slmJsonPath)
+    if spInstances is None:
+        print(f'{prj._name}/{sp._name}: Unable to get analysis instances; bailing')
+        return "", ""
 
     # compare to prior month's instances and annotate instances with results
     comparePriorInstances(cfg, prj, sp._name, spInstances)
@@ -446,6 +455,9 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
 
     # get analysis results
     prjInstances = analyzeFindingsInstances(cfg, prj, "COMBINED", slmJsonPath)
+    if prjInstances is None:
+        print(f'{prj._name}/COMBINED: Unable to get analysis instances; bailing')
+        return "", ""
 
     # compare to prior month's instances and annotate instances with results
     comparePriorInstances(cfg, prj, "COMBINED", prjInstances)
@@ -611,3 +623,35 @@ def doMakeFinalFindingsForProject(cfg, prj):
     # status to reflect the min of its subprojects --
     # AFTER taking into account creating a combined report, if needed
     return True
+
+# Gets correct SLM policy for this project object / subproject name
+# or "COMBINED" for overall. Returns policy object or None if invalid /
+# unable to pick just one for COMBINED.
+def getPolicy(cfg, prj, spName):
+    # if wanting COMBINED, then make sure we have exactly one policy for
+    # this project
+    if spName == "COMBINED":
+        if len(prj._slm_policies) > 1:
+            print(f"{prj._name}/COMBINED: project has more than one SLM policy, can't make findings")
+            return None
+
+        # we know now that there is only 1 policy, so we just return it
+        return list(prj._slm_policies.values())[0]
+
+    # get the right subproject
+    sp = prj._subprojects[spName]
+
+    # if subproject policy name is an empty string, then use the first
+    # policy if there is only one (if there's more than one, error out)
+    if sp._slm_policy_name == "":
+        if len(prj._slm_policies) > 1:
+            print(f"{prj._name}/{sp._name}: no slm policy specified for subproject but project has multiple policies, can't make findings")
+            return None
+        return list(prj._slm_policies.values())[0]
+
+    # otherwise get the right policy for this subproject, or fail if we can't
+    try:
+        return prj._slm_policies[sp._slm_policy_name]
+    except KeyError:
+        print(f"{prj._name}/{sp._name}: slm policy name \"{sp._slm_policy_name}\" not defined, can't make findings")
+        return None

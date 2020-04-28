@@ -70,16 +70,11 @@ def loadFindings(findingsFilename):
         with open(findingsFilename, "r") as f:
             yd = yaml.safe_load(f)
 
-            # expecting object with flagCategories and findings arrays
-            flag_categories = yd.get("flagCategories", [])
-            if flag_categories == []:
-                print(f'No flagged categories specified in {findingsFilename}')
-                return [], []
-
+            # expecting object with findings array
             findings_arr = yd.get("findings", [])
             if findings_arr == []:
                 print(f'No findings specified in {findingsFilename}')
-                return [], []
+                return []
 
             findings = []
             count = 0
@@ -94,21 +89,21 @@ def loadFindings(findingsFilename):
                 finding._matches_subproject = fd.get('matches-subproject', [])
                 if finding._matches_path == [] and finding._matches_license == [] and finding._matches_subproject == []:
                     print(f'Finding {count} in {findingsFilename} has no entries for either matches-path, matches-license or matches-subproject')
-                    return [], []
+                    return []
                 prstr = fd.get("priority", "")
                 try:
                     finding._priority = Priority[prstr.upper()]
                 except KeyError:
                     print(f'Invalid priority value for finding {count} in {findingsFilename} with paths {finding._matches_path}, licenses {finding._matches_license}, subprojects {finding._matches_subproject}, ')
-                    return [], []
+                    return []
 
                 findings.append(finding)
 
-            return findings, flag_categories
+            return findings
 
     except yaml.YAMLError as e:
         print(f'Error loading or parsing {findingsFilename}: {str(e)}')
-        return [], []
+        return []
 
 # parses secrets file; always looks in ~/.scaffold-secrets.json
 def loadSecrets():
@@ -460,9 +455,9 @@ def loadConfig(configFilename, scaffoldHome):
                 # also add in findings templates if a findings-{prj_name}.json file exists
                 findingsFilename = getFindingsProjectFilename(scaffoldHome, cfg._month, prj._name)
                 if os.path.isfile(findingsFilename):
-                    prj._findings, prj._flag_categories = loadFindings(findingsFilename)
+                    prj._findings = loadFindings(findingsFilename)
                 else:
-                    prj._findings, prj._flag_categories = [], []
+                    prj._findings = []
 
                 # and add project to the dictionary
                 cfg._projects[prj_name] = prj
@@ -483,32 +478,45 @@ def parseProjectSLMConfig(prj_dict, prj):
         prj._slm_extensions_skip = prj_slm_dict.get('extensions-skip', [])
         prj._slm_thirdparty_dirs = prj_slm_dict.get('thirdparty-dirs', [])
 
-    # build policies
-    prj._slm_policies = {}
-    policies = prj_slm_dict.get('policies', {})
-    for policy_name, categories in policies.items():
-        policy = SLMPolicy()
-        policy._name = policy_name
-        # for each policy, build category configs
-        policy._category_configs = []
-        for category_dict in categories:
-            cat = SLMCategoryConfig()
-            cat._name = category_dict.get('name', "")
-            if cat._name == "":
-                print(f'SLM category in project {prj._name}, policy {policy_name} has no name')
-                prj._ok = False
-            cat._license_configs = []
-            licenses = category_dict.get('licenses', [])
-            for license_dict in licenses:
-                lic = SLMLicenseConfig()
-                lic._name = license_dict.get('name', "")
-                if lic._name == "":
-                    print(f'SLM license in project {prj._name}, policy {policy_name}, category {cat._name} has no name')
+        # build policies
+        prj._slm_policies = {}
+        policies = prj_slm_dict.get('policies', {})
+        for policy_name, policy_dict in policies.items():
+            policy = SLMPolicy()
+            policy._name = policy_name
+            # for each policy, build category configs
+            policy._category_configs = []
+            categories = policy_dict.get('categories', [])
+            for category_dict in categories:
+                cat = SLMCategoryConfig()
+                cat._name = category_dict.get('name', "")
+                if cat._name == "":
+                    print(f'SLM category in project {prj._name}, policy {policy_name} has no name')
                     prj._ok = False
-                lic._aliases = license_dict.get('aliases', [])
-                cat._license_configs.append(lic)
-            policy._category_configs.append(cat)
-        prj._slm_policies[policy_name] = policy
+                cat._license_configs = []
+                licenses = category_dict.get('licenses', [])
+                for license_dict in licenses:
+                    lic = SLMLicenseConfig()
+                    lic._name = license_dict.get('name', "")
+                    if lic._name == "":
+                        print(f'SLM license in project {prj._name}, policy {policy_name}, category {cat._name} has no name')
+                        prj._ok = False
+                    lic._aliases = license_dict.get('aliases', [])
+                    cat._license_configs.append(lic)
+                policy._category_configs.append(cat)
+            # also get list of categories that are flagged
+            policy._flag_categories = policy_dict.get('flagged', [])
+            prj._slm_policies[policy_name] = policy
+
+        # check that there's at least one policy
+        if len(prj._slm_policies) < 1:
+            print(f'Project {prj._name} has no slm policies')
+            prj._ok = False
+        # check that there's no more than one policy if this project needs
+        # a combined report
+        if len(prj._slm_policies) > 1 and prj._slm_combined_report == True:
+            print(f'Project {prj._name} has more than one slm policy, but wants a combined report; invalid')
+            prj._ok = False
 
 def parseProjectWebConfig(prj_dict, prj):
     prj_web_dict = prj_dict.get('web', {})
@@ -539,6 +547,20 @@ def parseSubprojectSLMConfig(sp_dict, prj, sp):
         sp._slm_report_json = sp_slm_dict.get('report-json', "")
         sp._slm_pending_lics = sp_slm_dict.get('licenses-pending', [])
 
+        # check whether there's only one slm policy, if no name is given
+        # or check whether slm policy name is known, if one is given
+        if sp._slm_policy_name == "":
+            if len(prj._slm_policies) > 1:
+                print(f'Project {prj._name} has multiple slm policies but no policy is specified for subproject {sp._name}')
+                sp._ok = False
+                prj._ok = False
+        else:
+            if sp._slm_policy_name not in prj._slm_policies:
+                print(f'Project {prj._name} does not have slm policy named "{sp._slm_policy_name}", specified for subproject {sp._name}')
+                sp._ok = False
+                prj._ok = False
+
+
 class ConfigJSONEncoder(json.JSONEncoder):
     def default(self, o): # pylint: disable=method-hidden
         if isinstance(o, Config):
@@ -566,7 +588,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
 
             # build SLM data
             slm_section = {
-                "policies": o._policies,
+                "policies": o._slm_policies,
                 "combinedReport": o._slm_combined_report,
                 "extensions-skip": o._slm_extensions_skip,
                 "thirdparty-dirs": o._slm_thirdparty_dirs,
@@ -710,10 +732,10 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 }
 
         elif isinstance(o, SLMPolicy):
-            # just returning category configs because
-            # prj._policies is a map of names to SLMPolicies, so
-            # name will be handled in SLMProject encoder above
-            return o._license_configs
+            return {
+                "categories": o._category_configs,
+                "flagged": o._flag_categories,
+            }
 
         elif isinstance(o, SLMCategoryConfig):
             return {
