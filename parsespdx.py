@@ -16,6 +16,22 @@ def doParseSPDXForSubproject(cfg, prj, sp):
         print(f"{prj._name}/{sp._name}: status is {sp._status}, won't parse SPDX now")
         return False
 
+    # if subproject policy name is an empty string, then use the first
+    # policy if there is only one (if there's more than one, error out)
+    if sp._slm_policy_name == "":
+        if len(prj._slm_policies) > 1:
+            print(f"{prj._name}/{sp._name}: no slm policy specified for subproject but project has multiple policies, won't parse SPDX now")
+            return False
+        policy = list(prj._slm_policies.values())[0]
+
+    # otherwise get the right policy for this subproject, or fail if we can't
+    else:
+        try:
+            policy = prj._slm_policies[sp._slm_policy_name]
+        except KeyError:
+            print(f"{prj._name}/{sp._name}: slm policy name \"{sp._slm_policy_name}\" not defined, won't parse SPDX now")
+            return False
+
     # find the SPDX file we want to parse
     spdxFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
     spdxFilename = f"{sp._name}-{sp._code_pulled}.spdx"
@@ -52,19 +68,19 @@ def doParseSPDXForSubproject(cfg, prj, sp):
         return False
 
     # apply adjustments
-    applyAliases(cfg, prj, fdList)
+    applyAliases(policy, fdList)
     applyNoLicenseFoundFindings(cfg, prj, fdList)
 
     # create one category for each SLMCategoryConfig, so they're in
     # the correct order; same for licenses in each category
     # we'll later drop any that don't have files
-    cats = buildCategories(cfg, prj)
+    cats = buildCategories(policy)
 
     # reformulate into category/license/file structure, and/or error out
     # if any are missing
     missing_lics = []
     for fd in fdList:
-        cat_name = getCategoryForLicense(cfg, prj, fd.license)
+        cat_name = getCategoryForLicense(policy, fd.license)
         if cat_name:
             retval = addToLicense(cats, cat_name, fd)
             if not retval:
@@ -104,10 +120,10 @@ def doParseSPDXForSubproject(cfg, prj, sp):
     # status to reflect the min of its subprojects
     return True
 
-def applyAliases(cfg, prj, fdList):
+def applyAliases(policy, fdList):
     # build lookup of all configured aliases, with orig name => translated name
     aliases = {}
-    for cat in prj._slm_category_configs:
+    for cat in policy._category_configs:
         for lic in cat._license_configs:
             for a in lic._aliases:
                 aliases[a] = lic._name
@@ -157,17 +173,17 @@ def applyNoLicenseFoundFindings(cfg, prj, fdList):
             if fd.md5 == MD5_EMPTY_FILE:
                 fd.finding_emptyfile = "yes"
 
-def getCategoryForLicense(cfg, prj, lic):
-    for cat_cfg in prj._slm_category_configs:
+def getCategoryForLicense(policy, lic):
+    for cat_cfg in policy._category_configs:
         for lic_cfg in cat_cfg._license_configs:
             if lic_cfg._name == lic:
                 return cat_cfg._name
 
     return None
 
-def buildCategories(cfg, prj):
+def buildCategories(policy):
     cats = []
-    for cc in prj._slm_category_configs:
+    for cc in policy._category_configs:
         cat = SLMCategory()
         cat._name = cc._name
         for lc in cc._license_configs:
@@ -215,9 +231,18 @@ def doCreateCombinedSLMJSONForProject(cfg, prj):
             print(f"{prj._name}/COMBINED: status for subproject {sp._name} is {sp._status}, won't make combined JSON now")
             return False
 
+    # check if this project has more than one policy. if it does,
+    # we can't create a combined JSON file
+    if len(prj._slm_policies) > 1:
+        print(f"{prj._name}/COMBINED: project has more than one SLM policy, can't make combined JSON")
+        return False
+
+    # we know now that there is only 1 policy, so we just get it and proceed
+    policy = list(prj._slm_policies.values())[0]
+
     allCategories = []
     # initiate with config categories and licenses
-    for configCat in prj._slm_category_configs:
+    for configCat in policy._category_configs:
         newCat = SLMCategory()
         newCat._name = configCat._name
         allCategories.append(newCat)
