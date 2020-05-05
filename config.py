@@ -283,6 +283,7 @@ def loadConfig(configFilename, scaffoldHome):
                             else:
                                 # if repos is absent, that's fine
                                 sp._repos = sp_gerrit_dict.get('repos', [])
+                                sp._repo_dirs_delete = sp_gerrit_dict.get('repo-dirs-delete', {})
 
                             # and add subprojects to the project's dictionary
                             prj._subprojects[sp_name] = sp
@@ -360,6 +361,7 @@ def loadConfig(configFilename, scaffoldHome):
                             else:
                                 # if no repos specified, that's fine, we'll find them later
                                 sp._repos = gs_sp_shared_dict.get('repos', [])
+                                sp._repo_dirs_delete = gs_sp_shared_dict.get('repo-dirs-delete', {})
 
                             # and add subprojects to the project's dictionary
                             prj._subprojects[sp_name] = sp
@@ -432,6 +434,7 @@ def loadConfig(configFilename, scaffoldHome):
                                 sp._github_ziporg = github_dict.get('ziporg', sp._github_org)
                                 # if no repos specified, that's fine, we'll find them later
                                 sp._repos = github_dict.get('repos', [])
+                                sp._repo_dirs_delete = github_dict.get('repo-dirs-delete', {})
                                 # and if no repos-ignore specified, that's fine too
                                 sp._github_repos_ignore = github_dict.get('repos-ignore', [])
                                 # and if no repos-pending specified, that's fine too
@@ -657,6 +660,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "github": {
                         "org": o._github_org,
                         "ziporg": o._github_ziporg,
+                        "repo-dirs-delete": o._repo_dirs_delete,
                         "repos": sorted(o._repos),
                         "repos-ignore": sorted(o._github_repos_ignore),
                     }
@@ -685,6 +689,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "anyfiles": o._code_anyfiles,
                     },
                     "github-shared": {
+                        "repo-dirs-delete": o._repo_dirs_delete,
                         "repos": sorted(o._repos),
                     }
                 }
@@ -710,6 +715,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "anyfiles": o._code_anyfiles,
                     },
                     "gerrit": {
+                        "repo-dirs-delete": o._repo_dirs_delete,
                         "repos": sorted(o._repos),
                     }
                 }
