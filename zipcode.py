@@ -24,6 +24,12 @@ def doZipRepoCodeForSubproject(cfg, prj, sp):
     for repo in sp._repos:
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
         shutil.rmtree(dotgit_path)
+        # also remove its repo-dirs-delete, if any
+        delete_dirs = sp._repo_dirs_delete.get(repo, [])
+        for delete_dir in delete_dirs:
+            delete_dir_path = os.path.join(ziporg_path, repo, delete_dir)
+            print(f"{prj._name}/{sp._name}: deleting {repo}:{delete_dir}")
+            shutil.rmtree(delete_dir_path)
 
     # before zipping it all together, check and see whether it actually has any files
     if not sp._code_anyfiles:
@@ -66,6 +72,12 @@ def doZipRepoCodeForGerritSubproject(cfg, prj, sp):
         dstFolder = os.path.join(ziporg_path, dashName)
         dotgit_path = os.path.join(dstFolder, ".git")
         shutil.rmtree(dotgit_path)
+        # also remove its repo-dirs-delete, if any
+        delete_dirs = sp._repo_dirs_delete.get(repo, [])
+        for delete_dir in delete_dirs:
+            delete_dir_path = os.path.join(ziporg_path, dashName, delete_dir)
+            print(f"{prj._name}/{sp._name}: deleting {repo}:{delete_dir}")
+            shutil.rmtree(delete_dir_path)
 
     # before zipping it all together, check and see whether it actually has any files
     if not sp._code_anyfiles:

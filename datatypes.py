@@ -265,6 +265,8 @@ class Subproject:
         self._repotype = ProjectRepoType.UNKNOWN
         self._status = Status.UNKNOWN
         self._repos = []
+        # mapping of repo name to list of directories to delete
+        self._repo_dirs_delete = {}
 
         self._code_pulled = ""
         self._code_path = ""
