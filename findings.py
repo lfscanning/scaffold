@@ -518,9 +518,9 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
         report_f.write(renderedHtml)
 
     if isDraft:
-        print(f"{prj._name}: DRAFT findings written to {htmlFilename}")
+        print(f"{prj._name}/COMBINED: DRAFT findings written to {htmlFilename}")
     else:
-        print(f"{prj._name}: FINAL findings written to {htmlFilename}")
+        print(f"{prj._name}/COMBINED: FINAL findings written to {htmlFilename}")
 
     return htmlPath, reviewReportWrittenPath
 
