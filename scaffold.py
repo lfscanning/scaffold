@@ -22,6 +22,7 @@ from emailing import printEmail, printAllLinks, printReportLinks
 from delivering import doDelivered
 from metrics import getMetrics, printMetrics
 from metricsfile import saveMetrics
+from transfer import doTransfer
 
 def printUsage():
     print(f"""
@@ -31,11 +32,11 @@ Month: in format YYYY-MM
 Commands:
 
   Running:
-    newmonth:   Begin a new month and reset status for all projects
-    run:        Run next steps for all subprojects
-    clear:      Flag cleared in Fossology for [sub]project
-    approve:    Flag approved auto-generated findings in report for [sub]project
-    deliver:    Flag delivered report for [sub]project
+    newmonth:         Begin a new month and reset status for all projects
+    run:              Run next steps for all subprojects
+    clear:            Flag cleared in Fossology for [sub]project
+    approve:          Flag approved auto-generated findings in report for [sub]project
+    deliver:          Flag delivered report for [sub]project
 
   Printing:
     status:           Print status for all subprojects
@@ -46,6 +47,9 @@ Commands:
   Metrics:
     getmetrics:       Analyze and save metrics for overall current status to JSON file
     printmetrics:     Load and print metrics from JSON file
+
+  Admin:
+    transfer:         Transfer project scans from old Fossology server to new
 
 """)
 
@@ -65,12 +69,11 @@ def status(projects, prj_only, sp_only):
     table = sorted(table, key=itemgetter(0, 1))
     print(tabulate(table, headers=headers))
 
-def fossdriverSetup():
+def fossdriverSetup(fossdriverrc_path):
     config = FossConfig()
-    configPath = os.path.join(str(Path.home()), ".fossdriver", "fossdriverrc.json")
-    retval = config.configure(configPath)
+    retval = config.configure(fossdriverrc_path)
     if not retval:
-        print(f"Error: Could not load config file from {configPath}")
+        print(f"Error: Could not load config file from {fossdriverrc_path}")
         return False
 
     server = FossServer(config)
@@ -141,7 +144,8 @@ if __name__ == "__main__":
             saveBackupConfig(SCAFFOLD_HOME, cfg)
 
             # set up fossdriver server connection
-            fdServer = fossdriverSetup()
+            fossdriverrc_path = os.path.join(str(Path.home()), ".fossdriver", "fossdriverrc.json")
+            fdServer = fossdriverSetup(fossdriverrc_path)
             if not fdServer:
                 print(f"Unable to connect to Fossology server with fossdriver")
                 sys.exit(1)
@@ -202,7 +206,8 @@ if __name__ == "__main__":
 
         elif command == "getmetrics":
             ran_command = True
-            fdServer = fossdriverSetup()
+            fossdriverrc_path = os.path.join(str(Path.home()), ".fossdriver", "fossdriverrc.json")
+            fdServer = fossdriverSetup(fossdriverrc_path)
             if not fdServer:
                 print(f"Unable to connect to Fossology server with fossdriver")
                 sys.exit(1)
@@ -215,6 +220,24 @@ if __name__ == "__main__":
             ran_command = True
             metricsFilename = os.path.join(cfg._storepath, cfg._month, "metrics.json")
             printMetrics(metricsFilename)
+
+        elif command == "transfer":
+            ran_command = True
+
+            # set up fossdriver server connections
+            old_fossdriverrc_path = os.path.join(str(Path.home()), ".fossdriver", "fossdriverrc.json")
+            old_server = fossdriverSetup(old_fossdriverrc_path)
+            if not old_server:
+                print(f"Unable to connect to old Fossology server with fossdriver")
+                sys.exit(1)
+            new_fossdriverrc_path = os.path.join(str(Path.home()), ".fossdriver", "fossdriver3rc.json")
+            new_server = fossdriverSetup(new_fossdriverrc_path)
+            if not new_server:
+                print(f"Unable to connect to new Fossology server with fossdriver")
+                sys.exit(1)
+
+            # run transfer
+            doTransfer(SCAFFOLD_HOME, cfg, prj_only, old_server, new_server)
 
     if ran_command == False:
         printUsage()
