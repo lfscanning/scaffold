@@ -58,7 +58,7 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
             if fi._matches_subproject != []:
                 # requires subproject match, so check each one
                 for p in fi._matches_subproject:
-                    if p in fileName:
+                    if p == spName:
                         matchesSubproject = True
                 if not matchesSubproject:
                     # failed the subproject match, so go on to the next lic/file pair
