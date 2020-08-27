@@ -540,8 +540,8 @@ def parseSubprojectSLMConfig(sp_dict, prj, sp):
     sp_slm_dict = sp_dict.get('slm', {})
     if sp_slm_dict == {}:
         sp._slm_policy_name = ""
-        sp._slm_report_xlsx = []
-        sp._slm_report_json = []
+        sp._slm_report_xlsx = ""
+        sp._slm_report_json = ""
         sp._slm_pending_lics = []
     else:
         # we did get an slm section, so we'll parse it
