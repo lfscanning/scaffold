@@ -68,8 +68,13 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
             if fi._matches_path != []:
                 # requires path match, so check each one
                 for p in fi._matches_path:
-                    if p in fileName:
-                        matchesPath = True
+                    # if ends with $, match must be at end
+                    if p.endswith("$"):
+                        if fileName.endswith(p[0:-1]):
+                            matchesPath = True
+                    else:
+                        if p in fileName:
+                            matchesPath = True
                 if not matchesPath:
                     # failed the path match, so go on to the next lic/file pair
                     failedMatch = True
