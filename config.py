@@ -190,6 +190,10 @@ def loadConfig(configFilename, scaffoldHome):
             if cfg._ws_server_url == "":
                 print(f"No valid wsServerUrl found in config section")
                 return cfg
+            cfg._ws_unified_agent_jar_path = config_dict.get('wsUnifiedAgentJarPath', "")
+            if cfg._ws_unified_agent_jar_path == "":
+                print(f"No valid wsUnifiedAgentJarPath found in config section")
+                return cfg
 
             # load secrets
             cfg._secrets = loadSecrets()
@@ -633,6 +637,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "webReportsPath": o._web_reports_path,
                     "webReportsUrl": o._web_reports_url,
                     "wsServerUrl": o._ws_server_url,
+                    "wsUnifiedAgentJarPath": o._ws_unified_agent_jar_path,
                 },
                 "projects": o._projects,
                 # DO NOT OUTPUT _GH_OAUTH_TOKEN TO CONFIG.JSON

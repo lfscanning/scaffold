@@ -373,6 +373,7 @@ class Config:
         self._web_reports_path = ""
         self._web_reports_url = ""
         self._ws_server_url = ""
+        self._ws_unified_agent_jar_path = ""
         # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._gh_oauth_token = ""
         self._secrets = None
