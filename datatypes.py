@@ -234,6 +234,12 @@ class Project:
         self._slm_extensions_skip = []
         self._slm_thirdparty_dirs = []
 
+        # WhiteSource vars
+        self._ws_enabled = False
+        self._ws_env = {}
+        self._ws_override_org = ""
+        self._ws_override_product = ""
+
         # web upload vars, only for combined reports
         self._web_combined_uuid = ""
         self._web_combined_html_url = ""
@@ -286,6 +292,13 @@ class Subproject:
         self._slm_report_json = ""
         self._slm_pending_lics = []
 
+        # WS vars
+        self._ws_env = {}
+        self._ws_override_disable_anyway = False
+        self._ws_override_org = ""
+        self._ws_override_product = ""
+        self._ws_override_project = ""
+
         # web upload vars
         self._web_uuid = ""
         self._web_html_url = ""
@@ -323,6 +336,15 @@ class JiraSecret:
         self._password = ""
 
 
+class WSSecret:
+
+    def __init__(self):
+        super(WSSecret, self).__init__()
+
+        self._project_name = ""
+        self._ws_api_key = ""
+
+
 class Secrets:
 
     def __init__(self):
@@ -330,6 +352,9 @@ class Secrets:
 
         # mapping of project name to jira server details
         self._jira = {}
+
+        # mapping of project name to WhiteSource server details
+        self._ws = {}
 
 
 class Config:
@@ -347,6 +372,7 @@ class Config:
         self._web_server = ""
         self._web_reports_path = ""
         self._web_reports_url = ""
+        self._ws_server_url = ""
         # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._gh_oauth_token = ""
         self._secrets = None

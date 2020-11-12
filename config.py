@@ -8,7 +8,7 @@ from shutil import copyfile
 
 import yaml
 
-from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, SLMCategoryConfig, SLMLicenseConfig, SLMPolicy, Status, Subproject, TicketType
+from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, SLMCategoryConfig, SLMLicenseConfig, SLMPolicy, Status, Subproject, TicketType, WSSecret
 
 def getConfigFilename(scaffoldHome, month):
     return os.path.join(scaffoldHome, month, "config.json")
@@ -114,16 +114,23 @@ def loadSecrets():
 
             # expecting mapping of prj name to JiraSecret data
             secrets = Secrets()
-            for prj, jira_dict in js.items():
-                jira_secret = JiraSecret()
+            for prj, prj_dict in js.items():
+                jira_dict = prj_dict.get("jira", {})
+                if jira_dict != {}:
+                    jira_secret = JiraSecret()
+                    jira_secret._project_name = prj
+                    jira_secret._jira_project = jira_dict.get("board", "")
+                    jira_secret._server = jira_dict.get("server", "")
+                    jira_secret._username = jira_dict.get("username", "")
+                    jira_secret._password = jira_dict.get("password", "")
+                    secrets._jira[prj] = jira_secret
 
-                jira_secret._project_name = prj
-                jira_secret._jira_project = jira_dict.get("board", "")
-                jira_secret._server = jira_dict.get("server", "")
-                jira_secret._username = jira_dict.get("username", "")
-                jira_secret._password = jira_dict.get("password", "")
-
-                secrets._jira[prj] = jira_secret
+                ws_dict = prj_dict.get("whitesource", {})
+                if ws_dict != {}:
+                    ws_secret = WSSecret()
+                    ws_secret._project_name = prj
+                    ws_secret._ws_api_key = ws_dict.get("apikey", "")
+                    secrets._ws[prj] = ws_secret
 
         return secrets
 
@@ -176,6 +183,12 @@ def loadConfig(configFilename, scaffoldHome):
             cfg._web_reports_url = config_dict.get('webReportsUrl', "")
             if cfg._web_reports_url == "":
                 print(f"No valid webReportsUrl found in config section")
+                return cfg
+
+            # load config-wide WhiteSource data
+            cfg._ws_server_url = config_dict.get('wsServerUrl', "")
+            if cfg._ws_server_url == "":
+                print(f"No valid wsServerUrl found in config section")
                 return cfg
 
             # load secrets
@@ -231,6 +244,9 @@ def loadConfig(configFilename, scaffoldHome):
                     # now load SLM project data
                     parseProjectSLMConfig(prj_dict, prj)
 
+                    # now load WS project data
+                    parseProjectWSConfig(prj_dict, prj)
+
                     # now load project web data, where applicable
                     parseProjectWebConfig(prj_dict, prj)
 
@@ -277,6 +293,9 @@ def loadConfig(configFilename, scaffoldHome):
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
 
+                            # now load WS subproject data
+                            parseSubprojectWSConfig(sp_dict, prj, sp)
+
                             sp_gerrit_dict = sp_dict.get('gerrit', {})
                             if sp_gerrit_dict == {}:
                                 sp._repos = []
@@ -306,6 +325,9 @@ def loadConfig(configFilename, scaffoldHome):
 
                     # now load SLM project data
                     parseProjectSLMConfig(prj_dict, prj)
+
+                    # now load WS project data
+                    parseProjectWSConfig(prj_dict, prj)
 
                     # now load project web data, where applicable
                     parseProjectWebConfig(prj_dict, prj)
@@ -353,6 +375,9 @@ def loadConfig(configFilename, scaffoldHome):
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
 
+                            # now load WS subproject data
+                            parseSubprojectWSConfig(sp_dict, prj, sp)
+
                             # get subproject github-shared details, including repos
                             gs_sp_shared_dict = sp_dict.get('github-shared', {})
                             if gs_sp_shared_dict == {}:
@@ -371,6 +396,9 @@ def loadConfig(configFilename, scaffoldHome):
 
                     # now load SLM project data
                     parseProjectSLMConfig(prj_dict, prj)
+
+                    # now load WS project data
+                    parseProjectWSConfig(prj_dict, prj)
 
                     # now load project web data, where applicable
                     parseProjectWebConfig(prj_dict, prj)
@@ -419,6 +447,9 @@ def loadConfig(configFilename, scaffoldHome):
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
+
+                            # now load WS subproject data
+                            parseSubprojectWSConfig(sp_dict, prj, sp)
 
                             # get subproject github details
                             github_dict = sp_dict.get('github', {})
@@ -521,6 +552,18 @@ def parseProjectSLMConfig(prj_dict, prj):
             print(f'Project {prj._name} has more than one slm policy, but wants a combined report; invalid')
             prj._ok = False
 
+def parseProjectWSConfig(prj_dict, prj):
+    prj_ws_dict = prj_dict.get('ws', {})
+    if prj_ws_dict == {}:
+        return
+
+    # load data -- fine if missing or empty, since we might not
+    # have WhiteSource configured for this project
+    prj._ws_enabled = prj_ws_dict.get("enabled", False)
+    prj._ws_override_org = prj_ws_dict.get("override-org", "")
+    prj._ws_override_product = prj_ws_dict.get("override-product", "")
+    prj._ws_env = prj_ws_dict.get("env", {})
+
 def parseProjectWebConfig(prj_dict, prj):
     prj_web_dict = prj_dict.get('web', {})
     # it's okay if there's no web report data; possible we just haven't created it yet
@@ -563,6 +606,18 @@ def parseSubprojectSLMConfig(sp_dict, prj, sp):
                 sp._ok = False
                 prj._ok = False
 
+def parseSubprojectWSConfig(sp_dict, prj, sp):
+    sp_ws_dict = sp_dict.get('ws', {})
+    if sp_ws_dict == {}:
+        return
+
+    # load data -- fine if missing or empty, since we might not
+    # have WhiteSource configured for this project
+    sp._ws_override_disable_anyway = sp_ws_dict.get("override-disable-anyway", False)
+    sp._ws_override_org = sp_ws_dict.get("override-org", "")
+    sp._ws_override_product = sp_ws_dict.get("override-product", "")
+    sp._ws_override_project = sp_ws_dict.get("override-project", "")
+    sp._ws_env = sp_ws_dict.get("env", {})
 
 class ConfigJSONEncoder(json.JSONEncoder):
     def default(self, o): # pylint: disable=method-hidden
@@ -577,6 +632,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "webServer": o._web_server,
                     "webReportsPath": o._web_reports_path,
                     "webReportsUrl": o._web_reports_url,
+                    "wsServerUrl": o._ws_server_url,
                 },
                 "projects": o._projects,
                 # DO NOT OUTPUT _GH_OAUTH_TOKEN TO CONFIG.JSON
@@ -606,6 +662,17 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "xlsxurl": o._web_combined_xlsx_url,
                     }
                     retval["web"] = web_section
+
+            # build WS data
+            ws_section = {"enabled": o._ws_enabled}
+            if o._ws_override_org != "":
+                ws_section["override-org"] = o._ws_override_org
+            if o._ws_override_product != "":
+                ws_section["override-product"] = o._ws_override_product
+            if o._ws_env != {}:
+                ws_section["env"] = o._ws_env
+            if ws_section != {"enabled": False}:
+                retval["ws"] = ws_section
 
             if o._repotype == ProjectRepoType.GITHUB:
                 retval["type"] = "github"
@@ -649,6 +716,19 @@ class ConfigJSONEncoder(json.JSONEncoder):
             if o._slm_pending_lics != []:
                 slm_section["licenses-pending"] = o._slm_pending_lics
 
+            # build WS data
+            ws_section = {}
+            if o._ws_override_disable_anyway != False:
+                ws_section["override-disable-anyway"] = o._ws_override_disable_anyway
+            if o._ws_override_org != "":
+                ws_section["override-org"] = o._ws_override_org
+            if o._ws_override_product != "":
+                ws_section["override-product"] = o._ws_override_product
+            if o._ws_override_project != "":
+                ws_section["override-project"] = o._ws_override_project
+            if o._ws_env != {}:
+                ws_section["env"] = o._ws_env
+
             if o._repotype == ProjectRepoType.GITHUB:
                 js = {
                     "status": o._status.name,
@@ -665,6 +745,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos-ignore": sorted(o._github_repos_ignore),
                     }
                 }
+                if ws_section != {}:
+                    js["ws"] = ws_section
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
@@ -693,6 +775,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos": sorted(o._repos),
                     }
                 }
+                if ws_section != {}:
+                    js["ws"] = ws_section
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
@@ -719,6 +803,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos": sorted(o._repos),
                     }
                 }
+                if ws_section != {}:
+                    js["ws"] = ws_section
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
