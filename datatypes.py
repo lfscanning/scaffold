@@ -15,19 +15,20 @@ class Status(Enum):
     GOTLISTING = 2
     GOTCODE = 3
     ZIPPEDCODE = 4
-    UPLOADEDCODE = 5
-    RANAGENTS = 6
-    CLEARED = 7
-    GOTSPDX = 8
-    PARSEDSPDX = 9
-    CREATEDREPORTS = 10
-    MADEDRAFTFINDINGS = 11
-    APPROVEDFINDINGS = 12
-    MADEFINALFINDINGS = 13
-    UPLOADEDSPDX = 14
-    UPLOADEDREPORTS = 15
-    FILEDTICKETS = 16
-    DELIVERED = 17
+    UPLOADEDWS = 5
+    UPLOADEDCODE = 6
+    RANAGENTS = 7
+    CLEARED = 8
+    GOTSPDX = 9
+    PARSEDSPDX = 10
+    CREATEDREPORTS = 11
+    MADEDRAFTFINDINGS = 12
+    APPROVEDFINDINGS = 13
+    MADEFINALFINDINGS = 14
+    UPLOADEDSPDX = 15
+    UPLOADEDREPORTS = 16
+    FILEDTICKETS = 17
+    DELIVERED = 18
     STOPPED = 90
     MAX = 99
 
@@ -237,8 +238,9 @@ class Project:
         # WhiteSource vars
         self._ws_enabled = False
         self._ws_env = {}
-        self._ws_override_org = ""
-        self._ws_override_product = ""
+        ## NOT SAVED, refreshed on each run
+        self._ws_product_tokens = {}
+        self._ws_project_tokens = {}
 
         # web upload vars, only for combined reports
         self._web_combined_uuid = ""
@@ -295,7 +297,6 @@ class Subproject:
         # WS vars
         self._ws_env = {}
         self._ws_override_disable_anyway = False
-        self._ws_override_org = ""
         self._ws_override_product = ""
         self._ws_override_project = ""
 
@@ -343,6 +344,10 @@ class WSSecret:
 
         self._project_name = ""
         self._ws_api_key = ""
+        self._ws_user_key = ""
+        # overrides of API key for particular subprojects
+        # hash of sp name to API key
+        self._ws_api_key_overrides = {}
 
 
 class Secrets:
@@ -374,6 +379,7 @@ class Config:
         self._web_reports_url = ""
         self._ws_server_url = ""
         self._ws_unified_agent_jar_path = ""
+        self._ws_default_env = {}
         # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._gh_oauth_token = ""
         self._secrets = None

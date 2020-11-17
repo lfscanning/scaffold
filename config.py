@@ -130,6 +130,7 @@ def loadSecrets():
                     ws_secret = WSSecret()
                     ws_secret._project_name = prj
                     ws_secret._ws_api_key = ws_dict.get("apikey", "")
+                    ws_secret._ws_user_key = ws_dict.get("userkey", "")
                     secrets._ws[prj] = ws_secret
 
         return secrets
@@ -194,6 +195,8 @@ def loadConfig(configFilename, scaffoldHome):
             if cfg._ws_unified_agent_jar_path == "":
                 print(f"No valid wsUnifiedAgentJarPath found in config section")
                 return cfg
+            # default_env does not need to exist
+            cfg._ws_default_env = config_dict.get('wsDefaultEnv', {})
 
             # load secrets
             cfg._secrets = loadSecrets()
@@ -564,8 +567,6 @@ def parseProjectWSConfig(prj_dict, prj):
     # load data -- fine if missing or empty, since we might not
     # have WhiteSource configured for this project
     prj._ws_enabled = prj_ws_dict.get("enabled", False)
-    prj._ws_override_org = prj_ws_dict.get("override-org", "")
-    prj._ws_override_product = prj_ws_dict.get("override-product", "")
     prj._ws_env = prj_ws_dict.get("env", {})
 
 def parseProjectWebConfig(prj_dict, prj):
@@ -618,7 +619,6 @@ def parseSubprojectWSConfig(sp_dict, prj, sp):
     # load data -- fine if missing or empty, since we might not
     # have WhiteSource configured for this project
     sp._ws_override_disable_anyway = sp_ws_dict.get("override-disable-anyway", False)
-    sp._ws_override_org = sp_ws_dict.get("override-org", "")
     sp._ws_override_product = sp_ws_dict.get("override-product", "")
     sp._ws_override_project = sp_ws_dict.get("override-project", "")
     sp._ws_env = sp_ws_dict.get("env", {})
@@ -638,6 +638,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "webReportsUrl": o._web_reports_url,
                     "wsServerUrl": o._ws_server_url,
                     "wsUnifiedAgentJarPath": o._ws_unified_agent_jar_path,
+                    "wsDefaultEnv": o._ws_default_env,
                 },
                 "projects": o._projects,
                 # DO NOT OUTPUT _GH_OAUTH_TOKEN TO CONFIG.JSON
@@ -670,10 +671,6 @@ class ConfigJSONEncoder(json.JSONEncoder):
 
             # build WS data
             ws_section = {"enabled": o._ws_enabled}
-            if o._ws_override_org != "":
-                ws_section["override-org"] = o._ws_override_org
-            if o._ws_override_product != "":
-                ws_section["override-product"] = o._ws_override_product
             if o._ws_env != {}:
                 ws_section["env"] = o._ws_env
             if ws_section != {"enabled": False}:
@@ -725,8 +722,6 @@ class ConfigJSONEncoder(json.JSONEncoder):
             ws_section = {}
             if o._ws_override_disable_anyway != False:
                 ws_section["override-disable-anyway"] = o._ws_override_disable_anyway
-            if o._ws_override_org != "":
-                ws_section["override-org"] = o._ws_override_org
             if o._ws_override_product != "":
                 ws_section["override-product"] = o._ws_override_product
             if o._ws_override_project != "":
