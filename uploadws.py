@@ -5,6 +5,7 @@ import os
 
 from datatypes import Status
 from manualws import wsAgentForSubproject
+from ws.wscfg import isWSEnabled
 
 def doUploadWSForSubproject(cfg, prj, sp):
     # make sure the subproject has not already had its code uploaded to WS
@@ -12,6 +13,11 @@ def doUploadWSForSubproject(cfg, prj, sp):
     # for manual runs
     if sp._status != Status.ZIPPEDCODE:
         print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE")
+        return True
+
+    if not isWSEnabled(cfg, prj, sp):
+        print(f"{prj._name}/{sp._name}: skipping, WhiteSource is disabled")
+        sp._status = Status.UPLOADEDWS
         return True
 
     retval = wsAgentForSubproject(cfg, prj, sp)

@@ -62,3 +62,12 @@ def getWSEnv(cfg, prj, sp):
     for k, v in sp._ws_env.items():
         env[k] = v
     return env
+
+# is WS enabled for this project / subproject, taking overrides
+# into account?
+def isWSEnabled(cfg, prj, sp):
+    if not prj._ws_enabled:
+        return False
+    if sp._ws_override_disable_anyway:
+        return False
+    return True
