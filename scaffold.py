@@ -15,6 +15,7 @@ from fossdriver.server import FossServer
 from config import loadConfig, saveBackupConfig, saveConfig
 import datefuncs
 from runners import doNextThing
+from manualws import runManualWSAgent
 from clearing import doCleared
 from newmonth import copyToNextMonth
 from approving import doApprove
@@ -37,6 +38,9 @@ Commands:
     clear:            Flag cleared in Fossology for [sub]project
     approve:          Flag approved auto-generated findings in report for [sub]project
     deliver:          Flag delivered report for [sub]project
+
+  Manual run:
+    ws:               Manually run a new WhiteSource scan
 
   Printing:
     status:           Print status for all subprojects
@@ -156,6 +160,16 @@ if __name__ == "__main__":
             # save modified config file
             saveConfig(SCAFFOLD_HOME, cfg)
 
+        elif command == "ws":
+            ran_command = True
+            if prj_only == "" or sp_only == "":
+                print(f"ws command requires specifying project and subproject")
+                sys.exit(1)
+
+            # run WS agent manually if between ZIPPEDCODE and CLEARED state
+            # does not modify the config file
+            runManualWSAgent(cfg, prj_only, sp_only)
+
         elif command == "clear":
             ran_command = True
             saveBackupConfig(SCAFFOLD_HOME, cfg)
@@ -242,4 +256,3 @@ if __name__ == "__main__":
     if ran_command == False:
         printUsage()
         sys.exit(1)
-

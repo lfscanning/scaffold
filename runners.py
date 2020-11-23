@@ -10,6 +10,7 @@ from datatypes import ProjectRepoType, Status, Subproject
 from repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
 from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
 from zipcode import doZipRepoCodeForSubproject, doZipRepoCodeForGerritSubproject
+from uploadws import doUploadWSForSubproject
 from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
 from runagents import doRunAgentsForSubproject
 from getspdx import doGetSPDXForSubproject
@@ -135,6 +136,9 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # delete .git folder and zip code
         return doZipRepoCodeForSubproject(cfg, prj, sp)
     elif status == Status.ZIPPEDCODE:
+        # upload to WhiteSource
+        return doUploadWSForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDWS:
         # upload code
         return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.UPLOADEDCODE:
@@ -197,6 +201,9 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         # delete .git folder and zip code
         return doZipRepoCodeForGerritSubproject(cfg, prj, sp)
     elif status == Status.ZIPPEDCODE:
+        # upload to WhiteSource
+        return doUploadWSForSubproject(cfg, prj, sp)
+    elif status == Status.UPLOADEDWS:
         # upload code
         return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
     elif status == Status.UPLOADEDCODE:

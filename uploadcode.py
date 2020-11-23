@@ -28,8 +28,8 @@ def doUploadCodeForProject(cfg, fdServer, prj):
     # and now cycle through each subproject and upload the code here
     for sp in prj._subprojects.values():
         # make sure the subproject has not already had its code uploaded
-        if sp._status != Status.ZIPPEDCODE:
-            print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE")
+        if sp._status != Status.UPLOADEDWS:
+            print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected UPLOADEDWS")
             continue
         zipPath = sp._code_path
         if zipPath == "":
@@ -68,8 +68,8 @@ def doUploadCodeForSubproject(cfg, fdServer, prj, sp):
         return False
 
     # make sure the subproject has not already had its code uploaded
-    if sp._status != Status.ZIPPEDCODE:
-        print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE")
+    if sp._status != Status.UPLOADEDWS:
+        print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected UPLOADEDWS")
         return True
     zipPath = sp._code_path
     if zipPath == "":
