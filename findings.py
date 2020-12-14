@@ -341,7 +341,8 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
 
     # load template
     tmplstr = ""
-    with open("templates/findings.html", "r") as tmpl_f:
+    templatePath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates", "findings.html")
+    with open(templatePath, "r") as tmpl_f:
         tmplstr = tmpl_f.read()
 
     # calculate paths; report folder would have been created in doCreateReport stage
@@ -438,7 +439,8 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
 
     # load template
     tmplstr = ""
-    with open("templates/findings.html", "r") as tmpl_f:
+    templatePath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "templates", "findings.html")
+    with open(templatePath, "r") as tmpl_f:
         tmplstr = tmpl_f.read()
 
     # calculate paths; report folder would have been created in doCreateReport stage
