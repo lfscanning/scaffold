@@ -13,13 +13,8 @@ def wsAgentForSubproject(cfg, prj, sp):
     # it's possible to re-run even if the agent has already run once
     # (e.g., we might change configuration and re-run)
     # have to at least have the code
-    # ok to have marked as CLEARED, but not to proceed past that
-    if not (sp._status == Status.ZIPPEDCODE or
-            sp._status == Status.UPLOADEDWS or
-            sp._status == Status.UPLOADEDCODE or
-            sp._status == Status.RANAGENTS or
-            sp._status == Status.CLEARED):
-        print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected between ZIPPEDCODE and CLEARED")
+    if not (sp._status.value >= Status.ZIPPEDCODE.value and sp._status != Status.STOPPED):
+        print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE or higher")
         return False
 
     userkey = ws.wscfg.getWSUserKey(cfg, prj)

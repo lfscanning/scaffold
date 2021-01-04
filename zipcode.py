@@ -82,8 +82,8 @@ def doZipRepoCodeForGerritSubproject(cfg, prj, sp):
     # before zipping it all together, check and see whether it actually has any files
     if not sp._code_anyfiles:
         print(f"{prj._name}/{sp._name}: not zipping, no files found")
-        # still advance state because we checked for code
-        sp._status = Status.ZIPPEDCODE
+        # stop here, we checked for code and there isn't any
+        sp._status = Status.STOPPED
         return True
 
     # now zip it all together

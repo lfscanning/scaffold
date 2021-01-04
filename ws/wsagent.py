@@ -8,6 +8,17 @@ import sys
 import ws.wscfg
 
 def runUnifiedAgent(cfg, prj, sp):
+    # make sure that the code to upload actually exists!
+    if not sp._code_path:
+        print(f"{prj._name}/{sp._name}: No code path found; not uploading to WS")
+        return False
+    if not os.path.exists(sp._code_path):
+        print(f"{prj._name}/{sp._name}: Nothing found at code path {sp._code_path}; not uploading to WS")
+        return False
+    if not os.path.isfile(sp._code_path):
+        print(f"{prj._name}/{sp._name}: Code path {sp._code_path} exists but is not a file; not uploading to WS")
+        return False
+
     # get environment, including necessary values
     env = ws.wscfg.getWSEnv(cfg, prj, sp)
     env["WS_WSS_URL"] = cfg._ws_server_url + "/agent"
