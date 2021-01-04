@@ -217,6 +217,10 @@ class Project:
         self._matches = []
         self._findings = []
 
+        # cycle to run scans
+        # 0 = every month, 1 = first month in each calendar quarter, 2 = second month, etc.
+        self._cycle = 0
+
         # only if Gerrit
         self._gerrit_apiurl = ""
         self._gerrit_subproject_config = "manual"
@@ -276,6 +280,10 @@ class Subproject:
         # mapping of repo name to list of directories to delete
         self._repo_dirs_delete = {}
 
+        # cycle to run scans
+        # 0 = every month, 1 = first month in each calendar quarter, 2 = second month, etc.
+        self._cycle = 0
+
         self._code_pulled = ""
         self._code_path = ""
         self._code_anyfiles = False
@@ -285,6 +293,7 @@ class Subproject:
         # only if GitHub
         self._github_org = ""
         self._github_ziporg = ""
+        self._github_branch = ""
         self._github_repos_ignore = []
         self._github_repos_pending = []
 

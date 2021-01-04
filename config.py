@@ -215,6 +215,8 @@ def loadConfig(configFilename, scaffoldHome):
                 prj._name = prj_name
                 prj._ok = True
 
+                prj._cycle = prj_dict.get('cycle', 99)
+
                 # get project status
                 status_str = prj_dict.get('status', '')
                 if status_str == '':
@@ -265,6 +267,8 @@ def loadConfig(configFilename, scaffoldHome):
                             sp._name = sp_name
                             sp._repotype = ProjectRepoType.GERRIT
                             sp._ok = True
+
+                            sp._cycle = sp_dict.get('cycle', 99)
 
                             # get subproject status
                             status_str = sp_dict.get('status', '')
@@ -348,6 +352,8 @@ def loadConfig(configFilename, scaffoldHome):
                             sp._repotype = ProjectRepoType.GITHUB_SHARED
                             sp._ok = True
 
+                            sp._cycle = sp_dict.get('cycle', 99)
+
                             # get subproject status
                             status_str = sp_dict.get('status', '')
                             if status_str == '':
@@ -421,6 +427,8 @@ def loadConfig(configFilename, scaffoldHome):
                             sp._repotype = ProjectRepoType.GITHUB
                             sp._ok = True
 
+                            sp._cycle = sp_dict.get('cycle', 99)
+
                             # get subproject status
                             status_str = sp_dict.get('status', '')
                             if status_str == '':
@@ -470,6 +478,8 @@ def loadConfig(configFilename, scaffoldHome):
                                     sp._ok = False
                                 # if no ziporg specified, that's fine, use the org name
                                 sp._github_ziporg = github_dict.get('ziporg', sp._github_org)
+                                # if no branch specified, that's fine
+                                sp._github_branch = github_dict.get('branch', "")
                                 # if no repos specified, that's fine, we'll find them later
                                 sp._repos = github_dict.get('repos', [])
                                 sp._repo_dirs_delete = github_dict.get('repo-dirs-delete', {})
@@ -647,6 +657,9 @@ class ConfigJSONEncoder(json.JSONEncoder):
         elif isinstance(o, Project):
             retval = {}
 
+            if o._cycle != 99:
+                retval["cycle"] = o._cycle
+
             # build ticket data, if any
             if o._ticket_type == TicketType.JIRA:
                 retval["ticket-type"] = "jira"
@@ -745,8 +758,12 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos-ignore": sorted(o._github_repos_ignore),
                     }
                 }
+                if o._github_branch != "":
+                    js["github"]["branch"] = o._github_branch
                 if ws_section != {}:
                     js["ws"] = ws_section
+                if o._cycle != 99:
+                    js["cycle"] = o._cycle
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
@@ -777,6 +794,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 }
                 if ws_section != {}:
                     js["ws"] = ws_section
+                if o._cycle != 99:
+                    js["cycle"] = o._cycle
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
@@ -805,6 +824,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                 }
                 if ws_section != {}:
                     js["ws"] = ws_section
+                if o._cycle != 99:
+                    js["cycle"] = o._cycle
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
