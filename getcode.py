@@ -36,8 +36,14 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         print(f"{prj._name}/{sp._name}: cloning {git_url}")
         git.Git(ziporg_path).clone(git_url)
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
+        # change branch if another is specified
+        # note that this assumes either there is only one repo or else that
+        #   all such repos have the same branch name
         # also record the top commit
         r = git.Repo(dotgit_path)
+        if sp._github_branch != "":
+            print(f"{prj._name}/{sp._name}: repo {repo}: switching to branch {sp._github_branch}")
+            r.git.checkout('-b', sp._github_branch, f"origin/{sp._github_branch}")
         cmts = list(r.iter_commits())
         if len(cmts) > 0:
             sp._code_repos[repo] = cmts[0].hexsha
@@ -85,7 +91,7 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
         gitAddress = os.path.join(prj._gerrit_apiurl, repo)
         # get repo
         print(f"{prj._name}/{sp._name}: cloning {gitAddress}")
-        git.Repo.clone_from(gitAddress, dstFolder)
+        git.Repo.clone_from(gitAddress, dstFolder, depth=1)
         # also record the top commit
         dotgit_path = os.path.join(dstFolder, ".git")
         r = git.Repo(dotgit_path)

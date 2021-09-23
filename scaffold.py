@@ -12,7 +12,7 @@ from tabulate import tabulate
 from fossdriver.config import FossConfig
 from fossdriver.server import FossServer
 
-from config import loadConfig, saveBackupConfig, saveConfig
+from config import loadConfig, saveBackupConfig, saveConfig, isInThisCycle
 import datefuncs
 from runners import doNextThing
 from manualws import runManualWSAgent
@@ -57,17 +57,24 @@ Commands:
 
 """)
 
-def status(projects, prj_only, sp_only):
-    headers = ["Project", "Subproject", "Status"]
+def status(cfg, prj_only, sp_only):
+    headers = ["Project", "Subproject", "Status", "Notes"]
     table = []
+    projects = cfg._projects
 
     for prj in projects.values():
         if prj_only == "" or prj_only == prj._name:
-            row = [prj._name, "", prj._status.name]
+            row = [prj._name, "", prj._status.name, ""]
             table.append(row)
             for sp in prj._subprojects.values():
                 if sp_only == "" or sp_only == sp._name:
-                    row = [prj._name, sp._name, sp._status.name]
+                    extras = []
+                    if not isInThisCycle(cfg, prj, sp):
+                        extras.append(f"off-cycle")
+                    if sp._github_branch != "":
+                        extras.append(f"branch: {sp._github_branch}")
+
+                    row = [prj._name, sp._name, sp._status.name, ";".join(extras)]
                     table.append(row)
 
     table = sorted(table, key=itemgetter(0, 1))
@@ -137,7 +144,7 @@ if __name__ == "__main__":
 
         if command == "status":
             ran_command = True
-            status(cfg._projects, prj_only, sp_only)
+            status(cfg, prj_only, sp_only)
 
         elif command == "newmonth":
             ran_command = True

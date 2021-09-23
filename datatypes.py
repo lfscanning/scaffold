@@ -219,7 +219,8 @@ class Project:
 
         # cycle to run scans
         # 0 = every month, 1 = first month in each calendar quarter, 2 = second month, etc.
-        self._cycle = 0
+        # 99 = not specified, run every month
+        self._cycle = 99
 
         # only if Gerrit
         self._gerrit_apiurl = ""
@@ -282,7 +283,8 @@ class Subproject:
 
         # cycle to run scans
         # 0 = every month, 1 = first month in each calendar quarter, 2 = second month, etc.
-        self._cycle = 0
+        # 99 = not specified, run every month
+        self._cycle = 99
 
         self._code_pulled = ""
         self._code_path = ""

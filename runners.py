@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 import shutil
 
-from config import saveConfig, updateProjectStatusToSubprojectMin
+from config import saveConfig, updateProjectStatusToSubprojectMin, isInThisCycle
 from datatypes import ProjectRepoType, Status, Subproject
 from repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
 from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
@@ -25,15 +25,21 @@ from tickets import doFileTicketsForSubproject
 def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
     for prj in cfg._projects.values():
         if prj_only == "" or prj_only == prj._name:
-            retval = True
-            while retval:
-                retval = doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only)
+            if isInThisCycle(cfg, prj, None):
+                retval = True
+                while retval:
+                    retval = doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only)
+            else:
+                print(f"{prj._name}: not in this cycle; skipping")
 
 # Tries to do the next thing for this project. Returns True if
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
 def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
+    if not isInThisCycle(cfg, prj, None):
+        print(f"{prj._name}: not in this cycle; skipping")
+        return False
     # if GitHub project, go to subprojects
     if prj._repotype == ProjectRepoType.GITHUB:
         did_something = False
@@ -125,6 +131,9 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
 def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
+    if not isInThisCycle(cfg, prj, sp):
+        print(f"{prj._name}/{sp._name}: not in this cycle; skipping")
+        return False
     status = sp._status
     if status == Status.START:
         # get repo listing and see if we're good
@@ -193,6 +202,9 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
 # probably need to intervene). Does not handle START case because that is
 # handled at the project level.
 def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
+    if not isInThisCycle(cfg, prj, sp):
+        print(f"{prj._name}/{sp._name}: not in this cycle; skipping")
+        return False
     status = sp._status
     if status == Status.GOTLISTING:
         # get code

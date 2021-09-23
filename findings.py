@@ -72,6 +72,14 @@ def analyzeFindingsInstances(cfg, prj, spName, slmJsonFilename):
                     if p.endswith("$"):
                         if fileName.endswith(p[0:-1]):
                             matchesPath = True
+                    # if starts with !, must _NOT_ match the given path
+                    # note that, in YAML, it may need to be wrapped in quote marks
+                    # note also that having multiple "!" selections means that a file
+                    # path will almost ALWAYS bypass them, because it will typically
+                    # not match at least one of them
+                    elif p.startswith("!"):
+                        if p[1:] not in fileName:
+                            matchesPath = True
                     else:
                         if p in fileName:
                             matchesPath = True

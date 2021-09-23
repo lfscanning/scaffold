@@ -269,7 +269,10 @@ def loadConfig(configFilename, scaffoldHome):
                             sp._ok = True
 
                             sp._cycle = sp_dict.get('cycle', 99)
-
+                            if prj._cycle != 99 and sp._cycle != 99:
+                                print(f"Project {prj_name} and subproject {sp_name} both have cycles specified; invalid")
+                                prj._ok = False
+                                sp._ok = False
                             # get subproject status
                             status_str = sp_dict.get('status', '')
                             if status_str == '':
@@ -353,6 +356,10 @@ def loadConfig(configFilename, scaffoldHome):
                             sp._ok = True
 
                             sp._cycle = sp_dict.get('cycle', 99)
+                            if prj._cycle != 99 and sp._cycle != 99:
+                                print(f"Project {prj_name} and subproject {sp_name} both have cycles specified; invalid")
+                                prj._ok = False
+                                sp._ok = False
 
                             # get subproject status
                             status_str = sp_dict.get('status', '')
@@ -428,6 +435,10 @@ def loadConfig(configFilename, scaffoldHome):
                             sp._ok = True
 
                             sp._cycle = sp_dict.get('cycle', 99)
+                            if prj._cycle != 99 and sp._cycle != 99:
+                                print(f"Project {prj_name} and subproject {sp_name} both have cycles specified; invalid")
+                                prj._ok = False
+                                sp._ok = False
 
                             # get subproject status
                             status_str = sp_dict.get('status', '')
@@ -900,3 +911,24 @@ def updateProjectStatusToSubprojectMin(cfg, prj):
     if minStatus == Status.MAX:
         minStatus = Status.START
     prj._status = minStatus
+
+def isInThisCycle(cfg, prj, sp):
+    cycle = 99
+    # shouldn't have both prj._cycle and sp._cycle set at the same time;
+    # JSON loader validates this so we'll ignore it here (not sure how
+    # to best handle here)
+    if prj._cycle != 99:
+        cycle = prj._cycle
+    if sp is not None and sp._cycle != 99:
+        cycle = sp._cycle
+    if cycle == 0 or cycle == 99:
+        return True
+
+    mth = cfg._month[5:7]
+    if cycle == 1 and mth in ['01', '04', '07', '10']:
+        return True
+    if cycle == 2 and mth in ['02', '05', '08', '11']:
+        return True
+    if cycle == 3 and mth in ['03', '06', '09', '10']:
+        return True
+    return False
