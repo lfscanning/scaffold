@@ -103,7 +103,7 @@
 				"node-modules"
 			]
 		},
-		"subprojects": [
+		"subprojects": {
 			"sp1": {
 				"status": "START",
 				"slm": {
@@ -124,7 +124,7 @@
 					]
 				}
 			}
-		]
+		}
 	}
     }
 }
