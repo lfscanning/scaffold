@@ -49,3 +49,70 @@ A very basic template for the `config.json` file is available at [`config-templa
 ```
 
 Edit that config.json's contents to configure for your setup. The following provides details about what the various fields mean.
+
+#### "config" object
+
+* `storepath`: on-disk path for $SCAFFOLD-HOME
+* `month`: this month as a string in "YYYY-MM" format, e.g. `"2021-09"`
+* `version`: version of this config.json file. Starts at 1 and increments each time the config.json file is modified by scaffold (saving the prior version to the `backup/` subfolder)
+* `spdxGithubOrg`: name of GitHub org where repos containing the SPDX documents from Fossology will be posted
+* `spdxGithubSignoff`: name and email address to use in `Signed-off-by:` commit messages for the SPDX documents
+* `webServer`: domain name for the web server where reports will be uploaded
+* `webReportsPath`: on-disk path on the web server for where reports should be scp'd
+* `webReportsUrl`: URL path fragment to appear between the web server domain name and the specific project/subproject address for reports, typically just `"reports"`
+
+There are also several values prefixed by `ws`. These are currently required to be present, but are not used unless one or more projects are configured to upload scan findings to WhiteSource (FIXME: details to be added).
+
+#### "project" objects:
+
+Each project will have a unique identifier / key which should be used as its ID in all scaffold commands.
+
+Within the project's object are the following fields:
+* `slm`: refers to SPDX License Manager (a precursor to scaffold); contains the following fields:
+  * `policies`: Each policy has a unique identifier and contains the following fields:
+    * `categories`: an ordered array of categories of licenses. Each category has the following properties:
+      * `name`: a unique name for the category
+      * `licenses`: an ordered array of licenses in this category. Each license as the following properties:
+        * `name`: a unique reference for this license, which will appear in the reports. Can be an SPDX license expression or any other text.
+        * `aliases`: an array of SPDX license expressions, received from the SPDX document from Fossology, which should be mapped and translated to this license name in the reports.
+      * `flagged`: an array of category names that should be flagged in the internal instances JSON report, for review as key findings
+    * NOTE: there should always be one category with the name "No license found". It should contain a license also with the name "No license found", and the alias "NOASSERTION". scaffold uses this category/license pair to break out files with no license found that meet certain other criteria (e.g. with a specified file extension to ignore, in a third party directory to ignore, or empty files)
+  * `combinedReport`: boolean, to indicate whether there should also be an aggregate report that combines the findings and results from all of the subprojects together
+  * `extensions-skip`: array of filename extensions that should be grouped into the "excluded file extension" category in the report if no license is detected
+  * `thirdparty-dirs`: array of directories whose sub-contents should be grouped into the "third party directory" category in the report if no license is detected
+
+* `status`: for some project types (e.g. `gerrit`), the project's overall status is also tracked.
+
+* `subprojects`: object containing the project's subprojects and their configurations
+
+* `type`: one of the following values:
+  * `github`: means that each of the project's subprojects are hosted on GitHub _in different orgs_
+  * `github-shared`: means that each of the project's subprojects are hosted on GitHub _in the same org_
+  * `gerrit`: means that each of the project's subprojects are hosted on Gerrit
+  * Each subproject will have a sub-property with the same key as the project's `type`, described further below
+
+If the project's `type` is `github-shared`, then it will also contain a `github-shared` property with the following fields:
+* `org`: the GitHub org identifier
+* `repos-ignore`: array of repos that should _not_ be assigned to any subproject.
+* `repos-pending`: array of repos that were detected and need to be either assigned to a subproject or added to `repos-ignore`.
+
+If the project's `type` is `gerrit`, then it will also contain a `gerrit` property with the following fields:
+* `apiurl`: the URL to the project's Gerrit API endpoint
+* `subproject-config`:
+  * `"one"` means that all repos will be combined into exactly one subproject.
+  * `"auto"` means that scaffold will automatically create and remove subprojects, based on the hierarchy within the Gerrit repos.
+  * `"manual"` means that the user will need to create and remove subprojects manually.
+* `repos-ignore`: array of repos that should _not_ be assigned to any subproject.
+* `repos-pending`: array of repos that were detected and need to be either assigned to a subproject or added to `repos-ignore`.
+
+#### "subproject" objects:
+
+Each subproject will have an identifier / key which is unique within that project, and which should be used as its ID in all scaffold commands.
+
+Within the subproject's object are the following fields:
+* `status`: the [current status](./concepts.md#status-values) of the subproject in scaffold for this month
+* `slm`: an object storing data relating to the subproject's SPDX files and any detected licenses that need to be added to the applicable policy's categories
+* `web`: an object storing data relating to where the HTML and XLSX reports are uploaded
+* `code`: an object storing data relating to code that has been pulled from the repos
+
+There is also a property with the same name as the parent project's `type`, with different sub-fields depending on the project's `type` value (FIXME: details to be added).
