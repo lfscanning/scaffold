@@ -10,25 +10,6 @@ When scaffold is run from the command line, it will load in `config.json`; proce
 
 There are also some other configuration files containing secrets that should be stored in the user's home directory. These are also detailed below.
 
-## Concepts
-
-The following concepts are important in order to understand how scaffold's configuration is structured:
-
-* **policy**: represents a particular categorization of licenses, within the scope of a project.
-  * Each policy typically defines a category of "Project licenses".
-  * Each policy typically defines other categories such as "Non-OSS", "Copyleft", "Weak copyleft", "Attribution", "Other", etc.
-  * Each policy should also define a category with the specific name "No license found".
-* **project**: represents a collection of related subprojects.
-  * Each project defines one or more policies.
-  * Each project contains one or more subprojects.
-  * Each project is defined as being of one of the following types:
-    * `github`: means that the project's repos are all stored on GitHub, _in a separate GitHub org_ for each subproject.
-    * `github-shared`: means that the project's repos are all stored on GitHub, _together in the same GitHub org_ for all subprojects.
-    * `gerrit`: means that the project's repos are all stored on Gerrit.
-* **subproject**: represents a collection of related repos within one project.
-  * Each subproject contains the information about which repos it includes in the scanning or ignores / excludes.
-  * If multiple license policies are defined for the overarching project, then each subproject can specify which of those policies applies to it.
-
 ## Configuration
 
 ### Create main scaffold directory
