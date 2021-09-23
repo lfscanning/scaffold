@@ -1,0 +1,7 @@
+requests
+gitpython
+tabulate
+jira
+openpyxl
+pyyaml
+Jinja2
