@@ -386,6 +386,7 @@ class Config:
         self._spdx_github_org = ""
         self._spdx_github_signoff = ""
         self._web_server = ""
+        self._web_server_username = ""
         self._web_reports_path = ""
         self._web_reports_url = ""
         self._ws_server_url = ""

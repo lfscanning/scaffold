@@ -177,6 +177,10 @@ def loadConfig(configFilename, scaffoldHome):
             if cfg._web_server == "":
                 print(f"No valid webServer found in config section")
                 return cfg
+            cfg._web_server_username = config_dict.get('webServerUsername', "")
+            if cfg._web_server_username == "":
+                print(f"No valid webServerUsername found in config section")
+                return cfg
             cfg._web_reports_path = config_dict.get('webReportsPath', "")
             if cfg._web_reports_path == "":
                 print(f"No valid webReportsPath found in config section")
@@ -655,6 +659,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "spdxGithubOrg": o._spdx_github_org,
                     "spdxGithubSignoff": o._spdx_github_signoff,
                     "webServer": o._web_server,
+                    "webServerUsername": o._web_server_username,
                     "webReportsPath": o._web_reports_path,
                     "webReportsUrl": o._web_reports_url,
                     "wsServerUrl": o._ws_server_url,

@@ -33,7 +33,7 @@ def doUploadReportsForSubproject(cfg, prj, sp):
 
     # scp HTML report to server, if it exists (e.g., if there were any findings)
     if os.path.exists(srcHtmlPath):
-        cmd = ["scp", srcHtmlPath, f"{cfg._web_server}:{dstHtmlPath}"]
+        cmd = ["scp", srcHtmlPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstHtmlPath}"]
         cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if cp.returncode != 0:
             print(f"""{prj._name}/{sp._name}: scp of HTML report failed with error code {cp.returncode}:
@@ -54,7 +54,7 @@ errors:
         print(f"{prj._name}/{sp._name}: no HTML report on disk, skipping")
 
     # scp XLSX report to server
-    cmd = ["scp", srcXlsxPath, f"{cfg._web_server}:{dstXlsxPath}"]
+    cmd = ["scp", srcXlsxPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstXlsxPath}"]
     cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     if cp.returncode != 0:
         print(f"""{prj._name}/{sp._name}: scp of XLSX report failed with error code {cp.returncode}:
@@ -105,7 +105,7 @@ def doUploadReportsForProject(cfg, prj):
 
     # scp HTML report to server, if it exists (e.g., if there were any findings)
     if os.path.exists(srcHtmlPath):
-        cmd = ["scp", srcHtmlPath, f"{cfg._web_server}:{dstHtmlPath}"]
+        cmd = ["scp", srcHtmlPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstHtmlPath}"]
         cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if cp.returncode != 0:
             print(f"""{prj._name}: scp of HTML report failed with error code {cp.returncode}:
@@ -126,7 +126,7 @@ errors:
         print(f"{prj._name}: no HTML report on disk, skipping")
 
     # scp XLSX report to server
-    cmd = ["scp", srcXlsxPath, f"{cfg._web_server}:{dstXlsxPath}"]
+    cmd = ["scp", srcXlsxPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstXlsxPath}"]
     cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     if cp.returncode != 0:
         print(f"""{prj._name}: scp of XLSX report failed with error code {cp.returncode}:

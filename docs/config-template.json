@@ -6,6 +6,7 @@
         "spdxGithubOrg": "GITHUB-ORG-NAME",
         "spdxGithubSignoff": "NAME <EMAIL@ADDRESS.COM>",
         "webServer": "WEB-SERVER-DOMAIN.ORG",
+	"webServerUsername": "USERNAME-ON-WEB-SERVER",
         "webReportsPath": "/SERVER-DISK-PATH-TO-REPORTS",
         "webReportsUrl": "reports",
 	"wsServerUrl": "https://saas.whitesourcesoftware.com",
@@ -34,6 +35,7 @@
             "WS_PYTHON_PIPPATH": "/home/USER/.virtualenvs/ws/bin/pip3",
             "WS_PYTHON_RESOLVEDEPENDENCIES": "true",
             "WS_PYTHON_IGNOREPIPINSTALLERRORS": "true"
+	}
     },
     "projects": {
 	"prj1": {

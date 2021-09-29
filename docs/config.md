@@ -58,6 +58,7 @@ Edit that config.json's contents to configure for your setup. The following prov
 * `spdxGithubOrg`: name of GitHub org where repos containing the SPDX documents from Fossology will be posted
 * `spdxGithubSignoff`: name and email address to use in `Signed-off-by:` commit messages for the SPDX documents
 * `webServer`: domain name for the web server where reports will be uploaded
+* `webServerUsername`: user name of account on web server, used for SCP connections
 * `webReportsPath`: on-disk path on the web server for where reports should be scp'd
 * `webReportsUrl`: URL path fragment to appear between the web server domain name and the specific project/subproject address for reports, typically just `"reports"`
 
