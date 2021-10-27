@@ -5,7 +5,6 @@ import json
 import os
 from pathlib import Path
 from shutil import copyfile
-import pdb
 
 import yaml
 
@@ -108,7 +107,6 @@ def loadFindings(findingsFilename):
 
 # parses secrets file; always looks in ~/.scaffold-secrets.json
 def loadSecrets():
-    pdb.set_trace()
     secretsFile = os.path.join(Path.home(), ".scaffold-secrets.json")
     try:
         with open(secretsFile, 'r') as f:
