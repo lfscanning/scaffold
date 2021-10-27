@@ -7,7 +7,7 @@ from gerrit import getGerritRepoDict, getGerritRepoList
 
 # Runner for START in GitHub
 def doRepoListingForSubproject(cfg, prj, sp):
-    allrepos = getGithubRepoList(cfg._gh_oauth_token, sp._github_org)
+    allrepos = getGithubRepoList(cfg._secrets._gitoauth[prj], sp._github_org)
 
     # first, figure out what repos need to be added
     for r in allrepos:
@@ -51,7 +51,7 @@ def doRepoListingForProject(cfg, prj):
                 allcfgrepos[r] = sp_name
 
         # collect all real repos currently on GitHub
-        allrealrepos = getGithubRepoList(cfg._gh_oauth_token, prj._github_shared_org)
+        allrealrepos = getGithubRepoList(cfg._secrets._gitoauth[prj], prj._github_shared_org)
 
         # first, figure out what repos need to be added
         for r in allrealrepos:

@@ -92,18 +92,6 @@ def fossdriverSetup(fossdriverrc_path):
 
     return server
 
-# FIXME move this into secrets file
-def githubOauthSetup():
-    scaffoldrc = os.path.join(Path.home(), ".scaffoldrc")
-    try:
-        with open(scaffoldrc, "r") as f:
-            js = json.load(f)
-            return js.get("gh_oauth_token", "")
-
-    except json.decoder.JSONDecodeError as e:
-        print(f'Error loading or parsing {scaffoldrc}: {str(e)}')
-        return ""
-
 if __name__ == "__main__":
     # check and parse year-month
     if len(sys.argv) < 2:
@@ -113,9 +101,6 @@ if __name__ == "__main__":
     if year == 0 and month == 0:
         printUsage()
         sys.exit(1)
-
-    # get github oauth token
-    GITHUB_OAUTH = githubOauthSetup()
 
     # get scaffold home directory
     SCAFFOLD_HOME = os.getenv('SCAFFOLD_HOME')
@@ -128,7 +113,6 @@ if __name__ == "__main__":
     # load configuration file for this month
     cfg_file = os.path.join(MONTH_DIR, "config.json")
     cfg = loadConfig(cfg_file, SCAFFOLD_HOME)
-    cfg._gh_oauth_token = GITHUB_OAUTH
 
     # we'll check if added optional args limit to one prj / sp
     prj_only = ""

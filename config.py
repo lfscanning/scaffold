@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 from shutil import copyfile
+import pdb
 
 import yaml
 
@@ -107,14 +108,17 @@ def loadFindings(findingsFilename):
 
 # parses secrets file; always looks in ~/.scaffold-secrets.json
 def loadSecrets():
+    pdb.set_trace()
     secretsFile = os.path.join(Path.home(), ".scaffold-secrets.json")
     try:
         with open(secretsFile, 'r') as f:
             js = json.load(f)
 
-            # expecting mapping of prj name to JiraSecret data
             secrets = Secrets()
-            for prj, prj_dict in js.items():
+            default_oauth = js.get("default_github_oauth", "")
+            # expecting mapping of prj name to JiraSecret data
+            project_data = js.get("projects", {})
+            for prj, prj_dict in project_data.items():
                 jira_dict = prj_dict.get("jira", {})
                 if jira_dict != {}:
                     jira_secret = JiraSecret()
@@ -132,6 +136,8 @@ def loadSecrets():
                     ws_secret._ws_api_key = ws_dict.get("apikey", "")
                     ws_secret._ws_user_key = ws_dict.get("userkey", "")
                     secrets._ws[prj] = ws_secret
+                    
+                secrets._gitoauth[prj] = prj_dict.get("github_oauth", default_oauth)
 
         return secrets
 
@@ -667,7 +673,6 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "wsDefaultEnv": o._ws_default_env,
                 },
                 "projects": o._projects,
-                # DO NOT OUTPUT _GH_OAUTH_TOKEN TO CONFIG.JSON
             }
 
         elif isinstance(o, Project):
