@@ -114,6 +114,7 @@ def loadSecrets():
 
             secrets = Secrets()
             default_oauth = js.get("default_github_oauth", "")
+            secrets._default_oauth = default_oauth
             # expecting mapping of prj name to JiraSecret data
             project_data = js.get("projects", {})
             for prj, prj_dict in project_data.items():
@@ -219,10 +220,14 @@ def loadConfig(configFilename, scaffoldHome):
                 return cfg
 
             for prj_name, prj_dict in projects_dict.items():
+                #TODO: Refactor this function - cognative and cyclomatic complexity is high
                 prj = Project()
                 prj._name = prj_name
                 prj._ok = True
-
+                if not prj_name in cfg._secrets._gitoauth:
+                # Update the secrets for any missing project data
+                    cfg._secrets._gitoauth[prj_name] = cfg._secrets._default_oauth
+                
                 prj._cycle = prj_dict.get('cycle', 99)
 
                 # get project status

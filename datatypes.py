@@ -374,6 +374,9 @@ class Secrets:
         
         # mapping of project name to Github OAUTH tokens
         self._gitoauth = {}
+        
+        # default git outh for projects that do not have a configured oauth
+        self._default_gitoauth = ""
 
 
 class Config:
