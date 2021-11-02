@@ -3,8 +3,7 @@
 
 from datetime import datetime
 import os
-import shutil
-import zipfile
+import util
 
 import git
 
@@ -25,7 +24,7 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         ziporg_path = os.path.join(sp_path, sp._github_ziporg)
     # clear contents if it's already there
     if os.path.exists(ziporg_path):
-        shutil.rmtree(ziporg_path)
+        util.retry_rmtree(ziporg_path)
     # and create it if it isn't
     if not os.path.exists(ziporg_path):
         os.makedirs(ziporg_path)
@@ -78,7 +77,7 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
     ziporg_path = os.path.join(sp_path, sp._name)
     # clear contents if it's already there
     if os.path.exists(ziporg_path):
-        shutil.rmtree(ziporg_path)
+        util.retry_rmtree(ziporg_path)
     # and create it if it isn't
     if not os.path.exists(ziporg_path):
         os.makedirs(ziporg_path)
