@@ -371,6 +371,12 @@ class Secrets:
 
         # mapping of project name to WhiteSource server details
         self._ws = {}
+        
+        # mapping of project name to Github OAUTH tokens
+        self._gitoauth = {}
+        
+        # default git outh for projects that do not have a configured oauth
+        self._default_gitoauth = ""
 
 
 class Config:
@@ -393,7 +399,6 @@ class Config:
         self._ws_unified_agent_jar_path = ""
         self._ws_default_env = {}
         # DO NOT OUTPUT THESE TO CONFIG.JSON
-        self._gh_oauth_token = ""
         self._secrets = None
 
     def __repr__(self):

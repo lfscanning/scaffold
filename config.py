@@ -112,9 +112,12 @@ def loadSecrets():
         with open(secretsFile, 'r') as f:
             js = json.load(f)
 
-            # expecting mapping of prj name to JiraSecret data
             secrets = Secrets()
-            for prj, prj_dict in js.items():
+            default_oauth = js.get("default_github_oauth", "")
+            secrets._default_oauth = default_oauth
+            # expecting mapping of prj name to JiraSecret data
+            project_data = js.get("projects", {})
+            for prj, prj_dict in project_data.items():
                 jira_dict = prj_dict.get("jira", {})
                 if jira_dict != {}:
                     jira_secret = JiraSecret()
@@ -132,6 +135,8 @@ def loadSecrets():
                     ws_secret._ws_api_key = ws_dict.get("apikey", "")
                     ws_secret._ws_user_key = ws_dict.get("userkey", "")
                     secrets._ws[prj] = ws_secret
+                    
+                secrets._gitoauth[prj] = prj_dict.get("github_oauth", default_oauth)
 
         return secrets
 
@@ -215,10 +220,14 @@ def loadConfig(configFilename, scaffoldHome):
                 return cfg
 
             for prj_name, prj_dict in projects_dict.items():
+                #TODO: Refactor this function - cognative and cyclomatic complexity is high
                 prj = Project()
                 prj._name = prj_name
                 prj._ok = True
-
+                if not prj_name in cfg._secrets._gitoauth:
+                # Update the secrets for any missing project data
+                    cfg._secrets._gitoauth[prj_name] = cfg._secrets._default_oauth
+                
                 prj._cycle = prj_dict.get('cycle', 99)
 
                 # get project status
@@ -667,7 +676,6 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "wsDefaultEnv": o._ws_default_env,
                 },
                 "projects": o._projects,
-                # DO NOT OUTPUT _GH_OAUTH_TOKEN TO CONFIG.JSON
             }
 
         elif isinstance(o, Project):
