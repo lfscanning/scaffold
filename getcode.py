@@ -33,7 +33,6 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
     for repo in sp._repos:
         git_url = f"git@github.com:{org}/{repo}.git"
         print(f"{prj._name}/{sp._name}: cloning {git_url}")
-        git.Repo(ziporg_path, odbt=git.GitCmdObjectDB).clone_from(git_url, ziporg_path)
         git.Git(ziporg_path).clone(git_url)
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
         # change branch if another is specified
