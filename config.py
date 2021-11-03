@@ -180,11 +180,11 @@ def loadConfig(configFilename, scaffoldHome):
             # load web server data
             cfg._web_server_use_scp = config_dict.get('webServerUseScp', False)
             cfg._web_server = config_dict.get('webServer', "")
-            if cfg._web_server == "":
+            if cfg._web_server == "" and cfg._web_server_use_scp:
                 print(f"No valid webServer found in config section")
                 return cfg
             cfg._web_server_username = config_dict.get('webServerUsername', "")
-            if cfg._web_server_username == "":
+            if cfg._web_server_username == "" and cfg._web_server_use_scp:
                 print(f"No valid webServerUsername found in config section")
                 return cfg
             cfg._web_reports_path = config_dict.get('webReportsPath', "")
