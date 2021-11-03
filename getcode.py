@@ -3,8 +3,7 @@
 
 from datetime import datetime
 import os
-import shutil
-import zipfile
+import util
 
 import git
 
@@ -25,7 +24,7 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         ziporg_path = os.path.join(sp_path, sp._github_ziporg)
     # clear contents if it's already there
     if os.path.exists(ziporg_path):
-        shutil.rmtree(ziporg_path)
+        util.retry_rmtree(ziporg_path)
     # and create it if it isn't
     if not os.path.exists(ziporg_path):
         os.makedirs(ziporg_path)
@@ -40,13 +39,16 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         # note that this assumes either there is only one repo or else that
         #   all such repos have the same branch name
         # also record the top commit
-        r = git.Repo(dotgit_path)
-        if sp._github_branch != "":
-            print(f"{prj._name}/{sp._name}: repo {repo}: switching to branch {sp._github_branch}")
-            r.git.checkout('-b', sp._github_branch, f"origin/{sp._github_branch}")
-        cmts = list(r.iter_commits())
-        if len(cmts) > 0:
-            sp._code_repos[repo] = cmts[0].hexsha
+        r = git.Repo(dotgit_path, odbt=git.GitCmdObjectDB)
+        try:
+            if sp._github_branch != "":
+                print(f"{prj._name}/{sp._name}: repo {repo}: switching to branch {sp._github_branch}")
+                r.git.checkout('-b', sp._github_branch, f"origin/{sp._github_branch}")
+            cmts = list(r.iter_commits())
+            if len(cmts) > 0:
+                sp._code_repos[repo] = cmts[0].hexsha
+        finally:
+            r.close()
 
     # before finishing, check and see whether it actually has any files
     anyfiles = False
@@ -78,7 +80,7 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
     ziporg_path = os.path.join(sp_path, sp._name)
     # clear contents if it's already there
     if os.path.exists(ziporg_path):
-        shutil.rmtree(ziporg_path)
+        util.retry_rmtree(ziporg_path)
     # and create it if it isn't
     if not os.path.exists(ziporg_path):
         os.makedirs(ziporg_path)

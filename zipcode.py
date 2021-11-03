@@ -1,12 +1,9 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
 
-from datetime import datetime
 import os
-import shutil
 import zipfile
-
-import git
+import util
 
 from datatypes import ProjectRepoType, Status
 
@@ -23,13 +20,13 @@ def doZipRepoCodeForSubproject(cfg, prj, sp):
     # remove each repo's .git directory
     for repo in sp._repos:
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
-        shutil.rmtree(dotgit_path)
+        util.retry_rmtree(dotgit_path)
         # also remove its repo-dirs-delete, if any
         delete_dirs = sp._repo_dirs_delete.get(repo, [])
         for delete_dir in delete_dirs:
             delete_dir_path = os.path.join(ziporg_path, repo, delete_dir)
             print(f"{prj._name}/{sp._name}: deleting {repo}:{delete_dir}")
-            shutil.rmtree(delete_dir_path)
+            util.retry_rmtree(delete_dir_path)
 
     # before zipping it all together, check and see whether it actually has any files
     if not sp._code_anyfiles:
@@ -53,7 +50,7 @@ def doZipRepoCodeForSubproject(cfg, prj, sp):
     zf.close()
 
     # and finally, remove the original unzipped directory
-    shutil.rmtree(ziporg_path)
+    util.retry_rmtree(ziporg_path)
 
     # success - advance state
     sp._status = Status.ZIPPEDCODE
@@ -71,13 +68,13 @@ def doZipRepoCodeForGerritSubproject(cfg, prj, sp):
         dashName = repo.replace("/", "-")
         dstFolder = os.path.join(ziporg_path, dashName)
         dotgit_path = os.path.join(dstFolder, ".git")
-        shutil.rmtree(dotgit_path)
+        util.retry_rmtree(dotgit_path)
         # also remove its repo-dirs-delete, if any
         delete_dirs = sp._repo_dirs_delete.get(repo, [])
         for delete_dir in delete_dirs:
             delete_dir_path = os.path.join(ziporg_path, dashName, delete_dir)
             print(f"{prj._name}/{sp._name}: deleting {repo}:{delete_dir}")
-            shutil.rmtree(delete_dir_path)
+            util.retry_rmtree(delete_dir_path)
 
     # before zipping it all together, check and see whether it actually has any files
     if not sp._code_anyfiles:
@@ -101,7 +98,7 @@ def doZipRepoCodeForGerritSubproject(cfg, prj, sp):
     zf.close()
 
     # and finally, remove the original unzipped directory
-    shutil.rmtree(ziporg_path)
+    util.retry_rmtree(ziporg_path)
 
     # success - advance state
     sp._status = Status.ZIPPEDCODE
