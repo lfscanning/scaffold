@@ -33,19 +33,23 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
     for repo in sp._repos:
         git_url = f"git@github.com:{org}/{repo}.git"
         print(f"{prj._name}/{sp._name}: cloning {git_url}")
+        git.Repo(ziporg_path, odbt=git.GitCmdObjectDB).clone_from(git_url, ziporg_path)
         git.Git(ziporg_path).clone(git_url)
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
         # change branch if another is specified
         # note that this assumes either there is only one repo or else that
         #   all such repos have the same branch name
         # also record the top commit
-        r = git.Repo(dotgit_path)
-        if sp._github_branch != "":
-            print(f"{prj._name}/{sp._name}: repo {repo}: switching to branch {sp._github_branch}")
-            r.git.checkout('-b', sp._github_branch, f"origin/{sp._github_branch}")
-        cmts = list(r.iter_commits())
-        if len(cmts) > 0:
-            sp._code_repos[repo] = cmts[0].hexsha
+        r = git.Repo(dotgit_path, odbt=git.GitCmdObjectDB)
+        try:
+            if sp._github_branch != "":
+                print(f"{prj._name}/{sp._name}: repo {repo}: switching to branch {sp._github_branch}")
+                r.git.checkout('-b', sp._github_branch, f"origin/{sp._github_branch}")
+            cmts = list(r.iter_commits())
+            if len(cmts) > 0:
+                sp._code_repos[repo] = cmts[0].hexsha
+        finally:
+            r.close()
 
     # before finishing, check and see whether it actually has any files
     anyfiles = False
