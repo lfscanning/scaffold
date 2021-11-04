@@ -57,10 +57,11 @@ Edit that config.json's contents to configure for your setup. The following prov
 * `version`: version of this config.json file. Starts at 1 and increments each time the config.json file is modified by scaffold (saving the prior version to the `backup/` subfolder)
 * `spdxGithubOrg`: name of GitHub org where repos containing the SPDX documents from Fossology will be posted
 * `spdxGithubSignoff`: name and email address to use in `Signed-off-by:` commit messages for the SPDX documents
-* `webServer`: domain name for the web server where reports will be uploaded
-* `webServerUsername`: user name of account on web server, used for SCP connections
 * `webReportsPath`: on-disk path on the web server for where reports should be scp'd
 * `webReportsUrl`: URL path fragment to appear between the web server domain name and the specific project/subproject address for reports, typically just `"reports"`
+* `webServerUseScp`: if true, use SCP to copy files to the webserver.  If false, the files will be copied to the`webReportsPath` directly
+* `webServer`: domain name for the web server where reports will be uploaded - required only if `webServerUseScp=true`
+* `webServerUsername`: user name of account on web server, used for SCP connections - required only if `webServerUseScp=true`
 
 There are also several values prefixed by `ws`. These are currently required to be present, but are not used unless one or more projects are configured to upload scan findings to WhiteSource (FIXME: details to be added).
 

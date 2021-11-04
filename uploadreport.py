@@ -4,6 +4,7 @@
 import os
 from subprocess import run, PIPE
 import uuid
+from shutil import copyfile
 
 from datatypes import Status
 
@@ -31,12 +32,13 @@ def doUploadReportsForSubproject(cfg, prj, sp):
     dstXlsxFilename = f"{sp._name}-{sp._code_pulled}-{web_uuid}.xlsx"
     dstXlsxPath = os.path.join(dstReportFolder, dstXlsxFilename)
 
-    # scp HTML report to server, if it exists (e.g., if there were any findings)
+    # copy HTML report to server, if it exists (e.g., if there were any findings)
     if os.path.exists(srcHtmlPath):
-        cmd = ["scp", srcHtmlPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstHtmlPath}"]
-        cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-        if cp.returncode != 0:
-            print(f"""{prj._name}/{sp._name}: scp of HTML report failed with error code {cp.returncode}:
+        if cfg._web_server_use_scp:
+            cmd = ["scp", srcHtmlPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstHtmlPath}"]
+            cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+            if cp.returncode != 0:
+                print(f"""{prj._name}/{sp._name}: scp of HTML report failed with error code {cp.returncode}:
 ----------
 output:
 {cp.stdout}
@@ -45,31 +47,36 @@ errors:
 {cp.stderr}
 ----------
 """)
-            return False
+                return False
+            else:
+                print(f"{prj._name}/{sp._name}: uploaded HTML report")
+                sp._web_html_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstHtmlFilename}"
         else:
-            print(f"{prj._name}/{sp._name}: uploaded HTML report")
-            sp._web_html_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstHtmlFilename}"
+            copyfile(srcHtmlPath, dstHtmlPath)
     else:
         # no HTML file b/c no findings
         print(f"{prj._name}/{sp._name}: no HTML report on disk, skipping")
 
-    # scp XLSX report to server
-    cmd = ["scp", srcXlsxPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstXlsxPath}"]
-    cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-    if cp.returncode != 0:
-        print(f"""{prj._name}/{sp._name}: scp of XLSX report failed with error code {cp.returncode}:
-----------
-output:
-{cp.stdout}
-----------
-errors:
-{cp.stderr}
-----------
-""")
-        return False
+    # copy XLSX report to server
+    if cfg._web_server_use_scp:
+        cmd = ["scp", srcXlsxPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstXlsxPath}"]
+        cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        if cp.returncode != 0:
+            print(f"""{prj._name}/{sp._name}: scp of XLSX report failed with error code {cp.returncode}:
+    ----------
+    output:
+    {cp.stdout}
+    ----------
+    errors:
+    {cp.stderr}
+    ----------
+    """)
+            return False
+        else:
+            print(f"{prj._name}/{sp._name}: uploaded XLSX report")
+            sp._web_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
     else:
-        print(f"{prj._name}/{sp._name}: uploaded XLSX report")
-        sp._web_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
+        copyfile(srcXlsxPath, dstXlsxFilename)
 
     # success!
     sp._status = Status.UPLOADEDREPORTS

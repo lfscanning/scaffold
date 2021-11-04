@@ -6,7 +6,7 @@ scaffold is a command-line tool to automate the process of running and clearing 
 
 In order to use scaffold, you will need a [Fossology server](https://github.com/fossology/fossology) to perform the actual codebase scans. scaffold uses fossdriver (see below) which I have previously used for a Fossology server with version 3.6.0. It may work for later versions of Fossology, but I have not tested it with them.
 
-You will also need a web server where HTML and XLSX files with reports will be made available. This web server should be configured such that your local system can scp files to it.
+You will also need a web server where HTML and XLSX files with reports will be made available. This web server should be configured such that your local system can either scp files to it or access the files locally.
 
 You will also need a public GitHub org to host repos where SPDX files from the Fossology scans will be committed.
 
