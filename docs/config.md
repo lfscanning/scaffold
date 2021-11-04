@@ -153,9 +153,9 @@ The `matches-[project].json` (where `[project]` is replaced with the project nam
 * `comment` Descriptive comment - such as the name of the header text being matched
 * `text`: Regular expression of the text to match
 * `actions`: List of actions with the following fields:
- * `action`: Action to be taken - one of:
-  * `add`: Add a new element
-  * FIXME: any others?
- *`license`: License ID
+	* `action`: Action to be taken - one of:
+		* `add`: Add a new element
+		* FIXME: any others?
+	* `license`: License ID
 
 See the [matches-sample.json](matches-sample.json) for an example file.
