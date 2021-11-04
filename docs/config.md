@@ -138,7 +138,7 @@ The JSON file has the following fields:
 
 ### create findings-[project].yaml files for each project
 
-The `findings-[project].yaml` file (where [project] is replaced with the project name used in the config file) contains information used in the generation of the HTML report.  The file contains a list of `findings` with the following fields:
+The `findings-[project].yaml` file (where `[project]` is replaced with the project name used in the config file) contains information used in the generation of the HTML report.  The file contains a list of `findings` with the following fields:
 * `id` Id unique to each finding
 * `priority` Priority of the finding as displayed in the report
 * `matches-license` license name that this finding applies to as it appears in the fossology
@@ -147,13 +147,15 @@ The `findings-[project].yaml` file (where [project] is replaced with the project
 
 See the [findings-sample.yaml](findings-sample.yaml) for an example file.
 
-### `matches-[project].json files for each project
+### matches-[project].json files for each project
 
-The `matches-[project].json` file optionally store information for bulk matches.  The file contains a list of bulk matches with the following fields:
+The `matches-[project].json` (where `[project]` is replaced with the project name used in the config file) file optionally store information for bulk matches.  The file contains a list of bulk matches with the following fields:
 * `comment` Descriptive comment - such as the name of the header text being matched
 * `text`: Regular expression of the text to match
 * `actions`: List of actions with the following fields:
-  * `action`: Action to be taken - one of:
-    * `add`: Add a new element
-    * FIXME: any others?
-  *`license`: License ID
+ * `action`: Action to be taken - one of:
+  * `add`: Add a new element
+  * FIXME: any others?
+ *`license`: License ID
+
+See the [matches-sample.json](matches-sample.json) for an example file.
