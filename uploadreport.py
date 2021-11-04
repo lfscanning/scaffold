@@ -52,7 +52,10 @@ errors:
                 print(f"{prj._name}/{sp._name}: uploaded HTML report")
                 sp._web_html_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstHtmlFilename}"
         else:
+            os.makedirs(os.path.dirname(dstHtmlPath), exist_ok=True)
             copyfile(srcHtmlPath, dstHtmlPath)
+            print(f"{prj._name}/{sp._name}: uploaded HTML report")
+            sp._web_html_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstHtmlFilename}"
     else:
         # no HTML file b/c no findings
         print(f"{prj._name}/{sp._name}: no HTML report on disk, skipping")
@@ -76,7 +79,10 @@ errors:
             print(f"{prj._name}/{sp._name}: uploaded XLSX report")
             sp._web_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
     else:
-        copyfile(srcXlsxPath, dstXlsxFilename)
+        os.makedirs(os.path.dirname(dstXlsxPath), exist_ok=True)
+        copyfile(srcXlsxPath, dstXlsxPath)
+        print(f"{prj._name}/{sp._name}: uploaded XLSX report")
+        sp._web_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
 
     # success!
     sp._status = Status.UPLOADEDREPORTS
@@ -112,10 +118,38 @@ def doUploadReportsForProject(cfg, prj):
 
     # scp HTML report to server, if it exists (e.g., if there were any findings)
     if os.path.exists(srcHtmlPath):
-        cmd = ["scp", srcHtmlPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstHtmlPath}"]
+        if cfg._web_server_use_scp:
+            cmd = ["scp", srcHtmlPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstHtmlPath}"]
+            cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+            if cp.returncode != 0:
+                print(f"""{prj._name}: scp of HTML report failed with error code {cp.returncode}:
+----------
+output:
+{cp.stdout}
+----------
+errors:
+{cp.stderr}
+----------
+""")
+                return False
+            else:
+                print(f"{prj._name}: uploaded HTML report")
+                prj._web_combined_html_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstHtmlFilename}"
+        else:
+            os.makedirs(os.path.dirname(dstHtmlPath), exist_ok=True)
+            copyfile(srcHtmlPath, dstHtmlPath)
+            print(f"{prj._name}: uploaded HTML report")
+            prj._web_combined_html_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstHtmlFilename}"
+    else:
+        # no HTML file b/c no findings
+        print(f"{prj._name}: no HTML report on disk, skipping")
+
+    # scp XLSX report to server
+    if cfg._web_server_use_scp:
+        cmd = ["scp", srcXlsxPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstXlsxPath}"]
         cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if cp.returncode != 0:
-            print(f"""{prj._name}: scp of HTML report failed with error code {cp.returncode}:
+            print(f"""{prj._name}: scp of XLSX report failed with error code {cp.returncode}:
 ----------
 output:
 {cp.stdout}
@@ -126,30 +160,13 @@ errors:
 """)
             return False
         else:
-            print(f"{prj._name}: uploaded HTML report")
-            prj._web_combined_html_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstHtmlFilename}"
+            print(f"{prj._name}: uploaded XLSX report")
+            prj._web_combined_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
     else:
-        # no HTML file b/c no findings
-        print(f"{prj._name}: no HTML report on disk, skipping")
-
-    # scp XLSX report to server
-    cmd = ["scp", srcXlsxPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstXlsxPath}"]
-    cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-    if cp.returncode != 0:
-        print(f"""{prj._name}: scp of XLSX report failed with error code {cp.returncode}:
-----------
-output:
-{cp.stdout}
-----------
-errors:
-{cp.stderr}
-----------
-""")
-        return False
-    else:
+        os.makedirs(os.path.dirname(dstHtmlPath), exist_ok=True)
+        copyfile(srcHtmlPath, dstHtmlPath)
         print(f"{prj._name}: uploaded XLSX report")
         prj._web_combined_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
-
     # success!
     prj._status = Status.UPLOADEDREPORTS
 
