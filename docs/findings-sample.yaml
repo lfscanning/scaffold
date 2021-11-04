@@ -1,0 +1,24 @@
+---
+findings:
+    - id: 1
+      priority: veryhigh
+      matches-license:
+        - Apache-2.0 AND Testing-Demonstration-only-1
+      text: >
+        This file indicates that sample images are provided only for testing and demonstration purposes, and are not authorized for sale or redistribution outside of this context. This statement, and the images it refers to, should be relicensed by the copyright holder under the Acumos project licenses, or else they should be removed from the repo.
+
+    - id: 2
+      priority: veryhigh
+      matches-license:
+        - CC-BY-4.0 AND LicenseRef-Sample-Video-Restrictions-1
+      text: >
+        This file indicates that sample videos may carry additional copyright restrictions and are not meant for public resale or consumption. This statement, and the videos it refers to, should be relicensed by the copyright holder under the Acumos project licenses, or else they should be removed from the repo.
+
+    - id: 3
+      priority: low
+      matches-path:
+        - package.json
+      matches-license:
+        - Apache (version unspecified)
+      text: >
+        This package.json NPM manifest lists the license as just "Apache", without specifying a version number. There are multiple versions of Apache licenses with significantly different effects. I recommend updating this to say "Apache-2.0" to be more specific which version applies.
