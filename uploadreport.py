@@ -79,8 +79,8 @@ errors:
             print(f"{prj._name}/{sp._name}: uploaded XLSX report")
             sp._web_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
     else:
-        os.makedirs(os.path.dirname(dstXlsxFilename), exist_ok=True)
-        copyfile(srcXlsxPath, dstXlsxFilename)
+        os.makedirs(os.path.dirname(dstXlsxPath), exist_ok=True)
+        copyfile(srcXlsxPath, dstXlsxPath)
         print(f"{prj._name}/{sp._name}: uploaded XLSX report")
         sp._web_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
 
