@@ -60,7 +60,7 @@ Edit that config.json's contents to configure for your setup. The following prov
 * `webReportsPath`: on-disk path on the web server for where reports should be scp'd
 * `webReportsUrl`: URL path fragment to appear between the web server domain name and the specific project/subproject address for reports, typically just `"reports"`
 * `webServerUseScp`: if true, use SCP to copy files to the webserver.  If false, the files will be copied to the`webReportsPath` directly
-* `webServer`: domain name for the web server where reports will be uploaded - required only if `webServerUseScp=true`
+* `webServer`: domain name for the web server where reports will be uploaded
 * `webServerUsername`: user name of account on web server, used for SCP connections - required only if `webServerUseScp=true`
 
 There are also several values prefixed by `ws`. These are currently required to be present, but are not used unless one or more projects are configured to upload scan findings to WhiteSource (FIXME: details to be added).
