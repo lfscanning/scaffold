@@ -155,56 +155,56 @@ def loadConfig(configFilename, scaffoldHome):
             config_dict = js.get('config', {})
             if config_dict == {}:
                 print(f'No config section found in config file')
-                return cfg
+                raise RuntimeError(f'No config section found in config file')
             cfg._month = config_dict.get('month', "")
             if cfg._month == "":
                 print(f'No valid month found in config section')
-                return cfg
+                raise RuntimeError(f'No valid month found in config section')
             cfg._version = config_dict.get('version', -1)
             if cfg._version == -1:
                 print(f'No valid version found in config section')
-                return cfg
+                raise RuntimeError(f'No valid version found in config section')
             cfg._storepath = config_dict.get('storepath', "")
             if cfg._storepath == "":
                 print(f'No valid storepath found in config section')
-                return cfg
+                raise RuntimeError(f'No valid storepath found in config section')
             cfg._spdx_github_org = config_dict.get('spdxGithubOrg', "")
             if cfg._spdx_github_org == "":
                 print(f'No valid spdxGithubOrg found in config section')
-                return cfg
+                raise RuntimeError(f'No valid spdxGithubOrg found in config section')
             cfg._spdx_github_signoff = config_dict.get('spdxGithubSignoff', "")
             if cfg._spdx_github_signoff == "":
                 print(f'No valid spdxGithubSignoff found in config section')
-                return cfg
+                raise RuntimeError(f'No valid spdxGithubSignoff found in config section')
 
             # load web server data
             cfg._web_server_use_scp = config_dict.get('webServerUseScp', False)
             cfg._web_server = config_dict.get('webServer', "")
             if cfg._web_server == "":
                 print(f"No valid webServer found in config section")
-                return cfg
+                raise RuntimeError(f"No valid webServer found in config section")
             cfg._web_server_username = config_dict.get('webServerUsername', "")
             if cfg._web_server_username == "" and cfg._web_server_use_scp:
                 print(f"No valid webServerUsername found in config section")
-                return cfg
+                raise RuntimeError(f"No valid webServerUsername found in config section")
             cfg._web_reports_path = config_dict.get('webReportsPath', "")
             if cfg._web_reports_path == "":
                 print(f"No valid webReportsPath found in config section")
-                return cfg
+                raise RuntimeError(f"No valid webReportsPath found in config section")
             cfg._web_reports_url = config_dict.get('webReportsUrl', "")
             if cfg._web_reports_url == "":
                 print(f"No valid webReportsUrl found in config section")
-                return cfg
+                raise RuntimeError(f"No valid webReportsUrl found in config section")
 
             # load config-wide WhiteSource data
             cfg._ws_server_url = config_dict.get('wsServerUrl', "")
             if cfg._ws_server_url == "":
                 print(f"No valid wsServerUrl found in config section")
-                return cfg
+                raise RuntimeError(f"No valid wsServerUrl found in config section")
             cfg._ws_unified_agent_jar_path = config_dict.get('wsUnifiedAgentJarPath', "")
             if cfg._ws_unified_agent_jar_path == "":
                 print(f"No valid wsUnifiedAgentJarPath found in config section")
-                return cfg
+                raise RuntimeError(f"No valid wsUnifiedAgentJarPath found in config section")
             # default_env does not need to exist
             cfg._ws_default_env = config_dict.get('wsDefaultEnv', {})
 
@@ -218,7 +218,7 @@ def loadConfig(configFilename, scaffoldHome):
             projects_dict = js.get('projects', {})
             if projects_dict == {}:
                 print(f'No projects found in config file')
-                return cfg
+                raise RuntimeError(f'No projects found in config file')
 
             for prj_name, prj_dict in projects_dict.items():
                 #TODO: Refactor this function - cognative and cyclomatic complexity is high
