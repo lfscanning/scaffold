@@ -2,6 +2,7 @@
 findings:
     - id: 1
       priority: veryhigh
+      title: Sample image found in distribution
       matches-license:
         - Apache-2.0 AND Testing-Demonstration-only-1
       text: >

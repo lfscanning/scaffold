@@ -8,9 +8,9 @@ Within this directory, there will be a subdirectory for each monthly scan, named
 
 When scaffold is run from the command line, it will load in `config.json`; process the requested actions; and output a revised `config.json` file with the updated status details. It will also store a backup copy of the prior `config.json` file in the `backup/` subdirectory for that month, in case there are any errors that result in an invalid `config.json` file being outputted.
 
-In addition to the `config.json` file, a `finding-[project].yaml` file is needed to generate the HTML report.  Details on the file format are below.
+In addition to the `config.json` file, a `findings-[project].yaml` file is needed to generate the HTML report.  Details on the file format are below.
 
-An optional `matches-[project].json` file provideing information on bulk matches for fossology.  See the details below.
+An optional `matches-[project].json` file providing information on bulk matches for fossology.  See the details below.
 
 There are also some other configuration files containing secrets that should be stored in the user's home directory. These are also detailed below.
 
@@ -141,9 +141,13 @@ The JSON file has the following fields:
 The `findings-[project].yaml` file (where `[project]` is replaced with the project name used in the config file) contains information used in the generation of the HTML report.  The file contains a list of `findings` with the following fields:
 * `id` Id unique to each finding
 * `priority` Priority of the finding as displayed in the report
-* `matches-license` license name that this finding applies to as it appears in the fossology
-* `matches-path` optional file path that the finding applies to
-* `text` Text used for the finding in the HTML report
+* `text` text used for the finding in the HTML report
+* `title` optional field which, if included, will set the title of the ticket in JIRA
+
+The `findings` elements contains one or more of the following matches fields.  A match is made if ALL of the match conditions are met (e.g. an AND of all matches). 
+* `matches-license` license name that this finding applies to as it appears in the fossology.  Note that the license name will be as it appears after the translations applied after retrieving the SPDX file -- e.g. how it appears on the web report, which might be different from how it appears in Fossology.
+* `matches-path` file path that the finding applies to
+* `matches-subproject` subproject the finding applies to
 
 See the [findings-sample.yaml](findings-sample.yaml) for an example file.
 
