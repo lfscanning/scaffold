@@ -145,8 +145,11 @@ The `findings-[project].yaml` file (where `[project]` is replaced with the proje
 * `title` optional field which, if included, will set the title of the ticket in JIRA
 
 The `findings` elements contains one or more of the following matches fields.  A match is made if ALL of the match conditions are met (e.g. an AND of all matches). 
-* `matches-license` license name that this finding applies to as it appears in the fossology.  Note that the license name will be as it appears after the translations applied after retrieving the SPDX file -- e.g. how it appears on the web report, which might be different from how it appears in Fossology.
-* `matches-path` file path that the finding applies to
+* `matches-license` license name that this finding applies to as it appears in Fossology or the license name in the `policies.licenses.name` field if there is a matching Fossology alias (see the `licenses` section of `policies` above.  
+* `matches-path` pattern for matching file paths
+  * Without special characters, the `matches-path` will match if it is contained within the full file path (e.g. a substring of the full file path)
+  * With a `!` character at the start of the string, there will be a match if the file path does NOT contain the string
+  * With a `$` at the end of the string, it will only match if the string is at the end of the file's path
 * `matches-subproject` subproject the finding applies to
 
 See the [findings-sample.yaml](findings-sample.yaml) for an example file.
