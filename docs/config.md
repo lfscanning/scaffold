@@ -8,6 +8,10 @@ Within this directory, there will be a subdirectory for each monthly scan, named
 
 When scaffold is run from the command line, it will load in `config.json`; process the requested actions; and output a revised `config.json` file with the updated status details. It will also store a backup copy of the prior `config.json` file in the `backup/` subdirectory for that month, in case there are any errors that result in an invalid `config.json` file being outputted.
 
+In addition to the `config.json` file, a `findings-[project].yaml` file is needed to generate the HTML report.  Details on the file format are below.
+
+An optional `matches-[project].json` file providing information on bulk matches for fossology.  See the details below.
+
 There are also some other configuration files containing secrets that should be stored in the user's home directory. These are also detailed below.
 
 ## Configuration
@@ -131,3 +135,34 @@ The JSON file has the following fields:
   * `jira`: Optional Jira server and login information
   * `whitesource`: Optional whitesource server authentication information
   * `github_oauth`: Optional project specific GitHub OAuth token
+
+### create findings-[project].yaml files for each project
+
+The `findings-[project].yaml` file (where `[project]` is replaced with the project name used in the config file) contains information used in the generation of the HTML report.  The file contains a list of `findings` with the following fields:
+* `id` Id unique to each finding
+* `priority` Priority of the finding as displayed in the report
+* `text` text used for the finding in the HTML report
+* `title` optional field which, if included, will set the title of the ticket in JIRA
+
+The `findings` elements contains one or more of the following matches fields.  A match is made if ALL of the match conditions are met (e.g. an AND of all matches). 
+* `matches-license` license name that this finding applies to as it appears in Fossology or the license name in the `policies.licenses.name` field if there is a matching Fossology alias (see the `licenses` section of `policies` above.  
+* `matches-path` pattern for matching file paths
+  * Without special characters, the `matches-path` will match if it is contained within the full file path (e.g. a substring of the full file path)
+  * With a `!` character at the start of the string, there will be a match if the file path does NOT contain the string
+  * With a `$` at the end of the string, it will only match if the string is at the end of the file's path
+* `matches-subproject` subproject the finding applies to
+
+See the [findings-sample.yaml](findings-sample.yaml) for an example file.
+
+### matches-[project].json files for each project
+
+The `matches-[project].json` (where `[project]` is replaced with the project name used in the config file) file optionally store information for bulk matches.  The file contains a list of bulk matches with the following fields:
+* `comment` Descriptive comment - such as the name of the header text being matched
+* `text`: Regular expression of the text to match
+* `actions`: List of actions with the following fields:
+	* `action`: Action to be taken - one of:
+		* `add`: Add a new element
+		* FIXME: any others?
+	* `license`: License ID
+
+See the [matches-sample.json](matches-sample.json) for an example file.
