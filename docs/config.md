@@ -162,7 +162,7 @@ The `matches-[project].json` (where `[project]` is replaced with the project nam
 * `actions`: List of actions with the following fields:
 	* `action`: Action to be taken - one of:
 		* `add`: Add a new element
-		* FIXME: any others?
-	* `license`: License ID
+		* 'remove`: removes an existing element
+	* `license`: License ID representing an element to be either added or removed
 
 See the [matches-sample.json](matches-sample.json) for an example file.
