@@ -66,6 +66,7 @@ Assuming that no errors are encountered, a typical workflow of the scanning proc
 * The user continues the scaffold process by running `> sc 2021-09 run project1 subproject4`
   * scaffold finalizes the HTML report
   * scaffold adds the SPDX file to the spdx-project1 repo, commits it and pushes it up to GitHub
+    * Note that the spdx-project1 repo must already be created in the SPDX Github repository (e.g. lfscanning) and cloned into the spdxrepos directory.  If the repository needs to be created, create an empty repo with the name `spdx-` followed by the project name (e.g. `spdx-project`).  Use the CC-0 license as the license for the new repository.
   * scaffold uploads the HTML and XLSX reports to the web server
 * The user gets the links for these reports: `> sc 2021-09 printlinks project1 subproject4` and emails them to the project maintainers
 * The user then finalizes the process by running `> sc 2021-09 deliver project1 subproject4`, which moves it to the `DELIVERED` status so that it is complete.
