@@ -145,3 +145,9 @@ Assuming that no errors are encountered, a typical workflow of the scanning proc
 * Additional arguments: `PROJECT [SUBPROJECT]`
 * Example: `> sc 2021-09 printlinks project1 subproject4`
 * Summary: Prints the URLs to one or more subprojects' HTML and XLSX reports, so that the user can copy and email them to the project team.
+
+### clearlock
+
+A lockfile is use to prevent more than one user from running the scaffold script at the same time for the same month.  In very unusual circumstances, the lockfile may not be properly removed (e.g. when the server crashes in the middle of a run).  In that situation, the clearlock command can be run to remove the lock file.
+
+Note: this command should be used with caution and only run after verifying no other users are running the script.
