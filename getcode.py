@@ -97,10 +97,13 @@ def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
         # also record the top commit
         dotgit_path = os.path.join(dstFolder, ".git")
         r = git.Repo(dotgit_path)
-        if len(r.refs) > 0:
-            cmts = list(r.iter_commits())
-            if len(cmts) > 0:
-                sp._code_repos[repo] = cmts[0].hexsha
+        try:
+            if len(r.refs) > 0:
+                cmts = list(r.iter_commits())
+                if len(cmts) > 0:
+                    sp._code_repos[repo] = cmts[0].hexsha
+        finally:
+            r.close()
 
     # before zipping it all together, check and see whether it actually has any files
     anyfiles = False
