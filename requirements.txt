@@ -5,3 +5,4 @@ jira
 openpyxl
 pyyaml
 Jinja2
+fossology
