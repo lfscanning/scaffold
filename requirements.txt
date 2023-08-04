@@ -1,4 +1,3 @@
-requests
 gitpython
 tabulate
 jira
