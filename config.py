@@ -106,8 +106,8 @@ def loadFindings(findingsFilename):
         return []
 
 # parses secrets file; always looks in ~/.scaffold-secrets.json
-def loadSecrets():
-    secretsFile = os.path.join(Path.home(), ".scaffold-secrets.json")
+def loadSecrets(secrets_file_name = ".scaffold-secrets.json"):
+    secretsFile = os.path.join(Path.home(), secrets_file_name)
     try:
         with open(secretsFile, 'r') as f:
             js = json.load(f)
@@ -115,6 +115,18 @@ def loadSecrets():
             secrets = Secrets()
             default_oauth = js.get("default_github_oauth", "")
             secrets._default_oauth = default_oauth
+            secrets._fossology_server = js.get("fossology_server")
+            if not secrets._fossology_server:
+                print('Missing fossology server in ~/.scaffold-secrets.json')
+                return None
+            secrets._fossology_username = js.get("fossology_username")
+            if not secrets._fossology_username:
+                print('Missing fossology username in ~/.scaffold-secrets.json')
+                return None
+            secrets._fossology_password = js.get("fossology_password")
+            if not secrets._fossology_password:
+                print('Missing fossology password in ~/.scaffold-secrets.json')
+                return None
             # expecting mapping of prj name to JiraSecret data
             project_data = js.get("projects", {})
             for prj, prj_dict in project_data.items():
@@ -144,7 +156,7 @@ def loadSecrets():
         print(f'Error loading or parsing {secretsFile}: {str(e)}')
         return None
 
-def loadConfig(configFilename, scaffoldHome):
+def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secrets.json'):
     cfg = Config()
 
     try:
@@ -209,7 +221,7 @@ def loadConfig(configFilename, scaffoldHome):
             cfg._ws_default_env = config_dict.get('wsDefaultEnv', {})
 
             # load secrets
-            cfg._secrets = loadSecrets()
+            cfg._secrets = loadSecrets(secrets_file_name)
 
             # if we get here, main config is at least valid
             cfg._ok = True

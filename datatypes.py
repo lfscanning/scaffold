@@ -377,6 +377,15 @@ class Secrets:
         
         # default git outh for projects that do not have a configured oauth
         self._default_gitoauth = ""
+        
+        # fossology server URL
+        self._fossology_server = ""
+        
+        # fossology user name
+        self._fossology_username = ""
+        
+        # fossology password
+        self._fossology_password = ""
 
 
 class Config:

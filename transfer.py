@@ -3,11 +3,12 @@
 
 import os
 
-from fossdriver.tasks import CreateFolder, Upload, Scanners, Copyright, BulkTextMatch, SPDXRDF, ImportRDF
+# from fossdriver.tasks import CreateFolder, Upload, Scanners, Copyright, BulkTextMatch, SPDXRDF, ImportRDF
 
 from datatypes import Status
 
 def doTransfer(scaffold_home, cfg, prj_name, old_server, new_server):
+    raise RuntimeError("The transfer feature has not been upgraded to fossology python")
     if prj_name == "":
         print(f"Error: `transfer` command requires specifying only one project")
         return False

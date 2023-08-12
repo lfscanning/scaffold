@@ -4,7 +4,7 @@
 import os
 from pathlib import Path
 
-from fossdriver.tasks import SPDXTV
+# from fossdriver.tasks import SPDXTV
 
 from datatypes import Status, ProjectRepoType
 

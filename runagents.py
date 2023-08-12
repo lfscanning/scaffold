@@ -4,7 +4,7 @@
 import os
 from pathlib import Path
 
-from fossdriver.tasks import Scanners, Copyright, Reuse, BulkTextMatch
+# from fossdriver.tasks import Scanners, Copyright, Reuse, BulkTextMatch
 
 from datatypes import Status, ProjectRepoType
 from datefuncs import parseYM, priorMonth, getYMStr

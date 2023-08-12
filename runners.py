@@ -22,13 +22,13 @@ from uploadspdx import doUploadSPDXForSubproject
 from uploadreport import doUploadReportsForSubproject, doUploadReportsForProject
 from tickets import doFileTicketsForSubproject
 
-def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
+def doNextThing(scaffold_home, cfg, fossologyServer, prj_only, sp_only):
     for prj in cfg._projects.values():
         if prj_only == "" or prj_only == prj._name:
             if isInThisCycle(cfg, prj, None):
                 retval = True
                 while retval:
-                    retval = doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only)
+                    retval = doNextThingForProject(scaffold_home, cfg, fossologyServer, prj, sp_only)
             else:
                 print(f"{prj._name}: not in this cycle; skipping")
 
@@ -36,7 +36,7 @@ def doNextThing(scaffold_home, cfg, fdServer, prj_only, sp_only):
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
-def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
+def doNextThingForProject(scaffold_home, cfg, fossologyServer, prj, sp_only):
     if not isInThisCycle(cfg, prj, None):
         print(f"{prj._name}: not in this cycle; skipping")
         return False
@@ -47,7 +47,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
             if sp_only == "" or sp_only == sp._name:
                 retval = True
                 while retval:
-                    retval = doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp)
+                    retval = doNextThingForSubproject(scaffold_home, cfg, fossologyServer, prj, sp)
                     updateProjectPostSubproject(cfg, prj)
                     saveConfig(scaffold_home, cfg)
                     if retval:
@@ -67,7 +67,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                     did_something = True
             # elif prj._status == Status.GOTCODE:
             #     # upload code to Fossology server
-            #     retval_prj = doUploadCodeForProject(cfg, fdServer, prj)
+            #     retval_prj = doUploadCodeForProject(cfg, fossologyServer, prj)
             #     updateProjectStatusToSubprojectMin(cfg, prj)
             #     saveConfig(scaffold_home, cfg)
             #     if retval_prj:
@@ -78,7 +78,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                     if sp_only == "" or sp_only == sp._name:
                         retval = True
                         while retval:
-                            retval = doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp)
+                            retval = doNextThingForSubproject(scaffold_home, cfg, fossologyServer, prj, sp)
                             updateProjectPostSubproject(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
@@ -101,7 +101,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                     did_something = True
             # elif prj._status == Status.GOTCODE:
             #     # upload code to Fossology server
-            #     retval_prj = doUploadCodeForProject(cfg, fdServer, prj)
+            #     retval_prj = doUploadCodeForProject(cfg, fossologyServer, prj)
             #     updateProjectStatusToSubprojectMin(cfg, prj)
             #     saveConfig(scaffold_home, cfg)
             #     if retval_prj:
@@ -112,7 +112,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
                     if sp_only == "" or sp_only == sp._name:
                         retval = True
                         while retval:
-                            retval = doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp)
+                            retval = doNextThingForGerritSubproject(scaffold_home, cfg, fossologyServer, prj, sp)
                             updateProjectPostSubproject(cfg, prj)
                             saveConfig(scaffold_home, cfg)
                             if retval:
@@ -130,7 +130,7 @@ def doNextThingForProject(scaffold_home, cfg, fdServer, prj, sp_only):
 # accomplished something (meaning that we could call this again
 # and possibly do the next-next thing), or False if accomplished
 # nothing (meaning that we probably need to intervene).
-def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
+def doNextThingForSubproject(scaffold_home, cfg, fossologyServer, prj, sp):
     if not isInThisCycle(cfg, prj, sp):
         print(f"{prj._name}/{sp._name}: not in this cycle; skipping")
         return False
@@ -149,17 +149,17 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
         return doUploadWSForSubproject(cfg, prj, sp)
     elif status == Status.UPLOADEDWS:
         # upload code
-        return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
+        return doUploadCodeForSubproject(cfg, fossologyServer, prj, sp)
     elif status == Status.UPLOADEDCODE:
         # run agents
-        return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
+        return doRunAgentsForSubproject(cfg, fossologyServer, prj, sp)
     elif status == Status.RANAGENTS:
         # needs manual clearing
         print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action")
         return False
     elif status == Status.CLEARED:
         # get SPDX tag-value file
-        return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
+        return doGetSPDXForSubproject(cfg, fossologyServer, prj, sp)
     elif status == Status.GOTSPDX:
         # parse SPDX tag-value file
         return doParseSPDXForSubproject(cfg, prj, sp)
@@ -201,7 +201,7 @@ def doNextThingForSubproject(scaffold_home, cfg, fdServer, prj, sp):
 # the next-next thing), or False if accomplished nothing (meaning that we
 # probably need to intervene). Does not handle START case because that is
 # handled at the project level.
-def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
+def doNextThingForGerritSubproject(scaffold_home, cfg, fossologyServer, prj, sp):
     if not isInThisCycle(cfg, prj, sp):
         print(f"{prj._name}/{sp._name}: not in this cycle; skipping")
         return False
@@ -217,17 +217,17 @@ def doNextThingForGerritSubproject(scaffold_home, cfg, fdServer, prj, sp):
         return doUploadWSForSubproject(cfg, prj, sp)
     elif status == Status.UPLOADEDWS:
         # upload code
-        return doUploadCodeForSubproject(cfg, fdServer, prj, sp)
+        return doUploadCodeForSubproject(cfg, fossologyServer, prj, sp)
     elif status == Status.UPLOADEDCODE:
         # run agents
-        return doRunAgentsForSubproject(cfg, fdServer, prj, sp)
+        return doRunAgentsForSubproject(cfg, fossologyServer, prj, sp)
     elif status == Status.RANAGENTS:
         # needs manual clearing
         print(f"{prj._name}/{sp._name}: status is RANAGENTS; clear in Fossology then run `clear` action")
         return False
     elif status == Status.CLEARED:
         # get SPDX tag-value file
-        return doGetSPDXForSubproject(cfg, fdServer, prj, sp)
+        return doGetSPDXForSubproject(cfg, fossologyServer, prj, sp)
     elif status == Status.GOTSPDX:
         # parse SPDX tag-value file
         return doParseSPDXForSubproject(cfg, prj, sp)

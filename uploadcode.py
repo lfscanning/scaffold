@@ -6,7 +6,7 @@ from pathlib import Path
 
 from datatypes import Status, ProjectRepoType
 
-from fossdriver.tasks import CreateFolder, Upload
+# from fossdriver.tasks import CreateFolder, Upload
 
 def doUploadCodeForProject(cfg, fdServer, prj):
     # create top-level folder for project, if it doesn't already exist
