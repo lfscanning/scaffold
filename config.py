@@ -105,7 +105,22 @@ def loadFindings(findingsFilename):
         print(f'Error loading or parsing {findingsFilename}: {str(e)}')
         return []
 
-# parses secrets file; always looks in ~/.scaffold-secrets.json
+def updateFossologyToken(token, secrets_file_name = ".scaffold-secrets.json"):
+    '''
+    Update the fossology token in the secrets file
+    '''
+    secretsFile = os.path.join(Path.home(), secrets_file_name)
+    
+    js = {}
+    with open(secretsFile, 'r') as f:
+        js = json.load(f)
+
+    js['fossology_token'] = token
+    with open(secretsFile, "w") as f:
+        json.dump(js, f, indent=4)
+
+
+# parses secrets file
 def loadSecrets(secrets_file_name = ".scaffold-secrets.json"):
     secretsFile = os.path.join(Path.home(), secrets_file_name)
     try:
@@ -127,6 +142,8 @@ def loadSecrets(secrets_file_name = ".scaffold-secrets.json"):
             if not secrets._fossology_password:
                 print('Missing fossology password in ~/.scaffold-secrets.json')
                 return None
+            secrets._fossology_token = js.get("fossology_token")
+            
             # expecting mapping of prj name to JiraSecret data
             project_data = js.get("projects", {})
             for prj, prj_dict in project_data.items():
@@ -163,6 +180,8 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
         with open(configFilename, 'r') as f:
             js = json.load(f)
 
+            # Save the secret file name
+            cfg._secrets_file = secrets_file_name
             # load global config
             config_dict = js.get('config', {})
             if config_dict == {}:

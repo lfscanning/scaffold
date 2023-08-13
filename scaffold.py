@@ -12,7 +12,7 @@ from fossology import fossology_token, Fossology
 from fossology.obj import TokenScope
 
 
-from config import loadConfig, saveBackupConfig, saveConfig, isInThisCycle
+from config import loadConfig, saveBackupConfig, saveConfig, isInThisCycle, updateFossologyToken
 import datefuncs
 from runners import doNextThing
 from manualws import runManualWSAgent
@@ -25,9 +25,9 @@ from metrics import getMetrics, printMetrics
 from metricsfile import saveMetrics
 from transfer import doTransfer
 from datetime import datetime
+from secrets import token_urlsafe
 
 LOCK_FILE_NAME = "lock.lock"
-FOSSOLOGY_TOKEN_NAME = "ScaffoldToken"
 
 def printUsage():
     print(f"""
@@ -84,24 +84,46 @@ def status(cfg, prj_only, sp_only):
 
     table = sorted(table, key=itemgetter(0, 1))
     print(tabulate(table, headers=headers))
-
-def fossologySetup(secrets):
+    
+def generateFossologyToken(secrets, secrets_file_name):
+    '''
+    Gets the fossology toke from the secrets.  If not present, generate a new
+    fossology token
+    '''
     try:
         token = fossology_token(
-              secrets._fossology_server,
-              secrets._fossology_username,
-              secrets._fossology_password,
-              FOSSOLOGY_TOKEN_NAME,
-              TokenScope.WRITE
-        )
+                    secrets._fossology_server,
+                    secrets._fossology_username,
+                    secrets._fossology_password,
+                    token_urlsafe(8),
+                    TokenScope.WRITE)
     except:
         print('Unable to get FOSSOlogy token - check secrets configuration fossology url, username and password')
         return None
     try:
+        secrets._fossology_token = token
+        updateFossologyToken(token, secrets_file_name)
+    except:
+        print('WARNING: Update to save the fossology token - a new token will be generated the next time scaffold is run.  You may want to delete old tokens in the FOSSOlogy user admin screen')
+    return token
+
+def fossologySetup(secrets, secrets_file_name):
+    token = secrets._fossology_token
+    if not token:
+        token = generateFossologyToken(secrets, secrets_file_name)
+        if not token:
+            print('No token, no fossology - unable to setup server')
+            return None
+    try:
         server = Fossology(secrets._fossology_server, token, secrets._fossology_username)
     except:
-        print('Error getting FOSSOlogy server')
-        return None
+        # try updating the token - it may be expired
+        token = generateFossologyToken(secrets, secrets_file_name)
+        try:
+            server = Fossology(secrets._fossology_server, token, secrets._fossology_username)
+        except:
+            print('Error getting FOSSOlogy server')
+            return None
     return server
 
 def lockfile(config_dir):
@@ -166,7 +188,7 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
         saveBackupConfig(SCAFFOLD_HOME, cfg)
 
         # setup FOSSOlogy server
-        fossologyServer = fossologySetup(cfg._secrets)
+        fossologyServer = fossologySetup(cfg._secrets, cfg._secrets_file_name)
         if not fossologyServer:
             print(f"Unable to connect to Fossology server")
             sys.exit(1)
@@ -237,7 +259,7 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
 
     elif command == "getmetrics":
         ran_command = True
-        fossologyServer = fossologySetup(cfg._secrets)
+        fossologyServer = fossologySetup(cfg._secrets, cfg._secrets_file_name)
         if not fossologyServer:
             print(f"Unable to connect to Fossology server")
             sys.exit(1)
@@ -262,11 +284,11 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
         # set up fossdriver server connections
         old_fossdriverrc_path = os.path.join(str(Path.home()), ".fossdriver", "fossdriverrc.json")
         oldConfig = loadSecrets('.scaffold-secrets-old.json')
-        old_server = fossologySetup(oldConfig)
+        old_server = fossologySetup(oldConfig, cfg._secrets_file_name)
         if not old_server:
             print(f"Unable to connect to old Fossology server")
             sys.exit(1)
-        new_server = fossologySetup(cfg._secrets)
+        new_server = fossologySetup(cfg._secrets, cfg._secrets_file_name)
         if not new_server:
             print(f"Unable to connect to new Fossology server")
             sys.exit(1)

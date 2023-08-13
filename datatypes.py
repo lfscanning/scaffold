@@ -386,6 +386,9 @@ class Secrets:
         
         # fossology password
         self._fossology_password = ""
+        
+        # fossology tokens
+        self._fossology_token = ""
 
 
 class Config:
@@ -410,6 +413,7 @@ class Config:
         self._ws_default_env = {}
         # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._secrets = None
+        self._secrets_file = None
 
     def __repr__(self):
         is_ok = "OK"
