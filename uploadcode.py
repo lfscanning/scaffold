@@ -8,9 +8,9 @@ from datatypes import Status, ProjectRepoType
 
 # from fossdriver.tasks import CreateFolder, Upload
 
-def doUploadCodeForProject(cfg, fdServer, prj):
+def doUploadCodeForProject(cfg, fossologyServer, prj):
     # create top-level folder for project, if it doesn't already exist
-    t = CreateFolder(fdServer, prj._name, "Software Repository")
+    t = CreateFolder(fossologyServer, prj._name, "Software Repository")
     retval = t.run()
     if not retval:
         print(f"{prj._name}: Could not create folder {prj._name}")
@@ -19,7 +19,7 @@ def doUploadCodeForProject(cfg, fdServer, prj):
     # create one project-level folder for this month, and
     # upload all code there
     dstFolder = f"{prj._name}-{cfg._month}"
-    t = CreateFolder(fdServer, dstFolder, prj._name)
+    t = CreateFolder(fossologyServer, dstFolder, prj._name)
     retval = t.run()
     if not retval:
         print(f"{prj._name}: Could not create folder {dstFolder}")
@@ -37,7 +37,7 @@ def doUploadCodeForProject(cfg, fdServer, prj):
             sp._status = Status.STOPPED
             continue
         print(f"{prj._name}/{sp._name}: uploading {zipPath} to {dstFolder}")
-        t = Upload(fdServer, zipPath, dstFolder)
+        t = Upload(fossologyServer, zipPath, dstFolder)
         retval = t.run()
         if not retval:
             print(f"Error: Could not upload")
@@ -50,20 +50,25 @@ def doUploadCodeForProject(cfg, fdServer, prj):
     # status to reflect the min of its subprojects
     return True
 
-def doUploadCodeForSubproject(cfg, fdServer, prj, sp):
+def doUploadCodeForSubproject(cfg, fossologyServer, prj, sp):
     # create top-level folder for project, if it doesn't already exist
-    t = CreateFolder(fdServer, prj._name, "Software Repository")
-    retval = t.run()
-    if not retval:
+    try:
+        folder = fossologyServer.create_folder(fossologyServer.rootFolder, prj._name)
+    except Exception as e:
+        print("Exception creating folder", e)
+    if not folder:
         print(f"{prj._name}/{sp._name}: Could not create folder {prj._name}")
         return False
 
     # create one project-level folder for this month, and
     # upload all code there
+    
     dstFolder = f"{prj._name}-{cfg._month}"
-    t = CreateFolder(fdServer, dstFolder, prj._name)
-    retval = t.run()
-    if not retval:
+    try:
+        folder = fossologyServer.create_folder(folder, dstFolder)
+    except Exception as e:
+        print("Exception creating folder", e)
+    if not folder:
         print(f"{prj._name}/{sp._name}: Could not create folder {dstFolder}")
         return False
 
@@ -77,8 +82,11 @@ def doUploadCodeForSubproject(cfg, fdServer, prj, sp):
         sp._status = Status.STOPPED
         return True
     print(f"{prj._name}/{sp._name}: uploading {zipPath} to {dstFolder}")
-    t = Upload(fdServer, zipPath, dstFolder)
-    retval = t.run()
+    retval = None
+    try:
+        retval = fossologyServer.upload_file(folder, file=zipPath, wait_time=20)
+    except Exception as e:
+        print("Exception uploading file", e)
     if not retval:
         print(f"Error: Could not upload")
         return False
