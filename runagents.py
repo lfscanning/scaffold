@@ -9,17 +9,39 @@ from pathlib import Path
 from datatypes import Status, ProjectRepoType
 from datefuncs import parseYM, priorMonth, getYMStr
 
-def priorUploadExists(fdServer, priorUploadFolder, priorUploadName):
-    # first, get the old scan's folder and upload ID
-    oldFolderNum = fdServer.GetFolderNum(priorUploadFolder)
-    if oldFolderNum is None or oldFolderNum == -1:
-        return False
-    oldUploadNum = fdServer.GetUploadNum(oldFolderNum, priorUploadName, False)
-    if oldUploadNum is None or oldUploadNum == -1:
-        return False
-    # if we get here, the old scan exists
-    return True
+def getPriorUploadFolder(fossologyServer, priorUploadFolderName):
+    ''' Gets the prior upload folder searching all folders for a matching name
+        returns None if no upload or priorUploadFolder exists
+    '''
+    folder = None
+    for fossFolder in fossologyServer.list_folders():
+        if fossFolder.name == priorUploadFolderName:
+            folder = fossFolder
+            break
+    return folder
+    
+def getPriorUpload(fossologyServer, uploadFolder, uploadName):
+    '''
+    Gets an upload from the upload folder.  Returns None if it doesn't exists
+    '''
+    if not uploadFolder:
+        return None
+    uploads = fossologyServer.list_uploads(folder=uploadFolder)[0]
+    for upload in uploads:
+        if upload.uploadname == uploadName:
+            return upload
+    return None     # Didn't find it
 
+def priorUploadExists(fossologyServer, priorUploadFolder, priorUploadName):
+    folder = priorUploadFolder
+    if isinstance(folder, str):
+        folder = getPriorUploadFolder(fossologyServer, priorUploadFolder)
+        if not folder:
+            return None
+    if getPriorUpload(fossologyServer, folder, priorUploadName):
+        return True
+    else:
+        return False
 
 def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
     year, month = parseYM(cfg._month)
@@ -33,6 +55,9 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
 
     # run nomos and monk
     print(f"{prj._name}/{sp._name}: running nomos and monk")
+    
+    
+    
     t = Scanners(fdServer, uploadName, uploadFolder)
     retval = t.run()
     if not retval:

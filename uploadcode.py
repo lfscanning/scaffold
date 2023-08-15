@@ -6,7 +6,7 @@ from pathlib import Path
 
 from datatypes import Status, ProjectRepoType
 
-# from fossdriver.tasks import CreateFolder, Upload
+WAIT_TIME = 10      # Time in seconds to check status on upload to fossology - timeout it 10 times this value
 
 def doUploadCodeForProject(cfg, fossologyServer, prj):
     # create top-level folder for project, if it doesn't already exist
@@ -44,7 +44,7 @@ def doUploadCodeForProject(cfg, fossologyServer, prj):
         print(f"{prj._name}/{sp._name}: uploading {zipPath} to {dstFolder}")
         retval = None
         try:
-            retval = fossologyServer.upload_file(folder, file=zipPath, wait_time=20)
+            retval = fossologyServer.upload_file(folder, file=zipPath, wait_time=WAIT_TIME)
         except Exception as e:
             print("Exception uploading file", e)
         if not retval:
@@ -91,7 +91,7 @@ def doUploadCodeForSubproject(cfg, fossologyServer, prj, sp):
     print(f"{prj._name}/{sp._name}: uploading {zipPath} to {dstFolder}")
     retval = None
     try:
-        retval = fossologyServer.upload_file(folder, file=zipPath, wait_time=20)
+        retval = fossologyServer.upload_file(folder, file=zipPath, wait_time=WAIT_TIME)
     except Exception as e:
         print("Exception uploading file", e)
     if not retval:
