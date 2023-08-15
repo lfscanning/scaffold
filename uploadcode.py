@@ -10,19 +10,24 @@ from datatypes import Status, ProjectRepoType
 
 def doUploadCodeForProject(cfg, fossologyServer, prj):
     # create top-level folder for project, if it doesn't already exist
-    t = CreateFolder(fossologyServer, prj._name, "Software Repository")
-    retval = t.run()
-    if not retval:
-        print(f"{prj._name}: Could not create folder {prj._name}")
+    try:
+        folder = fossologyServer.create_folder(fossologyServer.rootFolder, prj._name)
+    except Exception as e:
+        print("Exception creating folder", e)
+    if not folder:
+        print(f"{prj._name}/{sp._name}: Could not create folder {prj._name}")
         return False
 
     # create one project-level folder for this month, and
     # upload all code there
+    
     dstFolder = f"{prj._name}-{cfg._month}"
-    t = CreateFolder(fossologyServer, dstFolder, prj._name)
-    retval = t.run()
-    if not retval:
-        print(f"{prj._name}: Could not create folder {dstFolder}")
+    try:
+        folder = fossologyServer.create_folder(folder, dstFolder)
+    except Exception as e:
+        print("Exception creating folder", e)
+    if not folder:
+        print(f"{prj._name}/{sp._name}: Could not create folder {dstFolder}")
         return False
 
     # and now cycle through each subproject and upload the code here
@@ -37,12 +42,14 @@ def doUploadCodeForProject(cfg, fossologyServer, prj):
             sp._status = Status.STOPPED
             continue
         print(f"{prj._name}/{sp._name}: uploading {zipPath} to {dstFolder}")
-        t = Upload(fossologyServer, zipPath, dstFolder)
-        retval = t.run()
+        retval = None
+        try:
+            retval = fossologyServer.upload_file(folder, file=zipPath, wait_time=20)
+        except Exception as e:
+            print("Exception uploading file", e)
         if not retval:
             print(f"Error: Could not upload")
             return False
-
         # once we get here, the project's code has been uploaded
         sp._status = Status.UPLOADEDCODE
     
