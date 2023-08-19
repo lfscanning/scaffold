@@ -4,13 +4,12 @@
 import os
 from pathlib import Path
 
-# from fossdriver.tasks import SPDXTV
-
 from datatypes import Status, ProjectRepoType
-
-def doGetSPDXForSubproject(cfg, fdServer, prj, sp):
+from runagents import getUploadFolder, getUpload
+from fossology.obj import ReportFormat
+def doGetSPDXForSubproject(cfg, fossologyServer, prj, sp):
     uploadName = os.path.basename(sp._code_path)
-    uploadFolder = f"{prj._name}-{cfg._month}"
+    uploadFolderName = f"{prj._name}-{cfg._month}"
     spdxFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
     spdxFilename = f"{sp._name}-{sp._code_pulled}.spdx"
 
@@ -18,16 +17,29 @@ def doGetSPDXForSubproject(cfg, fdServer, prj, sp):
         print(f"{prj._name}/{sp._name}: no code path in config, so no upload name; not running agents")
         return False
 
+    uploadFolder = getUploadFolder(fossologyServer, uploadFolderName)
+    if not uploadFolder:
+        print(f"{prj._name}/{sp._name}: error getting the upload folder for generation of SPDX file")
+        return False
+    upload = getUpload(fossologyServer, uploadFolder, uploadName)
+    if not upload:
+        print(f"{prj._name}/{sp._name}: error getting the upload generation of SPDX file")
+        return False
+        
     # create spdx directory for project if it doesn't already exist
     if not os.path.exists(spdxFolder):
         os.makedirs(spdxFolder)
-
-    # run SPDX tag-value agent
+    
     print(f"{prj._name}/{sp._name}: getting SPDX tag-value file")
     spdxFilePath = os.path.join(spdxFolder, spdxFilename)
-    t = SPDXTV(fdServer, uploadName, uploadFolder, spdxFilePath)
-    retval = t.run()
-    if not retval:
+    
+    try:
+        report_id = fossologyServer.generate_report(upload, report_format=ReportFormat.SPDX2TV, group="fossy")
+        content, name = fossologyServer.download_report(report_id)
+        with open(spdxFilePath, "wb") as reportFile:
+            written = reportFile.write(content)
+            assert written == len(content)
+    except Exception:
         print(f"{prj._name}/{sp._name}: error getting SPDX tag-value file")
         return False
 

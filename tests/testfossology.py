@@ -8,6 +8,7 @@ from config import loadSecrets, loadConfig
 from uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
 from datatypes import Status
 from runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
+from getspdx import doGetSPDXForSubproject
 
 UPLOAD_FILE_NAME = "sp1-2021-09.zip"
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
@@ -261,7 +262,6 @@ class TestFossology(unittest.TestCase):
             self.assertIsNotNone(test_reuse_folder)
             reuse_upload = fossologyServer.upload_file(test_reuse_folder, file=reuseFile, wait_time=10)
             self.assertIsNotNone(reuse_upload)
-            pdb.set_trace()
             result = doRunAgentsForSubproject(cfg, fossologyServer, prj, sp)
             self.assertTrue(result)
             jobs = fossologyServer.list_jobs(upload=reuse_upload)[0]
@@ -282,11 +282,52 @@ class TestFossology(unittest.TestCase):
                     fossologyServer.delete_folder(test_project_folder)
                 fossologyServer.close()        
 
-    def test_do_run_agents_for_subproject_reuse(self):
-        pass
-
-    def test_do_run_agents_for_subproject_bulk_match(self):
-        pass
+    def test_spdx_report(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")       
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        prj = cfg._projects['prj1']
+        sp = prj._subprojects['sp1']
+        sp._code_path = TEST_SCAFFOLD_CODE
+        sp._status = Status.UPLOADEDWS
+        test_folder = None
+        test_project_folder = None
+        test_upload = None
+        fossologyServer = None
+        upload_name = UPLOAD_FILE_NAME
+        upload = None
+        cfg._storepath = self.scaffold_home_dir
+        spdxFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
+        spdxFilename = f"{sp._name}-{sp._code_pulled}.spdx"
+        spdxFile = os.path.join(spdxFolder, spdxFilename)
+        try:
+            # Setup and scan a project
+            fossologyServer = fossologySetup(cfg._secrets, SECRET_FILE_NAME)
+            test_project_folder = fossologyServer.create_folder(fossologyServer.rootFolder, prj._name)
+            self.assertIsNotNone(test_project_folder)
+            dstFolder = f"{prj._name}-{cfg._month}"
+            test_folder = fossologyServer.create_folder(test_project_folder, dstFolder)
+            self.assertIsNotNone(test_folder)
+            upload = fossologyServer.upload_file(test_folder, file=TEST_SCAFFOLD_CODE, wait_time=10)
+            self.assertIsNotNone(upload)
+            result = doRunAgentsForSubproject(cfg, fossologyServer, prj, sp)
+            self.assertTrue(result)
+            jobs = fossologyServer.list_jobs(upload=upload)[0]
+            for job in jobs:
+                self.assertEqual(job.status, "Completed")
+                
+            # Test spdx file generation
+            result = doGetSPDXForSubproject(cfg, fossologyServer, prj, sp)
+            self.assertTrue(result)
+            self.assertTrue(os.path.isfile(spdxFile))
+        finally:
+            if fossologyServer:
+                if upload:
+                    fossologyServer.delete_upload(upload)
+                if test_folder:
+                    fossologyServer.delete_folder(test_folder)
+                if test_project_folder:
+                    fossologyServer.delete_folder(test_project_folder)
+                fossologyServer.close()
                               
 if __name__ == '__main__':
     unittest.main()

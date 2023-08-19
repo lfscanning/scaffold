@@ -4,18 +4,16 @@
 import os
 from pathlib import Path
 
-# from fossdriver.tasks import Scanners, Copyright, Reuse, BulkTextMatch
-
 from datatypes import Status, ProjectRepoType
 from datefuncs import parseYM, priorMonth, getYMStr
 
-def getUploadFolder(fossologyServer, priorUploadFolderName):
+def getUploadFolder(fossologyServer, uploadFolderName):
     ''' Gets the prior upload folder searching all folders for a matching name
         returns None if no upload or priorUploadFolder exists
     '''
     folder = None
     for fossFolder in fossologyServer.list_folders():
-        if fossFolder.name == priorUploadFolderName:
+        if fossFolder.name == uploadFolderName:
             folder = fossFolder
             break
     return folder
@@ -140,7 +138,11 @@ def doRunAgentsForSubproject(cfg, fossologyServer, prj, sp):
                 return False
         '''
     # We have everything configured, we can start the run
-    job = fossologyServer.schedule_jobs(uploadFolder, upload, jobSpec, wait=True, timeout=10)
+    try:
+        job = fossologyServer.schedule_jobs(uploadFolder, upload, jobSpec, wait=True, timeout=10)
+    except Exception:
+         print(f"{prj._name}/{sp._name}: Exception running scanning job - see FOSSology for details")
+         return False
     # Poll for completion
     while job.status == "Processing":
         print(f"{prj._name}/{sp._name}: Waiting for scan completion...")
