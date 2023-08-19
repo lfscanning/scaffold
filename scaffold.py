@@ -188,7 +188,7 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
         saveBackupConfig(SCAFFOLD_HOME, cfg)
 
         # setup FOSSOlogy server
-        fossologyServer = fossologySetup(cfg._secrets, cfg._secrets_file_name)
+        fossologyServer = fossologySetup(cfg._secrets, cfg._secrets_file)
         if not fossologyServer:
             print(f"Unable to connect to Fossology server")
             sys.exit(1)
@@ -259,7 +259,7 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
 
     elif command == "getmetrics":
         ran_command = True
-        fossologyServer = fossologySetup(cfg._secrets, cfg._secrets_file_name)
+        fossologyServer = fossologySetup(cfg._secrets, cfg._secrets_file)
         if not fossologyServer:
             print(f"Unable to connect to Fossology server")
             sys.exit(1)
@@ -284,11 +284,11 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
         # set up fossdriver server connections
         old_fossdriverrc_path = os.path.join(str(Path.home()), ".fossdriver", "fossdriverrc.json")
         oldConfig = loadSecrets('.scaffold-secrets-old.json')
-        old_server = fossologySetup(oldConfig, cfg._secrets_file_name)
+        old_server = fossologySetup(oldConfig, cfg._secrets_file)
         if not old_server:
             print(f"Unable to connect to old Fossology server")
             sys.exit(1)
-        new_server = fossologySetup(cfg._secrets, cfg._secrets_file_name)
+        new_server = fossologySetup(cfg._secrets, cfg._secrets_file)
         if not new_server:
             print(f"Unable to connect to new Fossology server")
             sys.exit(1)
