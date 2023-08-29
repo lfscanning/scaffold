@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from enum import Enum
+from datetime import date
 
 class ProjectRepoType(Enum):
     UNKNOWN = 0
@@ -389,6 +390,9 @@ class Secrets:
         
         # fossology tokens
         self._fossology_token = ""
+        
+        # fossology token expiration date
+        self._fossology_token_expiration = date.today()
 
 
 class Config:

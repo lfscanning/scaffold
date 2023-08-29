@@ -3,6 +3,7 @@
 
 from pathlib import Path
 from operator import itemgetter
+from datetime import date, timedelta
 import os
 import sys
 
@@ -87,29 +88,31 @@ def status(cfg, prj_only, sp_only):
     
 def generateFossologyToken(secrets, secrets_file_name):
     '''
-    Gets the fossology toke from the secrets.  If not present, generate a new
-    fossology token
+    Generates a FOSSOlogy token and stores it in the secrets file
     '''
+    expire = date.today() + timedelta(days=30)
     try:
         token = fossology_token(
                     secrets._fossology_server,
                     secrets._fossology_username,
                     secrets._fossology_password,
                     token_urlsafe(8),
-                    TokenScope.WRITE)
+                    TokenScope.WRITE,
+                    token_expire=expire)
     except:
         print('Unable to get FOSSOlogy token - check secrets configuration fossology url, username and password')
         return None
     try:
         secrets._fossology_token = token
-        updateFossologyToken(token, secrets_file_name)
+        secrets._fossology_token_expiration = expire
+        updateFossologyToken(token, expire, secrets_file_name)
     except:
-        print('WARNING: Update to save the fossology token - a new token will be generated the next time scaffold is run.  You may want to delete old tokens in the FOSSOlogy user admin screen')
+        print('WARNING: Update to save the fossology token failed - a new token will be generated the next time scaffold is run.  You may want to delete old tokens in the FOSSOlogy user admin screen')
     return token
 
 def fossologySetup(secrets, secrets_file_name):
     token = secrets._fossology_token
-    if not token:
+    if not token or not secrets._fossology_token_expiration or secrets._fossology_token_expiration < date.today() + timedelta(days=2):
         token = generateFossologyToken(secrets, secrets_file_name)
         if not token:
             print('No token, no fossology - unable to setup server')

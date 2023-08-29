@@ -328,7 +328,7 @@ class TestFossology(unittest.TestCase):
                 if test_project_folder:
                     fossologyServer.delete_folder(test_project_folder)
                 fossologyServer.close()
-                              
+        
 if __name__ == '__main__':
     unittest.main()
         

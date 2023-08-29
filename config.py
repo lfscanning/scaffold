@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 from shutil import copyfile
+from datetime import date
 
 import yaml
 
@@ -105,7 +106,7 @@ def loadFindings(findingsFilename):
         print(f'Error loading or parsing {findingsFilename}: {str(e)}')
         return []
 
-def updateFossologyToken(token, secrets_file_name = ".scaffold-secrets.json"):
+def updateFossologyToken(token, expiration, secrets_file_name = ".scaffold-secrets.json"):
     '''
     Update the fossology token in the secrets file
     '''
@@ -116,6 +117,7 @@ def updateFossologyToken(token, secrets_file_name = ".scaffold-secrets.json"):
         js = json.load(f)
 
     js['fossology_token'] = token
+    js['fossology_token_expiration'] = expiration.strftime('%Y-%m-%d')
     with open(secretsFile, "w") as f:
         json.dump(js, f, indent=4)
 
@@ -143,6 +145,11 @@ def loadSecrets(secrets_file_name = ".scaffold-secrets.json"):
                 print('Missing fossology password in ~/.scaffold-secrets.json')
                 return None
             secrets._fossology_token = js.get("fossology_token")
+            expiration = js.get("fossology_token_expiration")
+            if not expiration:
+                secrets._fossology_token_expiration = date.today()
+            else:
+                secrets._fossology_token_expiration = date.fromisoformat(js.get("fossology_token_expiration"))
             
             # expecting mapping of prj name to JiraSecret data
             project_data = js.get("projects", {})
