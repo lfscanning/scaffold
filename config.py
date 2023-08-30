@@ -245,6 +245,9 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                 raise RuntimeError(f"No valid wsUnifiedAgentJarPath found in config section")
             # default_env does not need to exist
             cfg._ws_default_env = config_dict.get('wsDefaultEnv', {})
+            
+            # load upload timeout
+            cfg._upload_timeout =  config_dict.get('uploadTimeout', 10)
 
             # load secrets
             cfg._secrets = loadSecrets(secrets_file_name)

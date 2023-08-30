@@ -415,6 +415,7 @@ class Config:
         self._ws_server_url = ""
         self._ws_unified_agent_jar_path = ""
         self._ws_default_env = {}
+        self._upload_timeout = 10
         # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._secrets = None
         self._secrets_file = None
