@@ -1,0 +1,133 @@
+{
+    "config": {
+        "storepath": "/home/USER/scaffold",
+        "month": "2021-09",
+        "version": 1,
+        "spdxGithubOrg": "GITHUB-ORG-NAME",
+        "spdxGithubSignoff": "NAME <EMAIL@ADDRESS.COM>",
+        "webServerUseScp": true,
+        "webServer": "WEB-SERVER-DOMAIN.ORG",
+        "webServerUsername": "USERNAME-ON-WEB-SERVER",
+        "webReportsPath": "/SERVER-DISK-PATH-TO-REPORTS",
+        "webReportsUrl": "reports",
+        "wsServerUrl": "https://saas.whitesourcesoftware.com",
+        "wsUnifiedAgentJarPath": "/home/USER/scaffold/wss-unified-agent.jar",
+        "wsDefaultEnv": {
+            "PATH": "/home/USER/.virtualenvs/ws/bin:/home/USER/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "WS_CHECKPOLICIES": "false",
+            "WS_FORCECHECKALLDEPENDENCIES": "false",
+            "WS_FORCEUPDATE": "false",
+            "WS_FORCEUPDATE_FAILBUILDONPOLICYVIOLATION": "false",
+            "WS_HTML_RESOLVEDEPENDENCIES": "false",
+            "WS_NPM_RESOLVEDEPENDENCIES": "true",
+            "WS_NPM_IGNORESOURCEFILES": "true",
+            "WS_NPM_RUNPRESTEP": "true",
+            "WS_GO_COLLECTDEPENDENCIESATRUNTIME": "true",
+            "WS_INCLUDES": "**/*.c **/*.cc **/*.cp **/*.cpp **/*.cxx **/*.c++ **/*.h **/*.hpp **/*.hxx",
+            "WS_EXCLUDES": "**/*sources.jar **/*javadoc.jar",
+            "WS_CASE_SENSITIVE_GLOB": "false",
+            "WS_FOLLOWSYMBOLICLINKS": "true",
+            "WS_ARCHIVEEXTRACTIONDEPTH": "5",
+            "WS_ARCHIVEINCLUDES": "**/*.jar,**/*.egg,**/*.dll,**/*.tar.gz,**/*.tgz,**/*.zip,**/*.whl,**/*.gem,**/*.apk,**/*.air,**/*.dmg,**/*.exe,**/*.gem,**/*.gzip,**/*.msi,**/*.nupkg,**/*.swc,**/*.swf,**/*.tar.bz2,**/*.pkg.tar.xz,**/*.(u)?deb,**/*.(a)?rpm",
+            "WS_LOG_FILES_PATH": "/home/USER/scaffold/whitesource",
+            "WS_LOG_FILES_MAXFILESCOUNT": "10",
+            "WS_LOG_FILES_LEVEL": "info",
+            "WS_PYTHON_PATH": "/home/USER/.virtualenvs/ws/bin/python3",
+            "WS_PYTHON_PIPPATH": "/home/USER/.virtualenvs/ws/bin/pip3",
+            "WS_PYTHON_RESOLVEDEPENDENCIES": "true",
+            "WS_PYTHON_IGNOREPIPINSTALLERRORS": "true"
+	}
+    },
+    "projects": {
+	"prj1": {
+		"type": "github",
+		"slm": {
+			"policies": {
+				"apache": {
+					"categories": [
+						{
+							"name": "Project Licenses",
+							"licenses": [
+								{
+									"name": "Apache-2.0",
+									"aliases": []
+								},
+								{
+									"name": "CC-BY-4.0",
+									"aliases": []
+								}
+							]
+						},
+						{
+							"name": "Copyleft",
+							"licenses": [
+								{
+									"name": "GPL-2.0-or-later",
+									"aliases": ["GPL-2.0+"]
+								}
+							]
+						},
+						{
+							"name": "Attribution",
+							"licenses": [
+								{
+									"name": "MIT",
+									"aliases": []
+								}
+							]
+						},
+						{
+							"name": "No license found",
+							"licenses": [
+								{
+									"name": "No license found",
+									"aliases": ["NOASSERTION"]
+								}
+							]
+						}
+					],
+					"flagged": [
+						"Copyleft"
+					]
+				}
+			},
+			"combinedReport": false,
+			"extensions-skip": [
+				"json",
+				"jpg",
+				"jpeg",
+				"png",
+				"gif"
+			],
+			"thirdparty-dirs": [
+				"vendor",
+				"thirdparty",
+				"third-party",
+				"node-modules"
+			]
+		},
+		"subprojects": {
+			"sp1": {
+				"status": "START",
+				"slm": {
+					"policy": "apache"
+				},
+				"code": {},
+				"web": {},
+				"github": {
+					"org": "sp1-project",
+					"ziporg": "sp1",
+					"repos": [
+						"sp1-code",
+						"sp1-plugins"
+					],
+					"repos-ignore": [
+						"artwork",
+						"tsc"
+					]
+				}
+			}
+		}
+	}
+    }
+}

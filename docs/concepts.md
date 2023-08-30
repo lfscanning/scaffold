@@ -45,7 +45,7 @@ Below is a list of the valid status values, and what it means for a subproject (
 |`GOTLISTING` | All repos in org are categorized either to scan or ignore | Clone the code from each repo in turn, and save it temporarily in the `code/` folder|
 |`GOTCODE` | Code from all repos has been cloned | Prepare the code for scanning (e.g. by removing `.git/` directories and potentially others), zip the code into a single `.zip` file, and delete the unzipped code|
 |`ZIPPEDCODE` | Code has been cleaned, zipped and deleted | If WhiteSource scanning is configured, run the WhiteSource Unified Agent on it; if not configured, just proceed to next status|
-|`UPLOADEDWS` | If WhiteSource scanning is configured, WhiteSource scan has completed | Upload the code to Fossology using fossdriver|
+|`UPLOADEDWS` | If WhiteSource scanning is configured, WhiteSource scan has completed | Upload the code to Fossology|
 |`UPLOADEDCODE` | Code was successfully uploaded to Fossology | Run Fossology's nomos and monk agents; run any configured bulk monk text matches; and run the copyright notice agent|
 |`RANAGENTS` | Fossology agents have completed running | Stops here; user goes into Fossology and clears the scan results, and then gives scaffold the `clear` command when ready to proceed|
 |`CLEARED` | User has finished clearing the Fossology scan results and has given scaffold the `clear` command | Retrieve the SPDX document for this scan from Fossology and save it to the `spdx/` folder|

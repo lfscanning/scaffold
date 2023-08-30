@@ -131,6 +131,9 @@ See the [sample file](./sample-scaffold-secrets.json) file for the JSON file str
 
 The JSON file has the following fields:
 * `default_github_oauth`: A required GitHub OAuth token which is used to access gitHub if no project specific tokens are provided.  See the [GitHub OAuth documentation](https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps) for details on how to create the token.
+* `fossology_server`: The URL to the Fossology server (required)
+* `fossology_username`: The username Scaffold should use to log into the Fossology server (required)
+* `fossology_password`: The password Scaffold should use to log into the Fossology server (required)
 * `projects`: Map of a project name to project specific secrets.  The project specific secrets include:
   * `jira`: Optional Jira server and login information
   * `whitesource`: Optional whitesource server authentication information

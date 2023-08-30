@@ -6,4 +6,4 @@ whitesource/
 *.swp
 .project
 .pydevproject
-
+.foss_cli.ini

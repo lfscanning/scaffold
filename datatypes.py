@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from enum import Enum
+from datetime import date
 
 class ProjectRepoType(Enum):
     UNKNOWN = 0
@@ -377,6 +378,21 @@ class Secrets:
         
         # default git outh for projects that do not have a configured oauth
         self._default_gitoauth = ""
+        
+        # fossology server URL
+        self._fossology_server = ""
+        
+        # fossology user name
+        self._fossology_username = ""
+        
+        # fossology password
+        self._fossology_password = ""
+        
+        # fossology tokens
+        self._fossology_token = ""
+        
+        # fossology token expiration date
+        self._fossology_token_expiration = date.today()
 
 
 class Config:
@@ -401,6 +417,7 @@ class Config:
         self._ws_default_env = {}
         # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._secrets = None
+        self._secrets_file = None
 
     def __repr__(self):
         is_ok = "OK"

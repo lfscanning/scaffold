@@ -4,28 +4,48 @@
 import os
 from pathlib import Path
 
-from fossdriver.tasks import Scanners, Copyright, Reuse, BulkTextMatch
-
 from datatypes import Status, ProjectRepoType
 from datefuncs import parseYM, priorMonth, getYMStr
 
-def priorUploadExists(fdServer, priorUploadFolder, priorUploadName):
-    # first, get the old scan's folder and upload ID
-    oldFolderNum = fdServer.GetFolderNum(priorUploadFolder)
-    if oldFolderNum is None or oldFolderNum == -1:
-        return False
-    oldUploadNum = fdServer.GetUploadNum(oldFolderNum, priorUploadName, False)
-    if oldUploadNum is None or oldUploadNum == -1:
-        return False
-    # if we get here, the old scan exists
-    return True
+def getUploadFolder(fossologyServer, uploadFolderName):
+    ''' Gets the prior upload folder searching all folders for a matching name
+        returns None if no upload or priorUploadFolder exists
+    '''
+    folder = None
+    for fossFolder in fossologyServer.list_folders():
+        if fossFolder.name == uploadFolderName:
+            folder = fossFolder
+            break
+    return folder
+    
+def getUpload(fossologyServer, uploadFolder, uploadName):
+    '''
+    Gets an upload from the upload folder.  Returns None if it doesn't exists
+    '''
+    if not uploadFolder:
+        return None
+    uploads = fossologyServer.list_uploads(folder=uploadFolder)[0]
+    for upload in uploads:
+        if upload.uploadname == uploadName:
+            return upload
+    return None     # Didn't find it
 
+def uploadExists(fossologyServer, priorUploadFolder, priorUploadName):
+    folder = priorUploadFolder
+    if isinstance(folder, str):
+        folder = getUploadFolder(fossologyServer, priorUploadFolder)
+        if not folder:
+            return None
+    if getUpload(fossologyServer, folder, priorUploadName):
+        return True
+    else:
+        return False
 
-def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
+def doRunAgentsForSubproject(cfg, fossologyServer, prj, sp):
     year, month = parseYM(cfg._month)
 
     uploadName = os.path.basename(sp._code_path)
-    uploadFolder = f"{prj._name}-{cfg._month}"
+    uploadFolderName = f"{prj._name}-{cfg._month}"
 
     if uploadName == "":
         print(f"{prj._name}/{sp._name}: no code path in config, so no upload name; not running agents")
@@ -33,20 +53,35 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
 
     # run nomos and monk
     print(f"{prj._name}/{sp._name}: running nomos and monk")
-    t = Scanners(fdServer, uploadName, uploadFolder)
-    retval = t.run()
-    if not retval:
-        print(f"{prj._name}/{sp._name}: error running license scanners")
+    uploadFolder = getUploadFolder(fossologyServer, uploadFolderName)
+    if not uploadFolder:
+        print(f"{prj._name}/{sp._name}: Upload folder not found")
         return False
-    
-    # run copyright
-    print(f"{prj._name}/{sp._name}: running copyright")
-    t = Copyright(fdServer, uploadName, uploadFolder)
-    retval = t.run()
-    if not retval:
-        print(f"{prj._name}/{sp._name}: error running copyright scanner")
+    upload = getUpload(fossologyServer, uploadFolder, uploadName)
+    if not upload:
+        print(f"{prj._name}/{sp._name}: Upload found")
         return False
-    
+        
+    jobSpec = {
+        "analysis": {
+            "bucket": False,
+            "copyright_email_author": True,
+            "ecc": False,
+            "keyword": False,
+            "mime": False,
+            "monk": True,
+            "nomos": True,
+            "ojo": False,
+            "package": False,
+            "specific_agent": False,
+        },
+        "decider": {
+            "nomos_monk": False,
+            "bulk_reused": True,
+            "new_scanner": False,
+            "ojo_decider": False,
+        },
+    }
     # run reuser agent if prior upload exists, checking up to 12 prior months
     pYear = year
     pMonth = month
@@ -56,20 +91,27 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
         pYear, pMonth = priorMonth(pYear, pMonth)
         pYM = getYMStr(pYear, pMonth)
         priorUploadFragment = f"{sp._name}-{pYM}"
-        priorFolder = f"{prj._name}-{pYM}"
-
-        if priorUploadExists(fdServer, priorFolder, priorUploadFragment):
-            foundPrior = True
-            print(f"{prj._name}/{sp._name}: running reuser from {pYM}")
-            t = Reuse(fdServer, uploadName, uploadFolder, priorUploadFragment, priorFolder)
-            t.exact = False
-            retval = t.run()
-            if not retval:
-                # keep going anyway, don't fail
-                print(f"{prj._name}/{sp._name}: error running reuse from {priorUploadFragment} in {priorFolder}, skipping reuser")
-            break
+        priorFolderName = f"{prj._name}-{pYM}"
+        priorFolder = getUploadFolder(fossologyServer, priorFolderName)
+        if priorFolder:
+            priorUpload = getUpload(fossologyServer, priorFolder, priorUploadFragment + ".zip")
+            if priorUpload:           
+                foundPrior = True
+                print(f"{prj._name}/{sp._name}: running reuser from {pYM}")
+                jobSpec["reuse"] = {
+                    "reuse_upload": priorUpload.id,
+                    "reuse_group": "fossy",
+                    "reuse_main": True,
+                    "reuse_enhanced": False,
+                    "reuse_report": False,
+                    "reuse_copyright": True,
+                }
+                break
+            else:
+                print(f"{prj._name}/{sp._name}: didn't find prior upload for {pYM}")
+                numTries -= 1
         else:
-            print(f"{prj._name}/{sp._name}: didn't find prior upload for {pYM}")
+            print(f"{prj._name}/{sp._name}: didn't find prior upload folder {pYM}")
             numTries -= 1
 
     if not foundPrior:
@@ -77,6 +119,8 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
     
     # run bulk matches if the project has any
     if prj._matches != []:
+        print(f"{prj._name}/{sp._name}: contains bulk matches - these not not run - this feature depends on the next version of FOSSology")
+        '''
         for m in prj._matches:
             t = BulkTextMatch(fdServer, uploadName, uploadFolder, m._text)
             for (action, licName) in m._actions:
@@ -92,7 +136,20 @@ def doRunAgentsForSubproject(cfg, fdServer, prj, sp):
             if not retval:
                 print(f"{prj._name}/{sp._name}: error running bulk text match")
                 return False
-
+        '''
+    # We have everything configured, we can start the run
+    try:
+        job = fossologyServer.schedule_jobs(uploadFolder, upload, jobSpec, wait=True, timeout=10)
+    except Exception:
+         print(f"{prj._name}/{sp._name}: Exception running scanning job - see FOSSology for details")
+         return False
+    # Poll for completion
+    while job.status == "Processing":
+        print(f"{prj._name}/{sp._name}: Waiting for scan completion...")
+        job = fossologyServer.detail_job(job.id, wait=True, timeout=30)
+    if job.status != "Completed":
+        print(f"{prj._name}/{sp._name}: Error running scanning job - see FOSSology for details")
+        return False
     # once we get here, the agents have been run
     sp._status = Status.RANAGENTS
     
