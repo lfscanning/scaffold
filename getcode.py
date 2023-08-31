@@ -44,7 +44,11 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
             if sp._github_branch != "":
                 print(f"{prj._name}/{sp._name}: repo {repo}: switching to branch {sp._github_branch}")
                 r.git.checkout('-b', sp._github_branch, f"origin/{sp._github_branch}")
-            cmts = list(r.iter_commits())
+            cmts = []
+            try:
+                cmts = list(r.iter_commits())
+            except:
+                pass # We'll just leave this as empty.  git throws an exception if there are no commits - issue #49
             if len(cmts) > 0:
                 sp._code_repos[repo] = cmts[0].hexsha
         finally:
@@ -52,8 +56,9 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
 
     # before finishing, check and see whether it actually has any files
     anyfiles = False
+    gitPattern = ".git"+os.sep
     for dirpath, _, files in os.walk(ziporg_path):
-        if files and ".git/" not in dirpath and not dirpath.endswith(".git"):
+        if files and gitPattern not in dirpath and not dirpath.endswith(".git"):
             anyfiles = True
             break
     if not anyfiles:
