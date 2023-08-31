@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import copy
 from pathlib import Path
 
 from datatypes import Status, ProjectRepoType
@@ -62,26 +63,7 @@ def doRunAgentsForSubproject(cfg, fossologyServer, prj, sp):
         print(f"{prj._name}/{sp._name}: Upload found")
         return False
         
-    jobSpec = {
-        "analysis": {
-            "bucket": False,
-            "copyright_email_author": True,
-            "ecc": False,
-            "keyword": False,
-            "mime": False,
-            "monk": True,
-            "nomos": True,
-            "ojo": False,
-            "package": False,
-            "specific_agent": False,
-        },
-        "decider": {
-            "nomos_monk": False,
-            "bulk_reused": True,
-            "new_scanner": False,
-            "ojo_decider": False,
-        },
-    }
+    jobSpec = copy.deepcopy(cfg._fossology_job_spec)
     # run reuser agent if prior upload exists, checking up to 12 prior months
     pYear = year
     pMonth = month
