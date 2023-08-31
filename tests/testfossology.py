@@ -9,12 +9,14 @@ from uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
 from datatypes import Status
 from runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
 from getspdx import doGetSPDXForSubproject
+from newmonth import copyToNextMonth
 
 UPLOAD_FILE_NAME = "sp1-2021-09.zip"
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
 TEST_SCAFFOLD_CODE = os.path.join(os.path.dirname(__file__), "testresources", UPLOAD_FILE_NAME)
 TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "scaffoldhome")
 TEST_MONTH = "2023-07"
+TEST_NEXT_MONTH = "2023-08"
 TEST_MONTH_DIR = os.path.join(TEST_SCAFFOLD_HOME, TEST_MONTH)
 
 '''
@@ -282,6 +284,19 @@ class TestFossology(unittest.TestCase):
                     fossologyServer.delete_folder(test_project_folder)
                 fossologyServer.close()        
 
+    def test_newmonth(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")       
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        newUploadTimeout = 12
+        cfg._upload_timeout = newUploadTimeout
+        cfg._fossology_job_spec["analysis"]["bucket"] = True
+        copyToNextMonth(self.scaffold_home_dir, cfg)
+        next_month_dir = os.path.join(self.scaffold_home_dir, TEST_NEXT_MONTH)
+        next_cfg_file = os.path.join(next_month_dir, "config.json")
+        next_cfg = loadConfig(next_cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        self.assertEqual(newUploadTimeout, next_cfg._upload_timeout)
+        self.assertTrue(next_cfg._fossology_job_spec["analysis"]["bucket"])
+    
     def test_spdx_report(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)

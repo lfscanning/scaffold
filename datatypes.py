@@ -416,6 +416,26 @@ class Config:
         self._ws_unified_agent_jar_path = ""
         self._ws_default_env = {}
         self._upload_timeout = 10
+        self._fossology_job_spec = {
+                "analysis": {
+                    "bucket": False,
+                    "copyright_email_author": True,
+                    "ecc": False,
+                    "keyword": False,
+                    "mime": False,
+                    "monk": True,
+                    "nomos": True,
+                    "ojo": False,
+                    "package": False,
+                    "specific_agent": False,
+                },
+                "decider": {
+                    "nomos_monk": False,
+                    "bulk_reused": True,
+                    "new_scanner": False,
+                    "ojo_decider": False,
+                },
+            }
         # DO NOT OUTPUT THESE TO CONFIG.JSON
         self._secrets = None
         self._secrets_file = None

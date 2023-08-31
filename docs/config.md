@@ -67,6 +67,7 @@ Edit that config.json's contents to configure for your setup. The following prov
 * `webServer`: domain name for the web server where reports will be uploaded
 * `webServerUsername`: user name of account on web server, used for SCP connections - required only if `webServerUseScp=true`
 * `uploadTimeout`: Time in seconds to check status on code upload to fossology - timeout it 10 times this value
+* `fossologyJobSpec`: Options used for the FOSSOlogy analysis.  The options roughly follow the options on the jobs/schedule agent menu in the FOSSOlogy UI.
 
 There are also several values prefixed by `ws`. These are currently required to be present, but are not used unless one or more projects are configured to upload scan findings to WhiteSource (FIXME: details to be added).
 

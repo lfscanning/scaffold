@@ -248,6 +248,29 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
             
             # load upload timeout
             cfg._upload_timeout =  config_dict.get('uploadTimeout', 10)
+            
+            # load FOSSOlogy job specified
+            defaultJobSpec = {
+                                "analysis": {
+                                    "bucket": False,
+                                    "copyright_email_author": True,
+                                    "ecc": False,
+                                    "keyword": False,
+                                    "mime": False,
+                                    "monk": True,
+                                    "nomos": True,
+                                    "ojo": False,
+                                    "package": False,
+                                    "specific_agent": False,
+                                },
+                                "decider": {
+                                    "nomos_monk": False,
+                                    "bulk_reused": True,
+                                    "new_scanner": False,
+                                    "ojo_decider": False,
+                                },
+                            }
+            cfg._fossology_job_spec = config_dict.get('fossologyJobSpec', defaultJobSpec)
 
             # load secrets
             cfg._secrets = loadSecrets(secrets_file_name)
@@ -716,6 +739,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "wsServerUrl": o._ws_server_url,
                     "wsUnifiedAgentJarPath": o._ws_unified_agent_jar_path,
                     "wsDefaultEnv": o._ws_default_env,
+                    "uploadTimeout": o._upload_timeout,
+                    "fossologyJobSpec": o._fossology_job_spec,
                 },
                 "projects": o._projects,
             }

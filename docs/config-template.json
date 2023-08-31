@@ -37,7 +37,27 @@
             "WS_PYTHON_RESOLVEDEPENDENCIES": "true",
             "WS_PYTHON_IGNOREPIPINSTALLERRORS": "true"
 		},
-		"uploadTimeout": 10
+		"uploadTimeout": 10,
+		"fossologyJobSpec": {
+			"analysis": {
+				"bucket": "false",
+				"copyright_email_author": "true",
+				"ecc": "false",
+				"keyword": "false",
+				"mime": "false",
+				"monk": "true",
+				"nomos": "true",
+				"ojo": "false",
+				"package": "false",
+				"specific_agent": "false"
+			},
+			"decider": {
+				"nomos_monk": "false",
+				"bulk_reused": "true",
+				"new_scanner": "false",
+				"ojo_decider": "false"
+			}
+		}
     },
     "projects": {
 	"prj1": {
