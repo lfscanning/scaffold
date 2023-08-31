@@ -40,22 +40,22 @@
 		"uploadTimeout": 10,
 		"fossologyJobSpec": {
 			"analysis": {
-				"bucket": "false",
-				"copyright_email_author": "true",
-				"ecc": "false",
-				"keyword": "false",
-				"mime": "false",
-				"monk": "true",
-				"nomos": "true",
-				"ojo": "false",
-				"package": "false",
-				"specific_agent": "false"
+				"bucket": false,
+				"copyright_email_author": true,
+				"ecc": false,
+				"keyword": false,
+				"mime": false,
+				"monk": true,
+				"nomos": true,
+				"ojo": false,
+				"package": false,
+				"specific_agent": false
 			},
 			"decider": {
-				"nomos_monk": "false",
-				"bulk_reused": "true",
-				"new_scanner": "false",
-				"ojo_decider": "false"
+				"nomos_monk": false,
+				"bulk_reused": true,
+				"new_scanner": false,
+				"ojo_decider": false
 			}
 		}
     },
