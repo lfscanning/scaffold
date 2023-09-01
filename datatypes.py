@@ -415,7 +415,6 @@ class Config:
         self._ws_server_url = ""
         self._ws_unified_agent_jar_path = ""
         self._ws_default_env = {}
-        self._upload_timeout = 10
         self._fossology_job_spec = {
                 "analysis": {
                     "bucket": False,

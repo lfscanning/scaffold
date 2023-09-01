@@ -246,9 +246,6 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
             # default_env does not need to exist
             cfg._ws_default_env = config_dict.get('wsDefaultEnv', {})
             
-            # load upload timeout
-            cfg._upload_timeout =  config_dict.get('uploadTimeout', 10)
-            
             # load FOSSOlogy job specified
             defaultJobSpec = {
                                 "analysis": {
@@ -739,7 +736,6 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "wsServerUrl": o._ws_server_url,
                     "wsUnifiedAgentJarPath": o._ws_unified_agent_jar_path,
                     "wsDefaultEnv": o._ws_default_env,
-                    "uploadTimeout": o._upload_timeout,
                     "fossologyJobSpec": o._fossology_job_spec,
                 },
                 "projects": o._projects,

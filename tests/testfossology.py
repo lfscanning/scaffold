@@ -288,14 +288,11 @@ class TestFossology(unittest.TestCase):
     def test_newmonth(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        newUploadTimeout = 12
-        cfg._upload_timeout = newUploadTimeout
         cfg._fossology_job_spec["analysis"]["bucket"] = True
         copyToNextMonth(self.scaffold_home_dir, cfg)
         next_month_dir = os.path.join(self.scaffold_home_dir, TEST_NEXT_MONTH)
         next_cfg_file = os.path.join(next_month_dir, "config.json")
         next_cfg = loadConfig(next_cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        self.assertEqual(newUploadTimeout, next_cfg._upload_timeout)
         self.assertTrue(next_cfg._fossology_job_spec["analysis"]["bucket"])
     
     def test_spdx_report(self):
@@ -368,8 +365,7 @@ class TestFossology(unittest.TestCase):
         codePath = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
         dirContents = os.listdir(codePath)
         self.assertEqual(len(dirContents), 1)
-        self.assertEqual(dirContents[0], '.git')
-        
+        self.assertEqual(dirContents[0], '.git')      
 
         
 if __name__ == '__main__':

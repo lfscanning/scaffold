@@ -37,7 +37,6 @@
             "WS_PYTHON_RESOLVEDEPENDENCIES": "true",
             "WS_PYTHON_IGNOREPIPINSTALLERRORS": "true"
 		},
-		"uploadTimeout": 10,
 		"fossologyJobSpec": {
 			"analysis": {
 				"bucket": false,
