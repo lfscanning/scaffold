@@ -12,7 +12,8 @@ from getspdx import doGetSPDXForSubproject
 from newmonth import copyToNextMonth
 from getcode import doGetRepoCodeForSubproject
 
-UPLOAD_FILE_NAME = "sp1-2021-09.zip"
+UPLOAD_FILE_FRAGMENT = "sp1-2021-09"
+UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
 TEST_SCAFFOLD_CODE = os.path.join(os.path.dirname(__file__), "testresources", UPLOAD_FILE_NAME)
 TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "scaffoldhome")
@@ -170,7 +171,7 @@ class TestFossology(unittest.TestCase):
         test_project_folder = None
         test_upload = None
         fossologyServer = None
-        upload_name = UPLOAD_FILE_NAME
+        upload_name = UPLOAD_FILE_FRAGMENT
         upload = None
         try:
             fossologyServer = fossologySetup(cfg._secrets, SECRET_FILE_NAME)
@@ -201,7 +202,7 @@ class TestFossology(unittest.TestCase):
         test_project_folder = None
         test_upload = None
         fossologyServer = None
-        upload_name = UPLOAD_FILE_NAME
+        upload_name = UPLOAD_FILE_FRAGMENT
         upload = None
         try:
             fossologyServer = fossologySetup(cfg._secrets, SECRET_FILE_NAME)

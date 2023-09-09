@@ -19,25 +19,25 @@ def getUploadFolder(fossologyServer, uploadFolderName):
             break
     return folder
     
-def getUpload(fossologyServer, uploadFolder, uploadName):
+def getUpload(fossologyServer, uploadFolder, uploadNameFragment):
     '''
-    Gets an upload from the upload folder.  Returns None if it doesn't exists
+    Gets an upload from the upload folder if the folder contains an upload who's name starts with uploadNameFragment.  Returns None if it doesn't exists
     '''
     if not uploadFolder:
         return None
     uploads = fossologyServer.list_uploads(folder=uploadFolder)[0]
     for upload in uploads:
-        if upload.uploadname == uploadName:
+        if upload.uploadname.startswith(uploadNameFragment):
             return upload
     return None     # Didn't find it
 
-def uploadExists(fossologyServer, priorUploadFolder, priorUploadName):
+def uploadExists(fossologyServer, priorUploadFolder, uploadNameFragment):
     folder = priorUploadFolder
     if isinstance(folder, str):
         folder = getUploadFolder(fossologyServer, priorUploadFolder)
         if not folder:
             return None
-    if getUpload(fossologyServer, folder, priorUploadName):
+    if getUpload(fossologyServer, folder, uploadNameFragment):
         return True
     else:
         return False
