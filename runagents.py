@@ -76,7 +76,7 @@ def doRunAgentsForSubproject(cfg, fossologyServer, prj, sp):
         priorFolderName = f"{prj._name}-{pYM}"
         priorFolder = getUploadFolder(fossologyServer, priorFolderName)
         if priorFolder:
-            priorUpload = getUpload(fossologyServer, priorFolder, priorUploadFragment + ".zip")
+            priorUpload = getUpload(fossologyServer, priorFolder, priorUploadFragment)
             if priorUpload:           
                 foundPrior = True
                 print(f"{prj._name}/{sp._name}: running reuser from {pYM}")

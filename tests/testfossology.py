@@ -1,5 +1,4 @@
 import unittest
-import pdb
 import os
 import tempfile
 import shutil
@@ -12,7 +11,7 @@ from getspdx import doGetSPDXForSubproject
 from newmonth import copyToNextMonth
 from getcode import doGetRepoCodeForSubproject
 
-UPLOAD_FILE_FRAGMENT = "sp1-2021-09"
+UPLOAD_FILE_FRAGMENT = "sp1-2023-07"
 UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
 TEST_SCAFFOLD_CODE = os.path.join(os.path.dirname(__file__), "testresources", UPLOAD_FILE_NAME)
@@ -242,7 +241,7 @@ class TestFossology(unittest.TestCase):
         upload_name = UPLOAD_FILE_NAME
         upload = None
         reuse_upload = None
-        reuseFile = os.path.join(self.temp_dir.name, "sp1-2021-10.zip")
+        reuseFile = os.path.join(self.temp_dir.name, "sp1-2023-10-10.zip")
         shutil.copyfile(TEST_SCAFFOLD_CODE, reuseFile)
         try:
             fossologyServer = fossologySetup(cfg._secrets, SECRET_FILE_NAME)
@@ -259,8 +258,8 @@ class TestFossology(unittest.TestCase):
             for job in jobs:
                 self.assertEqual(job.status, "Completed")
             # Test reuse
-            cfg._month = "2021-10"
-            sp._code_path = "sp1-2021-10.zip"
+            cfg._month = "2023-10"
+            sp._code_path = "sp1-2023-10-10.zip"
             reuseDstFolder = f"{prj._name}-{cfg._month}"
             test_reuse_folder = fossologyServer.create_folder(test_project_folder, reuseDstFolder)
             self.assertIsNotNone(test_reuse_folder)
