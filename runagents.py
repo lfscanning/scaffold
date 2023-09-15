@@ -27,8 +27,11 @@ def getUpload(fossologyServer, uploadFolder, uploadNameFragment):
         return None
     uploads = fossologyServer.list_uploads(folder=uploadFolder)[0]
     for upload in uploads:
+        print(f"Looking at {upload.uploadname} to see if it starts with {uploadNameFragment}")
         if upload.uploadname.startswith(uploadNameFragment):
+            print("Found it!")
             return upload
+    print("No matching upload found")
     return None     # Didn't find it
 
 def uploadExists(fossologyServer, priorUploadFolder, uploadNameFragment):
@@ -76,6 +79,7 @@ def doRunAgentsForSubproject(cfg, fossologyServer, prj, sp):
         priorFolderName = f"{prj._name}-{pYM}"
         priorFolder = getUploadFolder(fossologyServer, priorFolderName)
         if priorFolder:
+            print(f"Looking for {priorUploadFragment} in folder {priorFolderName}")
             priorUpload = getUpload(fossologyServer, priorFolder, priorUploadFragment)
             if priorUpload:           
                 foundPrior = True
