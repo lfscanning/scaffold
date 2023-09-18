@@ -27,7 +27,7 @@ def getUpload(fossologyServer, uploadFolder, uploadNameFragment):
         return None
     uploads = fossologyServer.list_uploads(folder=uploadFolder)[0]
     for upload in uploads:
-        if upload.uploadname.startswith(uploadNameFragment):
+        if upload.uploadname.lower().startswith(uploadNameFragment.lower()):
             return upload
     return None     # Didn't find it
 
