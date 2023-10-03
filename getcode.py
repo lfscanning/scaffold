@@ -32,27 +32,25 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
     # clone each repo and remove its .git directory
     for repo in sp._repos:
         git_url = f"git@github.com:{org}/{repo}.git"
-        print(f"{prj._name}/{sp._name}: cloning {git_url}")
-        git.Git(ziporg_path).clone(git_url)
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
-        # change branch if another is specified
-        # note that this assumes either there is only one repo or else that
-        #   all such repos have the same branch name
-        # also record the top commit
-        r = git.Repo(dotgit_path, odbt=git.GitCmdObjectDB)
-        try:
-            if sp._github_branch != "":
-                print(f"{prj._name}/{sp._name}: repo {repo}: switching to branch {sp._github_branch}")
-                r.git.checkout('-b', sp._github_branch, f"origin/{sp._github_branch}")
-            cmts = []
+        if sp._github_branch != "":
+            print(f"{prj._name}/{sp._name}: cloning {git_url} branch {sp._github_branch}")
+            git.Git(ziporg_path).clone(git_url, depth=1, branch=sp._github_branch, single_branch=True)
+            # Record the top commit
+            r = git.Repo(dotgit_path, odbt=git.GitCmdObjectDB)
             try:
-                cmts = list(r.iter_commits())
-            except:
-                pass # We'll just leave this as empty.  git throws an exception if there are no commits - issue #49
-            if len(cmts) > 0:
-                sp._code_repos[repo] = cmts[0].hexsha
-        finally:
-            r.close()
+                cmts = []
+                try:
+                    cmts = list(r.iter_commits())
+                except:
+                    pass # We'll just leave this as empty.  git throws an exception if there are no commits - issue #49
+                if len(cmts) > 0:
+                    sp._code_repos[repo] = cmts[0].hexsha
+            finally:
+                r.close()
+        else:
+            print(f"{prj._name}/{sp._name}: cloning {git_url}")
+            git.Git(ziporg_path).clone(git_url, depth=1)
 
     # before finishing, check and see whether it actually has any files
     anyfiles = False
