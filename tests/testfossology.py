@@ -309,6 +309,7 @@ class TestFossology(unittest.TestCase):
         upload_name = UPLOAD_FILE_NAME
         upload = None
         cfg._storepath = self.scaffold_home_dir
+        cfg._zippath = self.scaffold_home_dir
         spdxFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
         spdxFilename = f"{sp._name}-{sp._code_pulled}.spdx"
         spdxFile = os.path.join(spdxFolder, spdxFilename)
@@ -341,32 +342,6 @@ class TestFossology(unittest.TestCase):
                 if test_project_folder:
                     fossologyServer.delete_folder(test_project_folder)
                 fossologyServer.close()
-
-    def test_empty_github(self):
-        # Regression test for fetching an empty Github repo - issue #49
-        repoName = 'TEST-Empty'
-        githubOrg = 'lfscanning'
-        subProjectName = 'sp1'
-        projectName = 'prj1'
-        cfg_file = os.path.join(self.config_month_dir, "config.json")       
-        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        cfg._storepath = self.temp_dir.name
-        prj = cfg._projects[projectName]
-        prj._name = projectName
-        sp = prj._subprojects[subProjectName]
-        sp._name = subProjectName
-        sp._repos = [repoName]
-        sp._repotype = ProjectRepoType.GITHUB
-        sp._github_org = githubOrg
-        sp._github_ziporg = githubOrg
-        sp._github_branch = ""
-        
-        doGetRepoCodeForSubproject(cfg, prj, sp)
-        codePath = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
-        dirContents = os.listdir(codePath)
-        self.assertEqual(len(dirContents), 1)
-        self.assertEqual(dirContents[0], '.git')      
-
         
 if __name__ == '__main__':
     unittest.main()

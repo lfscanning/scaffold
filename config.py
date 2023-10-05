@@ -206,6 +206,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
             if cfg._storepath == "":
                 print(f'No valid storepath found in config section')
                 raise RuntimeError(f'No valid storepath found in config section')
+            cfg._zippath = config_dict.get('zippath', cfg._storepath)
             cfg._spdx_github_org = config_dict.get('spdxGithubOrg', "")
             if cfg._spdx_github_org == "":
                 print(f'No valid spdxGithubOrg found in config section')

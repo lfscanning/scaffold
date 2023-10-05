@@ -1,6 +1,7 @@
 {
     "config": {
         "storepath": "/home/USER/scaffold",
+        "zippath": "/home/USER/scaffold",
         "month": "2021-09",
         "version": 1,
         "spdxGithubOrg": "GITHUB-ORG-NAME",

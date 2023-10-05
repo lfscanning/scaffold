@@ -57,6 +57,7 @@ Edit that config.json's contents to configure for your setup. The following prov
 #### "config" object
 
 * `storepath`: on-disk path for $SCAFFOLD-HOME
+* `zippath`: optional on-disk path for where the zipped archives of the code is stored.  Default is the `storepath`
 * `month`: this month as a string in "YYYY-MM" format, e.g. `"2021-09"`
 * `version`: version of this config.json file. Starts at 1 and increments each time the config.json file is modified by scaffold (saving the prior version to the `backup/` subfolder)
 * `spdxGithubOrg`: name of GitHub org where repos containing the SPDX documents from Fossology will be posted
