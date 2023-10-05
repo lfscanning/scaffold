@@ -13,7 +13,7 @@ from datatypes import ProjectRepoType, Status
 def doGetRepoCodeForSubproject(cfg, prj, sp):
     # first, get path and make directory (if doesn't exist) for collecting code
     today = datetime.today().strftime("%Y-%m-%d")
-    sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
+    sp_path = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name)
     org = ""
     ziporg_path = ""
     if sp._repotype == ProjectRepoType.GITHUB_SHARED:
@@ -79,7 +79,7 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
 def doGetRepoCodeForGerritSubproject(cfg, prj, sp):
     # first, get path and make directory (if doesn't exist) for collecting code
     today = datetime.today().strftime("%Y-%m-%d")
-    sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
+    sp_path = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name)
     ziporg_path = os.path.join(sp_path, sp._name)
     # clear contents if it's already there
     if os.path.exists(ziporg_path):

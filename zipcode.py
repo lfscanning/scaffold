@@ -10,7 +10,7 @@ from datatypes import ProjectRepoType, Status
 # Runner for GOTCODE in GITHUB and GITHUB_SHARED
 def doZipRepoCodeForSubproject(cfg, prj, sp):
     # first, get path where code was collected
-    sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
+    sp_path = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name)
     ziporg_path = ""
     if sp._repotype == ProjectRepoType.GITHUB_SHARED:
         ziporg_path = os.path.join(sp_path, sp._name)
@@ -60,7 +60,7 @@ def doZipRepoCodeForSubproject(cfg, prj, sp):
 # Runner for GOTCODE in GERRIT
 def doZipRepoCodeForGerritSubproject(cfg, prj, sp):
     # first, get path where code was collected
-    sp_path = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name)
+    sp_path = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name)
     ziporg_path = os.path.join(sp_path, sp._name)
 
     # remove each repo's .git directory

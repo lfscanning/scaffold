@@ -2,9 +2,11 @@ import unittest
 import os
 import tempfile
 import shutil
+from datetime import datetime
 from getcode import doGetRepoCodeForSubproject
 from config import loadConfig
 from datatypes import Status, ProjectRepoType
+from zipcode import doZipRepoCodeForSubproject
 
 UPLOAD_FILE_FRAGMENT = "sp1-2023-07"
 UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"
@@ -14,6 +16,7 @@ TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "s
 TEST_MONTH = "2023-07"
 TEST_NEXT_MONTH = "2023-08"
 TEST_MONTH_DIR = os.path.join(TEST_SCAFFOLD_HOME, TEST_MONTH)
+TEST_ZIP_PATH = "/home/USER/zipped"
 
 '''
 Tests GetCode methods - such as fetching from git
@@ -37,7 +40,7 @@ class TestGetCode(unittest.TestCase):
         projectName = 'prj1'
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        cfg._storepath = self.temp_dir.name
+        cfg._zippath = self.temp_dir.name
         prj = cfg._projects[projectName]
         prj._name = projectName
         sp = prj._subprojects[subProjectName]
@@ -49,7 +52,7 @@ class TestGetCode(unittest.TestCase):
         sp._github_branch = ""
         
         doGetRepoCodeForSubproject(cfg, prj, sp)
-        codePath = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
+        codePath = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
         dirContents = os.listdir(codePath)
         self.assertEqual(len(dirContents), 1)
         self.assertEqual(dirContents[0], '.git')      
@@ -62,7 +65,7 @@ class TestGetCode(unittest.TestCase):
         projectName = 'prj1'
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        cfg._storepath = self.temp_dir.name
+        cfg._zippath = self.temp_dir.name
         prj = cfg._projects[projectName]
         prj._name = projectName
         sp = prj._subprojects[subProjectName]
@@ -74,7 +77,7 @@ class TestGetCode(unittest.TestCase):
         sp._github_branch = ""
         
         doGetRepoCodeForSubproject(cfg, prj, sp)
-        codePath = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
+        codePath = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
         shallowPath = os.path.join(codePath, '.git', 'shallow')
         self.assertTrue(os.path.isfile(shallowPath))
         mainPath = os.path.join(codePath, 'main.txt')
@@ -93,7 +96,7 @@ class TestGetCode(unittest.TestCase):
         projectName = 'prj1'
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        cfg._storepath = self.temp_dir.name
+        cfg._zippath = self.temp_dir.name
         prj = cfg._projects[projectName]
         prj._name = projectName
         sp = prj._subprojects[subProjectName]
@@ -105,7 +108,7 @@ class TestGetCode(unittest.TestCase):
         sp._github_branch = branchName
         
         doGetRepoCodeForSubproject(cfg, prj, sp)
-        codePath = os.path.join(cfg._storepath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
+        codePath = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
         shallowPath = os.path.join(codePath, '.git', 'shallow')
         self.assertTrue(os.path.isfile(shallowPath))
         branchPath = os.path.join(codePath, 'branch.txt')
@@ -113,7 +116,38 @@ class TestGetCode(unittest.TestCase):
         with open(shallowPath, 'r') as shallowFile:
             commit = shallowFile.read()
             # Note the following must the the latest commit from https://github.com/lfscanning/TEST-Branches/commits/test-branch
-            self.assertEqual(commit, '1b4dee764404a9fd8df2005ba585386b143649b2\n')        
+            self.assertEqual(commit, '1b4dee764404a9fd8df2005ba585386b143649b2\n')
+
+    def test_zip_path(self):
+        repoName = 'TEST-Branches'
+        githubOrg = 'lfscanning'
+        subProjectName = 'sp1'
+        projectName = 'prj1'
+        cfg_file = os.path.join(self.config_month_dir, "config.json")       
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        self.assertEqual(cfg._zippath, TEST_ZIP_PATH)
+        cfg._zippath = self.temp_dir.name
+        prj = cfg._projects[projectName]
+        prj._name = projectName
+        sp = prj._subprojects[subProjectName]
+        sp._name = subProjectName
+        sp._repos = [repoName]
+        sp._repotype = ProjectRepoType.GITHUB
+        sp._github_org = githubOrg
+        sp._github_ziporg = githubOrg
+        sp._github_branch = ""
+  
+        doGetRepoCodeForSubproject(cfg, prj, sp)
+        codePath = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)        
+        dirContents = os.listdir(codePath)
+        self.assertTrue(len(dirContents) > 1)
+        doZipRepoCodeForSubproject(cfg, prj, sp)
+        
+        zipCodePath = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name)
+        dirContents = os.listdir(zipCodePath)
+        self.assertEqual(1, len(dirContents))
+        self.assertEqual(githubOrg+'-'+datetime.today().strftime("%Y-%m-%d")+'.zip', dirContents[0])
+        
 if __name__ == '__main__':
     unittest.main()
         
