@@ -726,6 +726,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
             return {
                 "config": {
                     "storepath": o._storepath,
+                    "zippath": o._zippath,
                     "month": o._month,
                     "version": o._version,
                     "spdxGithubOrg": o._spdx_github_org,

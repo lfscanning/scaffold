@@ -4,7 +4,7 @@ import tempfile
 import shutil
 from datetime import datetime
 from getcode import doGetRepoCodeForSubproject
-from config import loadConfig
+from config import loadConfig, saveConfig
 from datatypes import Status, ProjectRepoType
 from zipcode import doZipRepoCodeForSubproject
 
@@ -147,6 +147,16 @@ class TestGetCode(unittest.TestCase):
         dirContents = os.listdir(zipCodePath)
         self.assertEqual(1, len(dirContents))
         self.assertEqual(githubOrg+'-'+datetime.today().strftime("%Y-%m-%d")+'.zip', dirContents[0])
+        
+    def test_save_zip_path_config(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")       
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        self.assertEqual(cfg._zippath, TEST_ZIP_PATH)
+        newZipPath = 'new/zip/path'
+        cfg._zippath = newZipPath
+        saveConfig(self.scaffold_home_dir, cfg)
+        cfg2 = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        self.assertEqual(newZipPath, cfg2._zippath)
         
 if __name__ == '__main__':
     unittest.main()
