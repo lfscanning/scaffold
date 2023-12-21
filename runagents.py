@@ -67,7 +67,7 @@ def doRunAgentsForSubproject(cfg, fossologyServer, prj, sp):
     # run reuser agent if prior upload exists, checking up to 12 prior months
     pYear = year
     pMonth = month
-    numTries = 12
+    numTries = 24
     foundPrior = False
     while numTries > 0:
         pYear, pMonth = priorMonth(pYear, pMonth)
