@@ -77,6 +77,7 @@ class TestGetCode(unittest.TestCase):
         sp._github_branch = ""
         
         doGetRepoCodeForSubproject(cfg, prj, sp)
+        self.assertTrue(repoName in sp._code_repos)
         codePath = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
         shallowPath = os.path.join(codePath, '.git', 'shallow')
         self.assertTrue(os.path.isfile(shallowPath))
@@ -106,8 +107,8 @@ class TestGetCode(unittest.TestCase):
         sp._github_org = githubOrg
         sp._github_ziporg = githubOrg
         sp._github_branch = branchName
-        
         doGetRepoCodeForSubproject(cfg, prj, sp)
+        self.assertTrue(repoName in sp._code_repos)
         codePath = os.path.join(cfg._zippath, cfg._month, "code", prj._name, sp._name, githubOrg, repoName)
         shallowPath = os.path.join(codePath, '.git', 'shallow')
         self.assertTrue(os.path.isfile(shallowPath))
