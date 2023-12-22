@@ -36,21 +36,21 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
         if sp._github_branch != "":
             print(f"{prj._name}/{sp._name}: cloning {git_url} branch {sp._github_branch}")
             git.Git(ziporg_path).clone(git_url, depth=1, branch=sp._github_branch, single_branch=True)
-            # Record the top commit
-            r = git.Repo(dotgit_path, odbt=git.GitCmdObjectDB)
-            try:
-                cmts = []
-                try:
-                    cmts = list(r.iter_commits())
-                except:
-                    pass # We'll just leave this as empty.  git throws an exception if there are no commits - issue #49
-                if len(cmts) > 0:
-                    sp._code_repos[repo] = cmts[0].hexsha
-            finally:
-                r.close()
         else:
             print(f"{prj._name}/{sp._name}: cloning {git_url}")
             git.Git(ziporg_path).clone(git_url, depth=1)
+        # Record the top commit
+        r = git.Repo(dotgit_path, odbt=git.GitCmdObjectDB)
+        try:
+            cmts = []
+            try:
+                cmts = list(r.iter_commits())
+            except:
+                pass # We'll just leave this as empty.  git throws an exception if there are no commits - issue #49
+            if len(cmts) > 0:
+                sp._code_repos[repo] = cmts[0].hexsha
+        finally:
+            r.close()
 
     # before finishing, check and see whether it actually has any files
     anyfiles = False
