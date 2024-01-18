@@ -35,12 +35,13 @@ def doGetSPDXForSubproject(cfg, fossologyServer, prj, sp):
     
     try:
         report_id = fossologyServer.generate_report(upload, report_format=ReportFormat.SPDX2TV, group="fossy")
-        content, name = fossologyServer.download_report(report_id)
+        content, name = fossologyServer.download_report(report_id, wait_time=60)
         with open(spdxFilePath, "wb") as reportFile:
             written = reportFile.write(content)
             assert written == len(content)
-    except Exception:
+    except Exception as e:
         print(f"{prj._name}/{sp._name}: error getting SPDX tag-value file")
+        print(e)
         return False
 
     # once we get here, the agents have been run
