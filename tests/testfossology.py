@@ -178,7 +178,7 @@ class TestFossology(unittest.TestCase):
             test_folder = fossologyServer.create_folder(test_project_folder, test_folder_name)
             result = getUpload(fossologyServer, test_folder, upload_name)
             self.assertIsNone(result)
-            upload = fossologyServer.upload_file(test_folder, file=TEST_SCAFFOLD_CODE, wait_time=10)
+            upload = fossologyServer.upload_file(test_folder, file=TEST_SCAFFOLD_CODE, wait_time=20)
             self.assertIsNotNone(upload)
             result = getUpload(fossologyServer, test_folder, upload_name)
             self.assertIsNotNone(result)

@@ -19,9 +19,14 @@ def upload_file(fossologyServer, folder, file):
     headers["uploadType"] = "file"
     with open(file, "rb") as fp:
         files = {"fileInput": fp}
-        response = fossologyServer.session.post(
-            f"{fossologyServer.api}/uploads", files=files, headers=headers
+        try:
+            response = fossologyServer.session.post(
+                f"{fossologyServer.api}/uploads", files=files, headers=headers
         )
+        except Exception as ex:
+            print("Unexpected exception posting file upload")
+            print(ex)
+            raise ex
         # This will initiate the file upload
     source = f"{file}"
     if response.status_code == 201:
@@ -30,7 +35,12 @@ def upload_file(fossologyServer, folder, file):
         done = False
         retries = 0
         while not done:
-            checkResponse = fossologyServer.session.get(f"{fossologyServer.api}/uploads/{upload_id}", headers={})
+            try:
+                checkResponse = fossologyServer.session.get(f"{fossologyServer.api}/uploads/{upload_id}", headers={})
+            except Exception as ex:
+                print("Unexpected exception checking upload response")
+                print(ex)
+                raise ex
             if checkResponse.status_code == 200:
                 # we're done
                 done = True
