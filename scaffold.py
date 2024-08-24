@@ -17,6 +17,7 @@ from config import loadConfig, saveBackupConfig, saveConfig, isInThisCycle, upda
 import datefuncs
 from runners import doNextThing
 from manualws import runManualWSAgent
+from manualtrivy import runManualTrivyAgent
 from clearing import doCleared
 from newmonth import copyToNextMonth
 from approving import doApprove
@@ -46,6 +47,7 @@ Commands:
 
   Manual run:
     ws:               Manually run a new WhiteSource scan
+    trivy:            Manually run a trivy scan
 
   Printing:
     status:           Print status for all subprojects
@@ -211,6 +213,16 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
         # run WS agent manually if between ZIPPEDCODE and CLEARED state
         # does not modify the config file
         runManualWSAgent(cfg, prj_only, sp_only)
+        
+    elif command == "trivy":
+        ran_command = True
+        if prj_only == "" or sp_only == "":
+            print(f"trivy command requires specifying project and subproject")
+            sys.exit(1)
+
+        # run trivy agent manually if between ZIPPEDCODE and CLEARED state
+        # does not modify the config file
+        runManualTrivyAgent(cfg, prj_only, sp_only)
 
     elif command == "clear":
         ran_command = True
