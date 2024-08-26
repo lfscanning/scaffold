@@ -6,11 +6,14 @@ from subprocess import run, PIPE
 import sys
 import zipfile
 import tempfile
+import spdx.spdxutil
+import spdx.xlsx
+from uploadspdx import doUploadFileForSubproject
+from spdx_tools.spdx.parser.error import SPDXParsingError
 from pdb import set_trace
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
-    set_trace()
     if not sp._code_path:
         print(f"{prj._name}/{sp._name}: No code path found; can not run Trivy")
         return False
@@ -27,7 +30,7 @@ def runUnifiedAgent(cfg, prj, sp):
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
         cmd = ["trivy", "fs", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
-        result = os.path.join(tempdir, f"{prj._name}-{sp._name}-spdx.json")
+        result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(result, 'w') as outfile:
             cp = run(cmd, stdout=outfile, stderr=PIPE, universal_newlines=True, shell=True)
             if cp.returncode != 0:
@@ -41,10 +44,28 @@ errors:
 ----------
 """)
                 return False
-        # TODO - Fixupt the output file
-        # TODO - Upload the result to GitHub
-        # TODO - Generate xls report
-        # TODO - put the report in the report directory
+        set_trace()
+        try:
+            spdxDocument = spdx.spdxutil.parseFile(result)
+        except SPDXParsingError:
+            print(f"{prj._name}/{sp._name}: unable to parse Trivy generated SPDX document")
+            return False
+        spdx.spdxutil.fixTrivyDocument(spdxDocument)
+        uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
+        uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
+        spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
+        if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxFileName):
+            print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
+            return False
+        workbook = spdx.xlsx.makeXlsx(spdxDocument)
+        workbookFile = os.path.join(tempdir, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        spdx.xlsx.saveXlsx(workbook, workbookFile)
+        _copyWorkbookToReportsFolder(workbookFile)
         print(f"{prj._name}/{sp._name}: Trivy successfully run")
         return True
+        
+    
+def _copyWorkbookToReportsFolder(file):
+    print("TODO: Implement copy workbook to reports folder")
+    
 

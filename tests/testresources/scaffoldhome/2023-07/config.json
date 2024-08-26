@@ -60,6 +60,96 @@
 		}
     },
     "projects": {
+		"TEST-DEPENDENCIES": {
+		"type": "github",
+		"slm": {
+			"policies": {
+				"apache": {
+					"categories": [
+						{
+							"name": "Project Licenses",
+							"licenses": [
+								{
+									"name": "Apache-2.0",
+									"aliases": []
+								},
+								{
+									"name": "CC-BY-4.0",
+									"aliases": []
+								}
+							]
+						},
+						{
+							"name": "Copyleft",
+							"licenses": [
+								{
+									"name": "GPL-2.0-or-later",
+									"aliases": ["GPL-2.0+"]
+								}
+							]
+						},
+						{
+							"name": "Attribution",
+							"licenses": [
+								{
+									"name": "MIT",
+									"aliases": []
+								}
+							]
+						},
+						{
+							"name": "No license found",
+							"licenses": [
+								{
+									"name": "No license found",
+									"aliases": ["NOASSERTION"]
+								}
+							]
+						}
+					],
+					"flagged": [
+						"Copyleft"
+					]
+				}
+			},
+			"combinedReport": false,
+			"extensions-skip": [
+				"json",
+				"jpg",
+				"jpeg",
+				"png",
+				"gif"
+			],
+			"thirdparty-dirs": [
+				"vendor",
+				"thirdparty",
+				"third-party",
+				"node-modules"
+			]
+		},
+		"subprojects": {
+			"sp1": {
+				"status": "START",
+				"slm": {
+					"policy": "apache"
+				},
+				"code": {},
+				"web": {},
+				"github": {
+					"org": "sp1-project",
+					"ziporg": "sp1",
+					"repos": [
+						"sp1-code",
+						"sp1-plugins"
+					],
+					"repos-ignore": [
+						"artwork",
+						"tsc"
+					]
+				}
+			}
+		}
+	},
 	"prj1": {
 		"type": "github",
 		"slm": {
