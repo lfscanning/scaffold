@@ -8,7 +8,6 @@ from manualtrivy import runManualTrivyAgent
 from config import loadConfig, saveConfig
 from datatypes import Status, ProjectRepoType
 from zipcode import doZipRepoCodeForSubproject
-from pdb import set_trace
 
 ANALYSIS_FILE_FRAGMENT = "sp1-2023-07"
 ANALYSIS_FILE_NAME = ANALYSIS_FILE_FRAGMENT + "-09.zip"
@@ -86,8 +85,9 @@ class TestTrivy(unittest.TestCase):
         result = runManualTrivyAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
         uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.json")
-        set_trace()
         self.assertTrue(os.path.isfile(uploadedfile))
+        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        self.assertTrue(os.path.isfile(reportfile))
         # TODO: Check if the file is committed and pushed to the repo
         
 if __name__ == '__main__':

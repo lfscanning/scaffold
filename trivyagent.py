@@ -8,9 +8,9 @@ import zipfile
 import tempfile
 import spdx.spdxutil
 import spdx.xlsx
+import shutil
 from uploadspdx import doUploadFileForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
-from pdb import set_trace
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -44,7 +44,6 @@ errors:
 ----------
 """)
                 return False
-        set_trace()
         try:
             spdxDocument = spdx.spdxutil.parseFile(result)
         except SPDXParsingError:
@@ -58,14 +57,13 @@ errors:
             print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
             return False
         workbook = spdx.xlsx.makeXlsx(spdxDocument)
-        workbookFile = os.path.join(tempdir, f"{prj._name}-{sp._name}-dependencies.xlsx")
-        spdx.xlsx.saveXlsx(workbook, workbookFile)
-        _copyWorkbookToReportsFolder(workbookFile)
+        workbookFilePath = os.path.join(tempdir, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        spdx.xlsx.saveXlsx(workbook, workbookFilePath)
+        reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+        if not os.path.exists(reportFolder):
+            os.makedirs(reportFolder)
+        reportFilePath = os.path.join(reportFolder, f"{prj._name}-{sp._name}-dependencies.xlsx");
+        shutil.copy(workbookFilePath, reportFilePath)
         print(f"{prj._name}/{sp._name}: Trivy successfully run")
         return True
         
-    
-def _copyWorkbookToReportsFolder(file):
-    print("TODO: Implement copy workbook to reports folder")
-    
-
