@@ -151,3 +151,17 @@ Assuming that no errors are encountered, a typical workflow of the scanning proc
 A lockfile is use to prevent more than one user from running the scaffold script at the same time for the same month.  In very unusual circumstances, the lockfile may not be properly removed (e.g. when the server crashes in the middle of a run).  In that situation, the clearlock command can be run to remove the lock file.
 
 Note: this command should be used with caution and only run after verifying no other users are running the script.
+
+## Additional Commands
+
+### trivy
+
+* Additional arguments: `PROJECT SUBPROJECT`
+* Example: `> sc 2021-09 trivy project1 subproject4`
+* Summary: Runs [trivy](https://aquasecurity.github.io/trivy) against the code with the licensing and vulnerability options
+* Details:
+  * Runs the trivy application with the following options:
+    * `--scanners license,vuln`
+	* `--format spdx-json`
+  * Uploads the resultant SPDX JSON file to the lfscanning repo spdx-[project-name]
+  * Creates an xlsx report on the dependencies and store that report in the reports folder

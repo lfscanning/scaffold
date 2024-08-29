@@ -18,6 +18,21 @@ In order to shorten the amount of typing, I typically create an alias to `sc` in
 alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 ```
 
+### Trivy
+
+To use the `trivy` command, [trivy](https://aquasecurity.github.io/trivy) must be installed on the local maching and an alias `trivy` setup to point to the local installation.
+
+The current version of Trivy requires Go version 1.22.X installed on the target machine.
+
+To install Trivy:
+
+```
+git clone --depth 1 --branch v0.54.0 https://github.com/aquasecurity/trivy
+cd trivy
+go install ./cmd/trivy
+```
+
+
 ## Configuration
 
 Running scaffold requires quite a lot of configuration. See [docs/config.md](docs/config.md) for more information about setup and configuration.

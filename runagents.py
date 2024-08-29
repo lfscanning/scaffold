@@ -101,7 +101,7 @@ def doRunAgentsForSubproject(cfg, fossologyServer, prj, sp):
     
     # run bulk matches if the project has any
     if prj._matches != []:
-        print(f"{prj._name}/{sp._name}: contains bulk matches - these not not run - this feature depends on the next version of FOSSology")
+        print(f"{prj._name}/{sp._name}: contains bulk matches - these were not run - this feature depends on the next version of FOSSology")
         '''
         for m in prj._matches:
             t = BulkTextMatch(fdServer, uploadName, uploadFolder, m._text)

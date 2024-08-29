@@ -9,6 +9,15 @@ from git import Repo
 from datatypes import Status
 
 def doUploadSPDXForSubproject(cfg, prj, sp):
+    srcFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
+    srcFilename = f"{sp._name}-{sp._code_pulled}.spdx"
+    if doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
+        sp._status = Status.UPLOADEDSPDX
+        return True
+    else:
+        return False
+
+def doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
     # get path to this project's local SPDX repo
     repoName = f"spdx-{prj._name}"
     repoPath = os.path.join(cfg._storepath, "spdxrepos", repoName)
@@ -33,8 +42,6 @@ def doUploadSPDXForSubproject(cfg, prj, sp):
         return False
 
     # figure out which file to copy to where
-    srcFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
-    srcFilename = f"{sp._name}-{sp._code_pulled}.spdx"
     srcAbs = os.path.join(srcFolder, srcFilename)
     dstRel = os.path.join(sp._name, cfg._month, srcFilename)
     dstAbs = os.path.join(repoPath, dstRel)
@@ -50,17 +57,11 @@ def doUploadSPDXForSubproject(cfg, prj, sp):
     repo.index.add([dstRel])
 
     # commit it
-    commitMsg = f"add SPDX file for {sp._name} from {cfg._month} Fossology scan\n\nSigned-off-by: {cfg._spdx_github_signoff}"
+    commitMsg = f"add SPDX file {srcFilename} for {sp._name} from {cfg._month}\n\nSigned-off-by: {cfg._spdx_github_signoff}"
     repo.index.commit(commitMsg)
-    print(f"{prj._name}/{sp._name}: added and committed spdx file at {dstRel}")
+    print(f"{prj._name}/{sp._name}: added and committed spdx {srcFilename} file at {dstRel}")
 
     # and push it
     origin.push()
     print(f"{prj._name}/{sp._name}: pushed to {cfg._spdx_github_org}/{repoName}")
-
-    # once we get here, the spdx file has been uploaded
-    sp._status = Status.UPLOADEDSPDX
-    
-    # and when we return, the runner framework should update the project's
-    # status to reflect the min of its subprojects
     return True

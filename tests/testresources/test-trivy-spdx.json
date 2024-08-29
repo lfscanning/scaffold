@@ -1,0 +1,217 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "Spdx-Java-Library",
+  "documentNamespace": "http://aquasecurity.github.io/trivy/filesystem/Spdx-Java-Library-cb5aa190-01aa-4d61-8698-e15ce3070fc3",
+  "creationInfo": {
+    "creators": [
+      "Organization: aquasecurity",
+      "Tool: trivy-dev"
+    ],
+    "created": "2024-08-26T22:09:43Z"
+  },
+  "packages": [
+    {
+      "name": "pom.xml",
+      "SPDXID": "SPDXRef-Application-f8f4c07e63afadde",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "attributionTexts": [
+        "Class: lang-pkgs",
+        "Type: pom"
+      ],
+      "primaryPackagePurpose": "APPLICATION"
+    },
+    {
+      "name": "com.google.code.findbugs:jsr305",
+      "SPDXID": "SPDXRef-Package-a5a3d0c814baaf49",
+      "versionInfo": "3.0.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.code.findbugs/jsr305@3.0.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.code.findbugs:jsr305:3.0.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.code.gson:gson",
+      "SPDXID": "SPDXRef-Package-6cc7d905fac3347c",
+      "versionInfo": "2.8.9",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.code.gson/gson@2.8.9"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.code.gson:gson:2.8.9",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.commons:commons-lang3",
+      "SPDXID": "SPDXRef-Package-9d14d5f84f12114a",
+      "versionInfo": "3.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.commons/commons-lang3@3.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.commons:commons-lang3:3.5",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.jsoup:jsoup",
+      "SPDXID": "SPDXRef-Package-5a506283ea706a50",
+      "versionInfo": "1.15.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "The-MIT-License",
+      "licenseDeclared": "The-MIT-License",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.jsoup/jsoup@1.15.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.jsoup:jsoup:1.15.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.slf4j:slf4j-api",
+      "SPDXID": "SPDXRef-Package-27c560513d549c66",
+      "versionInfo": "2.0.7",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "MIT-License",
+      "licenseDeclared": "MIT-License",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.slf4j/slf4j-api@2.0.7"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.slf4j:slf4j-api:2.0.7",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.spdx:java-spdx-library",
+      "SPDXID": "SPDXRef-Package-a5eeefe868200aae",
+      "versionInfo": "1.1.13-SNAPSHOT",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.spdx/java-spdx-library@1.1.13-SNAPSHOT"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.spdx:java-spdx-library:1.1.13-SNAPSHOT",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "Spdx-Java-Library",
+      "SPDXID": "SPDXRef-Filesystem-19f216bbde3b8f09",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "attributionTexts": [
+        "SchemaVersion: 2"
+      ],
+      "primaryPackagePurpose": "SOURCE"
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-Application-f8f4c07e63afadde",
+      "relatedSpdxElement": "SPDXRef-Package-a5eeefe868200aae",
+      "relationshipType": "CONTAINS"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-Filesystem-19f216bbde3b8f09",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-Filesystem-19f216bbde3b8f09",
+      "relatedSpdxElement": "SPDXRef-Application-f8f4c07e63afadde",
+      "relationshipType": "CONTAINS"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-a5eeefe868200aae",
+      "relatedSpdxElement": "SPDXRef-Package-27c560513d549c66",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-a5eeefe868200aae",
+      "relatedSpdxElement": "SPDXRef-Package-5a506283ea706a50",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-a5eeefe868200aae",
+      "relatedSpdxElement": "SPDXRef-Package-6cc7d905fac3347c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-a5eeefe868200aae",
+      "relatedSpdxElement": "SPDXRef-Package-9d14d5f84f12114a",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-a5eeefe868200aae",
+      "relatedSpdxElement": "SPDXRef-Package-a5a3d0c814baaf49",
+      "relationshipType": "DEPENDS_ON"
+    }
+  ]
+}
