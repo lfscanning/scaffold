@@ -48,7 +48,7 @@ def doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
 
     # create directories if needed
     dstAbsDir = os.path.dirname(dstAbs)
-    os.makedirs(dstAbsDir, mode=0o755)
+    os.makedirs(dstAbsDir, mode=0o755, exist_ok=True)
 
     # copy the file
     shutil.copyfile(srcAbs, dstAbs)

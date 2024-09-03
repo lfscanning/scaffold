@@ -29,7 +29,7 @@ def runUnifiedAgent(cfg, prj, sp):
         os.mkdir(analysisdir)
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
-        cmd = ["trivy", "fs", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
+        cmd = ["trivy", "fs", "--timeout", "30m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
         result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(result, 'w') as outfile:
             cp = run(cmd, stdout=outfile, stderr=PIPE, universal_newlines=True, shell=True)
