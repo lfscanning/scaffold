@@ -78,7 +78,7 @@ def _generateDependenciesSheet(wb, spdxDocument):
 def _addrow(ws, pkg, relationship):
     name = pkg.name if pkg.name else ""
     version = pkg.version if pkg.version else ""
-    if pkg.license_declared:
+    if hasattr(pkg, 'license_declared') and not pkg.license_declared is None:
         declaredLicense = str(pkg.license_declared)
     else:
         declaredLicense = ""
