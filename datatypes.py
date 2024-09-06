@@ -403,6 +403,7 @@ class Config:
         self._ok = False
         self._storepath = ""
         self._zippath = ""
+        self._trivy_exec_path = ""
         self._projects = {}
         self._month = ""
         self._version = 0

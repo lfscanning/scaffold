@@ -38,6 +38,11 @@ class TestTrivy(unittest.TestCase):
         self.git_url = f"git@github.com:{GITHUB_ORG}/{self.repoName}.git"
         git.Git(self.repo_dir).clone(self.git_url, depth=1)
         self._cleanGitClone(self.project_repo_dir)
+        if 'TRIVY_EXEC_PATH' in os.environ:
+            self.saved_trivy = os.environ['TRIVY_EXEC_PATH']
+        else:
+            self.saved_trivy = None
+            os.environ['TRIVY_EXEC_PATH'] = 'trivy' # default
         
     def _cleanGitClone(self, repo):
         if len(os.listdir(repo)) > 1:
@@ -59,13 +64,16 @@ class TestTrivy(unittest.TestCase):
             commitMsg = "Cleaning up after TestTrivy run"
             repo.index.commit(commitMsg)
             origin.push()
+            if self.saved_trivy is None:
+                del os.environ['TRIVY_EXEC_PATH']
+            else:
+                os.environ['TRIVY_EXEC_PATH'] = self.saved_trivy
 
     def tearDown(self):
         self._cleanGitClone(self.project_repo_dir)
         self.temp_dir.cleanup()
 
     def test_trivy(self):
-        
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
         cfg._zippath = self.temp_dir.name
@@ -89,6 +97,38 @@ class TestTrivy(unittest.TestCase):
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
         # TODO: Check if the file is committed and pushed to the repo
+    
+    def test_trivy_config(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")       
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._zippath = self.temp_dir.name
+        cfg._storepath = self.scaffold_home_dir
+        cfg._spdx_github_org = GITHUB_ORG
+        prj = cfg._projects[TEST_PROJECT_NAME]
+        prj._name = TEST_PROJECT_NAME
+        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
+        sp._name = TEST_SUBPROJECT_NAME
+        sp._repos = [self.repoName]
+        sp._repotype = ProjectRepoType.GITHUB
+        sp._github_org = GITHUB_ORG
+        sp._github_ziporg = GITHUB_ORG
+        sp._github_branch = ""
+        sp._status = Status.ZIPPEDCODE
+        sp._code_path = TEST_SCAFFOLD_CODE
+        sp._trivy_exec_path = os.environ['TRIVY_EXEC_PATH']
+        os.environ['TRIVY_EXEC_PATH'] = 'somegarbage'
+        result = runManualTrivyAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
+        self.assertTrue(result)
+        saved_trivy = sp._trivy_exec_path
+        sp._trivy_exec_path = 'somegarbage'
+        try:
+            result = runManualTrivyAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
+            self.assertFalse(result) # More likely to case an exception, but a false return is also OK
+        except:
+            pass  # expected
+        finally:
+            os.environ['TRIVY_EXEC_PATH'] = saved_trivy
+            
         
 if __name__ == '__main__':
     unittest.main()
