@@ -32,7 +32,7 @@ def runUnifiedAgent(cfg, prj, sp):
         cmd = [cfg._trivy_exec_path, "fs", "--timeout", "30m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
         result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(result, 'w') as outfile:
-            cp = run(cmd, stdout=outfile, stderr=PIPE, universal_newlines=True, shell=True)
+            cp = run(cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
             if cp.returncode != 0:
                 print(f"""{prj._name}/{sp._name}: Trivy failed with error code {cp.returncode}:
 ----------
