@@ -11,9 +11,14 @@ from spdx_tools.spdx.model.package import ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import PackagePurpose
 from spdx_tools.spdx.model.actor import Actor
 from spdx_tools.spdx.model.actor import ActorType
+from spdx_tools.spdx.model.annotation import Annotation
+from spdx_tools.spdx.model.annotation import AnnotationType
+from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.relationship import Relationship
 from spdx_tools.spdx.model.relationship import RelationshipType
+from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx_tools.spdx.model import SpdxNoAssertion
+from spdx_tools.spdx.model import SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.writer.write_anything import write_file
@@ -92,7 +97,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             # https://gerrit.onap.org/r/aai/aai-common
             # git clone "https://gerrit.onap.org/r/aai"
         else:
-            download_location = NoAssertion
+            download_location = SpdxNoAssertion()
             external_references = []
         version = sp._code_repos[repo]
         spdx_id = toSpdxRef(prj._name + "-" + sp._name + '-' + repo)
@@ -100,7 +105,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         source_info = 'The source this package was part of the LF Scanning configuration for the project ' + prj._name
         comment = 'This package was added to the Trivy analysis for the ' + name + ' by the Scaffold tool SBOM augmentation'
         repo_packages[repo] = Package(spdx_id = spdx_id, name = repo, download_location = download_location, version = version, supplier = supplier, \
-                                        files_analyzed = False, source_info = source_info, license_concluded = licensing.parse('NOASSERTION'), \
+                                        files_analyzed = False, source_info = source_info, license_concluded = SpdxNoAssertion(), \
                                         license_declared = repo_license, comment = comment, external_references = external_references, \
                                         primary_package_purpose = PackagePurpose.SOURCE)
         spdx_document.packages.append(repo_packages[repo])
@@ -114,14 +119,69 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             if repo:
                 relationship.spdx_element_id = repo_packages[repo].spdx_id
 
-    #
     # Fix up the creation info to add scaffold as a tool and Linux Foundation as an organization
+    spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.ORGANIZATION, name = 'Linux Foundation'))
+    spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.TOOL, name = 'Scaffold'))
+    for spdx_element in spdx_document.packages:
+        spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
+        spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
+        fix_download_location(spdx_element)
+        fix_attribution_text(spdx_element, spdx_document.annotations, spdx_document.creation_info.created)
+    for spdx_element in spdx_document.files:
+        spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
+        spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
+        fix_download_location(spdx_element)
+        fix_attribution_text(spdx_element, spdx_document.annotations)
+    for spdx_element in spdx_document.snippets:
+        spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
+        spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
+        fix_download_location(spdx_element)
+        fix_attribution_text(spdx_element, spdx_document.annotations)
+        
     # Change the NONES to NOASSERTION for licenses and download locations
     # Change any license IDs in expressions to LicenseRef's
     # Change attribution text to annotations
     
     print("Trivy document augmented")
     return True
+    
+def fix_license(lic, extracted_licensing_info, licensing):
+    if lic == SpdxNone():
+        return SpdxNoAssertion()
+    elif lic == SpdxNoAssertion():
+        return lic
+    else:
+        unknown_keys = licensing.unknown_license_keys(lic)
+        if not unknown_keys:
+            return lic
+        unparsed_lic = str(lic)
+        for unknown_key in unknown_keys:
+            if unknown_key.endswith('+'):
+                unknown_key = unknown_key[:-1]
+                if not licensing.unknown_license_keys(licensing.parse(unknown_key)):
+                    continue
+            extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-\+]+', '-', unknown_key)
+            extracted_id_found = False
+            for existing in extracted_licensing_info:
+                if existing.license_id == extracted_id:
+                    extracted_id_found = True
+                    break
+            if not extracted_id_found:
+                extracted_licensing_info.append(ExtractedLicensingInfo(license_id = extracted_id, extracted_text = unknown_key, \
+                                    comment = 'This license text represents a string found in licensing metadata - the actual text is not known'))
+            unparsed_lic = re.sub(r'(?<!LicenseRef-)' + unknown_key, extracted_id, unparsed_lic)
+        return licensing.parse(unparsed_lic)
+        
+def fix_download_location(spdx_element):
+    if spdx_element.download_location == SpdxNone():
+        spdx_element.download_location = SpdxNoAssertion()
+        
+def fix_attribution_text(spdx_element, annotations, date):
+    for attribution in spdx_element.attribution_texts:
+        annotations.append(Annotation(spdx_id = spdx_element.spdx_id, annotation_type = AnnotationType.OTHER, \
+                            annotator = Actor(actor_type = ActorType.TOOL, name='Trivy'), annotation_date = date, \
+                            annotation_comment = attribution))
+    spdx_element.attribution_texts = []
     
 def toSpdxRef(identifier):
     return 'SPDXRef-' + re.sub(r'[^0-9a-zA-Z\.\-\+]+', '-', identifier)
@@ -144,5 +204,5 @@ def licenseIdsToExpression(licenseIds, licensing):
             licstr = licstr + " AND " + licenseIds[i]
         return licensing.parse(licstr)
     else:
-        return licensing.parse('NOASSERTION')
+        return SpdxNoAssertion()
         
