@@ -49,7 +49,7 @@ errors:
         except SPDXParsingError:
             print(f"{prj._name}/{sp._name}: unable to parse Trivy generated SPDX document")
             return False
-        spdx.spdxutil.fixTrivyDocument(spdxDocument)
+        spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)

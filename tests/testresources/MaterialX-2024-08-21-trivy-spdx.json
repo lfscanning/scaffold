@@ -1,0 +1,2464 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "tests/testresources/MaterialX-2024-08-21",
+  "documentNamespace": "http://aquasecurity.github.io/trivy/filesystem/tests/testresources/MaterialX-2024-08-21-7ae7e94a-5071-4127-af91-a946b7158e8c",
+  "creationInfo": {
+    "creators": [
+      "Organization: aquasecurity",
+      "Tool: trivy-dev"
+    ],
+    "created": "2024-09-18T16:40:33Z"
+  },
+  "packages": [
+    {
+      "name": "MaterialX/javascript/MaterialXView/package-lock.json",
+      "SPDXID": "SPDXRef-Application-95ffd6aeac0971a4",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "attributionTexts": [
+        "Class: lang-pkgs",
+        "Type: npm"
+      ],
+      "primaryPackagePurpose": "APPLICATION"
+    },
+    {
+      "name": "@jridgewell/gen-mapping",
+      "SPDXID": "SPDXRef-Package-e5e18bf88fdfc531",
+      "versionInfo": "0.3.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40jridgewell/gen-mapping@0.3.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @jridgewell/gen-mapping@0.3.5",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@jridgewell/resolve-uri",
+      "SPDXID": "SPDXRef-Package-983c542c7d153b40",
+      "versionInfo": "3.1.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40jridgewell/resolve-uri@3.1.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @jridgewell/resolve-uri@3.1.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@jridgewell/set-array",
+      "SPDXID": "SPDXRef-Package-66460cc6d74c9ae6",
+      "versionInfo": "1.2.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40jridgewell/set-array@1.2.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @jridgewell/set-array@1.2.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@jridgewell/source-map",
+      "SPDXID": "SPDXRef-Package-212113b26548403f",
+      "versionInfo": "0.3.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40jridgewell/source-map@0.3.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @jridgewell/source-map@0.3.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@jridgewell/sourcemap-codec",
+      "SPDXID": "SPDXRef-Package-c3e782cdcd9a2f96",
+      "versionInfo": "1.4.15",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40jridgewell/sourcemap-codec@1.4.15"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @jridgewell/sourcemap-codec@1.4.15",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@jridgewell/trace-mapping",
+      "SPDXID": "SPDXRef-Package-52a96b7ec2c57c54",
+      "versionInfo": "0.3.25",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40jridgewell/trace-mapping@0.3.25"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @jridgewell/trace-mapping@0.3.25",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@types/eslint",
+      "SPDXID": "SPDXRef-Package-7e060ae7d68453b4",
+      "versionInfo": "8.56.10",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40types/eslint@8.56.10"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @types/eslint@8.56.10",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@types/eslint-scope",
+      "SPDXID": "SPDXRef-Package-7f2262e5febcc36e",
+      "versionInfo": "3.7.7",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40types/eslint-scope@3.7.7"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @types/eslint-scope@3.7.7",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@types/estree",
+      "SPDXID": "SPDXRef-Package-6949eef65820a360",
+      "versionInfo": "1.0.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40types/estree@1.0.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @types/estree@1.0.5",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@types/json-schema",
+      "SPDXID": "SPDXRef-Package-ee10794e6ae71fcc",
+      "versionInfo": "7.0.15",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40types/json-schema@7.0.15"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @types/json-schema@7.0.15",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@types/node",
+      "SPDXID": "SPDXRef-Package-5a44082455bbcb2b",
+      "versionInfo": "20.14.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40types/node@20.14.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @types/node@20.14.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/ast",
+      "SPDXID": "SPDXRef-Package-7c9be933901e6da8",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/ast@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/ast@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/floating-point-hex-parser",
+      "SPDXID": "SPDXRef-Package-584398e14737355a",
+      "versionInfo": "1.11.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/floating-point-hex-parser@1.11.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/floating-point-hex-parser@1.11.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/helper-api-error",
+      "SPDXID": "SPDXRef-Package-ae6e69e8724b631c",
+      "versionInfo": "1.11.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/helper-api-error@1.11.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/helper-api-error@1.11.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/helper-buffer",
+      "SPDXID": "SPDXRef-Package-79c62cea686eb47c",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/helper-buffer@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/helper-buffer@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/helper-numbers",
+      "SPDXID": "SPDXRef-Package-d10c9586c77309d5",
+      "versionInfo": "1.11.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/helper-numbers@1.11.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/helper-numbers@1.11.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/helper-wasm-bytecode",
+      "SPDXID": "SPDXRef-Package-4e6252e66ba86d15",
+      "versionInfo": "1.11.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/helper-wasm-bytecode@1.11.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/helper-wasm-bytecode@1.11.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/helper-wasm-section",
+      "SPDXID": "SPDXRef-Package-e6f98dd3baa4c783",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/helper-wasm-section@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/helper-wasm-section@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/ieee754",
+      "SPDXID": "SPDXRef-Package-4606ca5cd7daa147",
+      "versionInfo": "1.11.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/ieee754@1.11.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/ieee754@1.11.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/leb128",
+      "SPDXID": "SPDXRef-Package-34cdf6c68b998362",
+      "versionInfo": "1.11.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/leb128@1.11.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/leb128@1.11.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/utf8",
+      "SPDXID": "SPDXRef-Package-fe840b3da400b49e",
+      "versionInfo": "1.11.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/utf8@1.11.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/utf8@1.11.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/wasm-edit",
+      "SPDXID": "SPDXRef-Package-f706fb83c6c1d02d",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/wasm-edit@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/wasm-edit@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/wasm-gen",
+      "SPDXID": "SPDXRef-Package-5e086d23e2bf742e",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/wasm-gen@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/wasm-gen@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/wasm-opt",
+      "SPDXID": "SPDXRef-Package-959fcf280e3c8e19",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/wasm-opt@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/wasm-opt@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/wasm-parser",
+      "SPDXID": "SPDXRef-Package-ef08ec46dc23ad97",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/wasm-parser@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/wasm-parser@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@webassemblyjs/wast-printer",
+      "SPDXID": "SPDXRef-Package-88816f3133af3871",
+      "versionInfo": "1.12.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40webassemblyjs/wast-printer@1.12.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @webassemblyjs/wast-printer@1.12.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@xtuc/ieee754",
+      "SPDXID": "SPDXRef-Package-94dc25d0845edcf5",
+      "versionInfo": "1.2.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40xtuc/ieee754@1.2.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @xtuc/ieee754@1.2.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "@xtuc/long",
+      "SPDXID": "SPDXRef-Package-e1c55f17d1ef7f3",
+      "versionInfo": "4.2.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40xtuc/long@4.2.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @xtuc/long@4.2.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "acorn",
+      "SPDXID": "SPDXRef-Package-ab1d6b233f1c9a66",
+      "versionInfo": "8.12.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/acorn@8.12.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: acorn@8.12.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "acorn-import-attributes",
+      "SPDXID": "SPDXRef-Package-3b8869d92c6bb52e",
+      "versionInfo": "1.9.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/acorn-import-attributes@1.9.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: acorn-import-attributes@1.9.5",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "ajv",
+      "SPDXID": "SPDXRef-Package-43e55380e046c35c",
+      "versionInfo": "6.12.6",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/ajv@6.12.6"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: ajv@6.12.6",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "ajv-keywords",
+      "SPDXID": "SPDXRef-Package-56af87dbb8c92308",
+      "versionInfo": "3.5.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/ajv-keywords@3.5.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: ajv-keywords@3.5.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "browserslist",
+      "SPDXID": "SPDXRef-Package-bf78c8a11a616fe9",
+      "versionInfo": "4.23.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/browserslist@4.23.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: browserslist@4.23.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "buffer-from",
+      "SPDXID": "SPDXRef-Package-5d074b721f62e8ac",
+      "versionInfo": "1.1.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/buffer-from@1.1.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: buffer-from@1.1.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "caniuse-lite",
+      "SPDXID": "SPDXRef-Package-9065c54cd6d76f23",
+      "versionInfo": "1.0.30001636",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/caniuse-lite@1.0.30001636"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: caniuse-lite@1.0.30001636",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "chrome-trace-event",
+      "SPDXID": "SPDXRef-Package-913bff65b5d03816",
+      "versionInfo": "1.0.4",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/chrome-trace-event@1.0.4"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: chrome-trace-event@1.0.4",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "commander",
+      "SPDXID": "SPDXRef-Package-a83cb10c38047003",
+      "versionInfo": "2.20.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/commander@2.20.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: commander@2.20.3",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "electron-to-chromium",
+      "SPDXID": "SPDXRef-Package-27d1d85bb5ab37cf",
+      "versionInfo": "1.4.806",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/electron-to-chromium@1.4.806"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: electron-to-chromium@1.4.806",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "enhanced-resolve",
+      "SPDXID": "SPDXRef-Package-bab30e477fe0e8cc",
+      "versionInfo": "5.17.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/enhanced-resolve@5.17.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: enhanced-resolve@5.17.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "es-module-lexer",
+      "SPDXID": "SPDXRef-Package-325930546d4b8350",
+      "versionInfo": "1.5.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/es-module-lexer@1.5.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: es-module-lexer@1.5.3",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "escalade",
+      "SPDXID": "SPDXRef-Package-57aa757f72fd1211",
+      "versionInfo": "3.1.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/escalade@3.1.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: escalade@3.1.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "eslint-scope",
+      "SPDXID": "SPDXRef-Package-39f785d436a1a3b0",
+      "versionInfo": "5.1.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/eslint-scope@5.1.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: eslint-scope@5.1.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "esrecurse",
+      "SPDXID": "SPDXRef-Package-9c45aac1207c12b3",
+      "versionInfo": "4.3.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/esrecurse@4.3.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: esrecurse@4.3.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "estraverse",
+      "SPDXID": "SPDXRef-Package-7b13fd3ee18b0a0a",
+      "versionInfo": "5.3.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/estraverse@5.3.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: estraverse@5.3.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "estraverse",
+      "SPDXID": "SPDXRef-Package-f9596fa729be284d",
+      "versionInfo": "4.3.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/estraverse@4.3.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: estraverse@4.3.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "events",
+      "SPDXID": "SPDXRef-Package-b8c36f7871427f7c",
+      "versionInfo": "3.3.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/events@3.3.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: events@3.3.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "fast-deep-equal",
+      "SPDXID": "SPDXRef-Package-e4242c4cc3e86204",
+      "versionInfo": "3.1.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/fast-deep-equal@3.1.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: fast-deep-equal@3.1.3",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "fast-json-stable-stringify",
+      "SPDXID": "SPDXRef-Package-f69a28d66bf6600b",
+      "versionInfo": "2.1.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/fast-json-stable-stringify@2.1.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: fast-json-stable-stringify@2.1.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "glob-to-regexp",
+      "SPDXID": "SPDXRef-Package-227a6551771f0b47",
+      "versionInfo": "0.4.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/glob-to-regexp@0.4.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: glob-to-regexp@0.4.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "graceful-fs",
+      "SPDXID": "SPDXRef-Package-f4758bd2f26ca6c3",
+      "versionInfo": "4.2.11",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/graceful-fs@4.2.11"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: graceful-fs@4.2.11",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "has-flag",
+      "SPDXID": "SPDXRef-Package-c57d35400eb6d3f3",
+      "versionInfo": "4.0.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/has-flag@4.0.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: has-flag@4.0.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "jest-worker",
+      "SPDXID": "SPDXRef-Package-47a5bd78e913235d",
+      "versionInfo": "27.5.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/jest-worker@27.5.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: jest-worker@27.5.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "json-parse-even-better-errors",
+      "SPDXID": "SPDXRef-Package-34f554617e6be2ec",
+      "versionInfo": "2.3.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/json-parse-even-better-errors@2.3.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: json-parse-even-better-errors@2.3.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "json-schema-traverse",
+      "SPDXID": "SPDXRef-Package-adb74f0829f9ceea",
+      "versionInfo": "0.4.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/json-schema-traverse@0.4.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: json-schema-traverse@0.4.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "lil-gui",
+      "SPDXID": "SPDXRef-Package-6807e324401a5485",
+      "versionInfo": "0.19.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/lil-gui@0.19.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: lil-gui@0.19.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "loader-runner",
+      "SPDXID": "SPDXRef-Package-40a4f0f418d687ed",
+      "versionInfo": "4.3.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/loader-runner@4.3.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: loader-runner@4.3.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "merge-stream",
+      "SPDXID": "SPDXRef-Package-bbb48568cbcaa9b9",
+      "versionInfo": "2.0.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/merge-stream@2.0.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: merge-stream@2.0.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "mime-db",
+      "SPDXID": "SPDXRef-Package-f2f13f95f6e43c82",
+      "versionInfo": "1.52.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/mime-db@1.52.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: mime-db@1.52.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "mime-types",
+      "SPDXID": "SPDXRef-Package-4b0ddd0afd355724",
+      "versionInfo": "2.1.35",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/mime-types@2.1.35"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: mime-types@2.1.35",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "neo-async",
+      "SPDXID": "SPDXRef-Package-a23f1a88203cf5c7",
+      "versionInfo": "2.6.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/neo-async@2.6.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: neo-async@2.6.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "node-releases",
+      "SPDXID": "SPDXRef-Package-c0bfebe593cceeee",
+      "versionInfo": "2.0.14",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/node-releases@2.0.14"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: node-releases@2.0.14",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "picocolors",
+      "SPDXID": "SPDXRef-Package-71ab99104a7978d4",
+      "versionInfo": "1.0.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/picocolors@1.0.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: picocolors@1.0.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "punycode",
+      "SPDXID": "SPDXRef-Package-c5c36177f23aa463",
+      "versionInfo": "2.3.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/punycode@2.3.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: punycode@2.3.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "randombytes",
+      "SPDXID": "SPDXRef-Package-5904920aa0bcb5dc",
+      "versionInfo": "2.1.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/randombytes@2.1.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: randombytes@2.1.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "safe-buffer",
+      "SPDXID": "SPDXRef-Package-ba0aa13a2d47f26",
+      "versionInfo": "5.2.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/safe-buffer@5.2.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: safe-buffer@5.2.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "schema-utils",
+      "SPDXID": "SPDXRef-Package-b0ce9b77b6befa0b",
+      "versionInfo": "3.3.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/schema-utils@3.3.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: schema-utils@3.3.0",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "serialize-javascript",
+      "SPDXID": "SPDXRef-Package-3f87b2e2e1329d75",
+      "versionInfo": "6.0.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/serialize-javascript@6.0.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: serialize-javascript@6.0.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "source-map",
+      "SPDXID": "SPDXRef-Package-1d315d5b2dc934e",
+      "versionInfo": "0.6.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/source-map@0.6.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: source-map@0.6.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "source-map-support",
+      "SPDXID": "SPDXRef-Package-14fb43c574e919ce",
+      "versionInfo": "0.5.21",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/source-map-support@0.5.21"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: source-map-support@0.5.21",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "supports-color",
+      "SPDXID": "SPDXRef-Package-fd379b9d93f4281d",
+      "versionInfo": "8.1.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/supports-color@8.1.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: supports-color@8.1.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "tapable",
+      "SPDXID": "SPDXRef-Package-f06064dd5bc847ae",
+      "versionInfo": "2.2.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/tapable@2.2.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: tapable@2.2.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "terser",
+      "SPDXID": "SPDXRef-Package-62d9414e87423f41",
+      "versionInfo": "5.31.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/terser@5.31.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: terser@5.31.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "terser-webpack-plugin",
+      "SPDXID": "SPDXRef-Package-16f721369abb4519",
+      "versionInfo": "5.3.10",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/terser-webpack-plugin@5.3.10"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: terser-webpack-plugin@5.3.10",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "three",
+      "SPDXID": "SPDXRef-Package-13e35d1a5e2e98b0",
+      "versionInfo": "0.152.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/three@0.152.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: three@0.152.2",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "undici-types",
+      "SPDXID": "SPDXRef-Package-699ea1a37690ec16",
+      "versionInfo": "5.26.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/undici-types@5.26.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: undici-types@5.26.5",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "update-browserslist-db",
+      "SPDXID": "SPDXRef-Package-533597e7fb416fd4",
+      "versionInfo": "1.0.16",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/update-browserslist-db@1.0.16"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: update-browserslist-db@1.0.16",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "uri-js",
+      "SPDXID": "SPDXRef-Package-b59b3c97949dceb6",
+      "versionInfo": "4.4.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/uri-js@4.4.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: uri-js@4.4.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "watchpack",
+      "SPDXID": "SPDXRef-Package-4d9404d3741a401b",
+      "versionInfo": "2.4.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/watchpack@2.4.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: watchpack@2.4.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "webpack",
+      "SPDXID": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "versionInfo": "5.92.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/webpack@5.92.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "advisory",
+          "referenceLocator": "https://avd.aquasec.com/nvd/cve-2024-43788"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: webpack@5.92.1",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "webpack-sources",
+      "SPDXID": "SPDXRef-Package-1bf636378f77210",
+      "versionInfo": "3.2.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/webpack-sources@3.2.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: webpack-sources@3.2.3",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "tests/testresources/MaterialX-2024-08-21",
+      "SPDXID": "SPDXRef-Filesystem-e2ca6f4b84b7cbd2",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "attributionTexts": [
+        "SchemaVersion: 2"
+      ],
+      "primaryPackagePurpose": "SOURCE"
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-Application-95ffd6aeac0971a4",
+      "relatedSpdxElement": "SPDXRef-Package-13e35d1a5e2e98b0",
+      "relationshipType": "CONTAINS"
+    },
+    {
+      "spdxElementId": "SPDXRef-Application-95ffd6aeac0971a4",
+      "relatedSpdxElement": "SPDXRef-Package-6807e324401a5485",
+      "relationshipType": "CONTAINS"
+    },
+    {
+      "spdxElementId": "SPDXRef-Application-95ffd6aeac0971a4",
+      "relatedSpdxElement": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relationshipType": "CONTAINS"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-Filesystem-e2ca6f4b84b7cbd2",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-Filesystem-e2ca6f4b84b7cbd2",
+      "relatedSpdxElement": "SPDXRef-Application-95ffd6aeac0971a4",
+      "relationshipType": "CONTAINS"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-14fb43c574e919ce",
+      "relatedSpdxElement": "SPDXRef-Package-1d315d5b2dc934e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-14fb43c574e919ce",
+      "relatedSpdxElement": "SPDXRef-Package-5d074b721f62e8ac",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-16f721369abb4519",
+      "relatedSpdxElement": "SPDXRef-Package-3f87b2e2e1329d75",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-16f721369abb4519",
+      "relatedSpdxElement": "SPDXRef-Package-47a5bd78e913235d",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-16f721369abb4519",
+      "relatedSpdxElement": "SPDXRef-Package-52a96b7ec2c57c54",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-16f721369abb4519",
+      "relatedSpdxElement": "SPDXRef-Package-62d9414e87423f41",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-16f721369abb4519",
+      "relatedSpdxElement": "SPDXRef-Package-b0ce9b77b6befa0b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-212113b26548403f",
+      "relatedSpdxElement": "SPDXRef-Package-52a96b7ec2c57c54",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-212113b26548403f",
+      "relatedSpdxElement": "SPDXRef-Package-e5e18bf88fdfc531",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-34cdf6c68b998362",
+      "relatedSpdxElement": "SPDXRef-Package-e1c55f17d1ef7f3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-39f785d436a1a3b0",
+      "relatedSpdxElement": "SPDXRef-Package-9c45aac1207c12b3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-39f785d436a1a3b0",
+      "relatedSpdxElement": "SPDXRef-Package-f9596fa729be284d",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3f87b2e2e1329d75",
+      "relatedSpdxElement": "SPDXRef-Package-5904920aa0bcb5dc",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43e55380e046c35c",
+      "relatedSpdxElement": "SPDXRef-Package-adb74f0829f9ceea",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43e55380e046c35c",
+      "relatedSpdxElement": "SPDXRef-Package-b59b3c97949dceb6",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43e55380e046c35c",
+      "relatedSpdxElement": "SPDXRef-Package-e4242c4cc3e86204",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43e55380e046c35c",
+      "relatedSpdxElement": "SPDXRef-Package-f69a28d66bf6600b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4606ca5cd7daa147",
+      "relatedSpdxElement": "SPDXRef-Package-94dc25d0845edcf5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-47a5bd78e913235d",
+      "relatedSpdxElement": "SPDXRef-Package-5a44082455bbcb2b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-47a5bd78e913235d",
+      "relatedSpdxElement": "SPDXRef-Package-bbb48568cbcaa9b9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-47a5bd78e913235d",
+      "relatedSpdxElement": "SPDXRef-Package-fd379b9d93f4281d",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4b0ddd0afd355724",
+      "relatedSpdxElement": "SPDXRef-Package-f2f13f95f6e43c82",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4d9404d3741a401b",
+      "relatedSpdxElement": "SPDXRef-Package-227a6551771f0b47",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4d9404d3741a401b",
+      "relatedSpdxElement": "SPDXRef-Package-f4758bd2f26ca6c3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-52a96b7ec2c57c54",
+      "relatedSpdxElement": "SPDXRef-Package-983c542c7d153b40",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-52a96b7ec2c57c54",
+      "relatedSpdxElement": "SPDXRef-Package-c3e782cdcd9a2f96",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-533597e7fb416fd4",
+      "relatedSpdxElement": "SPDXRef-Package-57aa757f72fd1211",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-533597e7fb416fd4",
+      "relatedSpdxElement": "SPDXRef-Package-71ab99104a7978d4",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5904920aa0bcb5dc",
+      "relatedSpdxElement": "SPDXRef-Package-ba0aa13a2d47f26",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5a44082455bbcb2b",
+      "relatedSpdxElement": "SPDXRef-Package-699ea1a37690ec16",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5e086d23e2bf742e",
+      "relatedSpdxElement": "SPDXRef-Package-34cdf6c68b998362",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5e086d23e2bf742e",
+      "relatedSpdxElement": "SPDXRef-Package-4606ca5cd7daa147",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5e086d23e2bf742e",
+      "relatedSpdxElement": "SPDXRef-Package-4e6252e66ba86d15",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5e086d23e2bf742e",
+      "relatedSpdxElement": "SPDXRef-Package-7c9be933901e6da8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5e086d23e2bf742e",
+      "relatedSpdxElement": "SPDXRef-Package-fe840b3da400b49e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-62d9414e87423f41",
+      "relatedSpdxElement": "SPDXRef-Package-14fb43c574e919ce",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-62d9414e87423f41",
+      "relatedSpdxElement": "SPDXRef-Package-212113b26548403f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-62d9414e87423f41",
+      "relatedSpdxElement": "SPDXRef-Package-a83cb10c38047003",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-62d9414e87423f41",
+      "relatedSpdxElement": "SPDXRef-Package-ab1d6b233f1c9a66",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-7c9be933901e6da8",
+      "relatedSpdxElement": "SPDXRef-Package-4e6252e66ba86d15",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-7c9be933901e6da8",
+      "relatedSpdxElement": "SPDXRef-Package-d10c9586c77309d5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-7e060ae7d68453b4",
+      "relatedSpdxElement": "SPDXRef-Package-6949eef65820a360",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-7e060ae7d68453b4",
+      "relatedSpdxElement": "SPDXRef-Package-ee10794e6ae71fcc",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-7f2262e5febcc36e",
+      "relatedSpdxElement": "SPDXRef-Package-6949eef65820a360",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-7f2262e5febcc36e",
+      "relatedSpdxElement": "SPDXRef-Package-7e060ae7d68453b4",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-88816f3133af3871",
+      "relatedSpdxElement": "SPDXRef-Package-7c9be933901e6da8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-88816f3133af3871",
+      "relatedSpdxElement": "SPDXRef-Package-e1c55f17d1ef7f3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-959fcf280e3c8e19",
+      "relatedSpdxElement": "SPDXRef-Package-5e086d23e2bf742e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-959fcf280e3c8e19",
+      "relatedSpdxElement": "SPDXRef-Package-79c62cea686eb47c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-959fcf280e3c8e19",
+      "relatedSpdxElement": "SPDXRef-Package-7c9be933901e6da8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-959fcf280e3c8e19",
+      "relatedSpdxElement": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-9c45aac1207c12b3",
+      "relatedSpdxElement": "SPDXRef-Package-7b13fd3ee18b0a0a",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b0ce9b77b6befa0b",
+      "relatedSpdxElement": "SPDXRef-Package-43e55380e046c35c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b0ce9b77b6befa0b",
+      "relatedSpdxElement": "SPDXRef-Package-56af87dbb8c92308",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b0ce9b77b6befa0b",
+      "relatedSpdxElement": "SPDXRef-Package-ee10794e6ae71fcc",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b59b3c97949dceb6",
+      "relatedSpdxElement": "SPDXRef-Package-c5c36177f23aa463",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-bab30e477fe0e8cc",
+      "relatedSpdxElement": "SPDXRef-Package-f06064dd5bc847ae",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-bab30e477fe0e8cc",
+      "relatedSpdxElement": "SPDXRef-Package-f4758bd2f26ca6c3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-bf78c8a11a616fe9",
+      "relatedSpdxElement": "SPDXRef-Package-27d1d85bb5ab37cf",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-bf78c8a11a616fe9",
+      "relatedSpdxElement": "SPDXRef-Package-533597e7fb416fd4",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-bf78c8a11a616fe9",
+      "relatedSpdxElement": "SPDXRef-Package-9065c54cd6d76f23",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-bf78c8a11a616fe9",
+      "relatedSpdxElement": "SPDXRef-Package-c0bfebe593cceeee",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-16f721369abb4519",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-1bf636378f77210",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-227a6551771f0b47",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-325930546d4b8350",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-34f554617e6be2ec",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-39f785d436a1a3b0",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-3b8869d92c6bb52e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-40a4f0f418d687ed",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-4b0ddd0afd355724",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-4d9404d3741a401b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-6949eef65820a360",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-7c9be933901e6da8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-7f2262e5febcc36e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-913bff65b5d03816",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-a23f1a88203cf5c7",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-ab1d6b233f1c9a66",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-b0ce9b77b6befa0b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-b8c36f7871427f7c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-bab30e477fe0e8cc",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-bf78c8a11a616fe9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-f06064dd5bc847ae",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-f4758bd2f26ca6c3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c43fd763cd4f0d6b",
+      "relatedSpdxElement": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d10c9586c77309d5",
+      "relatedSpdxElement": "SPDXRef-Package-584398e14737355a",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d10c9586c77309d5",
+      "relatedSpdxElement": "SPDXRef-Package-ae6e69e8724b631c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d10c9586c77309d5",
+      "relatedSpdxElement": "SPDXRef-Package-e1c55f17d1ef7f3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e5e18bf88fdfc531",
+      "relatedSpdxElement": "SPDXRef-Package-52a96b7ec2c57c54",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e5e18bf88fdfc531",
+      "relatedSpdxElement": "SPDXRef-Package-66460cc6d74c9ae6",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e5e18bf88fdfc531",
+      "relatedSpdxElement": "SPDXRef-Package-c3e782cdcd9a2f96",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e6f98dd3baa4c783",
+      "relatedSpdxElement": "SPDXRef-Package-4e6252e66ba86d15",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e6f98dd3baa4c783",
+      "relatedSpdxElement": "SPDXRef-Package-5e086d23e2bf742e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e6f98dd3baa4c783",
+      "relatedSpdxElement": "SPDXRef-Package-79c62cea686eb47c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e6f98dd3baa4c783",
+      "relatedSpdxElement": "SPDXRef-Package-7c9be933901e6da8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relatedSpdxElement": "SPDXRef-Package-34cdf6c68b998362",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relatedSpdxElement": "SPDXRef-Package-4606ca5cd7daa147",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relatedSpdxElement": "SPDXRef-Package-4e6252e66ba86d15",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relatedSpdxElement": "SPDXRef-Package-7c9be933901e6da8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relatedSpdxElement": "SPDXRef-Package-ae6e69e8724b631c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relatedSpdxElement": "SPDXRef-Package-fe840b3da400b49e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-4e6252e66ba86d15",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-5e086d23e2bf742e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-79c62cea686eb47c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-7c9be933901e6da8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-88816f3133af3871",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-959fcf280e3c8e19",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-e6f98dd3baa4c783",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f706fb83c6c1d02d",
+      "relatedSpdxElement": "SPDXRef-Package-ef08ec46dc23ad97",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-fd379b9d93f4281d",
+      "relatedSpdxElement": "SPDXRef-Package-c57d35400eb6d3f3",
+      "relationshipType": "DEPENDS_ON"
+    }
+  ]
+}
