@@ -27,8 +27,6 @@ import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
 from datatypes import ProjectRepoType
 import re
 
-import pdb
-
 '''
 Parses an SPDX file with a supported file extension
 Raises SPDXParsingError on parsing errors

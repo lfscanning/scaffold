@@ -207,6 +207,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                 print(f'No valid storepath found in config section')
                 raise RuntimeError(f'No valid storepath found in config section')
             cfg._trivy_exec_path = config_dict.get('trivyExecPath', os.environ['TRIVY_EXEC_PATH'] if 'TRIVY_EXEC_PATH' in os.environ else "")
+            cfg._npm_exec_path = config_dict.get('npmExecPath', os.environ['NPM_EXEC_PATH'] if 'NPM_EXEC_PATH' in os.environ else "")
             cfg._zippath = config_dict.get('zippath', cfg._storepath)
             cfg._spdx_github_org = config_dict.get('spdxGithubOrg', "")
             if cfg._spdx_github_org == "":

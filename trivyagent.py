@@ -29,6 +29,7 @@ def runUnifiedAgent(cfg, prj, sp):
         os.mkdir(analysisdir)
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
+        installNpm(analysisdir, cfg)
         cmd = [cfg._trivy_exec_path, "fs", "--timeout", "30m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
         result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(result, 'w') as outfile:
@@ -66,4 +67,19 @@ errors:
         shutil.copy(workbookFilePath, reportFilePath)
         print(f"{prj._name}/{sp._name}: Trivy successfully run")
         return True
-        
+
+def installNpm(sourceDir, cfg):
+    npm_dirs = []
+    for (root,dirs,files) in os.walk(sourceDir, topdown=True):
+        if 'package.json' in files and 'node_modeles/' not in root and 'node_modules' not in dirs:
+            npm_dirs.append(root)
+        if 'node_modules' in dirs:
+            dirs.remove('node_modules')
+        if '.git' in dirs:
+            dirs.remove('.git')
+    for npm_dir in npm_dirs:
+        cmd = [cfg._npm_exec_path, "install", "--production"]
+        cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, cwd=npm_dir)
+        if cp.returncode != 0:
+            print(f"{prj._name}/{sp._name}: NPM install failed for {npm_dir} with exit code {cp.returncode}.")
+    

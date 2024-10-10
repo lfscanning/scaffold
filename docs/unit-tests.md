@@ -18,7 +18,7 @@ The JSON file has the following fields:
   * `whitesource`: Optional whitesource server authentication information
   * `github_oauth`: Optional project specific GitHub OAuth token
   
-You also need to set an environment variable `TRIVY_EXEC_PATH` set to the Trivy executable - otherwise the Trivy tests will fail.
+You also need to set an environment variables `TRIVY_EXEC_PATH` (set to the Trivy executable) and `NPM_EXEC_PATH` (set to the NPM executable) - otherwise the Trivy tests will fail.
 
 ## Running Tests
 
