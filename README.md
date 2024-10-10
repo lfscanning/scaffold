@@ -32,6 +32,11 @@ cd trivy
 go install ./cmd/trivy
 ```
 
+The location of the Trivy command needs to be added to the config file or as an environment variable `TRIVY_EXEC_PATH`.
+
+In addition [NPM](https://www.npmjs.com/) must be installed.
+
+The location of the NPM command needs to be added to the config file or as an environment variable `NPM_EXEC_PATH`.
 
 ## Configuration
 
