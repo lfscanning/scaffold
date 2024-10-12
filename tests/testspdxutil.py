@@ -134,7 +134,7 @@ class TestSpdxUtil(unittest.TestCase):
     def test_createxlsx(self):
         spdx_document = spdxutil.parseFile(self.trivy_json_path)
         workbook = xlsx.makeXlsx(spdx_document)
-        ws = workbook.active
+        ws = workbook['Dependencies']
         self.assertEqual(len(TEST_PACKAGES), ws.max_row-1)
         for i in range(2, ws.max_row+1):
             pkg = TEST_PACKAGES[ws.cell(i, 1).value]
@@ -143,11 +143,23 @@ class TestSpdxUtil(unittest.TestCase):
             self.assertEqual(pkg['version'], ws.cell(i, 3).value)
             self.assertEqual(pkg['purl'], ws.cell(i, 4).value)
             self.assertEqual(pkg['dependency'], ws.cell(i, 5).value)
+        licws = workbook['Extracted Licenses']
+        for i in range(2, licws.max_row+1):
+            if 'The-MIT-License' in ws.cell(i, 1):
+                self.assertEquals('LicenseRef-The-MIT-License', ws.cell(i, 1))
+                self.assertTrue('The-MIT-License' in ws.cell(i, 2))
+                self.assertTrue('represents' in ws.cell(i, 3))
+            elif 'MIT-License' in ws.cell(i, 1):
+                self.assertEquals('LicenseRef-MIT-License', ws.cell(i, 1))
+                self.assertTrue('MIT-License' in ws.cell(i, 2))
+                self.assertTrue('represents' in ws.cell(i, 3))
+            else:
+                self.fail('Unexpected license row')
         
     def test_largexlsx(self):
         spdx_document = spdxutil.parseFile(self.large_json_path)
         workbook = xlsx.makeXlsx(spdx_document)
-        ws = workbook.active
+        ws = workbook['Dependencies']
         self.assertTrue(ws.max_row > 1000)
         # TEMP
         # xlsxpath = os.path.join(self.temp_dir.name, "sample_report.xlsx")

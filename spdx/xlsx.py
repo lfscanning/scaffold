@@ -11,6 +11,7 @@ import openpyxl
 def makeXlsx(spdxDocument):
     wb = openpyxl.Workbook()
     _generateDependenciesSheet(wb, spdxDocument)
+    _generateExtractedLicenseSheet(wb, spdxDocument)
 
     # and return the workbook
     return wb
@@ -23,6 +24,30 @@ def saveXlsx(wb, path):
         return False
 
 ##### Helper functions for xlsx reporting
+
+def _generateExtractedLicenseSheet(wb, spdxDocument):
+    ws = wb.create_sheet('Extracted Licenses')
+    
+    # adjust column widths
+    ws.column_dimensions['A'].width = 30
+    ws.column_dimensions['B'].width = 60
+    ws.column_dimensions['C'].width = 40
+    
+    # create font styles
+    fontBold = openpyxl.styles.Font(size=16, bold=True)
+    fontNormal = openpyxl.styles.Font(size=14)
+    alignNormal = openpyxl.styles.Alignment(wrap_text=True)
+
+    # create headers
+    ws['A1'] = "License ID"
+    ws['A1'].font = fontBold
+    ws['B1'] = "License Text"
+    ws['B1'].font = fontBold
+    ws['C1'] = "License Comment"
+    ws['C1'].font = fontBold
+    
+    for lic in spdxDocument.extracted_licensing_info:
+        ws.append([extracted_licensing_info.license_id, extracted_licensing_info.extracted_text, extracted_licensing_info.comment])
 
 def _generateDependenciesSheet(wb, spdxDocument):
     # use the first (existing) sheet as the dependencies sheet
