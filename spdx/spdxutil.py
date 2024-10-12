@@ -154,11 +154,22 @@ def fix_license(lic, extracted_licensing_info, licensing):
             return lic
         unparsed_lic = str(lic)
         for unknown_key in unknown_keys:
-            if unknown_key.endswith('+'):
-                unknown_key = unknown_key[:-1]
-                if not licensing.unknown_license_keys(licensing.parse(unknown_key)):
-                    continue
-            extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-\+]+', '-', unknown_key)
+            # see if the unknown key is part of a WITH statement - we must replace these first
+            # so that the second search for the pattern will just find the individual occurences
+            withs = re.findall(f'([^ ]+) WITH ({re.escape(unknown_key)})', unparsed_lic)
+            for w in withs:
+                with_extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', w[0]) + '-LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-\+]+', '-', w[1])
+                with_id_found = False
+                for existing in extracted_licensing_info:
+                    if existing.license_id == with_extracted_id:
+                        with_id_found = True
+                        break
+                if not with_id_found:
+                    extracted_licensing_info.append(ExtractedLicensingInfo(license_id = with_extracted_id, extracted_text = f'{w[0]} WITH {w[1]}', \
+                                    comment = 'This license text represents a WITH statement found in licensing metadata - the actual text is not known'))
+                unparsed_lic = re.sub(f'{re.escape(w[0])} WITH {re.escape(w[1])}', with_extracted_id, unparsed_lic)
+            # Now we can handle the IDs not found in the WITH statements
+            extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', unknown_key)
             extracted_id_found = False
             for existing in extracted_licensing_info:
                 if existing.license_id == extracted_id:
@@ -167,7 +178,7 @@ def fix_license(lic, extracted_licensing_info, licensing):
             if not extracted_id_found:
                 extracted_licensing_info.append(ExtractedLicensingInfo(license_id = extracted_id, extracted_text = unknown_key, \
                                     comment = 'This license text represents a string found in licensing metadata - the actual text is not known'))
-            unparsed_lic = re.sub(r'(?<!LicenseRef-)' + unknown_key, extracted_id, unparsed_lic)
+            unparsed_lic = re.sub(r'(?<!LicenseRef-)' + re.escape(unknown_key), extracted_id, unparsed_lic)
         return licensing.parse(unparsed_lic)
         
 def fix_download_location(spdx_element):

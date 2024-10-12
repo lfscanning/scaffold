@@ -1,0 +1,2407 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "https://github.com/spdx/tools-java",
+  "documentNamespace": "http://aquasecurity.github.io/trivy/repository/github.com/spdx/tools-java-61a3ebc3-323d-478d-bb5c-8e53c8195b93",
+  "creationInfo": {
+    "creators": [
+      "Organization: aquasecurity",
+      "Tool: trivy-dev"
+    ],
+    "created": "2024-08-26T21:53:03Z"
+  },
+  "packages": [
+    {
+      "name": "pom.xml",
+      "SPDXID": "SPDXRef-Application-f8f4c07e63afadde",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "attributionTexts": [
+        "Class: lang-pkgs",
+        "Type: pom"
+      ],
+      "primaryPackagePurpose": "APPLICATION"
+    },
+    {
+      "name": "com.apicatalog:titanium-json-ld",
+      "SPDXID": "SPDXRef-Package-8b016d5b11b0f50b",
+      "versionInfo": "1.3.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.apicatalog/titanium-json-ld@1.3.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.apicatalog:titanium-json-ld:1.3.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.fasterxml.jackson.core:jackson-annotations",
+      "SPDXID": "SPDXRef-Package-774e8aaf88500cea",
+      "versionInfo": "2.16.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.fasterxml.jackson.core/jackson-annotations@2.16.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.fasterxml.jackson.core:jackson-annotations:2.16.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.fasterxml.jackson.core:jackson-core",
+      "SPDXID": "SPDXRef-Package-c7ea49c36c723843",
+      "versionInfo": "2.15.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.15.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.fasterxml.jackson.core:jackson-core:2.15.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.fasterxml.jackson.core:jackson-databind",
+      "SPDXID": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "versionInfo": "2.16.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.16.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.fasterxml.jackson.core:jackson-databind:2.16.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.fasterxml.jackson.dataformat:jackson-dataformat-xml",
+      "SPDXID": "SPDXRef-Package-73ff72c1f44ea727",
+      "versionInfo": "2.15.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-xml@2.15.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml",
+      "SPDXID": "SPDXRef-Package-8ac05d5727f6f713",
+      "versionInfo": "2.15.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml@2.15.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.fasterxml.woodstox:woodstox-core",
+      "SPDXID": "SPDXRef-Package-4e806e6735d7c9ff",
+      "versionInfo": "6.5.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.fasterxml.woodstox/woodstox-core@6.5.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.fasterxml.woodstox:woodstox-core:6.5.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.andrewoma.dexx:collection",
+      "SPDXID": "SPDXRef-Package-78a4555696bb3cf6",
+      "versionInfo": "0.7",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "MIT-License",
+      "licenseDeclared": "MIT-License",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.andrewoma.dexx/collection@0.7"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.andrewoma.dexx:collection:0.7",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.ben-manes.caffeine:caffeine",
+      "SPDXID": "SPDXRef-Package-697c3fc4d10373ac",
+      "versionInfo": "3.1.8",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.ben-manes.caffeine/caffeine@3.1.8"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.ben-manes.caffeine:caffeine:3.1.8",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.java-json-tools:btf",
+      "SPDXID": "SPDXRef-Package-c5a0f1624d061122",
+      "versionInfo": "1.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "licenseDeclared": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.java-json-tools/btf@1.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.java-json-tools:btf:1.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.java-json-tools:jackson-coreutils",
+      "SPDXID": "SPDXRef-Package-8fc92945d9a46a23",
+      "versionInfo": "2.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "licenseDeclared": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.java-json-tools/jackson-coreutils@2.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.java-json-tools:jackson-coreutils:2.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.java-json-tools:jackson-coreutils-equivalence",
+      "SPDXID": "SPDXRef-Package-d24dcc6ceec5f3de",
+      "versionInfo": "1.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "licenseDeclared": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.java-json-tools/jackson-coreutils-equivalence@1.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.java-json-tools:jackson-coreutils-equivalence:1.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.java-json-tools:json-schema-core",
+      "SPDXID": "SPDXRef-Package-881684823f8a1a8",
+      "versionInfo": "1.2.14",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "licenseDeclared": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.java-json-tools/json-schema-core@1.2.14"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.java-json-tools:json-schema-core:1.2.14",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.java-json-tools:json-schema-validator",
+      "SPDXID": "SPDXRef-Package-5057bcef68a69a7c",
+      "versionInfo": "2.2.14",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "licenseDeclared": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.java-json-tools/json-schema-validator@2.2.14"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.java-json-tools:json-schema-validator:2.2.14",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.java-json-tools:msg-simple",
+      "SPDXID": "SPDXRef-Package-d3da186f561d5349",
+      "versionInfo": "1.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "licenseDeclared": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.java-json-tools/msg-simple@1.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.java-json-tools:msg-simple:1.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.java-json-tools:uri-template",
+      "SPDXID": "SPDXRef-Package-d2a2548d657c77f6",
+      "versionInfo": "0.10",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "licenseDeclared": "(Lesser-General-Public-License--version-3 OR greater) AND Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.java-json-tools/uri-template@0.10"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.java-json-tools:uri-template:0.10",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.jsonld-java:jsonld-java",
+      "SPDXID": "SPDXRef-Package-5481778817399de5",
+      "versionInfo": "0.13.4",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.jsonld-java/jsonld-java@0.13.4"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.jsonld-java:jsonld-java:0.13.4",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.github.virtuald:curvesapi",
+      "SPDXID": "SPDXRef-Package-42cf2f3a2e92b389",
+      "versionInfo": "1.07",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.github.virtuald/curvesapi@1.07"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.github.virtuald:curvesapi:1.07",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.code.findbugs:jsr305",
+      "SPDXID": "SPDXRef-Package-3a8adbe502da5a0f",
+      "versionInfo": "3.0.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.code.findbugs/jsr305@3.0.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.code.findbugs:jsr305:3.0.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.code.gson:gson",
+      "SPDXID": "SPDXRef-Package-c34044ac092c7bd5",
+      "versionInfo": "2.8.9",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.code.gson/gson@2.8.9"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.code.gson:gson:2.8.9",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.errorprone:error_prone_annotations",
+      "SPDXID": "SPDXRef-Package-d9ab7da3f7940ab",
+      "versionInfo": "2.3.4",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.errorprone/error_prone_annotations@2.3.4"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.errorprone:error_prone_annotations:2.3.4",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.guava:failureaccess",
+      "SPDXID": "SPDXRef-Package-5fa256080935396d",
+      "versionInfo": "1.0.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.guava/failureaccess@1.0.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.guava:failureaccess:1.0.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.guava:guava",
+      "SPDXID": "SPDXRef-Package-b7e682d44d209e63",
+      "versionInfo": "28.2-android",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.guava/guava@28.2-android"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.guava:guava:28.2-android",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.guava:listenablefuture",
+      "SPDXID": "SPDXRef-Package-7ff6134f42cef405",
+      "versionInfo": "9999.0-empty-to-avoid-conflict-with-guava",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.j2objc:j2objc-annotations",
+      "SPDXID": "SPDXRef-Package-12ed566ad49c286",
+      "versionInfo": "1.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.j2objc/j2objc-annotations@1.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.j2objc:j2objc-annotations:1.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.google.protobuf:protobuf-java",
+      "SPDXID": "SPDXRef-Package-9fed95bc45fc628b",
+      "versionInfo": "3.24.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.google.protobuf/protobuf-java@3.24.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.google.protobuf:protobuf-java:3.24.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.googlecode.libphonenumber:libphonenumber",
+      "SPDXID": "SPDXRef-Package-1beac771fe6fc3b6",
+      "versionInfo": "8.11.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.googlecode.libphonenumber/libphonenumber@8.11.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.googlecode.libphonenumber:libphonenumber:8.11.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.opencsv:opencsv",
+      "SPDXID": "SPDXRef-Package-6a14a31b1aa0b3ca",
+      "versionInfo": "5.7.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.opencsv/opencsv@5.7.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.opencsv:opencsv:5.7.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.sun.mail:mailapi",
+      "SPDXID": "SPDXRef-Package-df3437b38985adee",
+      "versionInfo": "1.6.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "CDDL-GPLv2-CE",
+      "licenseDeclared": "CDDL-GPLv2-CE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.sun.mail/mailapi@1.6.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.sun.mail:mailapi:1.6.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "com.zaxxer:SparseBitSet",
+      "SPDXID": "SPDXRef-Package-9dead10809d23a94",
+      "versionInfo": "1.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/com.zaxxer/SparseBitSet@1.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: com.zaxxer:SparseBitSet:1.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "commons-beanutils:commons-beanutils",
+      "SPDXID": "SPDXRef-Package-3fcb5435a11b584e",
+      "versionInfo": "1.9.4",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/commons-beanutils/commons-beanutils@1.9.4"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: commons-beanutils:commons-beanutils:1.9.4",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "commons-cli:commons-cli",
+      "SPDXID": "SPDXRef-Package-7b0c54dd1d4572a1",
+      "versionInfo": "1.5.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/commons-cli/commons-cli@1.5.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: commons-cli:commons-cli:1.5.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "commons-codec:commons-codec",
+      "SPDXID": "SPDXRef-Package-20253d86d6bfa5e4",
+      "versionInfo": "1.16.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/commons-codec/commons-codec@1.16.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: commons-codec:commons-codec:1.16.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "commons-collections:commons-collections",
+      "SPDXID": "SPDXRef-Package-b8ab077a2ba85715",
+      "versionInfo": "3.2.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/commons-collections/commons-collections@3.2.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: commons-collections:commons-collections:3.2.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "commons-io:commons-io",
+      "SPDXID": "SPDXRef-Package-20e591dd50723fc2",
+      "versionInfo": "2.14.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/commons-io/commons-io@2.14.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: commons-io:commons-io:2.14.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "commons-logging:commons-logging",
+      "SPDXID": "SPDXRef-Package-1dd6b257d2d00341",
+      "versionInfo": "1.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/commons-logging/commons-logging@1.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: commons-logging:commons-logging:1.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "joda-time:joda-time",
+      "SPDXID": "SPDXRef-Package-32ae0b5d875daec7",
+      "versionInfo": "2.10.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/joda-time/joda-time@2.10.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: joda-time:joda-time:2.10.5",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "net.sf.jopt-simple:jopt-simple",
+      "SPDXID": "SPDXRef-Package-93b3436a5e2971b3",
+      "versionInfo": "5.0.4",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "The-MIT-License",
+      "licenseDeclared": "The-MIT-License",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/net.sf.jopt-simple/jopt-simple@5.0.4"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: net.sf.jopt-simple:jopt-simple:5.0.4",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.commons:commons-collections4",
+      "SPDXID": "SPDXRef-Package-ec2bbefe9f54eb7e",
+      "versionInfo": "4.4",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.commons/commons-collections4@4.4"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.commons:commons-collections4:4.4",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.commons:commons-compress",
+      "SPDXID": "SPDXRef-Package-47c5f6bd3513ca8b",
+      "versionInfo": "1.24.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.commons/commons-compress@1.24.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.commons:commons-compress:1.24.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.commons:commons-csv",
+      "SPDXID": "SPDXRef-Package-fec34be7aef84037",
+      "versionInfo": "1.10.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.commons/commons-csv@1.10.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.commons:commons-csv:1.10.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.commons:commons-lang3",
+      "SPDXID": "SPDXRef-Package-c8bedb7450b4e27",
+      "versionInfo": "3.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.commons/commons-lang3@3.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.commons:commons-lang3:3.5",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.commons:commons-math3",
+      "SPDXID": "SPDXRef-Package-3da8bd7b64acc32e",
+      "versionInfo": "3.6.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.commons/commons-math3@3.6.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.commons:commons-math3:3.6.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.commons:commons-text",
+      "SPDXID": "SPDXRef-Package-f366e0a6e8c41c90",
+      "versionInfo": "1.10.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.commons/commons-text@1.10.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.commons:commons-text:1.10.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.httpcomponents:httpclient",
+      "SPDXID": "SPDXRef-Package-e74ff67a35fd49e",
+      "versionInfo": "4.5.14",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.httpcomponents/httpclient@4.5.14"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.httpcomponents:httpclient:4.5.14",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.httpcomponents:httpclient-cache",
+      "SPDXID": "SPDXRef-Package-be19a0f695f601d3",
+      "versionInfo": "4.5.14",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.httpcomponents/httpclient-cache@4.5.14"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.httpcomponents:httpclient-cache:4.5.14",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.httpcomponents:httpcore",
+      "SPDXID": "SPDXRef-Package-5988d2f5cb5a7962",
+      "versionInfo": "4.4.16",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.httpcomponents/httpcore@4.4.16"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.httpcomponents:httpcore:4.4.16",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.jena:jena-arq",
+      "SPDXID": "SPDXRef-Package-43fdfc498bbd56fb",
+      "versionInfo": "4.10.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.jena/jena-arq@4.10.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.jena:jena-arq:4.10.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.jena:jena-base",
+      "SPDXID": "SPDXRef-Package-c5ec34ab11152df",
+      "versionInfo": "4.10.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.jena/jena-base@4.10.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.jena:jena-base:4.10.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.jena:jena-core",
+      "SPDXID": "SPDXRef-Package-9cf62d26a5f2b2f2",
+      "versionInfo": "4.10.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.jena/jena-core@4.10.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.jena:jena-core:4.10.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.jena:jena-iri",
+      "SPDXID": "SPDXRef-Package-759e1bbe6d7289c6",
+      "versionInfo": "4.10.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.jena/jena-iri@4.10.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.jena:jena-iri:4.10.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.logging.log4j:log4j-api",
+      "SPDXID": "SPDXRef-Package-996b20a06ca535a9",
+      "versionInfo": "2.18.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.logging.log4j/log4j-api@2.18.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.logging.log4j:log4j-api:2.18.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.poi:poi",
+      "SPDXID": "SPDXRef-Package-3164463450e0d8a3",
+      "versionInfo": "5.2.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.poi/poi@5.2.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.poi:poi:5.2.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.poi:poi-ooxml",
+      "SPDXID": "SPDXRef-Package-4af4e940e6971063",
+      "versionInfo": "5.2.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.poi/poi-ooxml@5.2.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.poi:poi-ooxml:5.2.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.poi:poi-ooxml-lite",
+      "SPDXID": "SPDXRef-Package-e348de727a4166a4",
+      "versionInfo": "5.2.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.poi/poi-ooxml-lite@5.2.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.poi:poi-ooxml-lite:5.2.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.thrift:libthrift",
+      "SPDXID": "SPDXRef-Package-775c4035e8d09ce8",
+      "versionInfo": "0.19.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.thrift/libthrift@0.19.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.thrift:libthrift:0.19.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.ws.xmlschema:xmlschema-core",
+      "SPDXID": "SPDXRef-Package-6ba7cce72805bc73",
+      "versionInfo": "2.3.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.ws.xmlschema/xmlschema-core@2.3.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.ws.xmlschema:xmlschema-core:2.3.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.apache.xmlbeans:xmlbeans",
+      "SPDXID": "SPDXRef-Package-d7f4c0880df0e9b5",
+      "versionInfo": "5.1.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.apache.xmlbeans/xmlbeans@5.1.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.apache.xmlbeans:xmlbeans:5.1.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.checkerframework:checker-compat-qual",
+      "SPDXID": "SPDXRef-Package-b738343142abf8d6",
+      "versionInfo": "2.5.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.checkerframework/checker-compat-qual@2.5.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.checkerframework:checker-compat-qual:2.5.5",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.checkerframework:checker-qual",
+      "SPDXID": "SPDXRef-Package-83532c6f780e1336",
+      "versionInfo": "3.37.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "The-MIT-License",
+      "licenseDeclared": "The-MIT-License",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.checkerframework/checker-qual@3.37.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.checkerframework:checker-qual:3.37.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.codehaus.woodstox:stax2-api",
+      "SPDXID": "SPDXRef-Package-c8f3df5e78d6fcdf",
+      "versionInfo": "4.2.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "BSD-4-Clause",
+      "licenseDeclared": "BSD-4-Clause",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.codehaus.woodstox/stax2-api@4.2.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.codehaus.woodstox:stax2-api:4.2.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.glassfish:jakarta.json",
+      "SPDXID": "SPDXRef-Package-1d86ca2175e2946f",
+      "versionInfo": "2.0.1",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Eclipse-Public-License-2.0 AND GNU-General-Public-License--version-2 WITH the-GNU-Classpath-Exception",
+      "licenseDeclared": "Eclipse-Public-License-2.0 AND GNU-General-Public-License--version-2 WITH the-GNU-Classpath-Exception",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.glassfish/jakarta.json@2.0.1"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.glassfish:jakarta.json:2.0.1",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.json:json",
+      "SPDXID": "SPDXRef-Package-cab6ea5b3c9ac170",
+      "versionInfo": "20231013",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Unlicense",
+      "licenseDeclared": "Unlicense",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.json/json@20231013"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.json:json:20231013",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.jsoup:jsoup",
+      "SPDXID": "SPDXRef-Package-573ef005ef9d09b3",
+      "versionInfo": "1.15.3",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "The-MIT-License",
+      "licenseDeclared": "The-MIT-License",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.jsoup/jsoup@1.15.3"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.jsoup:jsoup:1.15.3",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.mozilla:rhino",
+      "SPDXID": "SPDXRef-Package-d3e53681a672c7ca",
+      "versionInfo": "1.7.7.2",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Mozilla-Public-License--Version-2.0",
+      "licenseDeclared": "Mozilla-Public-License--Version-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.mozilla/rhino@1.7.7.2"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.mozilla:rhino:1.7.7.2",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.roaringbitmap:RoaringBitmap",
+      "SPDXID": "SPDXRef-Package-db80206f0f108d7d",
+      "versionInfo": "1.0.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.roaringbitmap/RoaringBitmap@1.0.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.roaringbitmap:RoaringBitmap:1.0.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.slf4j:jcl-over-slf4j",
+      "SPDXID": "SPDXRef-Package-e134d5c31b74ed46",
+      "versionInfo": "1.7.36",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.slf4j/jcl-over-slf4j@1.7.36"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.slf4j:jcl-over-slf4j:1.7.36",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.slf4j:slf4j-api",
+      "SPDXID": "SPDXRef-Package-fdde201acfca6a9a",
+      "versionInfo": "2.0.7",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "MIT-License",
+      "licenseDeclared": "MIT-License",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.slf4j/slf4j-api@2.0.7"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.slf4j:slf4j-api:2.0.7",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.spdx:java-spdx-library",
+      "SPDXID": "SPDXRef-Package-e933f4b96102f6e9",
+      "versionInfo": "1.1.10",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.spdx/java-spdx-library@1.1.10"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.spdx:java-spdx-library:1.1.10",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.spdx:spdx-jackson-store",
+      "SPDXID": "SPDXRef-Package-87b7c32520d93c52",
+      "versionInfo": "1.1.9",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.spdx/spdx-jackson-store@1.1.9"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.spdx:spdx-jackson-store:1.1.9",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.spdx:spdx-rdf-store",
+      "SPDXID": "SPDXRef-Package-86ed729ad6383e03",
+      "versionInfo": "1.1.9",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.spdx/spdx-rdf-store@1.1.9"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.spdx:spdx-rdf-store:1.1.9",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.spdx:spdx-spreadsheet-store",
+      "SPDXID": "SPDXRef-Package-366825f01e83ac86",
+      "versionInfo": "1.1.7",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.spdx/spdx-spreadsheet-store@1.1.7"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.spdx:spdx-spreadsheet-store:1.1.7",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.spdx:spdx-tagvalue-store",
+      "SPDXID": "SPDXRef-Package-80ce5bfcff5790fa",
+      "versionInfo": "1.1.7",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.spdx/spdx-tagvalue-store@1.1.7"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.spdx:spdx-tagvalue-store:1.1.7",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.spdx:tools-java",
+      "SPDXID": "SPDXRef-Package-4c0932f0c5b1646a",
+      "versionInfo": "1.1.9-SNAPSHOT",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.spdx/tools-java@1.1.9-SNAPSHOT"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.spdx:tools-java:1.1.9-SNAPSHOT",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "org.yaml:snakeyaml",
+      "SPDXID": "SPDXRef-Package-b2d9da2b4d566c73",
+      "versionInfo": "2.0",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: pom.xml",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:maven/org.yaml/snakeyaml@2.0"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: org.yaml:snakeyaml:2.0",
+        "PkgType: pom"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
+    {
+      "name": "https://github.com/spdx/tools-java",
+      "SPDXID": "SPDXRef-Repository-18b0dfc962df5ca0",
+      "downloadLocation": "git+https://github.com/spdx/tools-java",
+      "filesAnalyzed": false,
+      "attributionTexts": [
+        "SchemaVersion: 2"
+      ],
+      "primaryPackagePurpose": "SOURCE"
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-Application-f8f4c07e63afadde",
+      "relatedSpdxElement": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relationshipType": "CONTAINS"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-Repository-18b0dfc962df5ca0",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3164463450e0d8a3",
+      "relatedSpdxElement": "SPDXRef-Package-20253d86d6bfa5e4",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3164463450e0d8a3",
+      "relatedSpdxElement": "SPDXRef-Package-20e591dd50723fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3164463450e0d8a3",
+      "relatedSpdxElement": "SPDXRef-Package-3da8bd7b64acc32e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3164463450e0d8a3",
+      "relatedSpdxElement": "SPDXRef-Package-996b20a06ca535a9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3164463450e0d8a3",
+      "relatedSpdxElement": "SPDXRef-Package-9dead10809d23a94",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3164463450e0d8a3",
+      "relatedSpdxElement": "SPDXRef-Package-ec2bbefe9f54eb7e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-366825f01e83ac86",
+      "relatedSpdxElement": "SPDXRef-Package-3164463450e0d8a3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-366825f01e83ac86",
+      "relatedSpdxElement": "SPDXRef-Package-4af4e940e6971063",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-366825f01e83ac86",
+      "relatedSpdxElement": "SPDXRef-Package-6a14a31b1aa0b3ca",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-366825f01e83ac86",
+      "relatedSpdxElement": "SPDXRef-Package-e933f4b96102f6e9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3fcb5435a11b584e",
+      "relatedSpdxElement": "SPDXRef-Package-1dd6b257d2d00341",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-3fcb5435a11b584e",
+      "relatedSpdxElement": "SPDXRef-Package-b8ab077a2ba85715",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-1d86ca2175e2946f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-5481778817399de5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-775c4035e8d09ce8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-8b016d5b11b0f50b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-9cf62d26a5f2b2f2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-9fed95bc45fc628b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-be19a0f695f601d3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-c34044ac092c7bd5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-c7ea49c36c723843",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-c8bedb7450b4e27",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-e134d5c31b74ed46",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-e74ff67a35fd49e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relatedSpdxElement": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-20e591dd50723fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-3164463450e0d8a3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-42cf2f3a2e92b389",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-47c5f6bd3513ca8b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-996b20a06ca535a9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-d7f4c0880df0e9b5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-e348de727a4166a4",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4af4e940e6971063",
+      "relatedSpdxElement": "SPDXRef-Package-ec2bbefe9f54eb7e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relatedSpdxElement": "SPDXRef-Package-366825f01e83ac86",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relatedSpdxElement": "SPDXRef-Package-5057bcef68a69a7c",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relatedSpdxElement": "SPDXRef-Package-6ba7cce72805bc73",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relatedSpdxElement": "SPDXRef-Package-80ce5bfcff5790fa",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relatedSpdxElement": "SPDXRef-Package-86ed729ad6383e03",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relatedSpdxElement": "SPDXRef-Package-87b7c32520d93c52",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4c0932f0c5b1646a",
+      "relatedSpdxElement": "SPDXRef-Package-e933f4b96102f6e9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-4e806e6735d7c9ff",
+      "relatedSpdxElement": "SPDXRef-Package-c8f3df5e78d6fcdf",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-1beac771fe6fc3b6",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-32ae0b5d875daec7",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-881684823f8a1a8",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-93b3436a5e2971b3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-b7e682d44d209e63",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-d24dcc6ceec5f3de",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-5057bcef68a69a7c",
+      "relatedSpdxElement": "SPDXRef-Package-df3437b38985adee",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-697c3fc4d10373ac",
+      "relatedSpdxElement": "SPDXRef-Package-83532c6f780e1336",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-697c3fc4d10373ac",
+      "relatedSpdxElement": "SPDXRef-Package-d9ab7da3f7940ab",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-6a14a31b1aa0b3ca",
+      "relatedSpdxElement": "SPDXRef-Package-3fcb5435a11b584e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-6a14a31b1aa0b3ca",
+      "relatedSpdxElement": "SPDXRef-Package-c8bedb7450b4e27",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-6a14a31b1aa0b3ca",
+      "relatedSpdxElement": "SPDXRef-Package-ec2bbefe9f54eb7e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-6a14a31b1aa0b3ca",
+      "relatedSpdxElement": "SPDXRef-Package-f366e0a6e8c41c90",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-73ff72c1f44ea727",
+      "relatedSpdxElement": "SPDXRef-Package-4e806e6735d7c9ff",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-73ff72c1f44ea727",
+      "relatedSpdxElement": "SPDXRef-Package-774e8aaf88500cea",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-73ff72c1f44ea727",
+      "relatedSpdxElement": "SPDXRef-Package-c7ea49c36c723843",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-73ff72c1f44ea727",
+      "relatedSpdxElement": "SPDXRef-Package-c8f3df5e78d6fcdf",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-73ff72c1f44ea727",
+      "relatedSpdxElement": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-80ce5bfcff5790fa",
+      "relatedSpdxElement": "SPDXRef-Package-e933f4b96102f6e9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-86ed729ad6383e03",
+      "relatedSpdxElement": "SPDXRef-Package-43fdfc498bbd56fb",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-86ed729ad6383e03",
+      "relatedSpdxElement": "SPDXRef-Package-9cf62d26a5f2b2f2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-86ed729ad6383e03",
+      "relatedSpdxElement": "SPDXRef-Package-c5ec34ab11152df",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-86ed729ad6383e03",
+      "relatedSpdxElement": "SPDXRef-Package-e933f4b96102f6e9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-87b7c32520d93c52",
+      "relatedSpdxElement": "SPDXRef-Package-73ff72c1f44ea727",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-87b7c32520d93c52",
+      "relatedSpdxElement": "SPDXRef-Package-8ac05d5727f6f713",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-87b7c32520d93c52",
+      "relatedSpdxElement": "SPDXRef-Package-c34044ac092c7bd5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-87b7c32520d93c52",
+      "relatedSpdxElement": "SPDXRef-Package-c7ea49c36c723843",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-87b7c32520d93c52",
+      "relatedSpdxElement": "SPDXRef-Package-cab6ea5b3c9ac170",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-87b7c32520d93c52",
+      "relatedSpdxElement": "SPDXRef-Package-e933f4b96102f6e9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-87b7c32520d93c52",
+      "relatedSpdxElement": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-881684823f8a1a8",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-881684823f8a1a8",
+      "relatedSpdxElement": "SPDXRef-Package-8fc92945d9a46a23",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-881684823f8a1a8",
+      "relatedSpdxElement": "SPDXRef-Package-b7e682d44d209e63",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-881684823f8a1a8",
+      "relatedSpdxElement": "SPDXRef-Package-d24dcc6ceec5f3de",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-881684823f8a1a8",
+      "relatedSpdxElement": "SPDXRef-Package-d2a2548d657c77f6",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-881684823f8a1a8",
+      "relatedSpdxElement": "SPDXRef-Package-d3e53681a672c7ca",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-881684823f8a1a8",
+      "relatedSpdxElement": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-8ac05d5727f6f713",
+      "relatedSpdxElement": "SPDXRef-Package-b2d9da2b4d566c73",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-8ac05d5727f6f713",
+      "relatedSpdxElement": "SPDXRef-Package-c7ea49c36c723843",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-8ac05d5727f6f713",
+      "relatedSpdxElement": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-8fc92945d9a46a23",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-8fc92945d9a46a23",
+      "relatedSpdxElement": "SPDXRef-Package-d3da186f561d5349",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-8fc92945d9a46a23",
+      "relatedSpdxElement": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-9cf62d26a5f2b2f2",
+      "relatedSpdxElement": "SPDXRef-Package-759e1bbe6d7289c6",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-9cf62d26a5f2b2f2",
+      "relatedSpdxElement": "SPDXRef-Package-7b0c54dd1d4572a1",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-9cf62d26a5f2b2f2",
+      "relatedSpdxElement": "SPDXRef-Package-c5ec34ab11152df",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-9cf62d26a5f2b2f2",
+      "relatedSpdxElement": "SPDXRef-Package-db80206f0f108d7d",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b7e682d44d209e63",
+      "relatedSpdxElement": "SPDXRef-Package-12ed566ad49c286",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b7e682d44d209e63",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b7e682d44d209e63",
+      "relatedSpdxElement": "SPDXRef-Package-5fa256080935396d",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b7e682d44d209e63",
+      "relatedSpdxElement": "SPDXRef-Package-7ff6134f42cef405",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b7e682d44d209e63",
+      "relatedSpdxElement": "SPDXRef-Package-b738343142abf8d6",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-b7e682d44d209e63",
+      "relatedSpdxElement": "SPDXRef-Package-d9ab7da3f7940ab",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-be19a0f695f601d3",
+      "relatedSpdxElement": "SPDXRef-Package-e74ff67a35fd49e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5a0f1624d061122",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-20253d86d6bfa5e4",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-20e591dd50723fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-47c5f6bd3513ca8b",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-697c3fc4d10373ac",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-78a4555696bb3cf6",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-c8bedb7450b4e27",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-ec2bbefe9f54eb7e",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-fdde201acfca6a9a",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-c5ec34ab11152df",
+      "relatedSpdxElement": "SPDXRef-Package-fec34be7aef84037",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d24dcc6ceec5f3de",
+      "relatedSpdxElement": "SPDXRef-Package-8fc92945d9a46a23",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d24dcc6ceec5f3de",
+      "relatedSpdxElement": "SPDXRef-Package-b7e682d44d209e63",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d24dcc6ceec5f3de",
+      "relatedSpdxElement": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d2a2548d657c77f6",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d2a2548d657c77f6",
+      "relatedSpdxElement": "SPDXRef-Package-b7e682d44d209e63",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d2a2548d657c77f6",
+      "relatedSpdxElement": "SPDXRef-Package-d3da186f561d5349",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d3da186f561d5349",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d3da186f561d5349",
+      "relatedSpdxElement": "SPDXRef-Package-c5a0f1624d061122",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-d7f4c0880df0e9b5",
+      "relatedSpdxElement": "SPDXRef-Package-996b20a06ca535a9",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e134d5c31b74ed46",
+      "relatedSpdxElement": "SPDXRef-Package-fdde201acfca6a9a",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e348de727a4166a4",
+      "relatedSpdxElement": "SPDXRef-Package-d7f4c0880df0e9b5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e74ff67a35fd49e",
+      "relatedSpdxElement": "SPDXRef-Package-5988d2f5cb5a7962",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e933f4b96102f6e9",
+      "relatedSpdxElement": "SPDXRef-Package-3a8adbe502da5a0f",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e933f4b96102f6e9",
+      "relatedSpdxElement": "SPDXRef-Package-573ef005ef9d09b3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e933f4b96102f6e9",
+      "relatedSpdxElement": "SPDXRef-Package-c34044ac092c7bd5",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e933f4b96102f6e9",
+      "relatedSpdxElement": "SPDXRef-Package-c8bedb7450b4e27",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-e933f4b96102f6e9",
+      "relatedSpdxElement": "SPDXRef-Package-fdde201acfca6a9a",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f366e0a6e8c41c90",
+      "relatedSpdxElement": "SPDXRef-Package-c8bedb7450b4e27",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relatedSpdxElement": "SPDXRef-Package-774e8aaf88500cea",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-f4b3bb3f9630fc2",
+      "relatedSpdxElement": "SPDXRef-Package-c7ea49c36c723843",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-Repository-18b0dfc962df5ca0",
+      "relatedSpdxElement": "SPDXRef-Application-f8f4c07e63afadde",
+      "relationshipType": "CONTAINS"
+    }
+  ]
+}
