@@ -779,6 +779,38 @@
             },
             "type": "github",
             "subprojects": {
+				"spdx-tools-java": {
+					"status": "DELIVERED",
+                    "slm": {
+                        "policy": "apache2",
+                        "report-json": "/lfScanningS3/scaffold/2024-08/report/aswf/spdx-tools-java-2024-08-21.json",
+                        "report-xlsx": "/lfScanningS3/scaffold/2024-08/report/aswf/spdx-tools-java-2024-08-21.xlsx"
+                    },
+                    "code": {
+                        "anyfiles": true,
+                        "pulled": "2024-08-21",
+                        "path": "/lfscanning-code/2024-08/code/aswf/spdx-tools-java/spdx-tools-java-2024-08-21.zip",
+                        "repos": {
+                            "spdx-tools-java": "153a803c46181319fd782ef8426ff58a2e885d82"
+                        }
+                    },
+                    "web": {
+                        "htmlurl": "https://lfscanning.org/reports/aswf/spdx-tools-java-2024-08-21-7e610c91-d939-4a36-bfb4-9737ab575b72.html",
+                        "xlsxurl": "https://lfscanning.org/reports/aswf/spdx-tools-java-2024-08-21-7e610c91-d939-4a36-bfb4-9737ab575b72.xlsx",
+                        "uuid": "7e610c91-d939-4a36-bfb4-9737ab575b72"
+                    },
+                    "github": {
+                        "org": "spdx",
+                        "ziporg": "spdx-tools-java",
+                        "repo-dirs-delete": {},
+                        "repos": [
+                            "spdx-tools-java"
+                        ],
+                        "repos-ignore": [
+                            ".github"
+                        ]
+                    }
+				},
                 "materialx": {
                     "status": "DELIVERED",
                     "slm": {

@@ -18,13 +18,11 @@ from spdx_tools.spdx.model.relationship import Relationship
 from spdx_tools.spdx.model.relationship import RelationshipType
 from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.model import SpdxNone
+from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
 from license_expression import get_spdx_licensing
 import re
-
-
-import pdb
 
 TRIVY_SPDX_FILENAME = "test-trivy-spdx.json"
 TEST_TRIVY_SPDX_PATH = os.path.join(os.path.dirname(__file__), "testresources", TRIVY_SPDX_FILENAME)
@@ -35,6 +33,8 @@ MATERIALX_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "testresources",
 MATERIALX_TRIVY_FILENAME = "MaterialX-2024-08-21-trivy-spdx.json"
 MATERIALX_TRIVY_PATH = os.path.join(os.path.dirname(__file__), "testresources", MATERIALX_TRIVY_FILENAME)
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
+SPDX_TOOLS_JAVA_FILENAME = "spdx-tools-java-git-license-spdx.json"
+SPDX_TOOLS_JAVA_PATH = os.path.join(os.path.dirname(__file__), "testresources", SPDX_TOOLS_JAVA_FILENAME)
 
 TEST_PACKAGES = {
     "pom.xml" : {
@@ -124,6 +124,8 @@ class TestSpdxUtil(unittest.TestCase):
         os.mkdir(self.config_dir)
         self.materialx_config_path = os.path.join(self.config_dir, MATERIALX_CONFIG_FILENAME)
         shutil.copy(MATERIALX_CONFIG_PATH, self.materialx_config_path)
+        self.spdx_tools_java_path = os.path.join(self.temp_dir.name, SPDX_TOOLS_JAVA_FILENAME)
+        shutil.copy(SPDX_TOOLS_JAVA_PATH, self.spdx_tools_java_path)
         
 
     def tearDown(self):
@@ -156,8 +158,8 @@ class TestSpdxUtil(unittest.TestCase):
         licensing = get_spdx_licensing()
         extracted_licensing_info = []
         result = spdxutil.fix_license('CC-BY-3.0+', extracted_licensing_info, licensing)
-        self.assertEqual('CC-BY-3.0+', str(result))
-        self.assertFalse(extracted_licensing_info)
+        self.assertEqual('LicenseRef-CC-BY-3.0-', str(result))
+        self.assertEquals(1, len(extracted_licensing_info))
         license_declared = licensing.parse('GPL-2.0-or-later AND some-random-declared-id')
         license_concluded = licensing.parse('some-random-concluded-id AND some-random-declared-id')
         result_declared = spdxutil.fix_license(license_declared, extracted_licensing_info, licensing)
@@ -166,7 +168,7 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertTrue('LicenseRef-' in str(result_declared))
         result_concluded = spdxutil.fix_license(license_concluded, extracted_licensing_info, licensing)
         self.assertTrue('LicenseRef-' in str(result_concluded))
-        self.assertEqual(2, len(extracted_licensing_info))
+        self.assertEqual(3, len(extracted_licensing_info))
         found_declared = False
         found_concluded = False
         for extracted in extracted_licensing_info:
@@ -177,6 +179,16 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertTrue(found_concluded)
         self.assertTrue(found_declared)
     
+    def testRegressionToolsJava(self):
+        self.maxDiff = None
+        spdx_document = spdxutil.parseFile(self.spdx_tools_java_path)
+        cfg = loadConfig(self.materialx_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
+        prj = cfg._projects['aswf']
+        sp = prj._subprojects['spdx-tools-java']
+        spdxutil.augmentTrivyDocument(spdx_document, cfg, prj, sp)
+        errors = validate_full_spdx_document(spdx_document)
+        self.assertFalse(errors)
+        
     def testFixTrivyDocument(self):
         self.maxDiff = None
         spdx_document = spdxutil.parseFile(self.materialx_trivy_path)
@@ -189,10 +201,10 @@ class TestSpdxUtil(unittest.TestCase):
                     spdx_element_utils.get_element_type_from_spdx_id(relationship.related_spdx_element_id, spdx_document) == Package:
                 describes = document_utils.get_element_from_spdx_id(spdx_document, relationship.related_spdx_element_id)
         self.assertEqual('aswf.materialx', describes.name)
-        self.assertEqual('(BSD-3-Clause AND BSD-3-Clause AND CC-BY-3.0 AND BSD-3-Clause AND CC-BY-4.0 AND CC-BY-3.0+) OR (MIT AND CC-BY-4.0 AND AMPAS AND Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND Apache-2.0 AND CC-BY-4.0 AND CC-BY-4.0 AND CC-BY-4.0 AND MPL-2.0 AND MPL-2.0 AND CC-BY-4.0 AND MPL-2.0 AND LicenseRef-DreamWorks-BSD-style-1)', \
+        self.assertEqual('(BSD-3-Clause AND BSD-3-Clause AND CC-BY-3.0 AND BSD-3-Clause AND CC-BY-4.0 AND LicenseRef-CC-BY-3.0-) OR (MIT AND CC-BY-4.0 AND AMPAS AND Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND Apache-2.0 AND CC-BY-4.0 AND CC-BY-4.0 AND CC-BY-4.0 AND MPL-2.0 AND MPL-2.0 AND CC-BY-4.0 AND MPL-2.0 AND LicenseRef-DreamWorks-BSD-style-1)', \
                             str(describes.license_declared))
         
-        self.assertEqual('(BSD-3-Clause AND BSD-3-Clause AND CC-BY-3.0 AND BSD-3-Clause AND CC-BY-4.0 AND CC-BY-3.0+) OR (MIT AND CC-BY-4.0 AND AMPAS AND Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND Apache-2.0 AND CC-BY-4.0 AND CC-BY-4.0 AND CC-BY-4.0 AND MPL-2.0 AND MPL-2.0 AND CC-BY-4.0 AND MPL-2.0 AND LicenseRef-DreamWorks-BSD-style-1)', \
+        self.assertEqual('(BSD-3-Clause AND BSD-3-Clause AND CC-BY-3.0 AND BSD-3-Clause AND CC-BY-4.0 AND LicenseRef-CC-BY-3.0-) OR (MIT AND CC-BY-4.0 AND AMPAS AND Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND Apache-2.0 AND CC-BY-4.0 AND CC-BY-4.0 AND CC-BY-4.0 AND MPL-2.0 AND MPL-2.0 AND CC-BY-4.0 AND MPL-2.0 AND LicenseRef-DreamWorks-BSD-style-1)', \
                             str(describes.license_concluded))
         contained = []
         for relationship in spdx_document.relationships:
@@ -238,7 +250,8 @@ class TestSpdxUtil(unittest.TestCase):
                 found_lf = True
         self.assertTrue(found_scaffold)
         self.assertTrue(found_lf)
-        
+        errors = validate_full_spdx_document(spdx_document)
+        self.assertFalse(errors)
         
 if __name__ == '__main__':
     unittest.main()
