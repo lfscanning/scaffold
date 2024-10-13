@@ -29,7 +29,7 @@ def runUnifiedAgent(cfg, prj, sp):
         os.mkdir(analysisdir)
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
-        installNpm(analysisdir, cfg)
+        installNpm(analysisdir, cfg, prj, sp)
         cmd = [cfg._trivy_exec_path, "fs", "--timeout", "30m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
         result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(result, 'w') as outfile:
@@ -68,7 +68,7 @@ errors:
         print(f"{prj._name}/{sp._name}: Trivy successfully run")
         return True
 
-def installNpm(sourceDir, cfg):
+def installNpm(sourceDir, cfg, prj, sp):
     npm_dirs = []
     for (root,dirs,files) in os.walk(sourceDir, topdown=True):
         if 'package.json' in files and 'node_modeles/' not in root and 'node_modules' not in dirs:
