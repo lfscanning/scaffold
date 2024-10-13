@@ -47,7 +47,7 @@ def _generateExtractedLicenseSheet(wb, spdxDocument):
     ws['C1'].font = fontBold
     
     for lic in spdxDocument.extracted_licensing_info:
-        ws.append([extracted_licensing_info.license_id, extracted_licensing_info.extracted_text, extracted_licensing_info.comment])
+        ws.append([lic.license_id, lic.extracted_text, lic.comment])
 
 def _generateDependenciesSheet(wb, spdxDocument):
     # use the first (existing) sheet as the dependencies sheet

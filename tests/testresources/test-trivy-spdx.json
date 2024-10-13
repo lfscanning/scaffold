@@ -100,8 +100,8 @@
       "downloadLocation": "NONE",
       "filesAnalyzed": false,
       "sourceInfo": "package found in: pom.xml",
-      "licenseConcluded": "The-MIT-License",
-      "licenseDeclared": "The-MIT-License",
+      "licenseConcluded": "LicenseRef-The-MIT-License",
+      "licenseDeclared": "LicenseRef-The-MIT-License",
       "externalRefs": [
         {
           "referenceCategory": "PACKAGE-MANAGER",
@@ -123,8 +123,8 @@
       "downloadLocation": "NONE",
       "filesAnalyzed": false,
       "sourceInfo": "package found in: pom.xml",
-      "licenseConcluded": "MIT-License",
-      "licenseDeclared": "MIT-License",
+      "licenseConcluded": "LicenseRef-MIT-License",
+      "licenseDeclared": "LicenseRef-MIT-License",
       "externalRefs": [
         {
           "referenceCategory": "PACKAGE-MANAGER",
@@ -172,6 +172,16 @@
       "primaryPackagePurpose": "SOURCE"
     }
   ],
+   "hasExtractedLicensingInfos" : [ {
+		"licenseId" : "LicenseRef-The-MIT-License",
+		"extractedText" : "Replaces found The-MIT-License",
+		"comment" : "represents The-MIT-License"
+	  },
+	  {
+		"licenseId" : "LicenseRef-MIT-License",
+		"extractedText" : "Replaces found MIT-License",
+		"comment" : "represents MIT-License"
+  }],
   "relationships": [
     {
       "spdxElementId": "SPDXRef-Application-f8f4c07e63afadde",

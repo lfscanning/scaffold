@@ -80,16 +80,16 @@ TEST_PACKAGES = {
     "org.jsoup:jsoup": {
         "spdxId": "SPDXRef-Package-9d14d5f84f12114a",
         "version": "1.15.3",
-        "licenseConcluded": "The-MIT-License",
-        "licenseDeclared": "The-MIT-License",
+        "licenseConcluded": "LicenseRef-The-MIT-License",
+        "licenseDeclared": "LicenseRef-The-MIT-License",
         "purl": "pkg:maven/org.jsoup/jsoup@1.15.3",
         "dependency": "org.spdx:java-spdx-library DEPENDS_ON"
     },
     "org.slf4j:slf4j-api": {
         "spdxId": "SPDXRef-Package-27c560513d549c66",
         "version": "2.0.7",
-        "licenseConcluded": "MIT-License",
-        "licenseDeclared": "MIT-License",
+        "licenseConcluded": "LicenseRef-MIT-License",
+        "licenseDeclared": "LicenseRef-MIT-License",
         "purl": "pkg:maven/org.slf4j/slf4j-api@2.0.7",
         "dependency": "org.spdx:java-spdx-library DEPENDS_ON"
     },
@@ -144,15 +144,16 @@ class TestSpdxUtil(unittest.TestCase):
             self.assertEqual(pkg['purl'], ws.cell(i, 4).value)
             self.assertEqual(pkg['dependency'], ws.cell(i, 5).value)
         licws = workbook['Extracted Licenses']
+        self.assertTrue(licws.max_row > 2)
         for i in range(2, licws.max_row+1):
-            if 'The-MIT-License' in ws.cell(i, 1):
-                self.assertEquals('LicenseRef-The-MIT-License', ws.cell(i, 1))
-                self.assertTrue('The-MIT-License' in ws.cell(i, 2))
-                self.assertTrue('represents' in ws.cell(i, 3))
-            elif 'MIT-License' in ws.cell(i, 1):
-                self.assertEquals('LicenseRef-MIT-License', ws.cell(i, 1))
-                self.assertTrue('MIT-License' in ws.cell(i, 2))
-                self.assertTrue('represents' in ws.cell(i, 3))
+            if 'The-MIT-License' in licws.cell(i, 1).value:
+                self.assertEquals('LicenseRef-The-MIT-License', licws.cell(i, 1).value)
+                self.assertTrue('The-MIT-License' in licws.cell(i, 2).value)
+                self.assertTrue('represents' in licws.cell(i, 3).value)
+            elif 'MIT-License' in licws.cell(i, 1).value:
+                self.assertEquals('LicenseRef-MIT-License', licws.cell(i, 1).value)
+                self.assertTrue('MIT-License' in licws.cell(i, 2).value)
+                self.assertTrue('represents' in licws.cell(i, 3).value)
             else:
                 self.fail('Unexpected license row')
         
