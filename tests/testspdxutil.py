@@ -147,11 +147,11 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertTrue(licws.max_row > 2)
         for i in range(2, licws.max_row+1):
             if 'The-MIT-License' in licws.cell(i, 1).value:
-                self.assertEquals('LicenseRef-The-MIT-License', licws.cell(i, 1).value)
+                self.assertEqual('LicenseRef-The-MIT-License', licws.cell(i, 1).value)
                 self.assertTrue('The-MIT-License' in licws.cell(i, 2).value)
                 self.assertTrue('represents' in licws.cell(i, 3).value)
             elif 'MIT-License' in licws.cell(i, 1).value:
-                self.assertEquals('LicenseRef-MIT-License', licws.cell(i, 1).value)
+                self.assertEqual('LicenseRef-MIT-License', licws.cell(i, 1).value)
                 self.assertTrue('MIT-License' in licws.cell(i, 2).value)
                 self.assertTrue('represents' in licws.cell(i, 3).value)
             else:
@@ -172,7 +172,7 @@ class TestSpdxUtil(unittest.TestCase):
         extracted_licensing_info = []
         result = spdxutil.fix_license('CC-BY-3.0+', extracted_licensing_info, licensing)
         self.assertEqual('LicenseRef-CC-BY-3.0-', str(result))
-        self.assertEquals(1, len(extracted_licensing_info))
+        self.assertEqual(1, len(extracted_licensing_info))
         license_declared = licensing.parse('GPL-2.0-or-later AND some-random-declared-id')
         license_concluded = licensing.parse('some-random-concluded-id AND some-random-declared-id')
         result_declared = spdxutil.fix_license(license_declared, extracted_licensing_info, licensing)

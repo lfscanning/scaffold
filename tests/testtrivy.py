@@ -127,8 +127,12 @@ class TestTrivy(unittest.TestCase):
     def test_npm_install(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        prj = cfg._projects[TEST_PROJECT_NAME]
+        prj._name = TEST_PROJECT_NAME
+        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
+        sp._name = TEST_SUBPROJECT_NAME
         self.assertFalse(os.path.isdir(self.node_modules_path))
-        installNpm(self.npm_path, cfg)
+        installNpm(self.npm_path, cfg, prj, sp)
         self.assertTrue(os.path.isdir(self.node_modules_path))
         self.assertTrue(os.path.isfile(self.uuid_package_json_path))
         
