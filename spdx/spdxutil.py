@@ -27,6 +27,7 @@ import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
 from datatypes import ProjectRepoType
 import re
 
+
 '''
 Parses an SPDX file with a supported file extension
 Raises SPDXParsingError on parsing errors
@@ -63,7 +64,11 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             if category._name == "Project Licenses":
                 for licenseconfig in category._license_configs: 
                     project_licenses.append(licenseconfig._name)
-    project_license = licenseIdsToExpression(project_licenses, licensing)
+    try:
+        project_license = licenseStringsToExpression(project_licenses, spdx_document.extracted_licensing_info, licensing)
+    except:
+        print(f'Error converting license IDs to expressions for {project_licenses}.  Fix the config file to contain accurate SPDX license IDs')
+        return False
     describes.license_declared = project_license
     describes.license_concluded = project_license
     # Add a level under root for each of the repos
@@ -75,7 +80,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
                 if category._name == "Project Licenses":
                     for licenseconfig in category._license_configs: 
                         repo_licenses.append(licenseconfig._name)
-        repo_license = licenseIdsToExpression(repo_licenses, licensing)
+        repo_license = licenseStringsToExpression(repo_licenses, spdx_document.extracted_licensing_info, licensing)
         
         name = repo
         fileAnalyzed = False
@@ -206,12 +211,31 @@ def findRepoName(element, repos):
             return repo
     return None
 
-def licenseIdsToExpression(licenseIds, licensing):
-    if licenseIds:
-        licstr = licenseIds[0]
-        for i in range(1, len(licenseIds)-1):
-            licstr = licstr + " AND " + licenseIds[i]
+def licenseStringsToExpression(license_strings, extracted_licensing_info, licensing):
+    if license_strings:
+        licstr = _licenseStringToExpression(license_strings[0], extracted_licensing_info, licensing)
+        for i in range(1, len(license_strings)-1):
+            licstr = licstr + " AND " + _licenseStringToExpression(license_strings[i], extracted_licensing_info, licensing)
         return licensing.parse(licstr)
     else:
         return SpdxNoAssertion()
         
+def _licenseStringToExpression(license_string, extracted_licensing_info, licensing):
+    try:
+        lic = licensing.parse(license_string)
+        if ' ' in license_string:
+            return '(' + str(fix_license(lic, extracted_licensing_info, licensing)) + ')'
+        else:
+            return str(fix_license(lic, extracted_licensing_info, licensing))
+    except:
+        extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', license_string)
+        extracted_id_found = False
+        for existing in extracted_licensing_info:
+            if existing.license_id == extracted_id:
+                extracted_id_found = True
+                break
+        if not extracted_id_found:
+            extracted_licensing_info.append(ExtractedLicensingInfo(license_id = extracted_id, extracted_text = license_string, \
+                                comment = 'This license text represents a string found in licensing metadata - the actual text is not known'))
+        return extracted_id
+            

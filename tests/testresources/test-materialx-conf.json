@@ -889,6 +889,1994 @@
                     }
                 }
             }
+        },
+	"cncf-3": {
+            "slm": {
+                "policies": {
+                    "default": {
+                        "categories": [
+                            {
+                                "name": "Project Licenses",
+                                "licenses": [
+                                    {
+                                        "name": "Apache-2.0",
+                                        "aliases": [
+                                            "Apache-2.0 AND Apache-2.0",
+                                            "Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified",
+                                            "Apache-2.0 AND LicenseRef-Apache-possibility",
+                                            "Apache-2.0 AND LicenseRef-UnclassifiedLicense",
+                                            "Apache-2.0 AND LicenseRef-fossology-UnclassifiedLicense",
+                                            "LicenseRef-fossology-Apache",
+                                            "Apache-2.0 AND LicenseRef-fossology-Apache-2.0-Pixar-modified",
+                                            "Apache-2.0 AND LicenseRef-fossology-Apache-possibility",
+                                            "LicenseRef-fossology-Apache-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 (ASF header)",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-Apache-2.0-ASF-Header-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 (Cloudera header)",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-Apache-2.0-Cloudera-Header-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND CC-BY-4.0",
+                                        "aliases": [
+                                            "Apache-2.0 AND CC-BY-3.0",
+                                            "Apache-2.0 AND LicenseRef-fossology-CC-BY"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND LicenseRef-Meta-List-of-Dependencies-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR CC-BY-4.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR LGPL-2.1+",
+                                        "aliases": [
+                                            "Apache-2.0 OR LGPL-2.1-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR LGPL-3.0+",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR MIT",
+                                        "aliases": [
+                                            "LicenseRef-fossology-Apache OR MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR BSD-3-Clause",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR UPL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 WITH LLVM-exception",
+                                        "aliases": [
+                                            "Apache-2.0 AND LLVM-exception",
+                                            "Apache-2.0 OR LLVM-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "CC-BY-4.0",
+                                        "aliases": [
+                                            "LicenseRef-CC-BY",
+                                            "LicenseRef-fossology-CC-BY"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Non-OSS",
+                                "licenses": [
+                                    {
+                                        "name": "Cloudbyte proprietary notice",
+                                        "aliases": [
+                                            "LicenseRef-Cloudbyte-proprietary-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Commercial-INSPINIA-Theme-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-Commercial-INSPINIA-Theme-1 AND MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-Informa-Telecom-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-NVIDIA-License-Reference-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-NVIDIA-use-1",
+                                        "aliases": [
+                                            "LicenseRef-fossology-NVIDIA-use-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Personal-classroom-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-Microsoft-possibility",
+                                        "aliases": [
+                                            "LicenseRef-Apache-possibility AND LicenseRef-Microsoft-possibility",
+                                            "LicenseRef-IBM-possibility AND LicenseRef-Microsoft-possibility",
+                                            "LicenseRef-fossology-Microsoft-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-HP-possibility",
+                                        "aliases": [
+                                            "LicenseRef-fossology-HP-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-RSA-possibility",
+                                        "aliases": [
+                                            "LicenseRef-fossology-RSA-possibility"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Binary files",
+                                "licenses": [
+                                    {
+                                        "name": "Binary file",
+                                        "aliases": [
+                                            "LicenseRef-Meta-Binary"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Use Restrictions",
+                                "licenses": [
+                                    {
+                                        "name": "CC-BY-NC-SA-4.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-ND-4.0",
+                                        "aliases": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Copyleft",
+                                "licenses": [
+                                    {
+                                        "name": "(Apache-2.0 OR LGPL-3.0+) AND (LGPL-3.0+ OR GPL-2.0)",
+                                        "aliases": [
+                                            "Apache-2.0 AND GPL-2.0 AND LGPL-3.0+ AND LicenseRef-Dual-license"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND GPL-2.0",
+                                        "aliases": [
+                                            "Apache-2.0 AND GPL-2.0-only"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND GPL-3.0+",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-GPL",
+                                            "Apache-2.0 AND GPL-3.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND GPL-2.0+ AND LGPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND GPL-2.0 AND LGPL-3.0+ AND LicenseRef-Dual-license AND LicenseRef-Python",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND GPL-2.0-or-later AND MIT",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-GPL AND MIT",
+                                            "Apache-2.0 AND LicenseRef-fossology-GPL AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "CDDL-1.0 AND GPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Sleepycat",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "VOSTROM",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "EUPL-1.2",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CECILL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CECILL-2.1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CECILL-B",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CECILL-C",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "GFDL-1.2-only",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "NGPL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "GL2PS",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "GPL-1.0",
+                                        "aliases": [
+                                            "GPL-1.0-only",
+                                            "BSD-3-Clause AND GPL-1.0-only"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-1.0-or-later",
+                                        "aliases": [
+                                            "Artistic-1.0-Perl AND GPL-1.0-or-later",
+                                            "Artistic-1.0 AND GPL-1.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0",
+                                        "aliases": [
+                                            "GPL-2.0-only",
+                                            "CC0-1.0 AND GPL-2.0-only",
+                                            "BSD-2-Clause AND GPL-2.0-only",
+                                            "GPL-2.0-only AND MIT",
+                                            "GPL-2.0-only AND openvpn-openssl-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0 OR LGPL-3.0+",
+                                        "aliases": [
+                                            "GPL-2.0-only OR LGPL-3.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0-or-later",
+                                        "aliases": [
+                                            "GPL-2.0+",
+                                            "LicenseRef-GPL",
+                                            "LicenseRef-fossology-GPL",
+                                            "GPL-2.0-or-later AND ISC",
+                                            "GPL-2.0-or-later AND LGPL-2.1-or-later AND LicenseRef-fossology-MPL",
+                                            "GPL-2.0-or-later AND MPL-2.0-no-copyleft-exception",
+                                            "GPL-2.0-or-later AND openvpn-openssl-exception",
+                                            "BSD-2-Clause AND GPL-2.0-or-later",
+                                            "BSD-3-Clause AND GPL-2.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0-only (external reference)",
+                                        "aliases": [
+                                            "GPL-2.0 AND LicenseRef-Meta-External-Reference"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0-only WITH Universal-FOSS-exception-1.0",
+                                        "aliases": [
+                                            "GPL-2.0-only AND LicenseRef-fossology-universal-foss-exception-1.0"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0",
+                                        "aliases": [
+                                            "GPL-3.0-only",
+                                            "BSD-2-Clause AND GPL-3.0-only",
+                                            "GPL-3.0-only AND openvpn-openssl-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0+ AND LGPL-2.1+",
+                                        "aliases": [
+                                            "GPL-2.0-or-later AND LGPL-2.1-or-later",
+                                            "GPL-2.0-or-later AND LGPL-2.0-or-later",
+                                            "GPL-2.0-or-later AND LGPL-2.0-only",
+                                            "GPL-2.0-or-later AND LGPL-2.1-only",
+                                            "GPL-2.0-only AND LGPL-2.0-only",
+                                            "GPL-2.0-only AND LGPL-2.1-only",
+                                            "BSD-2-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later",
+                                            "BSD-3-Clause AND GPL-2.0-only AND LGPL-2.1-only",
+                                            "BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later",
+                                            "BSD-3-Clause AND GPL-2.0-or-later AND ISC AND LGPL-2.1-or-later",
+                                            "BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0 AND LGPL-3.0",
+                                        "aliases": [
+                                            "GPL-3.0-only AND LGPL-3.0-only",
+                                            "BSD-3-Clause AND GPL-3.0-only AND LGPL-3.0-only",
+                                            "GPL-3.0-or-later AND LGPL-2.0-or-later",
+                                            "BSD-3-Clause AND GPL-3.0-or-later AND LGPL-2.0-or-later",
+                                            "BSD-3-Clause AND GPL-3.0-or-later AND LGPL-3.0-or-later",
+                                            "BSD-3-Clause AND GPL-2.0-or-later AND LGPL-3.0-or-later",
+                                            "GPL-3.0-or-later AND LGPL-2.1-only",
+                                            "GPL-2.0-or-later AND LGPL-3.0-or-later",
+                                            "GPL-3.0-or-later AND LGPL-3.0-or-later",
+                                            "GPL-3.0-only AND LGPL-2.1-or-later",
+                                            "GPL-3.0-or-later AND LGPL-2.1-or-later",
+                                            "BSD-3-Clause AND GPL-3.0-or-later AND LGPL-2.1-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0 AND LGPL-3.0 AND MPL-2.0",
+                                        "aliases": [
+                                            "GPL-3.0 AND LGPL-3.0 AND LicenseRef-MPL",
+                                            "GPL-3.0-only AND LGPL-3.0-only AND LicenseRef-fossology-MPL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0+",
+                                        "aliases": [
+                                            "GPL-3.0-or-later",
+                                            "BSD-2-Clause AND GPL-3.0-or-later",
+                                            "BSD-4-Clause AND GPL-3.0-or-later",
+                                            "GPL-3.0-or-later AND LicenseRef-fossology-MPL",
+                                            "BSD-3-Clause AND GPL-3.0-only AND GPL-3.0-or-later",
+                                            "CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.1-or-later",
+                                            "BSD-3-Clause AND GPL-3.0-or-later",
+                                            "GPL-3.0-or-later AND openvpn-openssl-exception",
+                                            "CC0-1.0 AND GPL-3.0-or-later AND ISC AND LGPL-2.1-or-later AND LicenseRef-fossology-Public-domain-ref"
+                                        ]
+                                    },
+                                    {
+                                        "name": "AGPL-3.0",
+                                        "aliases": [
+                                            "AGPL-3.0-only",
+                                            "LicenseRef-fossology-AGPL",
+                                            "AGPL-3.0-only AND BSD-2-Clause",
+                                            "AGPL-3.0-only AND openvpn-openssl-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "AGPL-3.0-or-later",
+                                        "aliases": [
+                                            "LicenseRef-AGPL-3.0+",
+                                            "LicenseRef-fossology-AGPL-3.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0+ AND GPL-3.0+ WITH Libtool-exception AND GPL-2.0+ WITH Libtool-exception",
+                                        "aliases": [
+                                            "GPL-2.0+ WITH Libtool-exception AND GPL-3.0+ AND GPL-3.0+ WITH Libtool-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "(LGPL-3.0-or-later OR GPL-2.0-only) AND (Apache-2.0 OR LGPL-3.0-or-later) AND MPL-2.0 AND Apache-2.0 AND MIT AND BSD-3-Clause AND BSD-2-Clause AND BSD-2-Clause-FreeBSD AND ISC AND CC0-1.0",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-FreeBSD AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0 AND ISC AND LGPL-3.0+ AND LicenseRef-Dual-license AND MIT AND MPL-2.0"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Weak Copyleft",
+                                "licenses": [
+                                    {
+                                        "name": "Apache-2.0 (refs to deps under LGPL-3.0 WITH LGPL3-Linking-Exception-1 AND BSD-2-Clause AND BSD-3-Clause AND MIT)",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND LGPL-3.0 AND LicenseRef-LGPL3-Linking-Exception-1 AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND ISC AND LGPL-3.0+ AND LicenseRef-LGPL3-Linking-Exception-1 AND MIT AND MPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND CC-BY-4.0 AND CC-BY-SA-4.0",
+                                        "aliases": [
+                                            "Apache-2.0 AND CC-BY-SA-4.0"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND ISC AND MIT AND MPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND MIT AND MPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND MPL-2.0 AND (Apache-2.0 OR LGPL-3.0+) AND MIT AND BSD-2-Clause AND BSD-3-Clause AND ISC AND CC0-1.0",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND ISC AND LGPL-3.0+ AND LicenseRef-Dual-license AND MIT AND MPL-2.0"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-1.0 AND EPL-2.0 AND LGPL-2.1 AND MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND CC0-1.0 AND EPL-2.0 AND MIT",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-2.0 AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND MPL-2.0",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-CC-BY AND MPL-2.0",
+                                            "Apache-2.0 AND BSD-3-Clause AND MPL-2.0 AND MPL-2.0-no-copyleft-exception",
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-fossology-CC-BY AND MPL-2.0"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND MPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND EPL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause (from CDDL upstream)",
+                                        "aliases": [
+                                            "LicenseRef-BSD-2-Clause-CDDL-upstream"
+                                        ]
+                                    },
+                                    {
+                                        "name": "CC-BY-SA-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-SA-3.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-SA-3.0 AND MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-SA-4.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CDDL-1.0",
+                                        "aliases": [
+                                            "LicenseRef-fossology-CDDL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "EPL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "EPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CDDL-1.0 AND Unicode-DFS-2006",
+                                        "aliases": [
+                                            "CDDL-1.0 AND LicenseRef-Unicode-DFS-2006"
+                                        ]
+                                    },
+                                    {
+                                        "name": "CDDL-1.0 AND OSF custom permissive notice",
+                                        "aliases": [
+                                            "CDDL-1.0 AND LicenseRef-OSF-Permissive-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "CDDL-1.0 AND Public domain notice with BSD-style disclaimer",
+                                        "aliases": [
+                                            "CDDL-1.0 AND LicenseRef-Public-domain-BSD-disclaimer"
+                                        ]
+                                    },
+                                    {
+                                        "name": "CDDL-1.1 AND EPL-1.0 AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND CDDL-1.1 AND EPL-1.0 AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "CDDL-1.1 AND EPL-1.0 AND Apache-2.0 AND BSD-3-Clause AND MIT (list of dependencies)",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND CDDL-1.1 AND EPL-1.0 AND LicenseRef-Meta-List-of-Dependencies-1 AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-2.0",
+                                        "aliases": [
+                                            "LGPL-2.0-only",
+                                            "BSD-2-Clause AND LGPL-2.0-only",
+                                            "BSD-3-Clause AND LGPL-2.0-only",
+                                            "LGPL-2.0-only AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-2.0+",
+                                        "aliases": [
+                                            "LGPL-2.0-or-later",
+                                            "BSD-3-Clause AND LGPL-2.0-or-later",
+                                            "BSD-2-Clause AND LGPL-2.0-or-later",
+                                            "LGPL-2.0-or-later AND LicenseRef-fossology-MPL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-2.1",
+                                        "aliases": [
+                                            "LGPL-2.1-only",
+                                            "BSD-3-Clause AND LGPL-2.1-only",
+                                            "LGPL-2.1-only AND LicenseRef-fossology-MPL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-2.1+",
+                                        "aliases": [
+                                            "LGPL-2.1-or-later",
+                                            "LGPL-2.1-or-later AND LicenseRef-fossology-BSD",
+                                            "LicenseRef-fossology-LGPL",
+                                            "LGPL-2.1-or-later AND LicenseRef-fossology-MPL",
+                                            "LGPL-2.1-only AND LicenseRef-fossology-CDDL",
+                                            "LGPL-2.1-or-later AND MIT AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-3.0",
+                                        "aliases": [
+                                            "LGPL-3.0-only",
+                                            "LGPL-3.0-only AND MPL-2.0 AND Apache-2.0 AND BSD-3-Clause AND MIT AND ISC",
+                                            "Apache-2.0 AND BSD-3-Clause AND ISC AND LGPL-3.0 AND MIT AND MPL-2.0"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-3.0+",
+                                        "aliases": [
+                                            "LGPL-3.0-or-later",
+                                            "LGPL-3.0+ AND MIT",
+                                            "BSD-3-Clause AND LGPL-3.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-3.0 AND LicenseRef-LGPL3-Linking-Exception-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "MPL-1.1",
+                                        "aliases": [
+                                            "MIT AND MPL-1.1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MPL-2.0",
+                                        "aliases": [
+                                            "LicenseRef-MPL",
+                                            "LicenseRef-fossology-MPL",
+                                            "MPL-2.0-no-copyleft-exception",
+                                            "MPL-2.0 AND MPL-2.0-no-copyleft-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "FreeImage",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "MPL-2.0 AND BSD-3-Clause",
+                                        "aliases": [
+                                            "BSD-3-Clause AND MPL-2.0",
+                                            "BSD-3-Clause AND LicenseRef-fossology-MPL"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Advertising Clause",
+                                "licenses": [
+                                    {
+                                        "name": "FTL OR GPL-2.0+",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "SSLeay-standalone-1 AND LicenseRef-OpenSSL-Nokia-Patents-Statement-1",
+                                        "aliases": [
+                                            "LicenseRef-OpenSSL-Nokia-Patents-Statement-1 AND LicenseRef-SSLeay-standalone-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "OpenSSL AND OpenSSL-Nokia-Patents-Statement-1",
+                                        "aliases": [
+                                            "LicenseRef-OpenSSL-Nokia-Patents-Statement-1 AND OpenSSL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "OpenSSL-standalone-1",
+                                        "aliases": [
+                                            "LicenseRef-OpenSSL-standalone-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "SSLeay-standalone-1",
+                                        "aliases": [
+                                            "LicenseRef-SSLeay-standalone-1",
+                                            "LicenseRef-fossology-SSLeay AND LicenseRef-fossology-SSLeay-standalone-1",
+                                            "0BSD AND ISC AND LicenseRef-fossology-SSLeay AND LicenseRef-fossology-SSLeay-standalone-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "OpenSSL",
+                                        "aliases": [
+                                            "LicenseRef-SSLeay AND OpenSSL",
+                                            "LicenseRef-Cryptogams OR OpenSSL",
+                                            "LicenseRef-fossology-Cryptogams OR OpenSSL",
+                                            "LicenseRef-fossology-OpenSSL-standalone-1 AND OpenSSL",
+                                            "LicenseRef-fossology-OpenSSL-standalone-1 AND LicenseRef-fossology-SSLeay-standalone-1 AND OpenSSL",
+                                            "LicenseRef-fossology-OpenSSL-standalone-1 AND LicenseRef-fossology-SSLeay AND OpenSSL",
+                                            "LicenseRef-fossology-AS-IS-1 AND LicenseRef-fossology-OpenSSL-standalone-1 AND LicenseRef-fossology-SSLeay-standalone-1 AND OpenSSL",
+                                            "LicenseRef-fossology-AS-IS-1 AND LicenseRef-fossology-OpenSSL-standalone-1 AND LicenseRef-fossology-SSLeay AND OpenSSL",
+                                            "LicenseRef-fossology-SSLeay-standalone-1 AND OpenSSL",
+                                            "LicenseRef-fossology-AS-IS-1 AND LicenseRef-fossology-SSLeay AND LicenseRef-fossology-SSLeay-standalone-1 AND OpenSSL",
+                                            "LicenseRef-fossology-AS-IS-1 AND LicenseRef-fossology-SSLeay AND OpenSSL",
+                                            "LicenseRef-fossology-SSLeay AND OpenSSL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "OpenSSL AND BSD (version unspecified)",
+                                        "aliases": [
+                                            "LicenseRef-BSD AND OpenSSL",
+                                            "0BSD AND ISC AND OpenSSL",
+                                            "0BSD AND ISC AND LicenseRef-fossology-Dual-license AND LicenseRef-fossology-SSLeay AND LicenseRef-fossology-WebM AND MIT AND MIT AND OpenSSL",
+                                            "LicenseRef-fossology-BSD AND LicenseRef-fossology-BSD-style AND LicenseRef-fossology-Cryptogams AND LicenseRef-fossology-Dual-license AND OpenSSL",
+                                            "LicenseRef-fossology-BSD AND LicenseRef-fossology-Cryptogams AND LicenseRef-fossology-Dual-license AND OpenSSL",
+                                            "BSD-3-Clause AND LicenseRef-fossology-Cryptogams AND OpenSSL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "RSA-MD",
+                                        "aliases": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Fix license statement",
+                                "licenses": [
+                                    {
+                                        "name": "Apache (no version specified)",
+                                        "aliases": [
+                                            "LicenseRef-Apache",
+                                            "LicenseRef-Apache-possibility",
+                                            "LicenseRef-Apache-possibility AND LicenseRef-MIT-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 (typo in license statement)",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-Meta-Typo"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND LicenseRef-Meta-Typo-In-License-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 and obsolete BSD-3-Clause reference",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-Meta-Wrong-License-Statement"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD (wrong license statement)",
+                                        "aliases": [
+                                            "LicenseRef-BSD AND LicenseRef-Meta-Wrong-License-Statement"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause (should this be Apache-2.0?)",
+                                        "aliases": [
+                                            "BSD-2-Clause AND LicenseRef-Meta-Wrong-License-Statement"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSL-1.0 (file copying error)",
+                                        "aliases": [
+                                            "BSL-1.0 AND LicenseRef-Meta-Discuss"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT (should this be Apache-2.0?)",
+                                        "aliases": [
+                                            "LicenseRef-Meta-Wrong-License-Statement AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Same license as PACKAGE package",
+                                        "aliases": [
+                                            "LicenseRef-Meta-Wrong-License-Statement AND LicenseRef-Same-license-as",
+                                            "LicenseRef-Same-license-as"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Attribution",
+                                "licenses": [
+                                    {
+                                        "name": "(MIT OR GPL-2.0) AND (MIT OR BSD-3-Clause OR GPL-2.0)",
+                                        "aliases": [
+                                            "BSD-3-Clause AND GPL-2.0 AND LicenseRef-Dual-license AND MIT",
+                                            "GPL-2.0 AND LicenseRef-BSD AND LicenseRef-Dual-license AND MIT",
+                                            "LicenseRef-fossology-BSD OR LicenseRef-fossology-GPL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-Style OR GPL-2.0",
+                                        "aliases": [
+                                            "BSD-3-Clause OR GPL-2.0-only",
+                                            "BSD-2-Clause OR GPL-2.0-only",
+                                            "BSD-2-Clause AND GPL-2.0-only AND LicenseRef-fossology-BSD-style",
+                                            "GPL-2.0-only AND LicenseRef-fossology-BSD-style",
+                                            "BSD-4-Clause-Shortened AND LicenseRef-fossology-GPL-2.0--WITH-Autoconf-short-exception-1",
+                                            "BSD-2-Clause AND GPL-2.0-only AND LicenseRef-fossology-BSD AND LicenseRef-fossology-Dual-license",
+                                            "GPL-2.0-only OR LicenseRef-fossology-BSD",
+                                            "GPL-2.0-only OR LicenseRef-fossology-BSD-style",
+                                            "BSD-2-Clause AND GPL-2.0-only AND LicenseRef-fossology-BSD-style AND LicenseRef-fossology-Dual-license",
+                                            "GPL-2.0-only AND LicenseRef-fossology-BSD AND LicenseRef-fossology-BSD-style AND LicenseRef-fossology-Dual-license"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-Style OR LGPL-2.1",
+                                        "aliases": [
+                                            "BSD-2-Clause OR LGPL-2.1-only",
+                                            "BSD-3-Clause AND LGPL-2.1-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR GPL-2.0",
+                                        "aliases": [
+                                            "Apache-2.0 OR GPL-2.0-only",
+                                            "Apache-2.0 AND GPL-2.0-only AND LicenseRef-fossology-BSD-style AND LicenseRef-fossology-Dual-license",
+                                            "Apache-2.0 AND GPL-2.0-only AND LicenseRef-fossology-BSD AND LicenseRef-fossology-Dual-license"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR LGPL-3.0-or-later",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "(OpenSSL OR Cryptogams) AND BSD (version unspecified)",
+                                        "aliases": [
+                                            "LicenseRef-BSD AND LicenseRef-Cryptogams AND LicenseRef-Dual-license AND OpenSSL",
+                                            "BSD-3-Clause AND LicenseRef-Cryptogams AND OpenSSL",
+                                            "LicenseRef-fossology-Cryptogams AND OpenSSL",
+                                            "LicenseRef-fossology-SSLeay",
+                                            "LicenseRef-fossology-SSLeay OR OpenSSL",
+                                            "LicenseRef-BSD-style AND LicenseRef-Cryptogams AND LicenseRef-Dual-license AND OpenSSL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD (version unspecified)",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-BSD",
+                                            "Apache-2.0 AND LicenseRef-BSD-style",
+                                            "Apache-2.0 AND LicenseRef-fossology-BSD"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-2-Clause",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-2-Clause-NetBSD",
+                                            "Apache-2.0 AND LicenseRef-fossology-BSD-2-Clause-NetBSD"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT",
+                                        "aliases": [
+                                            "0BSD AND Apache-2.0 AND BSD-3-Clause AND ISC AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-2-Clause AND MIT",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-2-Clause AND LicenseRef-BSD AND MIT",
+                                            "Apache-2.0 AND BSD-2-Clause AND LicenseRef-fossology-BSD AND MIT",
+                                            "Apache-2.0 AND BSD-2-Clause AND MIT AND MIT",
+                                            "0BSD AND Apache-2.0 AND MIT",
+                                            "0BSD AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND ISC AND LicenseRef-fossology-MIT-style AND Linux-OpenIB AND MIT AND MIT AND X11 AND X11-distribute-modifications-variant"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND CC-BY-4.0 AND MIT",
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-fossology-WebM AND MIT AND MIT",
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-fossology-BSD-2-Clause-vector AND MIT AND MIT AND Ruby",
+                                            "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND CC-BY-3.0 AND LicenseRef-fossology-BSD-2-Clause-vector AND LicenseRef-fossology-Python AND LicenseRef-fossology-SSLeay AND MIT AND MIT AND NCSA AND NTP AND OpenSSL AND Zlib AND ZPL-2.1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-BSD",
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-fossology-BSD",
+                                            "Apache-2.0 AND LicenseRef-fossology-BSD",
+                                            "Apache-2.0 AND LicenseRef-fossology-BSD AND LicenseRef-fossology-BSD-style",
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-fossology-WebM",
+                                            "Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause",
+                                            "Apache-2.0 OR LicenseRef-fossology-BSD",
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-fossology-Dual-license AND LicenseRef-fossology-WebM"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause (list of dependencies)",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-Meta-List-of-Dependencies-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND CC-BY-3.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND PHP-3.0",
+                                        "aliases": [
+                                            "LicenseRef-Apache-possibility AND LicenseRef-BSD-possibility AND LicenseRef-PHP-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND MIT",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-BSD AND MIT",
+                                            "Apache-2.0 AND BSD-3-Clause AND ISC AND MIT",
+                                            "Apache-2.0 AND BSD-3-Clause AND LicenseRef-fossology-BSD AND MIT",
+                                            "Apache-2.0 AND BSD-3-Clause AND MIT AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND CC-BY (version unspecified)",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-CC-BY"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND Creative Commons (version unspecified)",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-CC"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND ISC",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND MIT",
+                                        "aliases": [
+                                            "LicenseRef-Apache OR MIT",
+                                            "Apache-2.0 AND CC0-1.0 AND MIT",
+                                            "Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified AND MIT",
+                                            "Apache-2.0 AND MIT AND MIT",
+                                            "LicenseRef-Apache-possibility AND LicenseRef-MIT-possibility",
+                                            "Apache-2.0 AND JSON",
+                                            "Apache-2.0 AND LicenseRef-fossology-Dual-license AND LLVM-exception AND MIT",
+                                            "Apache-2.0 AND ISC AND MIT AND MIT",
+                                            "Apache-2.0 AND LicenseRef-fossology-Dual-license AND MIT AND MIT",
+                                            "LicenseRef-fossology-Apache-possibility AND LicenseRef-fossology-MIT-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND MIT AND FSFAP (first sentence) AND Public-domain",
+                                        "aliases": [
+                                            "Apache-2.0 AND LicenseRef-FSFAP-first-sentence AND LicenseRef-Public-domain AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND MIT AND OFL-1.1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND MIT AND Unicode-DFS-2016",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND OpenSSL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR BSL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR EPL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND PHP-3.0",
+                                        "aliases": [
+                                            "LicenseRef-Apache-possibility AND LicenseRef-PHP-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 OR GPL-2.0 AND BSD-2-Clause AND MIT",
+                                        "aliases": [
+                                            "Apache-2.0 AND GPL-2.0-only AND LicenseRef-fossology-Dual-license AND MIT",
+                                            "Apache-2.0 AND BSD-2-Clause AND GPL-2.0-only AND LicenseRef-fossology-Dual-license"
+                                        ]
+                                    },
+                                    {
+                                        "name": "0BSD",
+                                        "aliases": [
+                                            "0BSD AND LicenseRef-BSD",
+                                            "0BSD AND ISC",
+                                            "0BSD AND ISC AND LicenseRef-fossology-Public-domain"
+                                        ]
+                                    },
+                                    {
+                                        "name": "0BSD AND OpenSSL",
+                                        "aliases": [
+                                            "0BSD AND LicenseRef-SSLeay AND OpenSSL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-1-Clause",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause",
+                                        "aliases": [
+                                            "BSD-2-Clause AND BSD-2-Clause",
+                                            "BSD-2-Clause AND BSD-2-Clause-NetBSD",
+                                            "BSD-2-Clause-Views",
+                                            "BSD-2-Clause-Patent",
+                                            "LicenseRef-fossology-BSD-2-Clause-NetBSD",
+                                            "BSD-2-Clause AND LicenseRef-fossology-BSD-2-Clause-NetBSD"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause (bytecode variant)",
+                                        "aliases": [
+                                            "LicenseRef-BSD-2-Clause-bytecode"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND BSD-2-Clause-FreeBSD",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND BSD-3-Clause",
+                                        "aliases": [
+                                            "BSD-2-Clause-Views AND BSD-3-Clause AND LicenseRef-fossology-BSD-2-Clause-EFI AND LicenseRef-fossology-WebM",
+                                            "BSD-3-Clause AND LicenseRef-fossology-BSD-2-Clause-EFI AND LicenseRef-fossology-WebM",
+                                            "BSD-2-Clause-Views AND BSD-3-Clause AND LicenseRef-fossology-WebM",
+                                            "BSD-2-Clause-Views AND BSD-3-Clause AND LicenseRef-fossology-BSD-2-Clause-EFI AND LicenseRef-fossology-BSD-2-Clause-FreeBSD AND LicenseRef-fossology-WebM"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND BSD-3-Clause AND ISC AND LicenseRef-Public-domain AND MIT AND Zlib",
+                                        "aliases": [
+                                            "0BSD AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-3-Clause-No-Military-License AND ISC AND LicenseRef-fossology-NewBSD AND LicenseRef-fossology-WebM AND MIT AND MIT AND Zlib"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND BSD-3-Clause AND LicenseRef-HPND-style-Russ-Cox-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND BSD-3-Clause AND MIT",
+                                        "aliases": [
+                                            "BSD-2-Clause AND BSD-3-Clause AND MIT AND MIT",
+                                            "BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Public-domain AND MIT AND MIT",
+                                            "BSD-2-Clause AND BSD-3-Clause AND LicenseRef-fossology-WebM AND MIT AND MIT AND X11"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND BSL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND ISC",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause AND MIT",
+                                        "aliases": [
+                                            "BSD-2-Clause AND MIT AND MIT",
+                                            "BSD-2-Clause AND LicenseRef-fossology-MIT-style AND Linux-OpenIB AND MIT AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause-FreeBSD",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause-FreeBSD AND BSD-3-Clause",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-2-Clause-NetBSD AND ISC",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause",
+                                        "aliases": [
+                                            "BSD-3-Clause AND BSD-3-Clause",
+                                            "BSD-3-Clause AND LicenseRef-BSD",
+                                            "BSD-3-Clause AND LicenseRef-BSD-style",
+                                            "LicenseRef-BSD AND LicenseRef-BSD-style",
+                                            "LicenseRef-fossology-BSD",
+                                            "LicenseRef-fossology-BSD-style",
+                                            "LicenseRef-fossology-BSD-possibility",
+                                            "BSD-3-Clause AND LicenseRef-fossology-BSD-style",
+                                            "LicenseRef-fossology-BSD AND LicenseRef-fossology-BSD-style",
+                                            "BSD-3-Clause AND LicenseRef-fossology-BSD",
+                                            "BSD-3-Clause AND LicenseRef-fossology-WebM",
+                                            "BSD-2-Clause AND BSD-3-Clause AND LicenseRef-fossology-BSD",
+                                            "BSD-3-Clause-LBNL",
+                                            "BSD-3-Clause-Attribution",
+                                            "LicenseRef-fossology-EDL-1.0",
+                                            "LicenseRef-fossology-IETF",
+                                            "TCL",
+                                            "AMPAS",
+                                            "Net-SNMP",
+                                            "NCSA",
+                                            "EPL-1.0 OR LicenseRef-fossology-EDL-1.0",
+                                            "BSD-3-Clause AND BSD-3-Clause-No-Nuclear-License-2014 AND LicenseRef-fossology-WebM"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND (Cryptogams OR OpenSSL)",
+                                        "aliases": [
+                                            "BSD-3-Clause AND LicenseRef-Cryptogams AND LicenseRef-Dual-license AND OpenSSL",
+                                            "BSD-3-Clause AND LicenseRef-Dual-license AND LicenseRef-SSLeay AND OpenSSL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND (MIT OR GPL-1.0-or-later)",
+                                        "aliases": [
+                                            "BSD-3-Clause AND GPL-1.0+ AND LicenseRef-Dual-license AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND BSD-Source-Code",
+                                        "aliases": [
+                                            "BSD-3-Clause AND LicenseRef-BSD-Source-Code"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND CC-BY-3.0",
+                                        "aliases": [
+                                            "LicenseRef-BSD AND LicenseRef-CC-BY",
+                                            "LicenseRef-fossology-BSD AND LicenseRef-fossology-CC-BY"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND CC-BY-3.0 AND MIT AND (MIT OR GPL-3.0-only)",
+                                        "aliases": [
+                                            "BSD-3-Clause AND CC-BY-3.0 AND GPL-3.0 AND LicenseRef-Dual-license-f9481bf9b27102a1531d8252c9de1cd3 AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND FSFULLR",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND ISC",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND ISC AND MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND LicenseRef-Public-domain",
+                                        "aliases": [
+                                            "BSD-3-Clause AND LicenseRef-fossology-Public-domain",
+                                            "LicenseRef-fossology-BSD AND LicenseRef-fossology-Public-domain"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND MIT",
+                                        "aliases": [
+                                            "BSD-3-Clause AND MIT AND MIT",
+                                            "0BSD AND BSD-2-Clause AND BSD-3-Clause AND MIT",
+                                            "LicenseRef-fossology-BSD AND LicenseRef-fossology-BSD-style AND MIT",
+                                            "BSD-3-Clause AND LicenseRef-fossology-WebM AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND OFL-1.1",
+                                        "aliases": [
+                                            "LicenseRef-BSD AND OFL-1.1",
+                                            "LicenseRef-fossology-BSD AND OFL-1.1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause OR CC0-1.0",
+                                        "aliases": [
+                                            "CC0-1.0 OR LicenseRef-fossology-BSD"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause OR LicenseRef-W3C-Test-Suite-License-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause OR MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-4-Clause",
+                                        "aliases": [
+                                            "BSD-4-Clause-Shortened"
+                                        ]
+                                    },
+                                    {
+                                        "name": "BSD-4-Clause-UC",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-3.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-3.0 AND MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-3.0 AND MIT AND OFL-1.1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "FSFAP",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "FSFAP AND FSFUL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "FSFUL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "FSFULLR",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "GPL-2.0+ OR MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Gladman custom permissive notice",
+                                        "aliases": [
+                                            "LicenseRef-Gladman-permissive-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "HPND-style-Russ-Cox",
+                                        "aliases": [
+                                            "LicenseRef-HPND-style-Russ-Cox-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "ISC",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "IJG",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "mpich2",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "ZPL-2.1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "ISC AND LicenseRef-Public-domain",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "ISC AND MIT",
+                                        "aliases": [
+                                            "ISC AND MIT AND MIT",
+                                            "ISC AND LicenseRef-fossology-Dual-license AND MIT AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-BSD",
+                                        "aliases": [
+                                            "LicenseRef-BSD-style",
+                                            "LicenseRef-BSD-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-HPND-MIT-no-disclaimer-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-Public-domain AND X11",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Linux-OpenIB OR GPL-2.0-only",
+                                        "aliases": [
+                                            "GPL-2.0 OR Linux-OpenIB"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT",
+                                        "aliases": [
+                                            "LicenseRef-Same-license-as AND MIT",
+                                            "LicenseRef-MIT-possibility",
+                                            "LicenseRef-X11-style",
+                                            "LicenseRef-fossology-X11-style",
+                                            "LicenseRef-MIT-CMU-style",
+                                            "X11",
+                                            "MIT AND X11",
+                                            "MIT AND MIT",
+                                            "MIT AND MIT AND X11",
+                                            "MIT-0",
+                                            "JSON",
+                                            "HPND",
+                                            "MIT-open-group",
+                                            "MIT-enna",
+                                            "MIT-CMU",
+                                            "MIT-feh",
+                                            "libtiff",
+                                            "LicenseRef-fossology-CMU",
+                                            "LicenseRef-AS-IS-1 AND MIT",
+                                            "LicenseRef-See-URL AND MIT",
+                                            "LicenseRef-fossology-Public-domain AND MIT",
+                                            "LicenseRef-fossology-MIT-possibility",
+                                            "LicenseRef-fossology-AS-IS-1 AND MIT",
+                                            "LicenseRef-fossology-MIT-style",
+                                            "LicenseRef-fossology-MIT-CMU-style",
+                                            "MIT AND MIT AND X11-distribute-modifications-variant",
+                                            "LicenseRef-fossology-See-URL AND MIT AND MIT",
+                                            "LicenseRef-fossology-Public-domain AND MIT AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT AND BSD (version unspecified)",
+                                        "aliases": [
+                                            "LicenseRef-BSD AND MIT",
+                                            "LicenseRef-BSD-possibility AND LicenseRef-MIT-possibility",
+                                            "LicenseRef-BSD-style AND MIT",
+                                            "0BSD AND MIT",
+                                            "LicenseRef-fossology-BSD AND MIT AND MIT",
+                                            "LicenseRef-fossology-BSD AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT AND LicenseRef-Public-domain",
+                                        "aliases": [
+                                            "CC0-1.0 AND MIT",
+                                            "LicenseRef-Public-domain AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT AND OFL-1.1",
+                                        "aliases": [
+                                            "MIT OR OFL-1.1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT AND OFL-1.1 AND (MIT OR GPL-2.0-only)",
+                                        "aliases": [
+                                            "GPL-2.0 AND LicenseRef-Dual-license AND MIT AND OFL-1.1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT AND Unlicense",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC-BY-4.0 AND MIT",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "MIT OR BSD (version unspecified)",
+                                        "aliases": [
+                                            "LicenseRef-BSD OR MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT OR GPL (version unspecified)",
+                                        "aliases": [
+                                            "LicenseRef-GPL OR MIT",
+                                            "LicenseRef-fossology-GPL OR MIT",
+                                            "LicenseRef-AS-IS-1 AND LicenseRef-GPL AND MIT AND MIT AND MIT",
+                                            "LicenseRef-fossology-AS-IS-1 AND LicenseRef-fossology-GPL AND MIT AND MIT AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT OR GPL-1.0-or-later",
+                                        "aliases": [
+                                            "GPL-1.0+ OR MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT OR GPL-2.0",
+                                        "aliases": [
+                                            "GPL-2.0 OR MIT",
+                                            "GPL-2.0-only OR MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIT OR GPL-3.0",
+                                        "aliases": [
+                                            "GPL-3.0 OR MIT",
+                                            "GPL-3.0-only OR MIT",
+                                            "LicenseRef-GPL AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "NTP-style",
+                                        "aliases": [
+                                            "LicenseRef-NTP-style-1",
+                                            "LicenseRef-fossology-MIT-CMU-style AND NTP"
+                                        ]
+                                    },
+                                    {
+                                        "name": "OFL-1.1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "AFL-2.1 OR LGPL-2.0-only",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Python",
+                                        "aliases": [
+                                            "Python-2.0",
+                                            "LicenseRef-Python",
+                                            "LicenseRef-fossology-Python",
+                                            "LicenseRef-fossology-Python AND LicenseRef-fossology-ZPL",
+                                            "LicenseRef-fossology-Python-2.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "PostgreSQL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Artistic-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "PSF-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "JasPer-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Beerware",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Imlib2",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "PHP-3.0",
+                                        "aliases": [
+                                            "LicenseRef-PHP-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Python AND MIT",
+                                        "aliases": [
+                                            "LicenseRef-Python AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Zlib",
+                                        "aliases": [
+                                            "LicenseRef-Zlib-possibility",
+                                            "LicenseRef-fossology-Zlib-possibility AND Zlib",
+                                            "LicenseRef-fossology-Zlib-possibility"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Info-ZIP",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "bzip2-1.0.6",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Community-Spec-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "FTL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-SunPro-permissive",
+                                        "aliases": [
+                                            "LicenseRef-fossology-SunPro-permissive"
+                                        ]
+                                    },
+                                    {
+                                        "name": "SSH-OpenSSH",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "UPL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Qhull",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "ICU",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "psutils",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "NetCDF",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "PHP-3.01",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "NTP",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "MirOS",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Fair",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "OLDAP-2.8",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "ECL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "libpng-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "TU-Berlin-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "ImageMagick",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "MulanPSL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "AFL-3.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "gnuplot",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "OML",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BlueOak-1.0.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "DOC",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Ruby",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "curl",
+                                        "aliases": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Other",
+                                "licenses": [
+                                    {
+                                        "name": "Artistic-1.0-Perl",
+                                        "aliases": [
+                                            "Artistic-1.0",
+                                            "LicenseRef-Perl-possibility",
+                                            "Artistic-1.0-Perl AND LicenseRef-fossology-Dual-license"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Artistic-1.0 OR GPL-1.0+",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "ClArtistic",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "BSD-3-Clause AND LicenseRef-Google-Patents-Notice-Polymer-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CC0-1.0",
+                                        "aliases": [
+                                            "CC-PDDC"
+                                        ]
+                                    },
+                                    {
+                                        "name": "ANTLR-PD",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "CockroachDB Community License Agreement",
+                                        "aliases": [
+                                            "LicenseRef-CockroachDB-Community-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "FSFUL AND FSFULLR AND GPL-2.0+ WITH Libtool-exception",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "FSFUL AND GPL-2.0+ WITH Libtool-exception",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "FSFULLR AND GPL-2.0+ WITH Libtool-exception",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LGPL-2.0-only WITH FLTK-exception",
+                                        "aliases": [
+                                            "FLTK-exception AND LGPL-2.0-only"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-2.1-only WITH Qwt-exception-1.0",
+                                        "aliases": [
+                                            "LGPL-2.1-only AND Qwt-exception-1.0"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-2.1-or-later WITH WxWindows-exception-3.1",
+                                        "aliases": [
+                                            "LGPL-2.0-or-later AND WxWindows-exception-3.1",
+                                            "LGPL-2.1-or-later AND WxWindows-exception-3.1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LGPL-3.0 WITH LGPL-3.0-linking-exception",
+                                        "aliases": [
+                                            "LGPL-3.0-linking-exception",
+                                            "LicenseRef-fossology-LGPL3-Linking-Exception-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0+ WITH gnu-javamail-exception",
+                                        "aliases": [
+                                            "gnu-javamail-exception AND GPL-2.0+",
+                                            "gnu-javamail-exception AND GPL-2.0-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0+ WITH Autoconf-short-exception-1",
+                                        "aliases": [
+                                            "LicenseRef-GPL-2.0--WITH-Autoconf-short-exception-1",
+                                            "LicenseRef-fossology-GPL-2.0--WITH-Autoconf-short-exception-1",
+                                            "LicenseRef-fossology-GPL-2.0--WITH-Autoconf-short-exception-3"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0+ WITH Libtool-exception",
+                                        "aliases": [
+                                            "LicenseRef-GPL-2.0--WITH-Libtool-exception",
+                                            "LicenseRef-fossology-GPL-2.0--WITH-Libtool-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0+ WITH mif-exception",
+                                        "aliases": [
+                                            "GPL-2.0-or-later OR mif-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0+ WITH Libtool-exception AND GPL-3.0+ WITH Libtool-exception",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "GPL-3.0+ AND LicenseRef-Autoconf-config-script-exception-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "GPL-3.0+ WITH Autoconf-short-exception-2",
+                                        "aliases": [
+                                            "LicenseRef-GPL-3.0--WITH-Autoconf-short-exception-2",
+                                            "LicenseRef-fossology-GPL-3.0--WITH-Autoconf-short-exception-2",
+                                            "GPL-3.0+ AND LicenseRef-Autoconf-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0+ WITH Autoconf-short-exception-3",
+                                        "aliases": [
+                                            "GPL-3.0+ AND LicenseRef-Autoconf-exception",
+                                            "Autoconf-exception-3.0 AND GPL-3.0-or-later",
+                                            "LicenseRef-GPL-3.0--WITH-Autoconf-short-exception-3",
+                                            "LicenseRef-fossology-GPL-3.0--WITH-Autoconf-short-exception-3"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0+ WITH Bison-exception-2.2",
+                                        "aliases": [
+                                            "LicenseRef-GPL-3.0--with-bison-exception",
+                                            "LicenseRef-GPL-3.0-with-bison-exception",
+                                            "LicenseRef-fossology-GPL-3.0-with-bison-exception"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0 WITH GCC-exception-2.0",
+                                        "aliases": [
+                                            "GCC-exception-2.0 AND GPL-2.0-only"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-3.0 WITH GCC-exception-3.1",
+                                        "aliases": [
+                                            "GCC-exception-3.1 AND GPL-3.0-or-later",
+                                            "GCC-exception-3.1 AND GPL-3.0-or-later AND LGPL-2.1-or-later"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0 WITH Classpath-exception-2.0",
+                                        "aliases": [
+                                            "Classpath-exception-2.0 AND GPL-2.0-only",
+                                            "Classpath-exception-2.0 AND GPL-2.0-or-later",
+                                            "Classpath-exception-2.0 AND GPL-2.0-only AND LicenseRef-fossology-CDDL"
+                                        ]
+                                    },
+                                    {
+                                        "name": "GPL-2.0 WITH Linux-syscall-note",
+                                        "aliases": [
+                                            "GPL-2.0-only OR Linux-syscall-note",
+                                            "GPL-2.0-or-later OR Linux-syscall-note",
+                                            "GPL-2.0-only AND Linux-syscall-note",
+                                            "GPL-2.0-or-later AND Linux-syscall-note"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-ATT-Public-License-1",
+                                        "aliases": [
+                                            "LicenseRef-ATT",
+                                            "LicenseRef-fossology-ATT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-CockroachDB-Community-License-Agreement-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-Google-Patents-Notice-GRPC-1",
+                                        "aliases": [
+                                            "LicenseRef-fossology-Google-Patents-Notice-GRPC-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Google-Patents-Notice-Golang-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-Google-Patents-Notice-goauth2-1",
+                                        "aliases": [
+                                            "LicenseRef-fossology-Google-Patents-Notice-goauth2-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Meta-List-of-Dependencies-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-Monotype-license-reference-1",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "LicenseRef-OASIS-IPR-Notice-1",
+                                        "aliases": [
+                                            "LicenseRef-fossology-OASIS-IPR-Notice-1"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Public-domain",
+                                        "aliases": [
+                                            "LicenseRef-Public-domain-ref",
+                                            "CC0-1.0 AND LicenseRef-fossology-Public-domain",
+                                            "LicenseRef-fossology-Public-domain",
+                                            "LicenseRef-fossology-Public-domain-ref"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Unlicense",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Unlicense AND LicenseRef-Meta-List-of-Dependencies-1",
+                                        "aliases": [
+                                            "LicenseRef-Meta-List-of-Dependencies-1 AND Unlicense"
+                                        ]
+                                    },
+                                    {
+                                        "name": "WTFPL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Vim",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "QPL-1.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "APSL-2.0",
+                                        "aliases": [
+                                            "APSL-2.0 AND BSD-3-Clause",
+                                            "APSL-2.0 AND BSD-4-Clause",
+                                            "APSL-2.0 AND LicenseRef-CMU",
+                                            "APSL-2.0 AND LicenseRef-fossology-CMU"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Unicode-TOU",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND Unicode-TOU",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "W3C",
+                                        "aliases": [
+                                            "LicenseRef-W3C-IP",
+                                            "LicenseRef-fossology-W3C-IP"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND curl AND GPL-2.0 AND ICU AND Intel AND LicenseRef-Python AND MIT AND Zlib",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Apache-2.0 AND BSD-3-Clause AND MIT AND (LGPL-2.1 WITH GCC-exception-2.0)",
+                                        "aliases": [
+                                            "Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND LGPL-2.1 AND LicenseRef-GCC-exception AND MIT",
+                                            "Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LicenseRef-fossology-GCC-exception AND MIT"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Non-commercial",
+                                        "aliases": [
+                                            "LicenseRef-fossology-Non-commercial"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Restricted-rights",
+                                        "aliases": [
+                                            "LicenseRef-fossology-Restricted-rights"
+                                        ]
+                                    },
+                                    {
+                                        "name": "LicenseRef-Not-for-sale",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "blessing",
+                                        "aliases": [
+                                            "LicenseRef-blessing"
+                                        ]
+                                    },
+                                    {
+                                        "name": "Noweb",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "NLPL",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "Java-WSDL-Policy",
+                                        "aliases": [
+                                            "LicenseRef-fossology-Java-WSDL-Policy"
+                                        ]
+                                    },
+                                    {
+                                        "name": "0BSD AND AFL-2.0 AND Apache-2.0 AND APSL-2.0 AND blessing AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-FreeBSD AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-3-Clause-No-Nuclear-License-2014 AND BSD-4-Clause AND BSD-4-Clause-UC AND BSD-Protection AND BSD-Source-Code AND BSL-1.0 AND Classpath-exception-2.0 AND CPL-1.0 AND CUA-OPL-1.0 AND curl AND FTL AND GPL-2.0 AND GPL-2.0+ AND GPL-3.0 AND HPND AND HPND-sell-variant AND ICU AND IJG AND ISC AND LGPL-2.0+ AND LGPL-2.1 AND LGPL-2.1+ AND LGPL-3.0+ AND Libpng AND libpng-2.0 AND LicenseRef-AGPL-3.0+ AND LicenseRef-Apache-2.0-Pixar-modified AND LicenseRef-AS-IS-1 AND LicenseRef-ATT AND LicenseRef-Bitstream-Vera-Fonts AND LicenseRef-BSD-2-Clause-EFI AND LicenseRef-BSD-2-Clause-vector AND LicenseRef-Dual-license AND LicenseRef-Freeware AND LicenseRef-Google-Patents-Notice-GRPC-1 AND LicenseRef-HPND-warranty-disclaimer AND LicenseRef-IBM-dhcp AND LicenseRef-Minpack AND LicenseRef-MS-PL-Pixar-modified AND LicenseRef-NewBSD AND LicenseRef-NVIDIA-use-1 AND LicenseRef-Public-domain-BSD-disclaimer AND LicenseRef-SSLeay AND LLVM-exception AND mif-exception AND MIT AND MPL-1.1 AND MPL-2.0 AND OFL-1.1-no-RFN AND OpenSSL AND SGI-B-2.0 AND Unicode AND Unlicense AND X11 AND Zlib",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "0BSD AND Apache-2.0 AND BSD-2-Clause-NetBSD AND BSD-3-Clause AND CDDL-1.0 AND DigiRule-FOSS-exception AND GPL-2.0+ AND GPL-3.0 AND ISC AND LGPL-3.0 AND LicenseRef-Bison-exception AND LicenseRef-BSD-2-Clause-vector AND LicenseRef-Dual-license AND LicenseRef-MPL AND LicenseRef-NotreDame-style AND LicenseRef-PHP AND MIT AND MIT AND NCSA AND PostgreSQL AND Python-2.0 AND Spencer-86 AND W3C AND Zlib AND ZPL-2.0",
+                                        "aliases": []
+                                    },
+                                    {
+                                        "name": "0BSD AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND GCC-exception-3.1 AND GPL-2.0+ AND GPL-3.0 AND GPL-3.0+ AND GPL-3.0-with-GCC-exception AND ICU AND ISC AND JSON AND LGPL-2.1 AND LGPL-2.1+ AND LicenseRef-AS-IS-1 AND LicenseRef-ATT AND LicenseRef-BSD-2-Clause-EFI AND LicenseRef-BSD-2-Clause-vector AND LicenseRef-CMake AND LicenseRef-CMU AND LicenseRef-Dual-license AND LicenseRef-naist-2003 AND LicenseRef-NewBSD AND LicenseRef-NotreDame-style AND LicenseRef-Public-domain-BSD-disclaimer AND LicenseRef-SSLeay AND MIT AND OpenSSL AND PSF-2.0 AND Python-2.0 AND Spencer-94 AND Unicode AND Unicode-DFS-2015 AND Unicode-DFS-2016 AND Unicode-TOU AND Universal-FOSS-exception-1.0 AND Zlib",
+                                        "aliases": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "No license found",
+                                "licenses": [
+                                    {
+                                        "name": "No license found",
+                                        "aliases": [
+                                            "LicenseRef-See-doc.OTHER",
+                                            "LicenseRef-See-file",
+                                            "LicenseRef-See-URL",
+                                            "LicenseRef-UnclassifiedLicense",
+                                            "LicenseRef-fossology-See-URL",
+                                            "LicenseRef-fossology-UnclassifiedLicense",
+                                            "LicenseRef-fossology-See-doc.OTHER",
+                                            "LicenseRef-fossology-Same-license-as",
+                                            "LicenseRef-fossology-See-file",
+                                            "NOASSERTION"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "flagged": [
+                            "Non-OSS",
+                            "Binary files",
+                            "Copyleft",
+                            "Weak Copyleft",
+                            "Advertising Clause",
+                            "Other",
+                            "Fix license statement"
+                        ]
+                    }
+                },
+                "combinedReport": false,
+                "extensions-skip": [
+                    "json",
+                    "jpg",
+                    "jpeg",
+                    "png",
+                    "gif",
+                    "pem",
+                    "crt",
+                    "key",
+                    "der",
+                    "ski",
+                    "pdf",
+                    "svg",
+                    "corpus*"
+                ],
+                "thirdparty-dirs": [
+                    "vendor",
+                    "thirdparty",
+                    "third-party",
+                    "node-modules"
+                ]
+            },
+            "type": "github",
+            "subprojects": {
+				 "keycloak": {
+                    "status": "START",
+                    "slm": {},
+                    "code": {
+                        "anyfiles": true,
+                        "pulled": "2024-03-15",
+                        "path": "/lfscanning-code/2024-03/code/cncf-3/keycloak/keycloak-2024-03-15.zip",
+                        "repos": {
+                            "kc-sig-fapi": "a7722e7918585396ce6dd8f5489aaea7740eb9da",
+                            "keycloak": "0e717f735e1b17d2ef10fa7b4764b1dc495d4746",
+                            "keycloak-benchmark": "5f7d404e81fd262f3686829f5285115958e27319",
+                            "keycloak-community": "140f549093e817e994811306ae5334be6c19af35",
+                            "keycloak-extension-poc": "64e3a0e90d26f52bfef43465d9d608ea14f4cede",
+                            "keycloak-github-bot": "4e825b2941d60a499e0f4e6f91f224b4abe43e49",
+                            "keycloak-k8s-resources": "02a2913e2ad9e3454844bd8f6bb0ebfb03765c0e",
+                            "keycloak-misc": "dee033f2d6d6b5c3a6ce8eb84e285f7e5626dbf6",
+                            "keycloak-nodejs-connect": "cee3608b35273d9e37f70fa9b5f24d8465bb9870",
+                            "keycloak-playground": "6a7de121d58d9760523b8d80edb7c2efa5da1d86",
+                            "keycloak-quickstarts": "66fc8d915dbcbed5abd0acb9b353aa3bef02b26a",
+                            "keycloak-realm-operator": "f0b2224aee10685b49c48febf38ddfbbe2e6ba0b",
+                            "keycloak-rest-api-description": "83557d81ec027a786f7cc467ad954982644fa8bc",
+                            "libunix-dbus-java": "06e3d1e5987f96eccad530b59cd133dcb895ae01"
+                        }
+                    },
+                    "web": {},
+                    "github": {
+                        "org": "keycloak",
+                        "ziporg": "keycloak",
+                        "repo-dirs-delete": {},
+                        "repos": [
+                            "kc-sig-fapi",
+                            "keycloak",
+                            "keycloak-benchmark",
+                            "keycloak-community",
+                            "keycloak-extension-poc",
+                            "keycloak-github-bot",
+                            "keycloak-k8s-resources",
+                            "keycloak-misc",
+                            "keycloak-nodejs-connect",
+                            "keycloak-playground",
+                            "keycloak-quickstarts",
+                            "keycloak-realm-operator",
+                            "keycloak-rest-api-description",
+                            "libunix-dbus-java"
+                        ],
+                        "repos-ignore": [
+                            ".github",
+                            "kcinit",
+                            "keycloak-containers",
+                            "keycloak-demo",
+                            "keycloak-documentation",
+                            "keycloak-gh-actionbot",
+                            "keycloak-nodejs-admin-client",
+                            "keycloak-operator",
+                            "keycloak-ui",
+                            "keycloak-web",
+                            "keycloak.github.io",
+                            "openshift-integration"
+                        ]
+                    }
+				 }
+            }
         }
 	}
 }
