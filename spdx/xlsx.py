@@ -103,15 +103,15 @@ def _generateDependenciesSheet(wb, spdxDocument):
 def _addrow(ws, pkg, relationship):
     name = pkg.name if pkg.name else ""
     version = pkg.version if pkg.version else ""
-    if hasattr(pkg, 'license_declared') and not pkg.license_declared is None:
-        declaredLicense = str(pkg.license_declared)
+    if hasattr(pkg, 'license_concluded') and not pkg.license_concluded is None:
+        concludedLicense = str(pkg.license_concluded)
     else:
-        declaredLicense = ""
+        concludedLicense = ""
     purl = ""
     for externalRef in pkg.external_references:
         if externalRef.reference_type == "purl":
             purl = externalRef.locator
-    ws.append([name, declaredLicense, version, purl, relationship])
+    ws.append([name, concludedLicense, version, purl, relationship])
 
 def _addrelationships(ws, pkg, unrecordedPackages, pkgRelationships):
      for relationship in pkgRelationships[pkg.spdx_id]:
