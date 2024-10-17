@@ -127,17 +127,26 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.TOOL, name = 'Scaffold'))
     for spdx_element in spdx_document.packages:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
-        spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
+        if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
+            spdx_element.license_declared = spdx_element.license_concluded
+        else:
+            spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
         fix_download_location(spdx_element)
         fix_attribution_text(spdx_element, spdx_document.annotations, spdx_document.creation_info.created)
     for spdx_element in spdx_document.files:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
-        spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
+        if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
+            spdx_element.license_declared = spdx_element.license_concluded
+        else:
+            spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
         fix_download_location(spdx_element)
         fix_attribution_text(spdx_element, spdx_document.annotations)
     for spdx_element in spdx_document.snippets:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
-        spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
+        if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
+            spdx_element.license_declared = spdx_element.license_concluded
+        else:
+            spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
         fix_download_location(spdx_element)
         fix_attribution_text(spdx_element, spdx_document.annotations)
         

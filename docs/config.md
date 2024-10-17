@@ -70,6 +70,7 @@ Edit that config.json's contents to configure for your setup. The following prov
 * `fossologyJobSpec`: Options used for the FOSSOlogy analysis.  The options roughly follow the options on the jobs/schedule agent menu in the FOSSOlogy UI.
 * `trivyExecPath`: Path to the Trivy executable
 * `npmExecPath`: Path to the NPM executable
+* `parlayExecPath`: Path to the Parlay executable
 
 There are also several values prefixed by `ws`. These are currently required to be present, but are not used unless one or more projects are configured to upload scan findings to WhiteSource (FIXME: details to be added).
 

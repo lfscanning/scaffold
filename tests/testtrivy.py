@@ -41,17 +41,16 @@ class TestTrivy(unittest.TestCase):
         self.git_url = f"git@github.com:{GITHUB_ORG}/{self.repoName}.git"
         git.Git(self.repo_dir).clone(self.git_url, depth=1)
         self._cleanGitClone(self.project_repo_dir)
-        if 'TRIVY_EXEC_PATH' in os.environ:
-            self.saved_trivy = os.environ['TRIVY_EXEC_PATH']
-        else:
-            self.saved_trivy = None
+        self.trivy_env_set = 'TRIVY_EXEC_PATH' in os.environ
+        if not self.trivy_env_set:
             os.environ['TRIVY_EXEC_PATH'] = 'trivy' # default
-        if 'NPM_EXEC_PATH' in os.environ:
-            self.saved_npm = os.environ['NPM_EXEC_PATH']
-        else:
-            self.saved_npm = None
+        self.npm_env_set = 'NPM_EXEC_PATH' in os.environ
+        if not self.npm_env_set:
             os.environ['NPM_EXEC_PATH'] = 'npm' # default
         self.npm_path = os.path.join(self.temp_dir.name, 'simplenpm')
+        self.parlay_env_set = 'PARLAY_EXEC_PATH' in os.environ
+        if not self.parlay_env_set:
+            os.environ['PARLAY_EXEC_PATH'] = 'parlay' # default
         with zipfile.ZipFile(SIMPLE_NPM_ZIP, mode='r') as zip:
             zip.extractall(self.temp_dir.name)
         self.node_modules_path = os.path.join(self.npm_path, 'node_modules')
@@ -77,22 +76,16 @@ class TestTrivy(unittest.TestCase):
             commitMsg = "Cleaning up after TestTrivy run"
             repo.index.commit(commitMsg)
             origin.push()
-            if self.saved_trivy is None:
-                del os.environ['TRIVY_EXEC_PATH']
-            else:
-                os.environ['TRIVY_EXEC_PATH'] = self.saved_trivy
 
     def tearDown(self):
         self._cleanGitClone(self.project_repo_dir)
         self.temp_dir.cleanup()
-        if self.saved_trivy:
-            os.environ['TRIVY_EXEC_PATH'] = self.saved_trivy
-        elif 'TRIVY_EXEC_PATH' in os.environ:
+        if not self.trivy_env_set:
             del os.environ['TRIVY_EXEC_PATH']
-        if self.saved_npm:
-            os.environ['NPM_EXEC_PATH'] = self.saved_npm
-        elif 'NPM_EXEC_PATH' in os.environ:
+        if not self.npm_env_set:
             del os.environ['NPM_EXEC_PATH']
+        if not self.parlay_env_set:
+            del os.environ['PARLAY_EXEC_PATH']
             
 
     def test_trivy(self):

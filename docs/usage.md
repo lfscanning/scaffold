@@ -158,10 +158,11 @@ Note: this command should be used with caution and only run after verifying no o
 
 * Additional arguments: `PROJECT SUBPROJECT`
 * Example: `> sc 2021-09 trivy project1 subproject4`
-* Summary: Runs [trivy](https://aquasecurity.github.io/trivy) against the code with the licensing and vulnerability options
+* Summary: Runs [trivy](https://aquasecurity.github.io/trivy) against the code with the licensing and vulnerability options and enriches the SBOM with [parlay](https://github.com/snyk/parlay)
 * Details:
   * Runs the trivy application with the following options:
     * `--scanners license,vuln`
 	* `--format spdx-json`
+  * Runs parlay application with the `ecosystems enrich` command
   * Uploads the resultant SPDX JSON file to the lfscanning repo spdx-[project-name]
   * Creates an xlsx report on the dependencies and store that report in the reports folder

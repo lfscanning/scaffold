@@ -20,19 +20,29 @@ alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 
 ### Trivy
 
-To use the `trivy` command, [trivy](https://aquasecurity.github.io/trivy) must be installed on the local maching and an alias `trivy` setup to point to the local installation.
-
-The current version of Trivy requires Go version 1.22.X installed on the target machine.
+To use the `trivy` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/) and [parlay](https://github.com/snyk/parlay) must be installed on the local machine.
+)
+The current version of Trivy and Parlay requires Go version 1.22.X installed on the target machine.
 
 To install Trivy:
 
 ```
-git clone --depth 1 --branch v0.54.0 https://github.com/aquasecurity/trivy
+git clone --depth 1 --branch v0.54.0 https://github.com/aquasecurity/trivy.git
 cd trivy
 go install ./cmd/trivy
 ```
 
-The location of the Trivy command needs to be added to the config file or as an environment variable `TRIVY_EXEC_PATH`.
+The location of the Trivy command needs to be added to the config file and/or as an environment variable `TRIVY_EXEC_PATH`.
+
+To install Parlay:
+
+```
+git clone --depth 1 --branch v0..5.1 https://github.com/snyk/parlay.git
+cd parlay
+go install .
+```
+
+The location of the Parlay command needs to be added to the config file and/or as an environment variable `PARLAY_EXEC_PATH`.
 
 In addition [NPM](https://www.npmjs.com/) must be installed.
 
