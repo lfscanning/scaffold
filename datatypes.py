@@ -404,6 +404,7 @@ class Config:
         self._storepath = ""
         self._zippath = ""
         self._trivy_exec_path = ""
+        self._parlay_exec_path = ""
         self._npm_exec_path = ""
         self._projects = {}
         self._month = ""

@@ -30,12 +30,27 @@ def runUnifiedAgent(cfg, prj, sp):
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
         installNpm(analysisdir, cfg, prj, sp)
-        cmd = [cfg._trivy_exec_path, "fs", "--timeout", "60m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
-        result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
-        with open(result, 'w') as outfile:
-            cp = run(cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
+        trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "60m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
+        trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
+        with open(trivy_result, 'w') as outfile:
+            cp = run(trivy_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
             if cp.returncode != 0:
                 print(f"""{prj._name}/{sp._name}: Trivy failed with error code {cp.returncode}:
+----------
+output:
+{cp.stdout}
+----------
+errors:
+{cp.stderr}
+----------
+""")
+                return False
+        result = os.path.join(tempdir, f"{prj._name}-{sp._name}-parlay-spdx.json")
+        parlay_cmd = [cfg._parlay_exec_path, "ecosystems", "enrich", str(trivy_result)]
+        with open(result, 'w') as outfile:
+            cp = run(parlay_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
+            if cp.returncode != 0:
+                print(f"""{prj._name}/{sp._name}: Parlay failed with error code {cp.returncode}:
 ----------
 output:
 {cp.stdout}
