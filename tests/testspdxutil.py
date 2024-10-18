@@ -224,11 +224,9 @@ class TestSpdxUtil(unittest.TestCase):
                     spdx_element_utils.get_element_type_from_spdx_id(relationship.related_spdx_element_id, spdx_document) == Package:
                 describes = document_utils.get_element_from_spdx_id(spdx_document, relationship.related_spdx_element_id)
         self.assertEqual('aswf.materialx', describes.name)
-        self.assertEqual('BSD-3-Clause AND (BSD-3-Clause AND CC-BY-3.0) AND (BSD-3-Clause AND CC-BY-4.0) AND (LicenseRef-LicenseRef-CC-BY-3.0- OR MIT) AND CC-BY-4.0 AND AMPAS AND Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND (Apache-2.0 AND CC-BY-4.0) AND CC-BY-4.0 AND CC-BY-4.0 AND MPL-2.0 AND (MPL-2.0 AND CC-BY-4.0) AND (MPL-2.0 AND LicenseRef-LicenseRef-DreamWorks-BSD-style-1)', \
-                            str(describes.license_declared))
+        self.assertEqual('Apache-2.0', str(describes.license_declared))
         
-        self.assertEqual('BSD-3-Clause AND (BSD-3-Clause AND CC-BY-3.0) AND (BSD-3-Clause AND CC-BY-4.0) AND (LicenseRef-LicenseRef-CC-BY-3.0- OR MIT) AND CC-BY-4.0 AND AMPAS AND Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND (Apache-2.0 AND CC-BY-4.0) AND CC-BY-4.0 AND CC-BY-4.0 AND MPL-2.0 AND (MPL-2.0 AND CC-BY-4.0) AND (MPL-2.0 AND LicenseRef-LicenseRef-DreamWorks-BSD-style-1)', \
-                            str(describes.license_concluded))
+        self.assertEqual('Apache-2.0', str(describes.license_concluded))
         contained = []
         for relationship in spdx_document.relationships:
             if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == describes.spdx_id:
@@ -237,8 +235,8 @@ class TestSpdxUtil(unittest.TestCase):
                 if repo_pkg.name == 'MaterialX':
                     materialx_pkg = repo_pkg
         self.assertEqual(3, len(contained))
-        self.assertEqual('Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND (Apache-2.0 AND CC-BY-4.0)', str(materialx_pkg.license_declared))
-        self.assertEqual(SpdxNoAssertion(), materialx_pkg.license_concluded)
+        self.assertEqual('Apache-2.0', str(materialx_pkg.license_declared))
+        self.assertEqual('Apache-2.0', str(materialx_pkg.license_concluded))
         self.assertEqual('https://github.com/AcademySoftwareFoundation/MaterialX/archive/153a803c46181319fd782ef8426ff58a2e885d82.zip', materialx_pkg.download_location)
         self.assertEqual(1, len(materialx_pkg.external_references))
         self.assertEqual(ExternalPackageRefCategory.PACKAGE_MANAGER, materialx_pkg.external_references[0].category)

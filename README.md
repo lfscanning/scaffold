@@ -37,7 +37,7 @@ The location of the Trivy command needs to be added to the config file and/or as
 To install Parlay:
 
 ```
-git clone --depth 1 --branch v0..5.1 https://github.com/snyk/parlay.git
+git clone --depth 1 --branch v0.5.1 https://github.com/snyk/parlay.git
 cd parlay
 go install .
 ```

@@ -58,30 +58,36 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     # set the version to the date the analysis was run
     describes.version = cfg._month
     # Collect the project licenses and set the project license to the AND of all project licenses
-    project_licenses = []
-    for policy in prj._slm_policies.values():
-        for category in policy._category_configs:
+    subproject_licenses = []
+    if sp._slm_policy_name in prj._slm_policies:
+        for category in prj._slm_policies[sp._slm_policy_name]._category_configs:
             if category._name == "Project Licenses":
                 for licenseconfig in category._license_configs: 
-                    project_licenses.append(licenseconfig._name)
+                    subproject_licenses.append(licenseconfig._name)
+                    break # The repo license should be the first configured project license
+    elif "default" in prj._slm_policies:
+        for category in prj._slm_policies["default"]._category_configs:
+            if category._name == "Project Licenses":
+                for licenseconfig in category._license_configs: 
+                    subproject_licenses.append(licenseconfig._name)
+                    break # The repo license should be the first configured project license
+    else:       
+        for policy in prj._slm_policies.values():
+            for category in policy._category_configs:
+                if category._name == "Project Licenses":
+                    for licenseconfig in category._license_configs: 
+                        subproject_licenses.append(licenseconfig._name)
+                        break # The project license should be the first configured project license
     try:
-        project_license = licenseStringsToExpression(project_licenses, spdx_document.extracted_licensing_info, licensing)
+        subproject_license = licenseStringsToExpression(subproject_licenses, spdx_document.extracted_licensing_info, licensing)
     except:
-        print(f'Error converting license IDs to expressions for {project_licenses}.  Fix the config file to contain accurate SPDX license IDs')
+        print(f'Error converting license IDs to expressions for {subproject_licenses}.  Fix the config file to contain accurate SPDX license IDs')
         return False
-    describes.license_declared = project_license
-    describes.license_concluded = project_license
+    describes.license_declared = subproject_license
+    describes.license_concluded = subproject_license
     # Add a level under root for each of the repos
     repo_packages = {}
     for repo in sp._repos:
-        repo_licenses = []
-        if sp._slm_policy_name in prj._slm_policies:
-            for category in prj._slm_policies[sp._slm_policy_name]._category_configs:
-                if category._name == "Project Licenses":
-                    for licenseconfig in category._license_configs: 
-                        repo_licenses.append(licenseconfig._name)
-        repo_license = licenseStringsToExpression(repo_licenses, spdx_document.extracted_licensing_info, licensing)
-        
         name = repo
         fileAnalyzed = False
         if sp._repotype == ProjectRepoType.GITHUB:
@@ -108,8 +114,8 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         source_info = 'The source this package was part of the LF Scanning configuration for the project ' + prj._name
         comment = 'This package was added to the Trivy analysis for the ' + name + ' by the Scaffold tool SBOM augmentation'
         repo_packages[repo] = Package(spdx_id = spdx_id, name = repo, download_location = download_location, version = version, supplier = supplier, \
-                                        files_analyzed = False, source_info = source_info, license_concluded = SpdxNoAssertion(), \
-                                        license_declared = repo_license, comment = comment, external_references = external_references, \
+                                        files_analyzed = False, source_info = source_info, license_concluded = subproject_license, \
+                                        license_declared = subproject_license, comment = comment, external_references = external_references, \
                                         primary_package_purpose = PackagePurpose.SOURCE)
         spdx_document.packages.append(repo_packages[repo])
         # add a contains relationship from the root to this package
