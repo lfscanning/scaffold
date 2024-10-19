@@ -35,6 +35,9 @@ MATERIALX_TRIVY_PATH = os.path.join(os.path.dirname(__file__), "testresources", 
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
 SPDX_TOOLS_JAVA_FILENAME = "spdx-tools-java-git-license-spdx.json"
 SPDX_TOOLS_JAVA_PATH = os.path.join(os.path.dirname(__file__), "testresources", SPDX_TOOLS_JAVA_FILENAME)
+TEST_MONTH = '2024-08'
+TEST_MATERIALX_REPORT_JSON_FILE_NAME = "materialx-2024-08-21.json"
+TEST_MATERIALX_REPORT_JSON = os.path.join(os.path.dirname(__file__), "testresources", TEST_MATERIALX_REPORT_JSON_FILE_NAME)
 
 TEST_PACKAGES = {
     "pom.xml" : {
@@ -120,12 +123,16 @@ class TestSpdxUtil(unittest.TestCase):
         self.scaffold_home_dir = os.path.join(self.temp_dir.name, "scaffold")
         os.mkdir(self.scaffold_home_dir)
         os.mkdir(os.path.join(self.scaffold_home_dir, 'spdxrepos'))
-        self.config_dir = os.path.join(self.scaffold_home_dir, '2024-08')
+        self.config_dir = os.path.join(self.scaffold_home_dir, TEST_MONTH)
         os.mkdir(self.config_dir)
         self.materialx_config_path = os.path.join(self.config_dir, MATERIALX_CONFIG_FILENAME)
         shutil.copy(MATERIALX_CONFIG_PATH, self.materialx_config_path)
         self.spdx_tools_java_path = os.path.join(self.temp_dir.name, SPDX_TOOLS_JAVA_FILENAME)
         shutil.copy(SPDX_TOOLS_JAVA_PATH, self.spdx_tools_java_path)
+        self.report_path = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", "aswf")
+        os.makedirs(self.report_path)
+        self.report_json_path = os.path.join(self.report_path, "materialx-2024-08-21.json")
+        shutil.copy(TEST_MATERIALX_REPORT_JSON, self.report_json_path)
         
 
     def tearDown(self):
@@ -216,6 +223,7 @@ class TestSpdxUtil(unittest.TestCase):
         self.maxDiff = None
         spdx_document = spdxutil.parseFile(self.materialx_trivy_path)
         cfg = loadConfig(self.materialx_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._storepath = str(self.scaffold_home_dir)
         prj = cfg._projects['aswf']
         sp = prj._subprojects['materialx']
         self.assertTrue(spdxutil.augmentTrivyDocument(spdx_document, cfg, prj, sp))
@@ -226,7 +234,7 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertEqual('aswf.materialx', describes.name)
         self.assertEqual('Apache-2.0', str(describes.license_declared))
         
-        self.assertEqual('Apache-2.0', str(describes.license_concluded))
+        self.assertEqual('Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified AND (Apache-2.0 AND MIT) AND MIT AND (MIT OR GPL-2.0-only) AND BSD-3-Clause AND BSL-1.0 AND ISC AND Zlib AND LicenseRef-Public-domain', str(describes.license_concluded))
         contained = []
         for relationship in spdx_document.relationships:
             if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == describes.spdx_id:
@@ -236,7 +244,7 @@ class TestSpdxUtil(unittest.TestCase):
                     materialx_pkg = repo_pkg
         self.assertEqual(3, len(contained))
         self.assertEqual('Apache-2.0', str(materialx_pkg.license_declared))
-        self.assertEqual('Apache-2.0', str(materialx_pkg.license_concluded))
+        self.assertEqual('Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified AND (Apache-2.0 AND MIT) AND MIT AND (MIT OR GPL-2.0-only) AND BSD-3-Clause AND BSL-1.0 AND ISC AND Zlib AND LicenseRef-Public-domain', str(materialx_pkg.license_concluded))
         self.assertEqual('https://github.com/AcademySoftwareFoundation/MaterialX/archive/153a803c46181319fd782ef8426ff58a2e885d82.zip', materialx_pkg.download_location)
         self.assertEqual(1, len(materialx_pkg.external_references))
         self.assertEqual(ExternalPackageRefCategory.PACKAGE_MANAGER, materialx_pkg.external_references[0].category)

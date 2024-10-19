@@ -25,8 +25,9 @@ from spdx_tools.spdx.writer.write_anything import write_file
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
 from datatypes import ProjectRepoType
+from slmjson import loadSLMCategories
 import re
-
+import os
 
 '''
 Parses an SPDX file with a supported file extension
@@ -58,33 +59,55 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     # set the version to the date the analysis was run
     describes.version = cfg._month
     # Collect the project licenses and set the project license to the AND of all project licenses
+    # if subproject policy name is an empty string, then use the first
+    # policy if there is only one (if there's more than one, error out)
+    if sp._slm_policy_name == "":
+        if len(prj._slm_policies) == 1:
+            policy = list(prj._slm_policies.values())[0]
+        else:
+            print(f"{prj._name}/{sp._name}: no slm policy specified for subproject but project has multiple policies, won't fix the Trivy SBOM")
+            return False
+    # otherwise get the right policy for this subproject, or fail if we can't
+    else:
+        try:
+            policy = prj._slm_policies[sp._slm_policy_name]
+        except KeyError:
+            print(f"{prj._name}/{sp._name}: slm policy name \"{sp._slm_policy_name}\" not defined, won't fix the Trivy SBOM")
+            return False
     subproject_licenses = []
-    if sp._slm_policy_name in prj._slm_policies:
-        for category in prj._slm_policies[sp._slm_policy_name]._category_configs:
-            if category._name == "Project Licenses":
-                for licenseconfig in category._license_configs: 
-                    subproject_licenses.append(licenseconfig._name)
-                    break # The repo license should be the first configured project license
-    elif "default" in prj._slm_policies:
-        for category in prj._slm_policies["default"]._category_configs:
-            if category._name == "Project Licenses":
-                for licenseconfig in category._license_configs: 
-                    subproject_licenses.append(licenseconfig._name)
-                    break # The repo license should be the first configured project license
-    else:       
-        for policy in prj._slm_policies.values():
-            for category in policy._category_configs:
-                if category._name == "Project Licenses":
-                    for licenseconfig in category._license_configs: 
-                        subproject_licenses.append(licenseconfig._name)
-                        break # The project license should be the first configured project license
+    for category in policy._category_configs:
+        if category._name == "Project Licenses":
+            if len(category._license_configs) > 0:
+                subproject_licenses.append(category._license_configs[0]._name)
     try:
-        subproject_license = licenseStringsToExpression(subproject_licenses, spdx_document.extracted_licensing_info, licensing)
+        subprojectDeclaredLicense = licenseStringsToExpression(subproject_licenses, spdx_document.extracted_licensing_info, licensing)
     except:
         print(f'Error converting license IDs to expressions for {subproject_licenses}.  Fix the config file to contain accurate SPDX license IDs')
         return False
-    describes.license_declared = subproject_license
-    describes.license_concluded = subproject_license
+    # Create the concluded license with the AND of all the found licenses from FOSSOlogy
+    reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+    jsonFilename = f"{sp._name}-{sp._code_pulled}.json"
+    jsonPath = os.path.join(reportFolder, jsonFilename)
+    if os.path.exists(jsonPath):
+        # load JSON license scan results
+        categories = loadSLMCategories(prj, sp, jsonPath)
+        subprojectConcludedLicenses = []
+        for cat in categories:
+            # skip category if it has no files
+            if cat._numfiles > 0:
+                for lic in cat._licenses:
+                    if lic._numfiles > 0:
+                        subprojectConcludedLicenses.append(lic._name)
+        for lic in subproject_licenses:
+            if not lic in subprojectConcludedLicenses:
+                subprojectConcludedLicenses.append(lic)
+        subprojectConcludedLicense = licenseStringsToExpression(subprojectConcludedLicenses, spdx_document.extracted_licensing_info, licensing)
+    else:
+        print(f"{prj._name}/{sp._name}: No SLM JSON file found - using project declared license as concluded license")
+        subprojectConcludedLicense = subprojectDeclaredLicense
+    
+    describes.license_declared = subprojectDeclaredLicense
+    describes.license_concluded = subprojectConcludedLicense
     # Add a level under root for each of the repos
     repo_packages = {}
     for repo in sp._repos:
@@ -114,8 +137,8 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         source_info = 'The source this package was part of the LF Scanning configuration for the project ' + prj._name
         comment = 'This package was added to the Trivy analysis for the ' + name + ' by the Scaffold tool SBOM augmentation'
         repo_packages[repo] = Package(spdx_id = spdx_id, name = repo, download_location = download_location, version = version, supplier = supplier, \
-                                        files_analyzed = False, source_info = source_info, license_concluded = subproject_license, \
-                                        license_declared = subproject_license, comment = comment, external_references = external_references, \
+                                        files_analyzed = False, source_info = source_info, license_concluded = subprojectConcludedLicense, \
+                                        license_declared = subprojectDeclaredLicense, comment = comment, external_references = external_references, \
                                         primary_package_purpose = PackagePurpose.SOURCE)
         spdx_document.packages.append(repo_packages[repo])
         # add a contains relationship from the root to this package
@@ -178,7 +201,9 @@ def fix_license(lic, extracted_licensing_info, licensing):
             # so that the second search for the pattern will just find the individual occurences
             withs = re.findall(f'([^ ]+) WITH ({re.escape(unknown_key)})', unparsed_lic)
             for w in withs:
-                with_extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', w[0]) + '-LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-\+]+', '-', w[1])
+                with_extracted_id = re.sub(r'[^0-9a-zA-Z\.\-]+', '-', w[0]) + '-LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-\+]+', '-', w[1])
+                if not with_extracted_id.startswith('LicenseRef-'):
+                    with_extracted_id = 'LicenseRef-' + with_extracted_id
                 with_id_found = False
                 for existing in extracted_licensing_info:
                     if existing.license_id == with_extracted_id:
@@ -189,7 +214,10 @@ def fix_license(lic, extracted_licensing_info, licensing):
                                     comment = 'This license text represents a WITH statement found in licensing metadata - the actual text is not known'))
                 unparsed_lic = re.sub(f'{re.escape(w[0])} WITH {re.escape(w[1])}', with_extracted_id, unparsed_lic)
             # Now we can handle the IDs not found in the WITH statements
-            extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', unknown_key)
+            if unknown_key.startswith('LicenseRef-'):
+                extracted_id = unknown_key
+            else:
+                extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', unknown_key)
             extracted_id_found = False
             for existing in extracted_licensing_info:
                 if existing.license_id == extracted_id:
@@ -243,7 +271,9 @@ def _licenseStringToExpression(license_string, extracted_licensing_info, licensi
         else:
             return str(fix_license(lic, extracted_licensing_info, licensing))
     except:
-        extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', license_string)
+        extracted_id = re.sub(r'[^0-9a-zA-Z\.\-]+', '-', license_string)
+        if not extracted_id.startswith("LicenseRef-"):
+            extracted_id = "LicenseRef-" + extracted_id
         extracted_id_found = False
         for existing in extracted_licensing_info:
             if existing.license_id == extracted_id:
