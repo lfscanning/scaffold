@@ -110,7 +110,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     describes.license_concluded = subprojectConcludedLicense
     # Add a level under root for each of the repos
     repo_packages = {}
-    for repo in sp._repos:
+    for repo in sp._code_repos.keys():
         name = repo
         fileAnalyzed = False
         if sp._repotype == ProjectRepoType.GITHUB:
