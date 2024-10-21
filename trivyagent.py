@@ -30,7 +30,7 @@ def runUnifiedAgent(cfg, prj, sp):
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
         installNpm(analysisdir, cfg, prj, sp)
-        trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "60m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
+        trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "120m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
         trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(trivy_result, 'w') as outfile:
             cp = run(trivy_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
