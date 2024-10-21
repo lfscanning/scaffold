@@ -206,8 +206,9 @@ def fix_license(lic, extracted_licensing_info, licensing):
                     with_extracted_id = 'LicenseRef-' + with_extracted_id
                 with_id_found = False
                 for existing in extracted_licensing_info:
-                    if existing.license_id == with_extracted_id:
+                    if existing.license_id.lower() == with_extracted_id.lower():
                         with_id_found = True
+                        with_extracted_id = existing.license_id # perserve the original case
                         break
                 if not with_id_found:
                     extracted_licensing_info.append(ExtractedLicensingInfo(license_id = with_extracted_id, extracted_text = f'{w[0]} WITH {w[1]}', \
@@ -220,8 +221,9 @@ def fix_license(lic, extracted_licensing_info, licensing):
                 extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', unknown_key)
             extracted_id_found = False
             for existing in extracted_licensing_info:
-                if existing.license_id == extracted_id:
+                if existing.license_id.lower() == extracted_id.lower():
                     extracted_id_found = True
+                    extracted_id = existing.license_id # perserve the original case
                     break
             if not extracted_id_found:
                 extracted_licensing_info.append(ExtractedLicensingInfo(license_id = extracted_id, extracted_text = unknown_key, \
