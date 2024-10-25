@@ -111,6 +111,8 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     
     describes.license_declared = subprojectDeclaredLicense
     describes.license_concluded = subprojectConcludedLicense
+    describes.supplier = Actor(actor_type = ActorType.ORGANIZATION, name = 'Linux Foundation Project ' + prj._name)
+    
     # Add a level under root for each of the repos
     repo_packages = {}
     for repo in sp._code_repos.keys():
