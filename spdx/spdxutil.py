@@ -29,6 +29,8 @@ from slmjson import loadSLMCategories
 import re
 import os
 
+import pdb
+
 '''
 Parses an SPDX file with a supported file extension
 Raises SPDXParsingError on parsing errors
@@ -44,6 +46,7 @@ def writeFile(spdx_document, file):
     print("SPDX sucessfully written")
     
 def augmentTrivyDocument(spdx_document, cfg, prj, sp):
+    remove_dup_packages(spdx_document)
     licensing = get_spdx_licensing()
     # find the root of the document
     describes = None
@@ -151,9 +154,10 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             if repo:
                 relationship.spdx_element_id = repo_packages[repo].spdx_id
 
-    # Fix up the creation info to add scaffold as a tool and Linux Foundation as an organization
+    # Fix up the creation info to add scaffold and Parlay as a tool and Linux Foundation as an organization
     spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.ORGANIZATION, name = 'Linux Foundation'))
     spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.TOOL, name = 'Scaffold'))
+    spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.TOOL, name = 'Parlay'))
     for spdx_element in spdx_document.packages:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
         if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
@@ -186,6 +190,21 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     print("Trivy document augmented")
     return True
     
+def remove_dup_packages(spdx_document):
+    # Removes duplicate packages from the SPDX document which will cause validation to fail
+    new_pkgs = [] # Note: we don't use the remove method on the spdx_document.packages due to performance issues
+    all_pkg_ids = set(())
+    num_dups = 0
+    for pkg in spdx_document.packages:
+        if pkg.spdx_id in all_pkg_ids:
+            num_dups = num_dups + 1
+        else:
+            new_pkgs.append(pkg)
+            all_pkg_ids.add(pkg.spdx_id)
+    if num_dups > 0:
+        print(f'Removing {num_dups} duplicate packages')
+        spdx_document.packages = new_pkgs
+
 def fix_license(lic, extracted_licensing_info, licensing):
     if lic == SpdxNone():
         return SpdxNoAssertion()

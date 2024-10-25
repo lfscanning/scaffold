@@ -46,6 +46,29 @@
       ],
       "primaryPackagePurpose": "LIBRARY"
     },
+	{
+      "name": "@jridgewell/gen-mapping",
+      "SPDXID": "SPDXRef-Package-e5e18bf88fdfc531",
+      "versionInfo": "0.3.5",
+      "supplier": "NOASSERTION",
+      "downloadLocation": "NONE",
+      "filesAnalyzed": false,
+      "sourceInfo": "package found in: MaterialX/javascript/MaterialXView/package-lock.json",
+      "licenseConcluded": "NONE",
+      "licenseDeclared": "NONE",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/%40jridgewell/gen-mapping@0.3.5"
+        }
+      ],
+      "attributionTexts": [
+        "PkgID: @jridgewell/gen-mapping@0.3.5",
+        "PkgType: npm"
+      ],
+      "primaryPackagePurpose": "LIBRARY"
+    },
     {
       "name": "@jridgewell/resolve-uri",
       "SPDXID": "SPDXRef-Package-983c542c7d153b40",

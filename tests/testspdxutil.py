@@ -138,7 +138,7 @@ class TestSpdxUtil(unittest.TestCase):
     def tearDown(self):
         self.temp_dir.cleanup()
 
-    def test_createxlsx(self):
+    def testCreateXlsx(self):
         spdx_document = spdxutil.parseFile(self.trivy_json_path)
         workbook = xlsx.makeXlsx(spdx_document)
         ws = workbook['Dependencies']
@@ -164,7 +164,7 @@ class TestSpdxUtil(unittest.TestCase):
             else:
                 self.fail('Unexpected license row')
         
-    def test_largexlsx(self):
+    def testLargeXlsx(self):
         spdx_document = spdxutil.parseFile(self.large_json_path)
         workbook = xlsx.makeXlsx(spdx_document)
         ws = workbook['Dependencies']
@@ -209,7 +209,7 @@ class TestSpdxUtil(unittest.TestCase):
         errors = validate_full_spdx_document(spdx_document)
         self.assertFalse(errors)
         
-    def test_fix_large_document(self):
+    def testFixLargeDocument(self):
         self.maxDiff = None
         spdx_document = spdxutil.parseFile(self.large_json_path)
         cfg = loadConfig(self.materialx_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
@@ -219,7 +219,20 @@ class TestSpdxUtil(unittest.TestCase):
         # takes too long - errors = validate_full_spdx_document(spdx_document)
         # self.assertFalse(errors)
     
-    def test_fix_trivy_document(self):
+    def testRemoveDupPackages(self):
+        self.maxDiff = None
+        spdx_document = spdxutil.parseFile(self.materialx_trivy_path)
+        cfg = loadConfig(self.materialx_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._storepath = str(self.scaffold_home_dir)
+        prj = cfg._projects['aswf']
+        sp = prj._subprojects['materialx']
+        self.assertTrue(spdxutil.augmentTrivyDocument(spdx_document, cfg, prj, sp))
+        pkgids = []
+        for pkg in spdx_document.packages:
+            self.assertFalse(pkg.spdx_id in pkgids)
+            pkgids.append(pkg.spdx_id)
+        
+    def testFixTrivyDocument(self):
         self.maxDiff = None
         spdx_document = spdxutil.parseFile(self.materialx_trivy_path)
         cfg = loadConfig(self.materialx_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
