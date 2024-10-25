@@ -231,7 +231,24 @@ class TestSpdxUtil(unittest.TestCase):
         for pkg in spdx_document.packages:
             self.assertFalse(pkg.spdx_id in pkgids)
             pkgids.append(pkg.spdx_id)
-        
+
+    def testAddVersionSupplier(self):
+        self.maxDiff = None
+        spdx_document = spdxutil.parseFile(self.materialx_trivy_path)
+        cfg = loadConfig(self.materialx_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._storepath = str(self.scaffold_home_dir)
+        prj = cfg._projects['aswf']
+        sp = prj._subprojects['materialx']
+        self.assertTrue(spdxutil.augmentTrivyDocument(spdx_document, cfg, prj, sp))
+        fixed_pkg = None
+        for pkg in spdx_document.packages:
+            if pkg.spdx_id == 'SPDXRef-Application-95ffd6aeac0971a4':
+                fixed_pkg = pkg
+                break
+        self.assertTrue(fixed_pkg)
+        self.assertEqual(sp._code_repos["MaterialX"], fixed_pkg.version)
+        self.assertEqual('Linux Foundation Project ' + prj._name, fixed_pkg.supplier.name)
+    
     def testFixTrivyDocument(self):
         self.maxDiff = None
         spdx_document = spdxutil.parseFile(self.materialx_trivy_path)

@@ -154,6 +154,16 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             if repo:
                 relationship.spdx_element_id = repo_packages[repo].spdx_id
 
+    # Add version and supplier info for any Trivy generated packages representing metadata files
+    for pkg in spdx_document.packages:
+        m = re.match(r'([^/]+)/.+', pkg.name)
+        if m and m.group(1) in repo_packages:
+            repo_pkg = repo_packages[m.group(1)]
+            if not hasattr(pkg, 'version') or not pkg.version:
+                pkg.version = repo_pkg.version
+            if not hasattr(pkg, 'supplier') or not pkg.supplier:
+                pkg.supplier = repo_pkg.supplier
+                
     # Fix up the creation info to add scaffold and Parlay as a tool and Linux Foundation as an organization
     spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.ORGANIZATION, name = 'Linux Foundation'))
     spdx_document.creation_info.creators.append(Actor(actor_type = ActorType.TOOL, name = 'Scaffold'))
@@ -166,6 +176,9 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
         fix_download_location(spdx_element)
         fix_attribution_text(spdx_element, spdx_document.annotations, spdx_document.creation_info.created)
+    # Change the NONES to NOASSERTION for licenses and download locations
+    # Change any license IDs in expressions to LicenseRef's
+    # Change attribution text to annotations
     for spdx_element in spdx_document.files:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
         if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
@@ -183,9 +196,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         fix_download_location(spdx_element)
         fix_attribution_text(spdx_element, spdx_document.annotations)
         
-    # Change the NONES to NOASSERTION for licenses and download locations
-    # Change any license IDs in expressions to LicenseRef's
-    # Change attribution text to annotations
+    
     
     print("Trivy document augmented")
     return True
