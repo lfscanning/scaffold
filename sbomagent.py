@@ -15,13 +15,13 @@ from spdx_tools.spdx.parser.error import SPDXParsingError
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
     if not sp._code_path:
-        print(f"{prj._name}/{sp._name}: No code path found; can not run Trivy")
+        print(f"{prj._name}/{sp._name}: No code path found; can not run sbom")
         return False
     if not os.path.exists(sp._code_path):
-        print(f"{prj._name}/{sp._name}: Nothing found at code path {sp._code_path}; can not run Trivy")
+        print(f"{prj._name}/{sp._name}: Nothing found at code path {sp._code_path}; can not run sbom")
         return False
     if not os.path.isfile(sp._code_path):
-        print(f"{prj._name}/{sp._name}: Code path {sp._code_path} exists but is not a file; can not run Trivy")
+        print(f"{prj._name}/{sp._name}: Code path {sp._code_path} exists but is not a file; can not run sbom")
         return False
     with tempfile.TemporaryDirectory() as tempdir:
         # Unzip file to a temporary directory
@@ -30,7 +30,7 @@ def runUnifiedAgent(cfg, prj, sp):
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
         installNpm(analysisdir, cfg, prj, sp)
-        trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--scanners", "license,vuln", "--format", "spdx-json", analysisdir]
+        trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--scanners", "license", "--format", "spdx-json", analysisdir]
         trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(trivy_result, 'w') as outfile:
             cp = run(trivy_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)

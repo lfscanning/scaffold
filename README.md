@@ -18,9 +18,9 @@ In order to shorten the amount of typing, I typically create an alias to `sc` in
 alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 ```
 
-### Trivy
+### Sbom
 
-To use the `trivy` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/) and [parlay](https://github.com/snyk/parlay) must be installed on the local machine.
+To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/) and [parlay](https://github.com/snyk/parlay) must be installed on the local machine.
 )
 The current version of Trivy and Parlay requires Go version 1.22.X installed on the target machine.
 

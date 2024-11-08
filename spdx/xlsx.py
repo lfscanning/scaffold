@@ -6,7 +6,7 @@ from collections import OrderedDict
 import openpyxl
 
 
-##### SPDX / Trivy xlsx reporting functions
+##### SPDX / SBOM xlsx reporting functions
 
 def makeXlsx(spdxDocument):
     wb = openpyxl.Workbook()

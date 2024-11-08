@@ -5,8 +5,8 @@ import shutil
 import git
 import zipfile
 from datetime import datetime
-from manualtrivy import runManualTrivyAgent
-from trivyagent import installNpm
+from manualsbom import runManualSbomAgent
+from sbomagent import installNpm
 from config import loadConfig, saveConfig
 from datatypes import Status, ProjectRepoType
 from zipcode import doZipRepoCodeForSubproject
@@ -25,9 +25,9 @@ TEST_SUBPROJECT_NAME = "sp1"
 GITHUB_ORG = 'lfscanning'
 
 '''
-Tests Trivy manual agent commands
+Tests sbom manual agent commands
 '''
-class TestTrivy(unittest.TestCase):
+class TestSbom(unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
@@ -73,7 +73,7 @@ class TestTrivy(unittest.TestCase):
             repo = git.Repo(self.project_repo_dir)
             origin = repo.remote(name="origin")
             repo.index.remove(content, r=True)
-            commitMsg = "Cleaning up after TestTrivy run"
+            commitMsg = "Cleaning up after TestSbom run"
             repo.index.commit(commitMsg)
             origin.push()
 
@@ -88,7 +88,7 @@ class TestTrivy(unittest.TestCase):
             del os.environ['PARLAY_EXEC_PATH']
             
 
-    def test_trivy(self):
+    def test_sbom(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
         cfg._zippath = self.temp_dir.name
@@ -109,7 +109,7 @@ class TestTrivy(unittest.TestCase):
         sp._code_anyfiles = True
         sp._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
         
-        result = runManualTrivyAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
+        result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
         uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.json")
         self.assertTrue(os.path.isfile(uploadedfile))
@@ -130,7 +130,7 @@ class TestTrivy(unittest.TestCase):
         self.assertTrue(os.path.isfile(self.uuid_package_json_path))
         
     
-    def test_trivy_config(self):
+    def test_sbom_config(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
         cfg._zippath = self.temp_dir.name
@@ -152,12 +152,12 @@ class TestTrivy(unittest.TestCase):
         sp._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
         sp._trivy_exec_path = os.environ['TRIVY_EXEC_PATH']
         os.environ['TRIVY_EXEC_PATH'] = 'somegarbage'
-        result = runManualTrivyAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
+        result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
         saved_trivy = sp._trivy_exec_path
         sp._trivy_exec_path = 'somegarbage'
         try:
-            result = runManualTrivyAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
+            result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
             self.assertFalse(result) # More likely to case an exception, but a false return is also OK
         except:
             pass  # expected
