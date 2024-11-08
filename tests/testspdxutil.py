@@ -219,6 +219,22 @@ class TestSpdxUtil(unittest.TestCase):
         # takes too long - errors = validate_full_spdx_document(spdx_document)
         # self.assertFalse(errors)
     
+    def testRemoveDupsFunction(self):
+        spdx_document = spdxutil.parseFile("C:\\Users\\gary\\Documents\\Development\\Temp2\\smalltrivy.json")
+        pkgids = []
+        numdups = 0
+        for pkg in spdx_document.packages:
+            if pkg.spdx_id in pkgids:
+                numdups = numdups + 1
+            pkgids.append(pkg.spdx_id)
+        self.assertTrue(numdups > 0)
+        
+        spdxutil.remove_dup_packages(spdx_document)
+        pkgids = []
+        for pkg in spdx_document.packages:
+            self.assertFalse(pkg.spdx_id in pkgids)
+            pkgids.append(pkg.spdx_id)
+            
     def testRemoveDupPackages(self):
         self.maxDiff = None
         spdx_document = spdxutil.parseFile(self.materialx_trivy_path)

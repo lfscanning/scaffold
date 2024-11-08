@@ -29,8 +29,6 @@ from slmjson import loadSLMCategories
 import re
 import os
 
-import pdb
-
 '''
 Parses an SPDX file with a supported file extension
 Raises SPDXParsingError on parsing errors
@@ -279,7 +277,6 @@ def toSpdxRef(identifier):
     
 def findRepoName(element, repos):
     if element == None:
-        pdb.set_trace()
         return None
     for repo in repos:
         if element.name.startswith(repo + "/"):
