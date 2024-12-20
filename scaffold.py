@@ -223,6 +223,7 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
         # run sbom agent manually if between ZIPPEDCODE and CLEARED state
         # does not modify the config file
         runManualSbomAgent(cfg, prj_only, sp_only)
+        saveConfig(SCAFFOLD_HOME, cfg)
 
     elif command == "clear":
         ran_command = True
