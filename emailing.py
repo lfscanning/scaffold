@@ -99,9 +99,12 @@ def printAllLinksForSubproject(cfg, prj, sp):
     spdxRepoName = f"spdx-{prj._name}"
 
     print(f"{prj._name}/{sp._name}, code pulled {sp._code_pulled}")
-    print(f"  - report: {sp._web_html_url}")
-    print(f"  - xlsx:   {sp._web_xlsx_url}")
-    print(f"  - spdx:   https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}/{sp._name}-{sp._code_pulled}.spdx")
+    print(f"  - report:      {sp._web_html_url}")
+    print(f"  - xlsx:        {sp._web_xlsx_url}")
+    print(f"  - spdx:        https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}/{sp._name}-{sp._code_pulled}.spdx")
+    if sp._web_sbom_url:
+        print(f"  - sbom xlsx:   {sp._web_sbom_url}")
+        print(f"  - sbom json:   https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}/{prj._name}-{sp._name}-spdx.json")
     print(f"")
 
 def printReportLinks(cfg, prj_only="", sp_only=""):
