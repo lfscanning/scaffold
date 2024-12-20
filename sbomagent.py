@@ -83,7 +83,7 @@ errors:
         reportFilePath = os.path.join(reportFolder, f"{prj._name}-{sp._name}-dependencies.xlsx");
         shutil.copy(workbookFilePath, reportFilePath)
         if uploadreport.doUploadSBOMReportsForSubproject(cfg, prj, sp):
-            print(f"Web version of dependency report available at: {sp.__web_sbom_url}")
+            print(f"Web version of dependency report available at: {sp._web_sbom_url}")
         print(f"{prj._name}/{sp._name}: SBOM successfully run")
         return True
 
