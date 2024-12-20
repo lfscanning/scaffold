@@ -316,6 +316,7 @@ class Subproject:
         self._web_uuid = ""
         self._web_html_url = ""
         self._web_xlsx_url = ""
+        self._web_sbom_url = ""
 
     def resetNewMonth(self):
         self._status = Status.START

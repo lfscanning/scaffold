@@ -9,6 +9,8 @@ import tempfile
 import spdx.spdxutil
 import spdx.xlsx
 import shutil
+
+import uploadreport
 from uploadspdx import doUploadFileForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
@@ -80,7 +82,8 @@ errors:
             os.makedirs(reportFolder)
         reportFilePath = os.path.join(reportFolder, f"{prj._name}-{sp._name}-dependencies.xlsx");
         shutil.copy(workbookFilePath, reportFilePath)
-        print(f"{prj._name}/{sp._name}: Trivy successfully run")
+        uploadreport.doUploadSBOMReportsForSubproject(cfg, prj, sp)
+        print(f"{prj._name}/{sp._name}: SBOM successfully run")
         return True
 
 def installNpm(sourceDir, cfg, prj, sp):
