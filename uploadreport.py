@@ -21,11 +21,11 @@ def doUploadSBOMReportsForSubproject(cfg, prj, sp):
 
     # determine source and dest filenames
     srcReportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
-    srcSbomXlsx = f"{prj._name}-{sp._name}-dependencies.html"
+    srcSbomXlsx = f"{prj._name}-{sp._name}-dependencies.xlsx"
     srcSbomPath = os.path.join(srcReportFolder, srcSbomXlsx)
 
     dstReportFolder = os.path.join(cfg._web_reports_path, prj._name)
-    dstSbomFilename = f"{prj._name}-{sp._name}-{web_uuid}-dependencies.html"
+    dstSbomFilename = f"{prj._name}-{sp._name}-{web_uuid}-dependencies.xlsx"
     dstSbomPath = os.path.join(dstReportFolder, dstSbomFilename)
 
     # copy HTML report to server, if it exists (e.g., if there were any findings)

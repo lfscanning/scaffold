@@ -65,7 +65,7 @@ errors:
         try:
             spdxDocument = spdx.spdxutil.parseFile(result)
         except SPDXParsingError:
-            print(f"{prj._name}/{sp._name}: unable to parse Trivy generated SPDX document")
+            print(f"{prj._name}/{sp._name}: unable to parse Parlay augmented SPDX document")
             return False
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
@@ -82,7 +82,8 @@ errors:
             os.makedirs(reportFolder)
         reportFilePath = os.path.join(reportFolder, f"{prj._name}-{sp._name}-dependencies.xlsx");
         shutil.copy(workbookFilePath, reportFilePath)
-        uploadreport.doUploadSBOMReportsForSubproject(cfg, prj, sp)
+        if uploadreport.doUploadSBOMReportsForSubproject(cfg, prj, sp):
+            print(f"Web version of dependency report available at: {sp.__web_sbom_url}")
         print(f"{prj._name}/{sp._name}: SBOM successfully run")
         return True
 
