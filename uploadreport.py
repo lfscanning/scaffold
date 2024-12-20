@@ -8,6 +8,55 @@ from shutil import copyfile
 
 from datatypes import Status
 
+# Upload ony the SBOMs
+def doUploadSBOMReportsForSubproject(cfg, prj, sp):
+    # make sure we're at the right stage
+    if not (sp._status.value >= Status.ZIPPEDCODE.value and sp._status != Status.STOPPED):
+        print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE or higher")
+        return False
+
+    # pick random uuid
+    web_uuid = str(uuid.uuid4())
+    sp._web_uuid = web_uuid
+
+    # determine source and dest filenames
+    srcReportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+    srcSbomXlsx = f"{prj._name}-{sp._name}-dependencies.xlsx"
+    srcSbomPath = os.path.join(srcReportFolder, srcSbomXlsx)
+
+    dstReportFolder = os.path.join(cfg._web_reports_path, prj._name)
+    dstSbomFilename = f"{prj._name}-{sp._name}-{web_uuid}-dependencies.xlsx"
+    dstSbomPath = os.path.join(dstReportFolder, dstSbomFilename)
+
+    # copy HTML report to server, if it exists (e.g., if there were any findings)
+    if os.path.exists(srcSbomPath):
+        if cfg._web_server_use_scp:
+            cmd = ["scp", srcSbomPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstSbomPath}"]
+            cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+            if cp.returncode != 0:
+                print(f"""{prj._name}/{sp._name}: scp of SBOM dependency report failed with error code {cp.returncode}:
+----------
+output:
+{cp.stdout}
+----------
+errors:
+{cp.stderr}
+----------
+""")
+                return False
+            else:
+                print(f"{prj._name}/{sp._name}: uploaded SBOM dependency report")
+                sp._web_sbom_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstSbomFilename}"
+        else:
+            os.makedirs(os.path.dirname(dstSbomPath), exist_ok=True)
+            copyfile(srcSbomPath, dstSbomPath)
+            print(f"{prj._name}/{sp._name}: uploaded SBOM dependency report")
+            sp._web_sbom_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstSbomFilename}"
+    else:
+        # no HTML file b/c no findings
+        print(f"{prj._name}/{sp._name}: no SBOM dependency report on disk, skipping")
+    return True
+
 # Runner for UPLOADEDSPDX for subproject
 def doUploadReportsForSubproject(cfg, prj, sp):
     # make sure we're at the right stage

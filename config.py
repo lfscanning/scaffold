@@ -378,10 +378,12 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 sp._web_uuid = ""
                                 sp._web_html_url = ""
                                 sp._web_xlsx_url = ""
+                                sp._web_sbom_url = ""
                             else:
                                 sp._web_uuid = web_dict.get('uuid', "")
                                 sp._web_html_url = web_dict.get('htmlurl', "")
                                 sp._web_xlsx_url = web_dict.get('xlsxurl', "")
+                                sp._web_sbom_url = web_dict.get('sbomurl', "")
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -466,10 +468,12 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 sp._web_uuid = ""
                                 sp._web_html_url = ""
                                 sp._web_xlsx_url = ""
+                                sp._web_sbom_url = ""
                             else:
                                 sp._web_uuid = web_dict.get('uuid', "")
                                 sp._web_html_url = web_dict.get('htmlurl', "")
                                 sp._web_xlsx_url = web_dict.get('xlsxurl', "")
+                                sp._web_sbom_url = web_dict.get('sbomurl', "")
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -545,10 +549,12 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 sp._web_uuid = ""
                                 sp._web_html_url = ""
                                 sp._web_xlsx_url = ""
+                                sp._web_sbom_url = ""
                             else:
                                 sp._web_uuid = web_dict.get('uuid', "")
                                 sp._web_html_url = web_dict.get('htmlurl', "")
                                 sp._web_xlsx_url = web_dict.get('xlsxurl', "")
+                                sp._web_sbom_url = web_dict.get('sbomurl', "")
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -864,6 +870,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["repos"] = o._code_repos
                 if o._web_html_url != "":
                     js["web"]["htmlurl"] = o._web_html_url
+                if o._web_sbom_url != "":
+                    js["web"]["sbomurl"] = o._web_sbom_url
                 if o._web_xlsx_url != "":
                     js["web"]["xlsxurl"] = o._web_xlsx_url
                 if o._web_uuid != "":
@@ -896,6 +904,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["repos"] = o._code_repos
                 if o._web_html_url != "":
                     js["web"]["htmlurl"] = o._web_html_url
+                if o._web_sbom_url != "":
+                    js["web"]["sbomurl"] = o._web_sbom_url
                 if o._web_xlsx_url != "":
                     js["web"]["xlsxurl"] = o._web_xlsx_url
                 if o._web_uuid != "":
@@ -926,6 +936,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["code"]["repos"] = o._code_repos
                 if o._web_html_url != "":
                     js["web"]["htmlurl"] = o._web_html_url
+                if o._web_sbom_url != "":
+                    js["web"]["sbomurl"] = o._web_sbom_url
                 if o._web_xlsx_url != "":
                     js["web"]["xlsxurl"] = o._web_xlsx_url
                 if o._web_uuid != "":

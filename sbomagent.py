@@ -9,6 +9,8 @@ import tempfile
 import spdx.spdxutil
 import spdx.xlsx
 import shutil
+
+import uploadreport
 from uploadspdx import doUploadFileForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
@@ -63,7 +65,7 @@ errors:
         try:
             spdxDocument = spdx.spdxutil.parseFile(result)
         except SPDXParsingError:
-            print(f"{prj._name}/{sp._name}: unable to parse Trivy generated SPDX document")
+            print(f"{prj._name}/{sp._name}: unable to parse Parlay augmented SPDX document")
             return False
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
@@ -80,7 +82,9 @@ errors:
             os.makedirs(reportFolder)
         reportFilePath = os.path.join(reportFolder, f"{prj._name}-{sp._name}-dependencies.xlsx");
         shutil.copy(workbookFilePath, reportFilePath)
-        print(f"{prj._name}/{sp._name}: Trivy successfully run")
+        if uploadreport.doUploadSBOMReportsForSubproject(cfg, prj, sp):
+            print(f"Web version of dependency report available at: {sp._web_sbom_url}")
+        print(f"{prj._name}/{sp._name}: SBOM successfully run")
         return True
 
 def installNpm(sourceDir, cfg, prj, sp):
