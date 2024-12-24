@@ -159,6 +159,9 @@ Note: this command should be used with caution and only run after verifying no o
 * Additional arguments: `PROJECT SUBPROJECT`
 * Example: `> sc 2021-09 sbom project1 subproject4`
 * Summary: Runs an SCA tool (currently [trivy](https://aquasecurity.github.io/trivy)) against the code with the licensing and vulnerability options and enriches the resultant SBOM with an enrichment tool (currently [parlay](https://github.com/snyk/parlay))
+* Prerequisites: 
+  * Must be at step `ZIPPEDCODE` or later
+  * Must not be `STOPPED`
 * Details:
   * Runs the trivy application with the following options:
     * `--scanners license,vuln`
