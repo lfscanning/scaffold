@@ -2,6 +2,7 @@ import unittest
 import os
 import tempfile
 import shutil
+import time
 import git
 import zipfile
 from datetime import datetime
@@ -22,6 +23,7 @@ TEST_NEXT_MONTH = "2023-08"
 TEST_MONTH_DIR = os.path.join(TEST_SCAFFOLD_HOME, TEST_MONTH)
 TEST_PROJECT_NAME = "TEST-DEPENDENCIES"
 TEST_SUBPROJECT_NAME = "sp1"
+TEST_SUBPROJECT_NAME2 = "sp2"
 GITHUB_ORG = 'lfscanning'
 
 '''
@@ -35,6 +37,7 @@ class TestSbom(unittest.TestCase):
         shutil.copytree(TEST_SCAFFOLD_HOME, self.scaffold_home_dir)
         self.config_month_dir = os.path.join(self.scaffold_home_dir, TEST_MONTH)
         self.repo_dir = os.path.join(self.scaffold_home_dir, "spdxrepos")
+        os.mkdir(self.repo_dir)
         # setup the git repo
         self.repoName = f"spdx-{TEST_PROJECT_NAME}"
         self.project_repo_dir = os.path.join(self.repo_dir, self.repoName)
@@ -79,7 +82,16 @@ class TestSbom(unittest.TestCase):
 
     def tearDown(self):
         self._cleanGitClone(self.project_repo_dir)
-        self.temp_dir.cleanup()
+        done = False
+        iterations = 0
+        while not done and iterations < 10:
+            try:
+                self.temp_dir.cleanup()
+            except Exception as e:
+                print("Clean up failed - retrying...")
+                time.sleep(5)
+                iterations = iterations + 1
+
         if not self.trivy_env_set:
             del os.environ['TRIVY_EXEC_PATH']
         if not self.npm_env_set:
@@ -94,6 +106,9 @@ class TestSbom(unittest.TestCase):
         cfg._zippath = self.temp_dir.name
         cfg._storepath = self.scaffold_home_dir
         cfg._spdx_github_org = GITHUB_ORG
+        cfg._web_server = "lfscanning.org"
+        cfg._web_server_use_scp = False
+        cfg._web_reports_path = os.path.join(self.temp_dir.name, 'outputreports')
         prj = cfg._projects[TEST_PROJECT_NAME]
         prj._name = TEST_PROJECT_NAME
         sp = prj._subprojects[TEST_SUBPROJECT_NAME]
@@ -129,13 +144,63 @@ class TestSbom(unittest.TestCase):
         self.assertTrue(os.path.isdir(self.node_modules_path))
         self.assertTrue(os.path.isfile(self.uuid_package_json_path))
         
-    
+    def test_project(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._zippath = self.temp_dir.name
+        cfg._storepath = self.scaffold_home_dir
+        cfg._spdx_github_org = GITHUB_ORG
+        cfg._web_server = "lfscanning.org"
+        cfg._web_server_use_scp = False
+        cfg._web_reports_path = os.path.join(self.temp_dir.name, 'outputreports')
+        prj = cfg._projects[TEST_PROJECT_NAME]
+        prj._name = TEST_PROJECT_NAME
+        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
+        sp._name = TEST_SUBPROJECT_NAME
+        sp._repos = [self.repoName]
+        sp._repotype = ProjectRepoType.GITHUB
+        sp._github_org = GITHUB_ORG
+        sp._github_ziporg = GITHUB_ORG
+        sp._github_branch = ""
+        sp._status = Status.ZIPPEDCODE
+        sp._code_path = TEST_SCAFFOLD_CODE
+        sp._code_pulled = "2024-08-21"
+        sp._code_anyfiles = True
+        sp._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
+
+        sp2 = prj._subprojects[TEST_SUBPROJECT_NAME2]
+        sp2._name = TEST_SUBPROJECT_NAME2
+        sp2._repos = [self.repoName]
+        sp2._repotype = ProjectRepoType.GITHUB
+        sp2._github_org = GITHUB_ORG
+        sp2._github_ziporg = GITHUB_ORG
+        sp2._github_branch = ""
+        sp2._status = Status.ZIPPEDCODE
+        sp2._code_path = TEST_SCAFFOLD_CODE
+        sp2._code_pulled = "2024-08-21"
+        sp2._code_anyfiles = True
+        sp2._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
+
+        result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, "")
+        self.assertTrue(result)
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.json")
+        self.assertTrue(os.path.isfile(uploadedfile))
+        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        self.assertTrue(os.path.isfile(reportfile))
+        uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{prj._name}-{sp2._name}-spdx.json")
+        self.assertTrue(os.path.isfile(uploadedfile))
+        reportfile2 = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp2._name}-dependencies.xlsx")
+        self.assertTrue(os.path.isfile(reportfile))
+
     def test_sbom_config(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
         cfg._zippath = self.temp_dir.name
         cfg._storepath = self.scaffold_home_dir
         cfg._spdx_github_org = GITHUB_ORG
+        cfg._web_server = "lfscanning.org"
+        cfg._web_server_use_scp = False
+        cfg._web_reports_path = os.path.join(self.temp_dir.name, 'outputreports')
         prj = cfg._projects[TEST_PROJECT_NAME]
         prj._name = TEST_PROJECT_NAME
         sp = prj._subprojects[TEST_SUBPROJECT_NAME]

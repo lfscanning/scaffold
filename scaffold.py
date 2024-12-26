@@ -216,8 +216,8 @@ def exec_command(SCAFFOLD_HOME, cfg, args):
         
     elif command == "sbom":
         ran_command = True
-        if prj_only == "" or sp_only == "":
-            print(f"sbom command requires specifying project and subproject")
+        if prj_only == "":
+            print(f"sbom command requires specifying project")
             sys.exit(1)
 
         # run sbom agent manually if between ZIPPEDCODE and CLEARED state
