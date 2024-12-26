@@ -1,9 +1,6 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
 
-import os
-from subprocess import run, PIPE
-
 import sbomagent
 
 from datatypes import Status
@@ -23,17 +20,18 @@ def sbomAgentForSubproject(cfg, prj, sp):
     
 def runManualSbomAgent(cfg, prj_only="", sp_only=""):
     if prj_only == "":
-        print(f"Error: `sbom` command requires specifying only one project and only one subproject")
+        print(f"Error: `sbom` command requires specifying only one project")
         return False
 
     prj = cfg._projects.get(prj_only, None)
     if not prj:
         print(f"{prj_only}: Project not found in config")
         return False
+    did_something = False
+    for sp in prj._subprojects.values():
+        if sp_only == "" or sp_only == sp._name:
+            if not sbomAgentForSubproject(cfg, prj, sp):
+                return False
+            did_something = True
+    return did_something
 
-    sp = prj._subprojects.get(sp_only, None)
-    if not sp:
-        print(f"{prj_only}/{sp_only}: Subproject not found in project config")
-        return False
-
-    return sbomAgentForSubproject(cfg, prj, sp)

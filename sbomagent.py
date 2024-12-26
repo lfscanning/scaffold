@@ -28,14 +28,14 @@ def runUnifiedAgent(cfg, prj, sp):
         return False
     with tempfile.TemporaryDirectory() as tempdir:
         # Unzip file to a temporary directory
-        print("f{prj._name}/{sp._name} [{datetime.now()}]: Unzipping project files")
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Unzipping project files")
         analysisdir = os.path.join(tempdir, "code")
         os.mkdir(analysisdir)
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
-        print("f{prj._name}/{sp._name} [{datetime.now()}]: Looking for NPM projects to install")
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for NPM projects to install")
         installNpm(analysisdir, cfg, prj, sp)
-        print("f{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
         trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--scanners", "license", "--format", "spdx-json", analysisdir]
         trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         with open(trivy_result, 'w') as outfile:
@@ -52,7 +52,7 @@ errors:
 """)
                 return False
         result = os.path.join(tempdir, f"{prj._name}-{sp._name}-parlay-spdx.json")
-        print("f{prj._name}/{sp._name} [{datetime.now()}]: Running Parlay")
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Parlay")
         parlay_cmd = [cfg._parlay_exec_path, "ecosystems", "enrich", str(trivy_result)]
         with open(result, 'w') as outfile:
             cp = run(parlay_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
@@ -72,9 +72,9 @@ errors:
         except SPDXParsingError:
             print(f"{prj._name}/{sp._name}: unable to parse Parlay augmented SPDX document")
             return False
-        print("f{prj._name}/{sp._name} [{datetime.now()}]: Augmenting SPDX document")
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Augmenting SPDX document")
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
-        print("f{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
