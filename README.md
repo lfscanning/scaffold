@@ -21,7 +21,7 @@ alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 ### Sbom
 
 To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/) and [parlay](https://github.com/snyk/parlay) must be installed on the local machine.
-)
+
 The current version of Trivy and Parlay requires Go version 1.22.X installed on the target machine.
 
 To install Trivy:
