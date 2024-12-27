@@ -14,7 +14,7 @@ Install the requirements from requirements.txt: `pip install -r requirements.txt
 
 In order to shorten the amount of typing, I typically create an alias to `sc` in my `~/.bashrc` for calls to run scaffold:
 
-```
+```shell
 alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 ```
 
@@ -26,7 +26,7 @@ The current version of Trivy and Parlay requires Go version 1.22.X installed on 
 
 To install Trivy:
 
-```
+```shell
 git clone --depth 1 --branch v0.54.0 https://github.com/aquasecurity/trivy.git
 cd trivy
 go install ./cmd/trivy
@@ -36,7 +36,7 @@ The location of the Trivy command needs to be added to the config file and/or as
 
 To install Parlay:
 
-```
+```shell
 git clone --depth 1 --branch v0.5.1 https://github.com/snyk/parlay.git
 cd parlay
 go install .
