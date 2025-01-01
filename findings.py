@@ -1,4 +1,5 @@
-# Copyright The Linux Foundation
+# SPDX-FileCopyrightText: Copyright The Linux Foundation
+# SPDX-FileType: SOURCE
 # SPDX-License-Identifier: Apache-2.0
 
 import glob
