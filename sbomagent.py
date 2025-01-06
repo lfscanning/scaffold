@@ -11,10 +11,13 @@ import spdx.spdxutil
 import spdx.xlsx
 import shutil
 from datetime import datetime
+from pathlib import Path
 
 import uploadreport
 from uploadspdx import doUploadFileForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
+
+trivyDebug = False
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -37,10 +40,18 @@ def runUnifiedAgent(cfg, prj, sp):
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for NPM projects to install")
         installNpm(analysisdir, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
-        trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--scanners", "license", "--format", "spdx-json", analysisdir]
+        if trivyDebug:
+            trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--debug", "--scanners", "license", "--format", "spdx-json", analysisdir]
+        else:
+            trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--scanners", "license", "--format", "spdx-json", analysisdir]
         trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
+        trivy_error = Path.home() / "last-trivy-debug.txt"
         with open(trivy_result, 'w') as outfile:
-            cp = run(trivy_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
+            if trivyDebug:
+                with open(trivy_error, 'w') as errorfile:
+                    cp = run(trivy_cmd, stdout=outfile, stderr=errorfile, universal_newlines=True)
+            else:
+                cp = run(trivy_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
             if cp.returncode != 0:
                 print(f"""{prj._name}/{sp._name}: Trivy failed with error code {cp.returncode}:
 ----------
