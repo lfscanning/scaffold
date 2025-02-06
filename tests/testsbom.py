@@ -1,4 +1,3 @@
-import pdb
 import unittest
 import os
 import tempfile
@@ -6,12 +5,10 @@ import shutil
 import time
 import git
 import zipfile
-from datetime import datetime
 from manualsbom import runManualSbomAgent
 from sbomagent import installNpm
-from config import loadConfig, saveConfig
+from config import loadConfig
 from datatypes import Status, ProjectRepoType
-from zipcode import doZipRepoCodeForSubproject
 
 ANALYSIS_FILE_FRAGMENT = "sp1-2023-07"
 ANALYSIS_FILE_NAME = ANALYSIS_FILE_FRAGMENT + "-09.zip"
