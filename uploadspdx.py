@@ -65,4 +65,5 @@ def doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
     # and push it
     origin.push()
     print(f"{prj._name}/{sp._name}: pushed to {cfg._spdx_github_org}/{repoName}")
+    del repo
     return True

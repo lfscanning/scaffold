@@ -1,3 +1,4 @@
+import pdb
 import unittest
 import os
 import tempfile
@@ -54,6 +55,9 @@ class TestSbom(unittest.TestCase):
         self.parlay_env_set = 'PARLAY_EXEC_PATH' in os.environ
         if not self.parlay_env_set:
             os.environ['PARLAY_EXEC_PATH'] = 'parlay' # default
+        self.cdsbom_env_set = 'CDSBOM_EXEC_PATH' in os.environ
+        if not self.cdsbom_env_set:
+            os.environ['CDSBOM_EXEC_PATH'] = 'cdsbom' # default
         with zipfile.ZipFile(SIMPLE_NPM_ZIP, mode='r') as zip:
             zip.extractall(self.temp_dir.name)
         self.node_modules_path = os.path.join(self.npm_path, 'node_modules')
@@ -79,6 +83,7 @@ class TestSbom(unittest.TestCase):
             commitMsg = "Cleaning up after TestSbom run"
             repo.index.commit(commitMsg)
             origin.push()
+            del repo
 
     def tearDown(self):
         self._cleanGitClone(self.project_repo_dir)
@@ -87,9 +92,11 @@ class TestSbom(unittest.TestCase):
         while not done and iterations < 10:
             try:
                 self.temp_dir.cleanup()
+                done = True
             except Exception as e:
+                # This seems to be caused by Git not going away - see https://github.com/gitpython-developers/GitPython/issues/287
                 print("Clean up failed - retrying...")
-                time.sleep(5)
+                time.sleep(1)
                 iterations = iterations + 1
 
         if not self.trivy_env_set:
@@ -98,6 +105,8 @@ class TestSbom(unittest.TestCase):
             del os.environ['NPM_EXEC_PATH']
         if not self.parlay_env_set:
             del os.environ['PARLAY_EXEC_PATH']
+        if not self.cdsbom_env_set:
+            del os.environ['CDSBOM_EXEC_PATH']
             
 
     def test_sbom(self):
