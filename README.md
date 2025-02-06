@@ -20,7 +20,7 @@ alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 
 ### Sbom
 
-To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/) and [parlay](https://github.com/snyk/parlay) must be installed on the local machine.
+To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/), [parlay](https://github.com/snyk/parlay) and [cdsbom](https://github.com/jeffmendoza/cdsbom) must be installed on the local machine.
 
 The current version of Trivy and Parlay requires Go version 1.22.X installed on the target machine.
 
@@ -43,6 +43,14 @@ go install .
 ```
 
 The location of the Parlay command needs to be added to the config file and/or as an environment variable `PARLAY_EXEC_PATH`.
+
+To install cdsbom:
+```shell
+git clone --depth 1 https://github.com/jeffmendoza/cdsbom.git
+cd cdsbom
+go install .
+```
+The location of the cdsbom command needs to be added to the config file and/or as an environment variable `CDSBOM_EXEC_PATH`.
 
 In addition [NPM](https://www.npmjs.com/) must be installed.
 

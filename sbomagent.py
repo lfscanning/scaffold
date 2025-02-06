@@ -18,6 +18,8 @@ from uploadspdx import doUploadFileForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
 trivyDebug = False
+parlayDebug = False
+cdsbomDebug = False
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -42,9 +44,10 @@ def runUnifiedAgent(cfg, prj, sp):
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
         if trivyDebug:
             trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--debug", "--scanners", "license", "--format", "spdx-json", analysisdir]
+            trivy_result = os.path.join(Path.home(), f"{prj._name}-{sp._name}-trivy-spdx.json")
         else:
             trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--scanners", "license", "--format", "spdx-json", analysisdir]
-        trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
+            trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         trivy_error = Path.home() / "last-trivy-debug.txt"
         with open(trivy_result, 'w') as outfile:
             if trivyDebug:
@@ -63,10 +66,13 @@ errors:
 ----------
 """)
                 return False
-        result = os.path.join(tempdir, f"{prj._name}-{sp._name}-parlay-spdx.json")
+        if parlayDebug:
+            parlay_result = os.path.join(Path.home(), f"{prj._name}-{sp._name}-parlay-spdx.json")
+        else:
+            parlay_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-parlay-spdx.json")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Parlay")
         parlay_cmd = [cfg._parlay_exec_path, "ecosystems", "enrich", str(trivy_result)]
-        with open(result, 'w') as outfile:
+        with open(parlay_result, 'w') as outfile:
             cp = run(parlay_cmd, stdout=outfile, stderr=PIPE, universal_newlines=True)
             if cp.returncode != 0:
                 print(f"""{prj._name}/{sp._name}: Parlay failed with error code {cp.returncode}:
@@ -79,6 +85,24 @@ errors:
 ----------
 """)
                 return False
+        if cdsbomDebug:
+            result = os.path.join(tempdir, f"{prj._name}-{sp._name}-cdsbom-spdx.json")
+        else:
+            result = os.path.join(Path.home(), f"{prj._name}-{sp._name}-cdsbom-spdx.json")
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running cdsbom")
+        cdsbom_cmd = [cfg._cdsbom_exec_path, "-out", str(result), str(parlay_result)]
+        cp = run(cdsbom_cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        if cp.returncode != 0:
+            print(f"""{prj._name}/{sp._name}: cdsbom failed with error code {cp.returncode}:
+----------
+output:
+{cp.stdout}
+----------
+errors:
+{cp.stderr}
+----------
+""")
+            return False
         try:
             spdxDocument = spdx.spdxutil.parseFile(result)
         except SPDXParsingError:

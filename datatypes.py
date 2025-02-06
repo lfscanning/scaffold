@@ -408,6 +408,7 @@ class Config:
         self._trivy_exec_path = ""
         self._parlay_exec_path = ""
         self._npm_exec_path = ""
+        self._cdsbom_exec_path = ""
         self._projects = {}
         self._month = ""
         self._version = 0
