@@ -329,9 +329,6 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
         fix_download_location(spdx_element)
         fix_attribution_text(spdx_element, spdx_document.annotations, spdx_document.creation_info.created)
-        
-    
-    
     print("Trivy document augmented")
     return True
     
@@ -449,3 +446,5 @@ def _licenseStringToExpression(license_string, extracted_licensing_info, licensi
                                 comment = 'This license text represents a string found in licensing metadata - the actual text is not known'))
         return extracted_id
             
+def mergeSpdxDocs(fossology_sbom, dependency_sbom):
+    pass
