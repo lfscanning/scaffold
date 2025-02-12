@@ -105,6 +105,7 @@ errors:
 """)
             return False
         '''
+        spdx.spdxutil.fixLicenseExpressions(parlay_result)
         try:
             spdxDocument = spdx.spdxutil.parseFile(parlay_result)
         except SPDXParsingError:
