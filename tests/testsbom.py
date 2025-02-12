@@ -237,7 +237,11 @@ class TestSbom(unittest.TestCase):
         finally:
             os.environ['TRIVY_EXEC_PATH'] = saved_trivy
             
-        
+    def test_merged_sbom:
+        # TODO: Implement
+        # Check uploaded merged SBOM file
+        pass
+
 if __name__ == '__main__':
     unittest.main()
         
