@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import pdb
 from subprocess import run, PIPE
 import sys
 import zipfile
@@ -142,8 +143,9 @@ def installNpm(sourceDir, cfg, prj, sp):
             dirs.remove('node_modules')
         if '.git' in dirs:
             dirs.remove('.git')
+    cachedir = os.path.join(cfg._zippath, "npmcache")
     for npm_dir in npm_dirs:
-        cmd = [cfg._npm_exec_path, "install", "--production"]
+        cmd = [cfg._npm_exec_path, "install", "--production", "--cache", cachedir]
         cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, cwd=npm_dir)
         if cp.returncode != 0:
             print(f"{prj._name}/{sp._name}: NPM install failed for {npm_dir} with exit code {cp.returncode}.")
