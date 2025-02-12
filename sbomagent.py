@@ -43,10 +43,10 @@ def runUnifiedAgent(cfg, prj, sp):
         installNpm(analysisdir, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
         if trivyDebug:
-            trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--debug", "--scanners", "license", "--format", "spdx-json", analysisdir]
+            trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "840m", "--debug", "--scanners", "license", "--format", "spdx-json", analysisdir]
             trivy_result = os.path.join(Path.home(), f"{prj._name}-{sp._name}-trivy-spdx.json")
         else:
-            trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "220m", "--scanners", "license", "--format", "spdx-json", analysisdir]
+            trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "840m", "--scanners", "license", "--format", "spdx-json", analysisdir]
             trivy_result = os.path.join(tempdir, f"{prj._name}-{sp._name}-trivy-spdx.json")
         trivy_error = Path.home() / "last-trivy-debug.txt"
         with open(trivy_result, 'w') as outfile:
@@ -85,10 +85,11 @@ errors:
 ----------
 """)
                 return False
+        '''
         if cdsbomDebug:
-            result = os.path.join(tempdir, f"{prj._name}-{sp._name}-cdsbom-spdx.json")
-        else:
             result = os.path.join(Path.home(), f"{prj._name}-{sp._name}-cdsbom-spdx.json")
+        else:
+            result = os.path.join(tempdir, f"{prj._name}-{sp._name}-cdsbom-spdx.json")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running cdsbom")
         cdsbom_cmd = [cfg._cdsbom_exec_path, "-out", str(result), str(parlay_result)]
         cp = run(cdsbom_cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
@@ -103,8 +104,9 @@ errors:
 ----------
 """)
             return False
+        '''
         try:
-            spdxDocument = spdx.spdxutil.parseFile(result)
+            spdxDocument = spdx.spdxutil.parseFile(parlay_result)
         except SPDXParsingError:
             print(f"{prj._name}/{sp._name}: unable to parse Parlay augmented SPDX document")
             return False
