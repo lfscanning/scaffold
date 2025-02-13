@@ -3,7 +3,7 @@
 
 # Utility class to support merging / fixing up SPDX documents
 
-from license_expression import get_spdx_licensing
+from license_expression import get_spdx_licensing, LicenseSymbol
 from spdx_tools.spdx.model.package import Package
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
@@ -28,6 +28,84 @@ import os
 import json
 
 '''
+Gets the licensing parser for SPDX and adds back in missing symbols
+for NONE, NOASSERTION and deprecated licenses
+'''
+def getLicensing():
+    licensing = get_spdx_licensing()
+    licensing.known_symbols['NOASSERTION'] = LicenseSymbol('NOASSERTION')
+    licensing.known_symbols['NONE'] = LicenseSymbol('NONE')
+    licensing.known_symbols['AGPL-1.0'] = LicenseSymbol('AGPL-1.0')
+    licensing.known_symbols['AGPL-3.0'] = LicenseSymbol('AGPL-3.0')
+    licensing.known_symbols['BSD-2-Clause-FreeBSD'] = LicenseSymbol('BSD-2-Clause-FreeBSD')
+    licensing.known_symbols['BSD-2-Clause-NetBSD'] = LicenseSymbol('BSD-2-Clause-NetBSD')
+    licensing.known_symbols['bzip2-1.0.5'] = LicenseSymbol('bzip2-1.0.5')
+    licensing.known_symbols['eCos-2.0'] = LicenseSymbol('eCos-2.0')
+    licensing.known_symbols['GFDL-1.1'] = LicenseSymbol('GFDL-1.1')
+    licensing.known_symbols['GFDL-1.2'] = LicenseSymbol('GFDL-1.2')
+    licensing.known_symbols['GFDL-1.3'] = LicenseSymbol('GFDL-1.3')
+    licensing.known_symbols['GPL-1.0'] = LicenseSymbol('GPL-1.0')
+    licensing.known_symbols['GPL-1.0+'] = LicenseSymbol('GPL-1.0+')
+    licensing.known_symbols['GPL-2.0'] = LicenseSymbol('GPL-2.0')
+    licensing.known_symbols['GPL-2.0+'] = LicenseSymbol('GPL-2.0+')
+    licensing.known_symbols['GPL-2.0-with-autoconf-exception'] = LicenseSymbol('GPL-2.0-with-autoconf-exception')
+    licensing.known_symbols['GPL-2.0-with-bison-exception'] = LicenseSymbol('GPL-2.0-with-bison-exception')
+    licensing.known_symbols['GPL-2.0-with-classpath-exception'] = LicenseSymbol('GPL-2.0-with-classpath-exception')
+    licensing.known_symbols['GPL-2.0-with-font-exception'] = LicenseSymbol('GPL-2.0-with-font-exception')
+    licensing.known_symbols['GPL-2.0-with-GCC-exception'] = LicenseSymbol('GPL-2.0-with-GCC-exception')
+    licensing.known_symbols['GPL-3.0'] = LicenseSymbol('GPL-3.0')
+    licensing.known_symbols['GPL-3.0+'] = LicenseSymbol('GPL-3.0+')
+    licensing.known_symbols['GPL-3.0-with-autoconf-exception'] = LicenseSymbol('GPL-3.0-with-autoconf-exception')
+    licensing.known_symbols['GPL-3.0-with-GCC-exception'] = LicenseSymbol('GPL-3.0-with-GCC-exception')
+    licensing.known_symbols['LGPL-2.0'] = LicenseSymbol('LGPL-2.0')
+    licensing.known_symbols['LGPL-2.0+'] = LicenseSymbol('LGPL-2.0+')
+    licensing.known_symbols['LGPL-2.1'] = LicenseSymbol('LGPL-2.1')
+    licensing.known_symbols['LGPL-2.1+'] = LicenseSymbol('LGPL-2.1+')
+    licensing.known_symbols['LGPL-3.0'] = LicenseSymbol('LGPL-3.0')
+    licensing.known_symbols['LGPL-3.0+'] = LicenseSymbol('LGPL-3.0+')
+    licensing.known_symbols['Net-SNMP'] = LicenseSymbol('Net-SNMP')
+    licensing.known_symbols['Nunit'] = LicenseSymbol('Nunit')
+    licensing.known_symbols['StandardML-NJ'] = LicenseSymbol('StandardML-NJ')
+    licensing.known_symbols['wxWindows'] = LicenseSymbol('wxWindows')
+
+
+    licensing.known_symbols_lowercase['noassertion'] = LicenseSymbol('NOASSERTION')
+    licensing.known_symbols_lowercase['none'] = LicenseSymbol('NONE')
+    licensing.known_symbols_lowercase['agpl-1.0'] = LicenseSymbol('AGPL-1.0')
+    licensing.known_symbols_lowercase['agpl-3.0'] = LicenseSymbol('AGPL-3.0')
+    licensing.known_symbols_lowercase['bsd-2-clause-freebsd'] = LicenseSymbol('BSD-2-Clause-FreeBSD')
+    licensing.known_symbols_lowercase['bsd-2-clause-netbsd'] = LicenseSymbol('BSD-2-Clause-NetBSD')
+    licensing.known_symbols_lowercase['bzip2-1.0.5'] = LicenseSymbol('bzip2-1.0.5')
+    licensing.known_symbols_lowercase['ecos-2.0'] = LicenseSymbol('eCos-2.0')
+    licensing.known_symbols_lowercase['gfdl-1.1'] = LicenseSymbol('GFDL-1.1')
+    licensing.known_symbols_lowercase['gfdl-1.2'] = LicenseSymbol('GFDL-1.2')
+    licensing.known_symbols_lowercase['gfdl-1.3'] = LicenseSymbol('GFDL-1.3')
+    licensing.known_symbols_lowercase['gpl-1.0'] = LicenseSymbol('GPL-1.0')
+    licensing.known_symbols_lowercase['gpl-1.0+'] = LicenseSymbol('GPL-1.0+')
+    licensing.known_symbols_lowercase['gpl-2.0'] = LicenseSymbol('GPL-2.0')
+    licensing.known_symbols_lowercase['gpl-2.0+'] = LicenseSymbol('GPL-2.0+')
+    licensing.known_symbols_lowercase['gpl-2.0-with-autoconf-exception'] = LicenseSymbol('GPL-2.0-with-autoconf-exception')
+    licensing.known_symbols_lowercase['gpl-2.0-with-bison-exception'] = LicenseSymbol('GPL-2.0-with-bison-exception')
+    licensing.known_symbols_lowercase['gpl-2.0-with-classpath-exception'] = LicenseSymbol('GPL-2.0-with-classpath-exception')
+    licensing.known_symbols_lowercase['gpl-2.0-with-font-exception'] = LicenseSymbol('GPL-2.0-with-font-exception')
+    licensing.known_symbols_lowercase['gpl-2.0-with-gcc-exception'] = LicenseSymbol('GPL-2.0-with-GCC-exception')
+    licensing.known_symbols_lowercase['gpl-3.0'] = LicenseSymbol('GPL-3.0')
+    licensing.known_symbols_lowercase['gpl-3.0+'] = LicenseSymbol('GPL-3.0+')
+    licensing.known_symbols_lowercase['gpl-3.0-with-autoconf-exception'] = LicenseSymbol('GPL-3.0-with-autoconf-exception')
+    licensing.known_symbols_lowercase['gpl-3.0-with-gcc-exception'] = LicenseSymbol('GPL-3.0-with-GCC-exception')
+    licensing.known_symbols_lowercase['lgpl-2.0'] = LicenseSymbol('LGPL-2.0')
+    licensing.known_symbols_lowercase['lgpl-2.0+'] = LicenseSymbol('LGPL-2.0+')
+    licensing.known_symbols_lowercase['lgpl-2.1'] = LicenseSymbol('LGPL-2.1')
+    licensing.known_symbols_lowercase['lgpl-2.1+'] = LicenseSymbol('LGPL-2.1+')
+    licensing.known_symbols_lowercase['lgpl-3.0'] = LicenseSymbol('LGPL-3.0')
+    licensing.known_symbols_lowercase['lgpl-3.0+'] = LicenseSymbol('LGPL-3.0+')
+    licensing.known_symbols_lowercase['net-snmp'] = LicenseSymbol('Net-SNMP')
+    licensing.known_symbols_lowercase['nunit'] = LicenseSymbol('Nunit')
+    licensing.known_symbols_lowercase['standardml-nj'] = LicenseSymbol('StandardML-NJ')
+    licensing.known_symbols_lowercase['wxwindows'] = LicenseSymbol('wxWindows')
+    return licensing
+
+'''
 Parses the SPDX JSON file for any license expressions that do not parse
 Fix these license by converting them to an extracted license info
 '''
@@ -35,7 +113,7 @@ def fixLicenseExpressions(fileName):
     with open(fileName, 'r', encoding='utf-8') as file:
         spdxJson = json.load(file)
     extractedLicenseText = {}
-    licensing = get_spdx_licensing()
+    licensing = getLicensing()
     _fix_license_expressions(spdxJson, extractedLicenseText, licensing)
     if extractedLicenseText:
         if 'hasExtractedLicensingInfos' in spdxJson:
@@ -92,7 +170,7 @@ def writeFile(spdx_document, file):
     
 def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     remove_dup_packages(spdx_document)
-    licensing = get_spdx_licensing()
+    licensing = getLicensing()
     # find the root of the document
     describes = None
     for relationship in spdx_document.relationships:
