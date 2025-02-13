@@ -34,7 +34,7 @@ Parses the SPDX JSON file for any license expressions that do not parse
 Fix these license by converting them to an extracted license info
 '''
 def fixLicenseExpressions(fileName):
-    with open(fileName, 'r') as file:
+    with open(fileName, 'r', encoding='utf-8') as file:
         spdxJson = json.load(file)
     extractedLicenses = {}
     licensing = get_spdx_licensing()
@@ -47,7 +47,7 @@ def fixLicenseExpressions(fileName):
             spdxJson['hasExtractedLicensingInfos'] = extracted
         for lic in extractedLicenses.values():
             extracted.append(lic)
-    with open(fileName, 'w') as file:
+    with open(fileName, 'w', encoding='utf-8') as file:
         json.dump(spdxJson, file)
 
 def _fix_license_expressions(elementJson, extractedLicenses, licensing):
