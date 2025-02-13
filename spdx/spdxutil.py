@@ -1,16 +1,15 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
+import pdb
 
 # Utility class to support merging / fixing up SPDX documents
 
 from license_expression import get_spdx_licensing
-from spdx_tools.spdx.model.document import Document
 from spdx_tools.spdx.model.package import Package
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import PackagePurpose
 from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.annotation import Annotation
 from spdx_tools.spdx.model.annotation import AnnotationType
 from spdx_tools.spdx.model.actor import ActorType
@@ -19,7 +18,6 @@ from spdx_tools.spdx.model.relationship import RelationshipType
 from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.model import SpdxNone
-from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.writer.write_anything import write_file
 import spdx_tools.spdx.document_utils as document_utils
@@ -28,6 +26,52 @@ from datatypes import ProjectRepoType
 from slmjson import loadSLMCategories
 import re
 import os
+import json
+import hashlib
+
+'''
+Parses the SPDX JSON file for any license expressions that do not parse
+Fix these license by converting them to an extracted license info
+'''
+def fixLicenseExpressions(fileName):
+    with open(fileName, 'r', encoding='utf-8') as file:
+        spdxJson = json.load(file)
+    extractedLicenses = {}
+    licensing = get_spdx_licensing()
+    _fix_license_expressions(spdxJson, extractedLicenses, licensing)
+    if extractedLicenses:
+        if 'hasExtractedLicensingInfos' in spdxJson:
+            extracted = spdxJson['hasExtractedLicensingInfos']
+        else:
+            extracted = []
+            spdxJson['hasExtractedLicensingInfos'] = extracted
+        for lic in extractedLicenses.values():
+            extracted.append(lic)
+    with open(fileName, 'w', encoding='utf-8') as file:
+        json.dump(spdxJson, file)
+
+def _fix_license_expressions(elementJson, extractedLicenses, licensing):
+    if isinstance(elementJson, dict):
+        fixedLicenses = {}
+        for key, value in elementJson.items():
+            if key == "licenseConcluded" or key == "licenseDeclared":
+                try:
+                    test = licensing.parse(value, validate=True, strict=True)
+                except:
+                    licenseId = 'LicenseRef-fixed' + hex(hash(value))
+                    if not licenseId in extractedLicenses:
+                        extractedLicenses['licenseId'] = {
+                            "licenseId": licenseId,
+                            "extractedText": value
+                        }
+                    fixedLicenses[key] = licenseId
+            else:
+                _fix_license_expressions(value, extractedLicenses, licensing)
+        for key, value in fixedLicenses.items():
+            elementJson[key] = value
+    elif isinstance(elementJson, list):
+        for value in elementJson:
+            _fix_license_expressions(value, extractedLicenses, licensing)
 
 '''
 Parses an SPDX file with a supported file extension

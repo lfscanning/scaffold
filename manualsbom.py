@@ -31,8 +31,12 @@ def runManualSbomAgent(cfg, prj_only="", sp_only=""):
     did_something = False
     for sp in prj._subprojects.values():
         if sp_only == "" or sp_only == sp._name:
-            if not sbomAgentForSubproject(cfg, prj, sp):
-                return False
-            did_something = True
+            try:
+                if sbomAgentForSubproject(cfg, prj, sp):
+                    did_something = True
+                else:
+                    print(f"##### {prj._name}/{sp._name}: SBOM creation failed")
+            except:
+                print(f"##### {prj._name}/{sp._name}: Exception creating SBOM")
     return did_something
 

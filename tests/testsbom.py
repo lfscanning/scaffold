@@ -1,3 +1,4 @@
+import pdb
 import unittest
 import os
 import tempfile
@@ -141,6 +142,7 @@ class TestSbom(unittest.TestCase):
     def test_npm_install(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._zippath = self.temp_dir.name
         prj = cfg._projects[TEST_PROJECT_NAME]
         prj._name = TEST_PROJECT_NAME
         sp = prj._subprojects[TEST_SUBPROJECT_NAME]
