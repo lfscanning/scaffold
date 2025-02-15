@@ -176,6 +176,44 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertEqual(result['hasExtractedLicensingInfos'][0]['licenseId'], declaredResult)
         self.assertEqual(result['hasExtractedLicensingInfos'][0]['extractedText'], badLicenseStr)
 
+    def testFixLicenseExpressionsLicenseRef(self):
+        licenseRefStr = "LicenseRef-something"
+        complexLicenseRefStr = "Apache-2.0 OR EPL-2.0 AND LicenseRef-complex"
+        spdxJson = {
+            "spdxVersion": "SPDX-2.3",
+            "dataLicense": "CC0-1.0",
+            "SPDXID": "SPDXRef-DOCUMENT",
+            "name": "c:/opendaylight-2025-02-05/yangtools",
+            "documentNamespace": "http://aquasecurity.github.io/trivy/filesystem/c:/opendaylight-2025-02-05/yangtools-940cad00-18db-4979-8c7c-2ab59c62d70c",
+            "creationInfo": {
+                "creators": [
+                    "Organization: aquasecurity",
+                    "Tool: trivy-dev"
+                ],
+                "created": "2025-02-11T04:23:13Z"
+            },
+            "packages": [
+                {
+                    "name": "artifacts/pom.xml",
+                    "SPDXID": "SPDXRef-Application-c6a6689e7f3b0f3b",
+                    "downloadLocation": "NONE",
+                    "filesAnalyzed": False,
+                    "licenseConcluded": complexLicenseRefStr,
+                    "licenseDeclared": licenseRefStr,
+                }
+            ]
+        }
+        jsonFileName = os.path.join(self.temp_dir.name, "spdx.json")
+        with open(jsonFileName, "w") as jsonFile:
+            json.dump(spdxJson, jsonFile)
+        spdxutil.fixLicenseExpressions(jsonFileName)
+        with open(jsonFileName, "r") as jsonFile:
+            result = json.load(jsonFile)
+        declaredResult = result['packages'][0]['licenseDeclared']
+        self.assertEqual(licenseRefStr, declaredResult)
+        concludedResult = result['packages'][0]['licenseConcluded']
+        self.assertEqual(complexLicenseRefStr, concludedResult)
+        self.assertFalse('hasExtractedLicensingInfos' in result)
 
     def testCreateXlsx(self):
         spdx_document = spdxutil.parseFile(self.trivy_json_path)
