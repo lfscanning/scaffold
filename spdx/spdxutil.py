@@ -56,6 +56,9 @@ def _fix_license_expressions(elementJson, extractedLicenses, licensing):
         for key, value in elementJson.items():
             if key == "licenseConcluded" or key == "licenseDeclared":
                 try:
+                    for lic_symbol in licensing.license_symbols(value):
+                        if (str(lic_symbol).startswith("LicenseRef-")):
+                            licensing.known_symbols[str(lic_symbol)] = lic_symbol
                     test = licensing.parse(value, validate=True, strict=True)
                 except:
                     licenseId = 'LicenseRef-fixed' + hex(hash(value))
