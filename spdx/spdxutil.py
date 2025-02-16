@@ -1,6 +1,5 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
-import pdb
 
 # Utility class to support merging / fixing up SPDX documents
 
@@ -27,7 +26,6 @@ from slmjson import loadSLMCategories
 import re
 import os
 import json
-import hashlib
 
 '''
 Parses the SPDX JSON file for any license expressions that do not parse
@@ -36,45 +34,47 @@ Fix these license by converting them to an extracted license info
 def fixLicenseExpressions(fileName):
     with open(fileName, 'r', encoding='utf-8') as file:
         spdxJson = json.load(file)
-    extractedLicenses = {}
+    extractedLicenseText = {}
     licensing = get_spdx_licensing()
-    _fix_license_expressions(spdxJson, extractedLicenses, licensing)
-    if extractedLicenses:
+    _fix_license_expressions(spdxJson, extractedLicenseText, licensing)
+    if extractedLicenseText:
         if 'hasExtractedLicensingInfos' in spdxJson:
             extracted = spdxJson['hasExtractedLicensingInfos']
         else:
             extracted = []
             spdxJson['hasExtractedLicensingInfos'] = extracted
-        for lic in extractedLicenses.values():
+        for lic in extractedLicenseText.values():
             extracted.append(lic)
     with open(fileName, 'w', encoding='utf-8') as file:
         json.dump(spdxJson, file)
 
-def _fix_license_expressions(elementJson, extractedLicenses, licensing):
+def _fix_license_expressions(elementJson, extractedLicenseText, licensing):
     if isinstance(elementJson, dict):
         fixedLicenses = {}
         for key, value in elementJson.items():
             if key == "licenseConcluded" or key == "licenseDeclared":
                 try:
                     for lic_symbol in licensing.license_symbols(value):
-                        if (str(lic_symbol).startswith("LicenseRef-")):
+                        if str(lic_symbol).startswith("LicenseRef-"):
                             licensing.known_symbols[str(lic_symbol)] = lic_symbol
                     test = licensing.parse(value, validate=True, strict=True)
                 except:
-                    licenseId = 'LicenseRef-fixed' + hex(hash(value))
-                    if not licenseId in extractedLicenses:
-                        extractedLicenses['licenseId'] = {
+                    if not value in extractedLicenseText:
+                        licenseId = 'LicenseRef-fixed-' + hex(abs(hash(value)))
+                        extractedLicenseText[value] = {
                             "licenseId": licenseId,
                             "extractedText": value
                         }
+                    else:
+                        licenseId = extractedLicenseText[value]['licenseId']
                     fixedLicenses[key] = licenseId
             else:
-                _fix_license_expressions(value, extractedLicenses, licensing)
+                _fix_license_expressions(value, extractedLicenseText, licensing)
         for key, value in fixedLicenses.items():
             elementJson[key] = value
     elif isinstance(elementJson, list):
         for value in elementJson:
-            _fix_license_expressions(value, extractedLicenses, licensing)
+            _fix_license_expressions(value, extractedLicenseText, licensing)
 
 '''
 Parses an SPDX file with a supported file extension
@@ -233,7 +233,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         else:
             spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
         fix_download_location(spdx_element)
-        fix_attribution_text(spdx_element, spdx_document.annotations)
+        fix_attribution_text(spdx_element, spdx_document.annotations, spdx_document.creation_info.created)
     for spdx_element in spdx_document.snippets:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
         if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
@@ -241,7 +241,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         else:
             spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
         fix_download_location(spdx_element)
-        fix_attribution_text(spdx_element, spdx_document.annotations)
+        fix_attribution_text(spdx_element, spdx_document.annotations, spdx_document.creation_info.created)
         
     
     
