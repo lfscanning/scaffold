@@ -4,11 +4,13 @@
 
 import os
 import shutil
+import zipfile
 
 from git import Repo
 
 from datatypes import Status
 
+MAX_FILE_SIZE = 50 * 1000000 # Maximum file size to push to GitHub - 50MB
 def doUploadSPDXForSubproject(cfg, prj, sp):
     srcFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
     srcFilename = f"{sp._name}-{sp._code_pulled}.spdx"
@@ -44,15 +46,20 @@ def doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
 
     # figure out which file to copy to where
     srcAbs = os.path.join(srcFolder, srcFilename)
-    dstRel = os.path.join(sp._name, cfg._month, srcFilename)
+    needToZip = os.path.getsize(srcAbs) > MAX_FILE_SIZE
+    dstRel = os.path.join(sp._name, cfg._month, srcFilename + ".zip") if needToZip else os.path.join(sp._name, cfg._month, srcFilename)
     dstAbs = os.path.join(repoPath, dstRel)
 
     # create directories if needed
     dstAbsDir = os.path.dirname(dstAbs)
     os.makedirs(dstAbsDir, mode=0o755, exist_ok=True)
 
-    # copy the file
-    shutil.copyfile(srcAbs, dstAbs)
+    # copy or zip the file
+    if needToZip:
+        with zipfile.ZipFile(dstAbs, 'w', compression=zipfile.ZIP_DEFLATED) as zf:
+            zf.write(srcAbs, srcFilename)
+    else:
+        shutil.copyfile(srcAbs, dstAbs)
 
     # add it
     repo.index.add([dstRel])
@@ -63,7 +70,10 @@ def doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
     print(f"{prj._name}/{sp._name}: added and committed spdx {srcFilename} file at {dstRel}")
 
     # and push it
-    origin.push()
-    print(f"{prj._name}/{sp._name}: pushed to {cfg._spdx_github_org}/{repoName}")
+    if not origin.push():
+        print(f"{prj._name}/{sp._name}: Failed to push to {cfg._spdx_github_org}/{repoName}.  Check the size of the upload and the git repository integrity.")
+        return False
+    else:
+        print(f"{prj._name}/{sp._name}: pushed to {cfg._spdx_github_org}/{repoName}")
     del repo
     return True

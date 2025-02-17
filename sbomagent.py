@@ -86,7 +86,6 @@ errors:
 ----------
 """)
                 return False
-        spdx.spdxutil.fixLicenseExpressions(parlay_result)
         if cdsbomDebug:
             result = os.path.join(Path.home(), f"{prj._name}-{sp._name}-cdsbom-spdx.json")
         else:
@@ -105,6 +104,7 @@ errors:
 ----------
 """)
             return False
+        spdx.spdxutil.fixLicenseExpressions(result)
         try:
             spdxDocument = spdx.spdxutil.parseFile(result)
         except SPDXParsingError:
