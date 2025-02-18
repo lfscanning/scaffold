@@ -1,6 +1,6 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
-import pdb
+
 import unittest
 import os
 import tempfile
@@ -8,21 +8,15 @@ import shutil
 import spdx.spdxutil as spdxutil
 import spdx.xlsx as xlsx
 from config import loadConfig
-from spdx_tools.spdx.model.document import Document
 from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import PackagePurpose
 from spdx_tools.spdx.model.actor import ActorType
-from spdx_tools.spdx.model.relationship import Relationship
 from spdx_tools.spdx.model.relationship import RelationshipType
-from spdx_tools.spdx.model import SpdxNoAssertion
-from spdx_tools.spdx.model import SpdxNone
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
 from license_expression import LicenseSymbol
-import re
 import json
 
 TRIVY_SPDX_FILENAME = "test-trivy-spdx.json"

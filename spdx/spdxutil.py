@@ -19,6 +19,7 @@ from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.model import SpdxNone
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.writer.write_anything import write_file
+from spdx_tools.common.spdx_licensing import spdx_licensing as tools_python_licensing
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
 from datatypes import ProjectRepoType
@@ -28,11 +29,10 @@ import os
 import json
 
 '''
-Gets the licensing parser for SPDX and adds back in missing symbols
+updates the licensing parser for SPDX and adds back in missing symbols
 for NONE, NOASSERTION and deprecated licenses
 '''
-def getLicensing():
-    licensing = get_spdx_licensing()
+def updateLicensing(licensing):
     licensing.known_symbols['NOASSERTION'] = LicenseSymbol('NOASSERTION')
     licensing.known_symbols['NONE'] = LicenseSymbol('NONE')
     licensing.known_symbols['AGPL-1.0'] = LicenseSymbol('AGPL-1.0')
@@ -103,6 +103,14 @@ def getLicensing():
     licensing.known_symbols_lowercase['nunit'] = LicenseSymbol('Nunit')
     licensing.known_symbols_lowercase['standardml-nj'] = LicenseSymbol('StandardML-NJ')
     licensing.known_symbols_lowercase['wxwindows'] = LicenseSymbol('wxWindows')
+
+'''
+Gets the licensing parser for SPDX and adds back in missing symbols
+for NONE, NOASSERTION and deprecated licenses
+'''
+def getLicensing():
+    licensing = get_spdx_licensing()
+    updateLicensing(licensing)
     return licensing
 
 '''
@@ -159,6 +167,7 @@ Parses an SPDX file with a supported file extension
 Raises SPDXParsingError on parsing errors
 '''
 def parseFile(file):
+    updateLicensing(tools_python_licensing)
     return parse_file(file)
 
 '''
@@ -166,7 +175,7 @@ wrties an SPDX document to a file in the format dictated by the file extension
 '''
 def writeFile(spdx_document, file):
     write_file(spdx_document, file, validate=False)
-    print("SPDX sucessfully written")
+    print("SPDX successfully written")
     
 def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     remove_dup_packages(spdx_document)
