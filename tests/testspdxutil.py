@@ -1,6 +1,6 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
-import pdb
+
 import unittest
 import os
 import tempfile
@@ -8,21 +8,15 @@ import shutil
 import spdx.spdxutil as spdxutil
 import spdx.xlsx as xlsx
 from config import loadConfig
-from spdx_tools.spdx.model.document import Document
 from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import PackagePurpose
 from spdx_tools.spdx.model.actor import ActorType
-from spdx_tools.spdx.model.relationship import Relationship
 from spdx_tools.spdx.model.relationship import RelationshipType
-from spdx_tools.spdx.model import SpdxNoAssertion
-from spdx_tools.spdx.model import SpdxNone
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
-from license_expression import get_spdx_licensing
-import re
+from license_expression import LicenseSymbol
 import json
 
 TRIVY_SPDX_FILENAME = "test-trivy-spdx.json"
@@ -139,6 +133,14 @@ class TestSpdxUtil(unittest.TestCase):
     def tearDown(self):
         self.temp_dir.cleanup()
 
+    def testNoAssertionInExpressionLicense(self):
+        declared = "NOASSERTION AND Apache-2.0"
+        licensing = spdxutil.getLicensing()
+        licensing.known_symbols['NOASSERTION'] = LicenseSymbol('NOASSERTION')
+        extracted_licensing_info = []
+        result = spdxutil.fix_license(declared, extracted_licensing_info, licensing)
+        self.assertEqual(declared, str(result))
+
     def testFixLicenseExpressions(self):
         badLicenseStr = "A very bad license and with a worse license"
         spdxJson = {
@@ -252,7 +254,7 @@ class TestSpdxUtil(unittest.TestCase):
         # pdb.set_trace()
         
     def testFixLicenses(self):
-        licensing = get_spdx_licensing()
+        licensing = spdxutil.getLicensing()
         extracted_licensing_info = []
         result = spdxutil.fix_license('CC-BY-3.0+', extracted_licensing_info, licensing)
         self.assertEqual('LicenseRef-CC-BY-3.0-', str(result))
@@ -341,7 +343,7 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertEqual('aswf.materialx', describes.name)
         self.assertEqual('Apache-2.0', str(describes.license_declared))
         
-        self.assertEqual('Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified AND (Apache-2.0 AND MIT) AND MIT AND (MIT OR GPL-2.0-only) AND BSD-3-Clause AND BSL-1.0 AND ISC AND Zlib AND LicenseRef-Public-domain', str(describes.license_concluded))
+        self.assertEqual('Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified AND (Apache-2.0 AND MIT) AND MIT AND (MIT OR GPL-2.0) AND BSD-3-Clause AND BSL-1.0 AND ISC AND Zlib AND LicenseRef-Public-domain', str(describes.license_concluded))
         contained = []
         for relationship in spdx_document.relationships:
             if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == describes.spdx_id:
@@ -351,7 +353,7 @@ class TestSpdxUtil(unittest.TestCase):
                     materialx_pkg = repo_pkg
         self.assertEqual(3, len(contained))
         self.assertEqual('Apache-2.0', str(materialx_pkg.license_declared))
-        self.assertEqual('Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified AND (Apache-2.0 AND MIT) AND MIT AND (MIT OR GPL-2.0-only) AND BSD-3-Clause AND BSL-1.0 AND ISC AND Zlib AND LicenseRef-Public-domain', str(materialx_pkg.license_concluded))
+        self.assertEqual('Apache-2.0 AND LicenseRef-Apache-2.0-Pixar-modified AND (Apache-2.0 AND MIT) AND MIT AND (MIT OR GPL-2.0) AND BSD-3-Clause AND BSL-1.0 AND ISC AND Zlib AND LicenseRef-Public-domain', str(materialx_pkg.license_concluded))
         self.assertEqual('https://github.com/AcademySoftwareFoundation/MaterialX/archive/153a803c46181319fd782ef8426ff58a2e885d82.zip', materialx_pkg.download_location)
         self.assertEqual(1, len(materialx_pkg.external_references))
         self.assertEqual(ExternalPackageRefCategory.PACKAGE_MANAGER, materialx_pkg.external_references[0].category)
