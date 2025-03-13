@@ -171,7 +171,7 @@ def parseFile(file):
     return parse_file(file)
 
 '''
-wrties an SPDX document to a file in the format dictated by the file extension
+writes an SPDX document to a file in the format dictated by the file extension
 '''
 def writeFile(spdx_document, file):
     write_file(spdx_document, file, validate=False)
@@ -187,7 +187,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
                 spdx_element_utils.get_element_type_from_spdx_id(relationship.related_spdx_element_id, spdx_document) == Package:
             describes = document_utils.get_element_from_spdx_id(spdx_document, relationship.related_spdx_element_id)
     if describes == None:
-        print("No document describes, trivy document not augumented")
+        print("No document describes, Trivy document not augmented")
         return False
     # Set the name to the "project.subproject"
     describes.name = prj._name + "." + sp._name
