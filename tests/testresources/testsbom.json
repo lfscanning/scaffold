@@ -1,0 +1,2990 @@
+{
+    "SPDXID": "SPDXRef-DOCUMENT",
+    "creationInfo": {
+        "created": "2025-03-13T18:51:43Z",
+        "creators": [
+            "Tool: protobom-v0.0.0-20250214231819-98dbdd2c0be6+dirty",
+            "Tool: trivy-dev",
+            "Organization: aquasecurity",
+            "Organization: Linux Foundation",
+            "Tool: Scaffold",
+            "Tool: Parlay"
+        ],
+        "licenseListVersion": "3.20"
+    },
+    "dataLicense": "CC0-1.0",
+    "name": "/tmp/tmpmr_vz1f2/code",
+    "spdxVersion": "SPDX-2.3",
+    "documentNamespace": "http://aquasecurity.github.io/trivy/filesystem//tmp/tmpmr_vz1f2/code-75b5157e-cc4d-4545-9556-5d259100837f",
+    "packages": [
+        {
+            "SPDXID": "SPDXRef-Application-43eaa81d9e7cd923",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "name": "flexmeasures/requirements.txt",
+            "primaryPackagePurpose": "APPLICATION",
+            "supplier": "Organization: Linux Foundation Project lfenergy",
+            "versionInfo": "784b3a623d031d2c7f36f811321c7ce993b2f002"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-631d4135d67fe7a4",
+            "description": "A database migration tool for SQLAlchemy.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/alembic@1.13.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://alembic.sqlalchemy.org",
+            "licenseConcluded": "BSD-3-Clause AND MIT",
+            "licenseDeclared": "MIT",
+            "name": "alembic",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: SQLAlchemy",
+            "versionInfo": "1.13.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-1aa356d863790d3b",
+            "description": "Vega-Altair: A declarative statistical visualization library for Python.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/altair@5.3.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "altair",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Vega",
+            "versionInfo": "5.3.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-289170cb8d37a752",
+            "description": "Better dates & times for Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/arrow@1.3.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "arrow",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Arrow",
+            "versionInfo": "1.3.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-f59d02fb7a5294e1",
+            "description": "Classes Without Boilerplate",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/attrs@23.2.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "attrs",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: The attrs Cabal",
+            "versionInfo": "23.2.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-83089ea34c88078a",
+            "description": "Internationalization utilities",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/babel@2.14.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://babel.pocoo.org/",
+            "licenseConcluded": "BSD-3-Clause AND BSD-3-Clause AND CC0-1.0",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "babel",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: python-babel",
+            "versionInfo": "2.14.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-51ba85f7aaf20ecb",
+            "description": "Modern password hashing for your software and your servers",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/bcrypt@4.0.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "(Apache-2.0 AND BSD-3-Clause) OR Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "bcrypt",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python Cryptographic Authority",
+            "versionInfo": "4.0.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-967781f84a298797",
+            "description": "Fast, simple object-to-object and broadcast signaling",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/blinker@1.7.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause AND MIT",
+            "licenseDeclared": "MIT",
+            "name": "blinker",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets Ecosystem",
+            "versionInfo": "1.7.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-5bf717a05f753eb5",
+            "description": "Python package for providing Mozilla's CA Bundle.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/certifi@2024.2.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/certifi/python-certifi",
+            "licenseConcluded": "MPL-2.0",
+            "licenseDeclared": "MPL-2.0",
+            "name": "certifi",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Certifi",
+            "versionInfo": "2024.2.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-f5a696aaa44b8509",
+            "description": "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/charset-normalizer@3.3.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "CC-BY-SA-3.0 AND LGPL-2.1-only AND LGPL-2.1-only AND MIT AND MIT AND MIT ",
+            "licenseDeclared": "MIT",
+            "name": "charset-normalizer",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: TAHRI Ahmed R.",
+            "versionInfo": "3.3.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-127ee326bf824e27",
+            "description": "Composable command line interface toolkit",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/click@8.1.7",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "click",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets",
+            "versionInfo": "8.1.7"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-599fafa20d11bfca",
+            "description": "click_default_group",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/click-default-group@1.2.4",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause ",
+            "licenseDeclared": "BSD-3-Clause",
+            "name": "click-default-group",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: click-contrib",
+            "versionInfo": "1.2.4"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-a23127a31780fc64",
+            "description": "converts and manipulates various color representation (HSL, RVB, web, X11, ...)",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/colour@0.1.5",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://github.com/vaab/colour",
+            "licenseConcluded": "BSD-2-Clause AND BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "colour",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Valentin Lab",
+            "versionInfo": "0.1.5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-5d66a5373a7f8637",
+            "description": "Python library for calculating contours of 2D quadrilateral grids",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/contourpy@1.2.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/contourpy/contourpy",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "contourpy",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: contourpy",
+            "versionInfo": "1.2.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-a443ea63142ecdc0",
+            "description": "Converts between Gregorian dates and other calendar systems",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/convertdate@2.4.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/fitnr/convertdate",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "convertdate",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Neil Freeman",
+            "versionInfo": "2.4.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-e233914f23b92c86",
+            "description": "Composable style cycles",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/cycler@0.12.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "cycler",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Matplotlib Developers",
+            "versionInfo": "0.12.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-59dfab9bca6fb7a6",
+            "description": "serialize all of Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/dill@0.3.8",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/uqfoundation/dill",
+            "licenseConcluded": "Apache-2.0 AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND MIT AND BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "dill",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: The UQ Foundation",
+            "versionInfo": "0.3.8"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-8ec3100555ecae1e",
+            "description": "DNS toolkit",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/dnspython@2.6.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "ISC AND ISC ",
+            "licenseDeclared": "ISC",
+            "name": "dnspython",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Bob Halley",
+            "versionInfo": "2.6.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-cb99290896c0a9ec",
+            "description": "A robust email address syntax and deliverability validation library.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/email-validator@2.1.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/JoshData/python-email-validator",
+            "licenseConcluded": "CC0-1.0 AND Unlicense AND Unlicense",
+            "licenseDeclared": "Unlicense",
+            "name": "email-validator",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Joshua Tauberer",
+            "versionInfo": "2.1.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-7535cc888943635",
+            "description": "A platform independent file lock.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/filelock@3.13.3",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/tox-dev/py-filelock",
+            "licenseConcluded": "Unlicense",
+            "licenseDeclared": "Unlicense",
+            "name": "filelock",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: tox development team",
+            "versionInfo": "3.13.3"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-d68e2db2d9a9ace",
+            "description": "A simple framework for building complex web applications.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask@2.2.5",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "flask",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets",
+            "versionInfo": "2.2.5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-9d0ecd03a22b4472",
+            "description": "Class based views for Flask",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-classful@0.16.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "flask-classful",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets Ecosystem",
+            "versionInfo": "0.16.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-801e940ed7eb367b",
+            "description": "A Flask extension simplifying CORS support",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-cors@4.0.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://corydolphin.github.io/flask-cors/",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "flask-cors",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Cory Dolphin",
+            "versionInfo": "4.0.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ed28ad0d4ec13c8",
+            "description": "Better JSON support for Flask",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-json@0.4.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/skozlovf/flask-json",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "flask-json",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Sergey Kozlov",
+            "versionInfo": "0.4.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-3b64ed9476bac044",
+            "description": "User authentication and session management for Flask.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-login@0.6.3",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/maxcountryman/flask-login",
+            "licenseConcluded": "BSD-3-Clause AND MIT ",
+            "licenseDeclared": "MIT",
+            "name": "flask-login",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Max Countryman",
+            "versionInfo": "0.6.3"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-8270886c7f00fefb",
+            "description": "Flask extension for sending email",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-mail@0.9.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "flask-mail",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets Ecosystem",
+            "versionInfo": "0.9.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-22435580d015923f",
+            "description": "Flask + marshmallow for beautiful APIs",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-marshmallow@1.2.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause AND MIT ",
+            "licenseDeclared": "MIT",
+            "name": "flask-marshmallow",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: marshmallow-code",
+            "versionInfo": "1.2.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-fd32c48945e25f7c",
+            "description": "SQLAlchemy database migrations for Flask applications using Alembic.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-migrate@4.0.7",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/miguelgrinberg/flask-migrate",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "flask-migrate",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Miguel Grinberg",
+            "versionInfo": "4.0.7"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-28ac1609e14de192",
+            "description": "Identity management for flask",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-principal@0.4.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://packages.python.org/Flask-Principal/",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "flask-principal",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets Ecosystem",
+            "versionInfo": "0.4.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-62036fe9e2fd3240",
+            "description": "Quickly add security features to your Flask application.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-security-too@5.1.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/pallets-eco/flask-security",
+            "licenseConcluded": "BSD-3-Clause AND BSD-3-Clause AND MIT AND MIT ",
+            "licenseDeclared": "MIT",
+            "name": "flask-security-too",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets Ecosystem",
+            "versionInfo": "5.1.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-a32375be94e7360e",
+            "description": "Add SQLAlchemy support to your Flask application.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-sqlalchemy@3.1.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "flask-sqlalchemy",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets Ecosystem",
+            "versionInfo": "3.1.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-abfd00acda1b55ca",
+            "description": "Force SSL on your Flask app.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-sslify@0.1.5",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/kennethreitz/flask-sslify",
+            "licenseConcluded": "NOASSERTION",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "flask-sslify",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Kenneth Reitz",
+            "versionInfo": "0.1.5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-714802cbad0dcf9e",
+            "description": "Form rendering, validation, and CSRF protection for Flask with WTForms.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/flask-wtf@1.2.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "flask-wtf",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: WTForms",
+            "versionInfo": "1.2.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-50c067e445186986",
+            "description": "Tools to manipulate font files",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/fonttools@4.51.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://github.com/fonttools/fonttools",
+            "licenseConcluded": "Apache-2.0 AND BSD-3-Clause AND CC-BY-SA-3.0 AND CC-BY-SA-4.0 AND CC-BY-SA-4.0 AND GPL-1.0-or-later AND (GPL-1.0-or-later AND OFL-1.1) AND LicenseRef-scancode-other-permissive AND LicenseRef-scancode-proprietary-license AND LicenseRef-scancode-unicode AND MIT AND MIT AND LicenseRef-scancode-unknown-license-reference AND OFL-1.1 AND OFL-1.1 AND (OFL-1.1 AND BSD-3-Clause) AND Apache-2.0",
+            "licenseDeclared": "Apache-2.0 AND BSD-3-Clause AND MIT AND OFL-1.1",
+            "name": "fonttools",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: FontTools",
+            "versionInfo": "4.51.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-dd39f1d705987e7f",
+            "description": "Lightweight in-process concurrent programming",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/greenlet@3.0.3",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://greenlet.readthedocs.io/",
+            "licenseConcluded": "MIT AND MIT AND MIT AND Python-2.0 AND PSF-2.0",
+            "licenseDeclared": "MIT AND PSF-2.0",
+            "name": "greenlet",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: python-greenlet",
+            "versionInfo": "3.0.3"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-72fdaf3736c3b8a4",
+            "description": "Python humanize utilities",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/humanize@4.9.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/python-humanize/humanize",
+            "licenseConcluded": "MIT AND MIT AND Python-2.0 ",
+            "licenseDeclared": "MIT",
+            "name": "humanize",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: python-humanize",
+            "versionInfo": "4.9.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-2b6bd9efd2517efd",
+            "description": "Internationalized Domain Names in Applications (IDNA)",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/idna@3.6",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "idna",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Kim Davies",
+            "versionInfo": "3.6"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-8523ee5b877ae1ef",
+            "description": "Read metadata from Python packages",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/importlib-metadata@7.1.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND Apache-2.0 AND LicenseRef-scancode-unknown-license-reference",
+            "licenseDeclared": "Apache-2.0",
+            "name": "importlib-metadata",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python",
+            "versionInfo": "7.1.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-fa84af594afd1e64",
+            "description": "Correctly generate plurals, singular nouns, ordinals, indefinite articles",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/inflect@6.0.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "inflect",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Jason R. Coombs",
+            "versionInfo": "6.0.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-c5fed862708d5a08",
+            "description": "A port of Ruby on Rails inflector to Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/inflection@0.5.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/jpvanhal/inflection",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "inflection",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Janne Vanhala",
+            "versionInfo": "0.5.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-86c72056c71d701b",
+            "description": "Simple module to parse ISO 8601 dates",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/iso8601@2.1.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/micktwomey/pyiso8601",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "iso8601",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Michael Twomey",
+            "versionInfo": "2.1.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-764a03e85b85b202",
+            "description": "An ISO 8601 date/time/duration parser and formatter",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/isodate@0.6.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/gweis/isodate/",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "isodate",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "versionInfo": "0.6.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-56b2317ea885d000",
+            "description": "Safely pass data to untrusted environments and back.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/itsdangerous@2.1.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "itsdangerous",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets",
+            "versionInfo": "2.1.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-2dd6c801105c0dcf",
+            "description": "A very fast and expressive template engine.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/jinja2@3.1.3",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "jinja2",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets",
+            "versionInfo": "3.1.3"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-e14ce469aa4cfd85",
+            "description": "Lightweight pipelining with Python functions",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/joblib@1.3.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://joblib.readthedocs.io",
+            "licenseConcluded": "BSD-3-Clause AND BSD-3-Clause AND Python-2.0 AND Python-2.0",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "joblib",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: joblib",
+            "versionInfo": "1.3.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-e75e2eec7ca3358d",
+            "description": "An implementation of JSON Schema validation for Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/jsonschema@4.21.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/python-jsonschema/jsonschema",
+            "licenseConcluded": "Apache-2.0 AND Apache-2.0 AND BSD-3-Clause AND ISC AND MIT AND MPL-2.0 AND Python-2.0 AND MIT",
+            "licenseDeclared": "MIT",
+            "name": "jsonschema",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python + JSON Schema",
+            "versionInfo": "4.21.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-89a1dec14b10d39a",
+            "description": "The JSON Schema meta-schemas and vocabularies, exposed as a Registry",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/jsonschema-specifications@2023.12.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/python-jsonschema/jsonschema-specifications",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "jsonschema-specifications",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python + JSON Schema",
+            "versionInfo": "2023.12.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-39e015e9e56533e4",
+            "description": "A fast implementation of the Cassowary constraint solver",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/kiwisolver@1.4.5",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND MIT ",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "kiwisolver",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: nucleic",
+            "versionInfo": "1.4.5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-a1f4ea3e4663ba24",
+            "description": "A Chinese Calendar Library in Pure Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/lunardate@0.2.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/lidaobing/python-lunardate",
+            "licenseConcluded": "GPL-1.0-or-later AND GPL-3.0-only AND GPL-2.0-only AND GPL-3.0 AND GPL-3.0-only",
+            "licenseDeclared": "GPL-1.0-or-later AND GPL-3.0 AND GPL-3.0-only AND GPL-3.0-or-later",
+            "name": "lunardate",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: LI Daobing",
+            "versionInfo": "0.2.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-40712ea47ac223e7",
+            "description": "A super-fast templating language that borrows the best ideas from the existing templating languages.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/mako@1.3.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://www.makotemplates.org/",
+            "licenseConcluded": "BSD-3-Clause AND MIT AND MIT AND MIT AND Python-2.0",
+            "licenseDeclared": "MIT",
+            "name": "mako",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: SQLAlchemy",
+            "versionInfo": "1.3.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-1013fcf1427d3656",
+            "description": "Safely add untrusted strings to HTML/XML markup.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/markupsafe@2.1.5",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "markupsafe",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets",
+            "versionInfo": "2.1.5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-4226bed2ef8f56d3",
+            "description": "A lightweight library for converting complex datatypes to and from native Python datatypes.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/marshmallow@3.21.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause AND MIT",
+            "licenseDeclared": "MIT",
+            "name": "marshmallow",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: marshmallow-code",
+            "versionInfo": "3.21.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-de96f6ed1b58ed62",
+            "description": "An unofficial extension to Marshmallow to allow for polymorphic fields",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/marshmallow-polyfield@5.11",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/Bachmann1234/marshmallow-polyfield",
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "marshmallow-polyfield",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Matt Bachmann",
+            "versionInfo": "5.11"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-bc9893341026b2d2",
+            "description": "SQLAlchemy integration with the marshmallow (de)serialization library",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/marshmallow-sqlalchemy@1.0.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "marshmallow-sqlalchemy",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: marshmallow-code",
+            "versionInfo": "1.0.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-2ce1bf928b9d4548",
+            "description": "Python plotting package",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/matplotlib@3.8.4",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://matplotlib.org",
+            "licenseConcluded": "AGPL-3.0-or-later AND APAFML AND Apache-2.0 AND Apache-2.0 AND MIT AND BSD-3-Clause AND BSD-3-Clause AND GPL-1.0-or-later AND LGPL-2.0-or-later AND Python-2.0 AND BSD-3-Clause AND Bitstream-Charter AND Bitstream-Vera AND Bitstream-Vera AND Bitstream-Vera AND Bitstream-Vera AND CC-BY-3.0 AND CC-PDDC AND CC0-1.0 AND MIT AND MPL-1.1 AND OFL-1.1 AND Python-2.0 AND Qhull AND TCL AND xlock",
+            "licenseDeclared": "PSF-2.0",
+            "name": "matplotlib",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Matplotlib Developers",
+            "versionInfo": "3.8.4"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-e5ac77762c05bad3",
+            "description": "Fundamental package for array computing in Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/numpy@1.24.4",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND Apache-2.0 AND MIT AND BSD-2-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause-Open-MPI AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause AND BSD-3-Clause-Open-MPI AND GPL-3.0-only AND BSD-3-Clause AND MIT AND BSD-3-Clause AND MIT AND Zlib AND BSD-3-Clause AND NCSA AND BSD-3-Clause AND BSD-3-Clause-Open-MPI AND CC-BY-4.0 AND CC-BY-SA-3.0 AND CC0-1.0 AND CC0-1.0 AND GPL-3.0-only AND GPL-3.0-or-later AND GPL-3.0-only AND MIT AND MIT AND Zlib AND MIT AND Zlib AND SunPro AND Zlib",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "numpy",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: NumPy",
+            "versionInfo": "1.24.4"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-7bb5870ffb850039",
+            "description": "Uncertainty treatment library",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/openturns@1.22",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://www.openturns.org",
+            "name": "openturns",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "versionInfo": "1.22"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-2a41fda579de0c77",
+            "description": "Core utilities for Python packages",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/packaging@24.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "((BSD-2-Clause OR Apache-2.0) AND (BSD-3-Clause OR Apache-2.0) AND Apache-2.0 AND Apache-2.0 AND (BSD-3-Clause OR Apache-2.0) AND Apache-2.0 AND BSD-2-Clause AND Apache-2.0 AND BSD-3-Clause AND BSD-2-Clause AND BSD-3-Clause) OR Apache-2.0",
+            "licenseDeclared": "Apache-2.0 AND BSD-3-Clause",
+            "name": "packaging",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python Packaging Authority",
+            "versionInfo": "24.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-c521e4f3e7d4a90c",
+            "description": "Powerful data structures for data analysis, time series, and statistics",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pandas@2.2.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://pandas.pydata.org",
+            "licenseConcluded": "(0BSD AND BSD-3-Clause AND Python-2.0 AND Apache-2.0 AND Apache-2.0 AND BSD-2-Clause AND Apache-2.0 AND BSD-3-Clause AND BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause AND Python-2.0 AND BSD-3-Clause AND TCL AND BSD-3-Clause) OR (Apache-2.0 AND MIT AND Python-2.0)",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "pandas",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: pandas",
+            "versionInfo": "2.2.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-597acd6dd31389fa",
+            "description": "comprehensive password hashing framework supporting over 30 schemes",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/passlib@1.7.4",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://passlib.readthedocs.io",
+            "licenseConcluded": "BSD-3-Clause AND Beerware AND ISC ",
+            "licenseDeclared": "BSD-3-Clause",
+            "name": "passlib",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "versionInfo": "1.7.4"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-4c163690195c3026",
+            "description": "A Python package for describing statistical models and for building design matrices.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/patsy@0.5.6",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/pydata/patsy",
+            "licenseConcluded": "BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND BSD-2-Clause AND BSD-3-Clause AND BSD-2-Clause AND BSD-2-Clause AND Python-2.0 AND MIT AND Python-2.0",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "patsy",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python for Data",
+            "versionInfo": "0.5.6"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ac904904b7e2f5da",
+            "description": "Python Imaging Library (Fork)",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pillow@10.3.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://python-pillow.github.io",
+            "licenseConcluded": "Apache-2.0 AND Apache-2.0 AND GPL-3.0-only AND LGPL-2.1-only AND MIT AND OFL-1.1 AND Bitstream-Vera AND Bitstream-Vera AND Bitstream-Vera AND Bitstream-Vera AND Bitstream-Vera AND CC0-1.0 AND GPL-1.0-or-later AND GPL-2.0-only AND LGPL-2.0-or-later AND Zlib AND GPL-1.0-or-later AND GPL-3.0-or-later AND GPL-1.0-or-later AND LGPL-2.0-or-later AND GPL-3.0-only AND HPND AND HPND AND MIT AND MIT-Modern-Variant AND OFL-1.1 AND TCL",
+            "licenseDeclared": "MIT-CMU",
+            "name": "pillow",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pillow",
+            "versionInfo": "10.3.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-fd287ed9495737c",
+            "description": "Physical quantities module",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pint@0.23",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/hgrecco/pint",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "pint",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Hernan Grecco",
+            "versionInfo": "0.23"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-a98652f2e7d8a282",
+            "description": "Python Lex & Yacc",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/ply@3.11",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://www.dabeaz.com/ply/",
+            "licenseConcluded": "BSD-3-Clause AND CC-PDDC AND LicenseRef-scancode-unknown-license-reference",
+            "licenseDeclared": "BSD-3-Clause",
+            "name": "ply",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "versionInfo": "3.11"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-e71911844391a244",
+            "description": "Proper scoring rules in Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/properscoring@0.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/TheClimateCorporation/properscoring",
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "properscoring",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: properscoring",
+            "versionInfo": "0.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-7fcf1d0a090f4dde",
+            "description": "Python to JavaScript compiler.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pscript@0.7.7",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/flexxui/pscript",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "pscript",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: flexxui",
+            "versionInfo": "0.7.7"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-1cb33f0d5d64d1a7",
+            "description": "Cross-platform lib for process and system monitoring in Python.  NOTE: the syntax of this script MUST be kept compatible with Python 2.7.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/psutil@5.9.8",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/giampaolo/psutil",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "psutil",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Giampaolo Rodola",
+            "versionInfo": "5.9.8"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-76cb23ac7093211a",
+            "description": "psycopg2 - Python-PostgreSQL Database Adapter",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/psycopg2-binary@2.9.9",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://psycopg.org/",
+            "licenseConcluded": "LGPL-2.0-or-later AND LGPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-3.0 AND LGPL-3.0-only AND LGPL-3.0-or-later AND PSF-2.0 AND Zlib",
+            "licenseDeclared": "LGPL-3.0-or-later WITH openvpn-openssl-exception",
+            "name": "psycopg2-binary",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: The Psycopg Team",
+            "versionInfo": "2.9.9"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-c55930913578058f",
+            "description": "Provides Currency and Money classes for use in your Python code.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/py-moneyed@3.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://github.com/py-moneyed/py-moneyed",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "py-moneyed",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "versionInfo": "3.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-a3a3656f2e978c73",
+            "description": "Data validation using Python type hints",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pydantic@1.10.15",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/pydantic/pydantic",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "pydantic",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pydantic",
+            "versionInfo": "1.10.15"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-557dfefc21cd386d",
+            "description": "A Python package for dealing with Hebrew (Jewish) calendar dates.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pyluach@2.2.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT AND MIT ",
+            "licenseDeclared": "MIT",
+            "name": "pyluach",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Meir S. List",
+            "versionInfo": "2.2.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-7c46541efb63b5cd",
+            "description": "Python implementation of Jean Meeus astronomical routines",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pymeeus@0.5.12",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/architest/pymeeus",
+            "licenseConcluded": "BSD-3-Clause AND GPL-3.0 AND GPL-3.0-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0 AND LGPL-3.0-only AND LGPL-3.0-only AND LGPL-3.0-only AND LGPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND MIT AND OFL-1.1 AND OFL-1.1 AND MIT",
+            "licenseDeclared": "LGPL-3.0-or-later",
+            "name": "pymeeus",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "versionInfo": "0.5.12"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-9773dea163d30a4e",
+            "description": "Pyomo: Python Optimization Modeling Objects",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pyomo@6.7.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://pyomo.org",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "pyomo",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pyomo",
+            "versionInfo": "6.7.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-3fe3945e674c4fed",
+            "description": "pyparsing module - Classes and methods to define and execute parsing grammars",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pyparsing@3.1.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/pyparsing/pyparsing/",
+            "licenseConcluded": "BSD-2-Clause AND BSD-3-Clause AND GPL-1.0-or-later AND GPL-3.0-only AND MIT AND MIT AND MIT AND MIT AND Python-2.0 AND MIT-CMU ",
+            "licenseDeclared": "MIT",
+            "name": "pyparsing",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pyparsing",
+            "versionInfo": "3.1.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-78ef154f0973e23d",
+            "description": "Extensions to the standard Python datetime module",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/python-dateutil@2.9.0.post0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/dateutil/dateutil",
+            "licenseConcluded": "Apache-2.0 AND (BSD-3-Clause AND Apache-2.0) AND Apache-2.0 AND (Python-2.0 AND BSD-2-Clause AND Apache-2.0 AND BSD-3-Clause) AND BSD-3-Clause AND (Apache-2.0 AND BSD-3-Clause) AND (LicenseRef-scancode-unknown-license-reference AND Apache-2.0) AND LicenseRef-scancode-unknown-license-reference AND (BSD-3-Clause AND Apache-2.0) AND (Apache-2.0 AND BSD-3-Clause) AND (LicenseRef-scancode-unknown-license-reference AND Apache-2.0 AND BSD-3-Clause) AND LicenseRef-scancode-unknown-license-reference AND (BSD-3-Clause AND Apache-2.0) AND (LicenseRef-scancode-unknown-license-reference AND Apache-2.0 AND BSD-3-Clause) AND LicenseRef-scancode-unknown-license-reference AND Apache-2.0 AND BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference AND BSD-3-Clause AND Apache-2.0",
+            "licenseDeclared": "Apache-2.0 AND BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference",
+            "name": "python-dateutil",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: dateutil",
+            "versionInfo": "2.9.0.post0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-3a6fcc4a31bb89e7",
+            "description": "Read key-value pairs from a .env file and set them as environment variables",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/python-dotenv@1.0.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/theskumar/python-dotenv",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "python-dotenv",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Saurabh Kumar",
+            "versionInfo": "1.0.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-7b28469dfa0d51a6",
+            "description": "World timezone definitions, modern and historical",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pytz@2024.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://pythonhosted.org/pytz",
+            "licenseConcluded": "MIT AND MIT AND ZPL-2.1 ",
+            "licenseDeclared": "MIT",
+            "name": "pytz",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Stub",
+            "versionInfo": "2024.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-e959f465c0595df2",
+            "description": "YAML parser and emitter for Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/pyyaml@6.0.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://pyyaml.org/",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "pyyaml",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: The YAML Project",
+            "versionInfo": "6.0.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-66787839607ba49b",
+            "description": "Python client for Redis database and key-value store",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/redis@4.6.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/redis/redis-py",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "redis",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Redis",
+            "versionInfo": "4.6.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-dbe3a853181cc89d",
+            "description": "A factory for redis connection that supports using Redis Sentinel",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/redis-sentinel-url@1.0.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/exponea/redis-sentinel-url",
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "redis-sentinel-url",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Exponea",
+            "versionInfo": "1.0.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-eb5745afa88e25a",
+            "description": "JSON Referencing + Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/referencing@0.34.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/python-jsonschema/referencing",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "referencing",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python + JSON Schema",
+            "versionInfo": "0.34.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-6a702494b7a3fb6c",
+            "description": "Python HTTP for Humans.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/requests@2.31.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://requests.readthedocs.io",
+            "licenseConcluded": "Apache-2.0 AND Apache-2.0 AND MIT AND Apache-2.0 ",
+            "licenseDeclared": "Apache-2.0",
+            "name": "requests",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python Software Foundation",
+            "versionInfo": "2.31.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-994c45ea85e45b24",
+            "description": "File transport adapter for Requests",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/requests-file@2.0.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/dashea/requests-file",
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "requests-file",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: David Shea",
+            "versionInfo": "2.0.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-432e24624603dc9a",
+            "description": "Python bindings to Rust's persistent data structures (rpds)",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/rpds-py@0.18.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/crate-py/rpds",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "rpds-py",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: crate-py",
+            "versionInfo": "0.18.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-6b189378fc55dd81",
+            "description": "RQ is a simple, lightweight, library for creating background jobs, and processing them.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/rq@1.16.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-2-Clause AND BSD-3-Clause AND BSD-2-Clause-Views AND BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "rq",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: RQ",
+            "versionInfo": "1.16.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-47ede5f074b1867f",
+            "description": "rq-dashboard is a general purpose, lightweight, web interface to monitor your RQ queues, jobs, and workers in realtime.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/rq-dashboard@0.8.0.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/Parallels/rq-dashboard",
+            "licenseConcluded": "BSD-2-Clause-Views AND BSD-3-Clause AND BSD-3-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference AND LicenseRef-scancode-free-unknown AND MIT AND MIT",
+            "licenseDeclared": "BSD-2-Clause AND BSD-2-Clause-Views",
+            "name": "rq-dashboard",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Parallels, Inc.",
+            "versionInfo": "0.8.0.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-e08a752a2010be8d",
+            "description": "Base classes for sklearn-like parametric objects",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/scikit-base@0.7.5",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "scikit-base",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: sktime",
+            "versionInfo": "0.7.5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-61364510c17e4f81",
+            "description": "A set of python modules for machine learning and data mining",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/scikit-learn@1.4.1.post1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "AGPL-3.0-or-later AND GPL-3.0-only AND Apache-2.0 AND BSD-3-Clause AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND MIT AND BSD-3-Clause AND CC-BY-2.0 AND LGPL-2.0-or-later AND MIT AND Python-2.0",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "scikit-learn",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: scikit-learn",
+            "versionInfo": "1.4.1.post1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-d1075160c89caebe",
+            "description": "Fundamental algorithms for scientific computing in Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/scipy@1.13.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND Apache-2.0 AND BSD-3-Clause AND GPL-1.0-or-later AND Apache-2.0 AND BSL-1.0 AND MIT AND Apache-2.0 AND MIT AND BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND MIT AND BSD-2-Clause AND BSD-3-Clause AND CC-BY-SA-3.0 AND GPL-1.0-or-later AND BSD-2-Clause AND BSL-1.0 AND MIT AND BSD-3-Clause AND BSD-3-Clause AND BSD-3-Clause-LBNL AND BSD-3-Clause AND BSD-3-Clause-Open-MPI AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND BSD-3-Clause AND Boehm-GC AND BSD-3-Clause AND GPL-3.0-only AND BSD-3-Clause AND LGPL-2.0-or-later AND BSD-3-Clause AND LGPL-2.1-or-later AND BSD-3-Clause AND MIT AND BSD-3-Clause AND BSD-3-Clause-LBNL AND BSL-1.0 AND BSL-1.0 AND GPL-1.0-or-later AND BSL-1.0 AND GPL-1.0-or-later AND LGPL-2.1-or-later AND BSL-1.0 AND EPL-1.0 AND MIT AND GPL-1.0-or-later AND LPPL-1.3a AND MIT AND MIT AND Qhull AND Zlib",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "scipy",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: SciPy",
+            "versionInfo": "1.13.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-10451ac5987a9f60",
+            "description": "Python client for Sentry (https://sentry.io)",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/sentry-sdk@1.44.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/getsentry/sentry-python",
+            "licenseConcluded": "BSD-3-Clause AND BSD-3-Clause AND MIT AND BSD-3-Clause AND MIT AND MIT AND MIT AND Python-2.0",
+            "licenseDeclared": "BSD-2-Clause AND MIT",
+            "name": "sentry-sdk",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Sentry",
+            "versionInfo": "1.44.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-f1af510d23614118",
+            "description": "Python 2 and 3 compatibility utilities",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/six@1.16.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/benjaminp/six",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "six",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Benjamin Peterson",
+            "versionInfo": "1.16.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-42e60673121a6a7f",
+            "description": "A unified framework for machine learning with time series",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/sktime@0.28.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://www.sktime.net",
+            "licenseConcluded": "BSD-3-Clause AND BSD-3-Clause AND CC-BY-4.0 AND BSD-3-Clause AND GPL-3.0-only AND MIT",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "sktime",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: sktime",
+            "versionInfo": "0.28.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-91083adb8dd42b08",
+            "description": "Database Abstraction Library",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/sqlalchemy@2.0.29",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://www.sqlalchemy.org",
+            "licenseConcluded": "BSD-3-Clause AND LGPL-2.0-only AND MIT",
+            "licenseDeclared": "MIT",
+            "name": "sqlalchemy",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: SQLAlchemy",
+            "versionInfo": "2.0.29"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-115082ba824716bf",
+            "description": "Statistical computations and models for Python",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/statsmodels@0.14.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://www.statsmodels.org/",
+            "licenseConcluded": "(BSD-2-Clause AND BSD-2-Clause AND BSD-3-Clause AND BSD-2-Clause AND BSD-3-Clause AND BSD-3-Clause AND MIT AND BSD-3-Clause AND MIT AND MIT) OR (GPL-1.0-or-later )",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "statsmodels",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: statsmodels",
+            "versionInfo": "0.14.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-4bf9fea77df74978",
+            "description": "Pretty-print tabular data",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/tabulate@0.9.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/astanin/python-tabulate",
+            "licenseConcluded": "MIT AND MIT AND Python-2.0",
+            "licenseDeclared": "MIT",
+            "name": "tabulate",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Sergey Astanin",
+            "versionInfo": "0.9.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-2ef8dc64d6b0e36c",
+            "description": "threadpoolctl",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/threadpoolctl@3.4.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/joblib/threadpoolctl",
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "threadpoolctl",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: joblib",
+            "versionInfo": "3.4.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-f5cf51a49ebd3c80",
+            "description": "Data modelled as beliefs (at a certain time) about events (at a certain time).",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/timely-beliefs@3.0.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "timely-beliefs",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Seita BV",
+            "versionInfo": "3.0.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-bd4f4677b1c389e5",
+            "description": "Sane handling of time series data for forecast modelling - with production usage in mind.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/timetomodel@0.7.3",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/seitabv/timetomodel",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "timetomodel",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Seita BV",
+            "versionInfo": "0.7.3"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-ef95bd0ba741e485",
+            "description": "Accurately separates a URL's subdomain, domain, and public suffix, using the Public Suffix List (PSL). By default, this includes the public ICANN TLDs and their exceptions. You can optionally support the Public Suffix List's private domains as well.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/tldextract@5.1.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/john-kurkowski/tldextract",
+            "licenseConcluded": "BSD-3-Clause AND MPL-2.0",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "tldextract",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: John Kurkowski",
+            "versionInfo": "5.1.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-fc8d63e02c7f64a5",
+            "description": "List processing tools and functional utilities",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/toolz@0.12.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/pytoolz/toolz/",
+            "licenseConcluded": "BSD-3-Clause AND BSD-3-Clause AND CC0-1.0 ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "toolz",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: pytoolz",
+            "versionInfo": "0.12.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-70ffa949307a1789",
+            "description": "Typing stubs for python-dateutil",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/types-python-dateutil@2.9.0.20240316",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/python/typeshed",
+            "licenseConcluded": "Apache-2.0 AND Apache-2.0 AND Python-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "types-python-dateutil",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: typeshed-internal",
+            "versionInfo": "2.9.0.20240316"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-4d71f7fa9909b73c",
+            "description": "Backported and Experimental Type Hints for Python 3.8+",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/typing-extensions@4.11.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/python/typing_extensions",
+            "licenseConcluded": "LicenseRef-scancode-unknown-license-reference AND LicenseRef-scancode-unknown-license-reference AND Python-2.0 AND Python-2.0 AND Python-2.0 AND (Python-2.0 AND BSD-3-Clause) AND (Python-2.0 AND BSD-3-Clause AND 0BSD)",
+            "licenseDeclared": "Python-2.0 AND Python-2.0 AND BSD-3-Clause AND Python-2.0 AND BSD-3-Clause AND 0BSD",
+            "name": "typing-extensions",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python",
+            "versionInfo": "4.11.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-1af2597751bc35a8",
+            "description": "Provider of IANA time zone data",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/tzdata@2024.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/python/tzdata",
+            "licenseConcluded": "Apache-2.0",
+            "licenseDeclared": "Apache-2.0",
+            "name": "tzdata",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Python",
+            "versionInfo": "2024.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-a097dac4616ba60e",
+            "description": "Lightweight plotting to the terminal. 4x resolution via Unicode.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/uniplot@0.12.5",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/olavolav/uniplot",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "uniplot",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Olav Stetter",
+            "versionInfo": "0.12.5"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-b1b8362d8fc96f52",
+            "description": "HTTP library with thread-safe connection pooling, file post, and more.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/urllib3@2.2.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT AND MPL-2.0 AND Python-2.0",
+            "licenseDeclared": "MIT",
+            "name": "urllib3",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: urllib3",
+            "versionInfo": "2.2.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-4f1769d0abb01282",
+            "description": "Convert Vega-Lite chart specifications to SVG, PNG, or Vega",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/vl-convert-python@1.3.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/jonmmease/vl-convert",
+            "licenseConcluded": "BSD-3-Clause AND CC0-1.0 AND MIT AND ISC AND Unlicense AND BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference AND BSD-3-Clause AND MIT AND OFL-1.1",
+            "licenseDeclared": "BSD-3-Clause",
+            "name": "vl-convert-python",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Vega",
+            "versionInfo": "1.3.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-dd6ed171e6b7903b",
+            "description": "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks, including Flask, Django, Bottle, Tornado, Pyramid, Falcon, and aiohttp.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/webargs@8.4.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "webargs",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: marshmallow-code",
+            "versionInfo": "8.4.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-4846701a47765619",
+            "description": "The comprehensive WSGI web application library.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/werkzeug@2.2.3",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "werkzeug",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Pallets",
+            "versionInfo": "2.2.3"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-9cf26685c88b73cf",
+            "description": "Worldwide holidays and working days helper and toolkit.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/workalendar@17.0.0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "https://github.com/workalendar/workalendar",
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "workalendar",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: workalendar",
+            "versionInfo": "17.0.0"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-c4b4587ff5d922b4",
+            "description": "Form validation and rendering for Python web development.",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/wtforms@3.1.2",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause AND BSD-3-Clause",
+            "name": "wtforms",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: WTForms",
+            "versionInfo": "3.1.2"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-3f04624aedf92a5b",
+            "description": "Library for developers to extract data from Microsoft Excel (tm) .xls spreadsheet files",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/xlrd@2.0.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "homepage": "http://www.python-excel.org/",
+            "licenseConcluded": "BSD-3-Clause AND BSD-3-Clause ",
+            "licenseDeclared": "BSD-2-Clause",
+            "name": "xlrd",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "versionInfo": "2.0.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Package-6751110d1f9e23a7",
+            "description": "Backport of pathlib-compatible object wrapper for zip files",
+            "downloadLocation": "NOASSERTION",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:pypi/zipp@3.18.1",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "MIT",
+            "licenseDeclared": "MIT",
+            "name": "zipp",
+            "primaryPackagePurpose": "LIBRARY",
+            "sourceInfo": "package found in: flexmeasures/requirements.txt",
+            "supplier": "Organization: Jason R. Coombs",
+            "versionInfo": "3.18.1"
+        },
+        {
+            "SPDXID": "SPDXRef-Filesystem-4270925c473ac568",
+            "downloadLocation": "NOASSERTION",
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "licenseDeclared": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "name": "lfenergy.flexmeasures",
+            "primaryPackagePurpose": "SOURCE",
+            "supplier": "Organization: Linux Foundation Project lfenergy",
+            "versionInfo": "2024-09"
+        },
+        {
+            "SPDXID": "SPDXRef-lfenergy-flexmeasures-flexmeasures",
+            "comment": "This package was added to the Trivy analysis for the flexmeasures by the Scaffold tool SBOM augmentation",
+            "downloadLocation": "https://github.com/flexmeasures/flexmeasures/archive/784b3a623d031d2c7f36f811321c7ce993b2f002.zip",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:github/flexmeasures/flexmeasures@784b3a623d031d2c7f36f811321c7ce993b2f002",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "licenseDeclared": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "name": "flexmeasures",
+            "primaryPackagePurpose": "SOURCE",
+            "sourceInfo": "The source this package was part of the LF Scanning configuration for the project lfenergy",
+            "supplier": "Organization: Linux Foundation Project lfenergy",
+            "versionInfo": "784b3a623d031d2c7f36f811321c7ce993b2f002"
+        },
+        {
+            "SPDXID": "SPDXRef-lfenergy-flexmeasures-flexmeasures-client",
+            "comment": "This package was added to the Trivy analysis for the flexmeasures-client by the Scaffold tool SBOM augmentation",
+            "downloadLocation": "https://github.com/flexmeasures/flexmeasures-client/archive/49f5c2792a1cd4bc8b4ca7e3d44362b6b2a3a8d0.zip",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:github/flexmeasures/flexmeasures-client@49f5c2792a1cd4bc8b4ca7e3d44362b6b2a3a8d0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "licenseDeclared": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "name": "flexmeasures-client",
+            "primaryPackagePurpose": "SOURCE",
+            "sourceInfo": "The source this package was part of the LF Scanning configuration for the project lfenergy",
+            "supplier": "Organization: Linux Foundation Project lfenergy",
+            "versionInfo": "49f5c2792a1cd4bc8b4ca7e3d44362b6b2a3a8d0"
+        },
+        {
+            "SPDXID": "SPDXRef-lfenergy-flexmeasures-flexmeasures-ha-integration",
+            "comment": "This package was added to the Trivy analysis for the flexmeasures-ha-integration by the Scaffold tool SBOM augmentation",
+            "downloadLocation": "https://github.com/flexmeasures/flexmeasures-ha-integration/archive/7eadcec3dbfd1c39d39fc1b21efb07ab65ad6b5a.zip",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:github/flexmeasures/flexmeasures-ha-integration@7eadcec3dbfd1c39d39fc1b21efb07ab65ad6b5a",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "licenseDeclared": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "name": "flexmeasures-ha-integration",
+            "primaryPackagePurpose": "SOURCE",
+            "sourceInfo": "The source this package was part of the LF Scanning configuration for the project lfenergy",
+            "supplier": "Organization: Linux Foundation Project lfenergy",
+            "versionInfo": "7eadcec3dbfd1c39d39fc1b21efb07ab65ad6b5a"
+        },
+        {
+            "SPDXID": "SPDXRef-lfenergy-flexmeasures-flexmeasures-plugin-template",
+            "comment": "This package was added to the Trivy analysis for the flexmeasures-plugin-template by the Scaffold tool SBOM augmentation",
+            "downloadLocation": "https://github.com/flexmeasures/flexmeasures-plugin-template/archive/6c00c3f19c64b20eb7b212a0182006d8939b06c0.zip",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "pkg:github/flexmeasures/flexmeasures-plugin-template@6c00c3f19c64b20eb7b212a0182006d8939b06c0",
+                    "referenceType": "purl"
+                }
+            ],
+            "filesAnalyzed": false,
+            "licenseConcluded": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "licenseDeclared": "Apache-2.0 AND MIT AND (CC-BY-3.0 AND MIT AND OFL-1.1)",
+            "name": "flexmeasures-plugin-template",
+            "primaryPackagePurpose": "SOURCE",
+            "sourceInfo": "The source this package was part of the LF Scanning configuration for the project lfenergy",
+            "supplier": "Organization: Linux Foundation Project lfenergy",
+            "versionInfo": "6c00c3f19c64b20eb7b212a0182006d8939b06c0"
+        }
+    ],
+    "relationships": [
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-1013fcf1427d3656",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-10451ac5987a9f60",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-115082ba824716bf",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-127ee326bf824e27",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-1aa356d863790d3b",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-1af2597751bc35a8",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-1cb33f0d5d64d1a7",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-22435580d015923f",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-289170cb8d37a752",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-28ac1609e14de192",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-2a41fda579de0c77",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-2b6bd9efd2517efd",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-2ce1bf928b9d4548",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-2dd6c801105c0dcf",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-2ef8dc64d6b0e36c",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-39e015e9e56533e4",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-3a6fcc4a31bb89e7",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-3b64ed9476bac044",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-3f04624aedf92a5b",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-3fe3945e674c4fed",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-40712ea47ac223e7",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-4226bed2ef8f56d3",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-42e60673121a6a7f",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-432e24624603dc9a",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-47ede5f074b1867f",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-4846701a47765619",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-4bf9fea77df74978",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-4c163690195c3026",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-4d71f7fa9909b73c",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-4f1769d0abb01282",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-50c067e445186986",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-51ba85f7aaf20ecb",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-557dfefc21cd386d",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-56b2317ea885d000",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-597acd6dd31389fa",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-599fafa20d11bfca",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-59dfab9bca6fb7a6",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-5bf717a05f753eb5",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-5d66a5373a7f8637",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-61364510c17e4f81",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-62036fe9e2fd3240",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-631d4135d67fe7a4",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-66787839607ba49b",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-6751110d1f9e23a7",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-6a702494b7a3fb6c",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-6b189378fc55dd81",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-70ffa949307a1789",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-714802cbad0dcf9e",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-72fdaf3736c3b8a4",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-7535cc888943635",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-764a03e85b85b202",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-76cb23ac7093211a",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-78ef154f0973e23d",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-7b28469dfa0d51a6",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-7bb5870ffb850039",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-7c46541efb63b5cd",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-7fcf1d0a090f4dde",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-801e940ed7eb367b",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-8270886c7f00fefb",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-83089ea34c88078a",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-8523ee5b877ae1ef",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-86c72056c71d701b",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-89a1dec14b10d39a",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-8ec3100555ecae1e",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-91083adb8dd42b08",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-967781f84a298797",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-9773dea163d30a4e",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-994c45ea85e45b24",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-9cf26685c88b73cf",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-9d0ecd03a22b4472",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-a097dac4616ba60e",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-a1f4ea3e4663ba24",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-a23127a31780fc64",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-a32375be94e7360e",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-a3a3656f2e978c73",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-a443ea63142ecdc0",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-a98652f2e7d8a282",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-abfd00acda1b55ca",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-ac904904b7e2f5da",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-b1b8362d8fc96f52",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-bc9893341026b2d2",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-bd4f4677b1c389e5",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-c4b4587ff5d922b4",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-c521e4f3e7d4a90c",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-c55930913578058f",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-c5fed862708d5a08",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-cb99290896c0a9ec",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-d1075160c89caebe",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-d68e2db2d9a9ace",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-dbe3a853181cc89d",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-dd39f1d705987e7f",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-dd6ed171e6b7903b",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-de96f6ed1b58ed62",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-e08a752a2010be8d",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-e14ce469aa4cfd85",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-e233914f23b92c86",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-e5ac77762c05bad3",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-e71911844391a244",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-e75e2eec7ca3358d",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-e959f465c0595df2",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-eb5745afa88e25a",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-ed28ad0d4ec13c8",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-ef95bd0ba741e485",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-f1af510d23614118",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-f59d02fb7a5294e1",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-f5a696aaa44b8509",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-f5cf51a49ebd3c80",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-fa84af594afd1e64",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-fc8d63e02c7f64a5",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-fd287ed9495737c",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relatedSpdxElement": "SPDXRef-Package-fd32c48945e25f7c",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-lfenergy-flexmeasures-flexmeasures",
+            "relatedSpdxElement": "SPDXRef-Application-43eaa81d9e7cd923",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-DOCUMENT",
+            "relatedSpdxElement": "SPDXRef-Filesystem-4270925c473ac568",
+            "relationshipType": "DESCRIBES"
+        },
+        {
+            "spdxElementId": "SPDXRef-Filesystem-4270925c473ac568",
+            "relatedSpdxElement": "SPDXRef-lfenergy-flexmeasures-flexmeasures",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Filesystem-4270925c473ac568",
+            "relatedSpdxElement": "SPDXRef-lfenergy-flexmeasures-flexmeasures-client",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Filesystem-4270925c473ac568",
+            "relatedSpdxElement": "SPDXRef-lfenergy-flexmeasures-flexmeasures-ha-integration",
+            "relationshipType": "CONTAINS"
+        },
+        {
+            "spdxElementId": "SPDXRef-Filesystem-4270925c473ac568",
+            "relatedSpdxElement": "SPDXRef-lfenergy-flexmeasures-flexmeasures-plugin-template",
+            "relationshipType": "CONTAINS"
+        }
+    ]
+}

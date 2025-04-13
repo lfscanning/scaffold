@@ -1,5 +1,8 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
+import copy
+import pdb
+import uuid
 
 # Utility class to support merging / fixing up SPDX documents
 
@@ -15,7 +18,7 @@ from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.relationship import Relationship
 from spdx_tools.spdx.model.relationship import RelationshipType
 from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx_tools.spdx.model import SpdxNoAssertion
+from spdx_tools.spdx.model import SpdxNoAssertion, Document
 from spdx_tools.spdx.model import SpdxNone
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.writer.write_anything import write_file
@@ -446,5 +449,42 @@ def _licenseStringToExpression(license_string, extracted_licensing_info, licensi
                                 comment = 'This license text represents a string found in licensing metadata - the actual text is not known'))
         return extracted_id
             
-def mergeSpdxDocs(fossology_sbom, dependency_sbom):
-    pass
+def mergeSpdxDocs(fossology_sbom, dependency_sbom, cfg, prj, sp):
+    result = copy.deepcopy(dependency_sbom)
+    # NOTE: We are assuming there are no conflicts between SPDX IDs in the two SBOMs due to the way they are generated
+    _addFossologyCreationInfo(result, fossology_sbom, prj, sp, cfg._month)
+    _addFossologyExtractedLicenses(result, fossology_sbom)
+    root = None
+    for relationship in result.relationships:
+        if relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == 'SPDXRef-DOCUMENT':
+            root = document_utils.get_element_from_spdx_id(result, relationship.related_spdx_element_id)
+    if not root:
+        return result
+    projectName = root.name
+    for relationship in result.relationships:
+        if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == root.spdx_id:
+            # Top level repository names
+            _copyRepoFromFossology(result, fossology_sbom, relationship.related_spdx_element_id[9+len(projectName):])
+    return result
+
+def _addFossologyCreationInfo(sbom, fossology_sbom, prj, sp, date):
+    sbom.creation_info.document_namespace = f"https://github.com/lfscanning/spdx-{prj._name}/{sp._name}/{date}/{prj._name}-{sp._name}-full/{str(uuid.uuid4())}"
+    for creator in fossology_sbom.creation_info.creators:
+        sbom.creation_info.creators.append(creator)
+
+def _addFossologyExtractedLicenses(sbom, fossology_sbom):
+    for extracedlicense in fossology_sbom.extracted_licensing_info:
+        sbom.extracted_licensing_info.append(extracedlicense)
+
+def _copyRepoFromFossology(sbom, fossology_sbom, repo_name):
+    repoPackage = None
+    for pkg in sbom.packages:
+        if re.fullmatch(f"SPDXRef-.+{repo_name}$", pkg.spdx_id):
+            repoPackage = pkg
+            break
+    assert repoPackage, f"No repository package found for {repo_name}"
+    repoPackage.files_analyzed = True
+    for file in fossology_sbom.files:
+        if re.fullmatch(f".+/{repo_name}/.+", file.name):
+            sbom.files.append(file)
+            sbom.relationships.append(Relationship(repoPackage.spdx_id, RelationshipType.CONTAINS, file.spdx_id))

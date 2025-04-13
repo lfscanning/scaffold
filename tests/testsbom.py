@@ -6,10 +6,17 @@ import shutil
 import time
 import git
 import zipfile
+
+from spdx_tools.spdx import document_utils, spdx_element_utils
+from spdx_tools.spdx.model import RelationshipType, Package, File
+from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
+
 from manualsbom import runManualSbomAgent
 from sbomagent import installNpm
 from config import loadConfig
 from datatypes import Status, ProjectRepoType
+from spdx_tools.spdx.parser.parse_anything import parse_file
+from spdx.spdxutil import mergeSpdxDocs
 
 ANALYSIS_FILE_FRAGMENT = "sp1-2023-07"
 ANALYSIS_FILE_NAME = ANALYSIS_FILE_FRAGMENT + "-09.zip"
@@ -24,6 +31,8 @@ TEST_PROJECT_NAME = "TEST-DEPENDENCIES"
 TEST_SUBPROJECT_NAME = "sp1"
 TEST_SUBPROJECT_NAME2 = "sp2"
 GITHUB_ORG = 'lfscanning'
+TEST_SBOM_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testsbom.json")
+TEST_FOSSOLOGY_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testfossology.spdx")
 
 '''
 Tests sbom manual agent commands
@@ -237,11 +246,62 @@ class TestSbom(unittest.TestCase):
         finally:
             os.environ['TRIVY_EXEC_PATH'] = saved_trivy
             
-    def test_merged_sbom:
-        # TODO: Implement
-        # Check uploaded merged SBOM file
-        pass
-
+    def test_merged_sbom(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._month = "2024-09"
+        prj = cfg._projects[TEST_PROJECT_NAME]
+        prj._name = "lfenergy"
+        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
+        sp._name = "flexmeasures"
+        sbom = parse_file(TEST_SBOM_FILE)
+        fossology = parse_file(TEST_FOSSOLOGY_FILE)
+        result = mergeSpdxDocs(fossology, sbom, cfg, prj, sp)
+        self.assertIsNotNone(result)
+        describes = None
+        # Check root describes
+        for relationship in result.relationships:
+            if relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == 'SPDXRef-DOCUMENT':
+                describes = document_utils.get_element_from_spdx_id(result, relationship.related_spdx_element_id)
+        self.assertIsNotNone(describes)
+        self.assertEqual(describes.name, "lfenergy.flexmeasures", "Wrong document describes")
+        # Check creation Info
+        self.assertTrue(result.creation_info.document_namespace.startswith("https://github.com/lfscanning/spdx-lfenergy/flexmeasures/2024-09/"))
+        foundToolScaffold = False
+        foundToolFossology = False
+        foundToolTrivy = False
+        foundLfCreator = False
+        for creator in result.creation_info.creators:
+            if creator.name.startswith("Scaffold"):
+                foundToolScaffold = True
+            if creator.name.startswith("trivy"):
+                foundToolTrivy = True
+            if creator.name.startswith("Linux Foundation"):
+                foundLfCreator = True
+            if creator.name.startswith("fossology"):
+                foundToolFossology = True
+        self.assertTrue(foundToolScaffold)
+        self.assertTrue(foundToolFossology)
+        self.assertTrue(foundToolTrivy)
+        self.assertTrue(foundLfCreator)
+        # Check source files merged
+        # Check dependencies merged
+        for relationship in result.relationships:
+            if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == describes.spdx_id:
+                foundDepRelationship = False
+                foundSourceRelationship = False
+                for repoRelationship in result.relationships:
+                    if repoRelationship.relationship_type == RelationshipType.CONTAINS and repoRelationship.spdx_element_id == relationship.related_spdx_element_id:
+                        if spdx_element_utils.get_element_type_from_spdx_id(repoRelationship.related_spdx_element_id, result) == Package:
+                            foundDepRelationship = True
+                        if spdx_element_utils.get_element_type_from_spdx_id(repoRelationship.related_spdx_element_id, result) == File:
+                            foundSourceRelationship = True
+                if relationship.related_spdx_element_id == "SPDXRef-lfenergy-flexmeasures-flexmeasures":
+                    self.assertTrue(foundDepRelationship)
+                    # Note that other repos don't contain dependencies
+                self.assertTrue(foundSourceRelationship)
+        validation = validate_full_spdx_document(result)
+        self.assertTrue(not validation)
 if __name__ == '__main__':
     unittest.main()
         
