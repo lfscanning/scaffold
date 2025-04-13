@@ -113,16 +113,16 @@ errors:
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Augmenting SPDX document")
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
-        fossologySpdxPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}-{sp._code_pulled}.spdx")
+        fossologySpdxPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
         if os.path.exists(fossologySpdxPath):
             fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
-            mergedSbom = spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument)
+            mergedSbom = spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
             mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx.json"
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
         else:
             print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
-            uploadMergedSbomFile = None
+            mergedSbomFileName = None
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
@@ -130,8 +130,8 @@ errors:
         if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxFileName):
             print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
             return False
-        if uploadMergedSbomFile:
-            if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadMergedSbomFile):
+        if mergedSbomFileName:
+            if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomFileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX file")
                 return False
         workbook = spdx.xlsx.makeXlsx(spdxDocument)

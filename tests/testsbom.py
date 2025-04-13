@@ -302,6 +302,7 @@ class TestSbom(unittest.TestCase):
                 self.assertTrue(foundSourceRelationship)
         validation = validate_full_spdx_document(result)
         self.assertTrue(not validation)
+
 if __name__ == '__main__':
     unittest.main()
         
