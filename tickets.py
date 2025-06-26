@@ -7,9 +7,9 @@ import os
 from jira import JIRA
 from jira.exceptions import JIRAError
 
-from datatypes import Priority, Status, TicketType
-from config import updateProjectStatusToSubprojectMin
-from instancesfile import loadInstances, saveInstances
+from .datatypes import Priority, Status, TicketType
+from .config import updateProjectStatusToSubprojectMin
+from .instancesfile import loadInstances, saveInstances
 
 # Helper to extract a particular Finding by ID.
 def getFindingByID(prj, finding_id):

@@ -8,14 +8,15 @@ from subprocess import run, PIPE
 import sys
 import zipfile
 import tempfile
-import spdx.spdxutil
-import spdx.xlsx
 import shutil
 from datetime import datetime
 from pathlib import Path
+import git
 
-import uploadreport
-from uploadspdx import doUploadFileForSubproject
+from .spdx import spdxutil
+from .spdx import xlsx
+from . import uploadreport
+from .uploadspdx import doUploadFileForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
 trivyDebug = False
@@ -104,29 +105,29 @@ errors:
 ----------
 """)
             return False
-        spdx.spdxutil.fixLicenseExpressions(result)
+        spdxutil.fixLicenseExpressions(result)
         try:
-            spdxDocument = spdx.spdxutil.parseFile(result)
+            spdxDocument = spdxutil.parseFile(result)
         except SPDXParsingError:
             print(f"{prj._name}/{sp._name}: unable to parse Parlay augmented SPDX document")
             return False
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Augmenting SPDX document")
-        spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
+        spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
         fossologySpdxPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
         if os.path.exists(fossologySpdxPath):
-            fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
-            mergedSbom = spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
+            fossologySbom = spdxutil.parseFile(fossologySpdxPath)
+            mergedSbom = spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
             mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx.json"
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
-            spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
+            spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
         else:
             print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
             mergedSbomFileName = None
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
-        spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
+        spdxutil.writeFile(spdxDocument, uploadSpdxFile)
         if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxFileName):
             print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
             return False
@@ -134,9 +135,9 @@ errors:
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomFileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX file")
                 return False
-        workbook = spdx.xlsx.makeXlsx(spdxDocument)
+        workbook = xlsx.makeXlsx(spdxDocument)
         workbookFilePath = os.path.join(tempdir, f"{prj._name}-{sp._name}-dependencies.xlsx")
-        spdx.xlsx.saveXlsx(workbook, workbookFilePath)
+        xlsx.saveXlsx(workbook, workbookFilePath)
         reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
         if not os.path.exists(reportFolder):
             os.makedirs(reportFolder)

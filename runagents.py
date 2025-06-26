@@ -3,19 +3,20 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import sys
 import copy
 from pathlib import Path
 
-from datatypes import Status, ProjectRepoType
-from datefuncs import parseYM, priorMonth, getYMStr
+from .datatypes import Status, ProjectRepoType
+from .datefuncs import parseYM, priorMonth, getYMStr
 
-def getUploadFolder(fossologyServer, uploadFolderName):
+def getUploadFolder(fossologyServer, folderName):
     ''' Gets the prior upload folder searching all folders for a matching name
         returns None if no upload or priorUploadFolder exists
     '''
     folder = None
     for fossFolder in fossologyServer.list_folders():
-        if fossFolder.name == uploadFolderName:
+        if fossFolder.name == folderName:
             folder = fossFolder
             break
     return folder

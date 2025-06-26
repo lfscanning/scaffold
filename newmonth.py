@@ -4,11 +4,13 @@
 
 import glob
 import os
+import sys
 import shutil
+from pathlib import Path
 
-from config import saveConfig
-from datatypes import Status
-import datefuncs
+from .config import saveConfig
+from .datatypes import Status
+from . import datefuncs
 
 def copyToNextMonth(scaffold_home, cfg):
     existing_ym = cfg._month

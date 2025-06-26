@@ -2,14 +2,15 @@ import unittest
 import os
 import tempfile
 import shutil
-from scaffold import fossologySetup
-from config import loadSecrets, loadConfig
-from uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
-from datatypes import Status, ProjectRepoType
-from runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
-from getspdx import doGetSPDXForSubproject
-from newmonth import copyToNextMonth
-from getcode import doGetRepoCodeForSubproject
+import socket
+from scaffold.scaffold import fossologySetup
+from scaffold.config import loadSecrets, loadConfig
+from scaffold.uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
+from scaffold.datatypes import Status, ProjectRepoType
+from scaffold.runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
+from scaffold.getspdx import doGetSPDXForSubproject
+from scaffold.newmonth import copyToNextMonth
+from scaffold.getcode import doGetRepoCodeForSubproject
 
 UPLOAD_FILE_FRAGMENT = "sp1-2023-07"
 UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"
@@ -20,9 +21,17 @@ TEST_MONTH = "2023-07"
 TEST_NEXT_MONTH = "2023-08"
 TEST_MONTH_DIR = os.path.join(TEST_SCAFFOLD_HOME, TEST_MONTH)
 
+def is_fossology_running():
+    try:
+        socket.create_connection(("localhost", 8081), timeout=2)
+        return True
+    except OSError:
+        return False
+
 '''
 Tests FOSSOlogy python API and configuration
 '''
+@unittest.skipIf(not is_fossology_running(), "Fossology server not running on localhost:8081")
 class TestFossology(unittest.TestCase):
 
     def setUp(self):
@@ -30,12 +39,20 @@ class TestFossology(unittest.TestCase):
         self.scaffold_home_dir = os.path.join(self.temp_dir.name, "scaffold")
         shutil.copytree(TEST_SCAFFOLD_HOME, self.scaffold_home_dir)
         self.config_month_dir = os.path.join(self.scaffold_home_dir, TEST_MONTH)
+        secrets_file_path = os.path.join(self.scaffold_home_dir, SECRET_FILE_NAME)
+        with open(secrets_file_path, "w") as f:
+            f.write("""{
+	"default_github_oauth": "githubOATHkey",
+	"fossology_server": "http://localhost:8081/repo",
+	"fossology_username": "fossy",
+	"fossology_password": "fossy"
+}""")
 
     def tearDown(self):
         self.temp_dir.cleanup()
         
     def test_config(self):
-        secrets = loadSecrets(SECRET_FILE_NAME)
+        secrets = loadSecrets(SECRET_FILE_NAME, scaffoldHome=self.scaffold_home_dir)
         self.assertIsNotNone(secrets)
         fossologyServer = None
         try:

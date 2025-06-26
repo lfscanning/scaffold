@@ -5,7 +5,7 @@
 import json
 import os
 
-from datatypes import SLMCategory, SLMFile, SLMLicense
+from .datatypes import SLMCategory, SLMFile, SLMLicense
 
 # returns list of SLMCategories
 # sp only used for ._name, use sp == None for combined reports

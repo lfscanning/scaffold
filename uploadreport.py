@@ -6,8 +6,9 @@ import os
 from subprocess import run, PIPE
 import uuid
 from shutil import copyfile
+import sys
 
-from datatypes import Status
+from .datatypes import Status
 
 # Upload ony the SBOMs
 def doUploadSBOMReportsForSubproject(cfg, prj, sp):
