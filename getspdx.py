@@ -5,8 +5,8 @@
 import os
 from pathlib import Path
 
-from datatypes import Status, ProjectRepoType
-from runagents import getUploadFolder, getUpload
+from .datatypes import Status, ProjectRepoType
+from .runagents import getUploadFolder, getUpload
 from fossology.obj import ReportFormat
 def doGetSPDXForSubproject(cfg, fossologyServer, prj, sp):
     uploadName = os.path.basename(sp._code_path)

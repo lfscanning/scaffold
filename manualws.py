@@ -4,10 +4,10 @@
 
 import os
 
-from datatypes import Status
-import ws.wsagent
-import ws.wsapi
-import ws.wscfg
+from .datatypes import Status
+from .ws import wsagent
+from .ws import wsapi
+from .ws import wscfg
 
 # run WS agent, either through manual trigger or runner
 def wsAgentForSubproject(cfg, prj, sp):
@@ -18,36 +18,36 @@ def wsAgentForSubproject(cfg, prj, sp):
         print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE or higher")
         return False
 
-    userkey = ws.wscfg.getWSUserKey(cfg, prj)
-    org_token = ws.wscfg.getWSOrgToken(cfg, prj, sp)
+    userkey = wscfg.getWSUserKey(cfg, prj)
+    org_token = wscfg.getWSOrgToken(cfg, prj, sp)
 
     # check that the sp exists as a product in whitesource;
     # will only call API if not yet called for this project in this
     # scaffold run
-    product_name = ws.wscfg.getWSProductName(cfg, prj, sp)
-    product_token = ws.wsapi.getProductToken(cfg, prj, product_name, userkey, org_token)
+    product_name = wscfg.getWSProductName(cfg, prj, sp)
+    product_token = wsapi.getProductToken(cfg, prj, product_name, userkey, org_token)
     if product_token == "":
         # try to create product
         print(f"Didn't find product {product_name}, attempting to create")
-        product_token = ws.wsapi.createProduct(cfg, prj, userkey, org_token, product_name)
+        product_token = wsapi.createProduct(cfg, prj, userkey, org_token, product_name)
         if product_token == "":
             print(f"Unable to get product token for {product_name} from WSAPI; bailing")
             return False
 
     # also check that the sp exists as a project within that product
-    project_name = ws.wscfg.getWSProjectName(cfg, prj, sp)
-    project_token = ws.wsapi.getProjectToken(cfg, prj, project_name, userkey, org_token)
+    project_name = wscfg.getWSProjectName(cfg, prj, sp)
+    project_token = wsapi.getProjectToken(cfg, prj, project_name, userkey, org_token)
     if project_token == "":
         # try to create project
         print(f"Didn't find project {project_name}, attempting to create")
-        project_token = ws.wsapi.createProject(cfg, prj, userkey, product_token, project_name)
+        project_token = wsapi.createProject(cfg, prj, userkey, product_token, project_name)
         if project_token == "":
             print(f"Unable to get project token for {project_name} from WSAPI; bailing")
             return False
 
     # it exists, so we can proceed
     print(f"{prj._name}/{sp._name}: running WhiteSource unified agent")
-    retval = ws.wsagent.runUnifiedAgent(cfg, prj, sp)
+    retval = wsagent.runUnifiedAgent(cfg, prj, sp)
     if not retval:
         print(f"{prj._name}/{sp._name}: failed to run WhiteSource unified agent")
         return False

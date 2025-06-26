@@ -2,26 +2,28 @@
 # SPDX-FileType: SOURCE
 # SPDX-License-Identifier: Apache-2.0
 
+from __future__ import annotations
+import sys
 from datetime import datetime
 import os
 import shutil
 
-from config import saveConfig, updateProjectStatusToSubprojectMin, isInThisCycle
-from datatypes import ProjectRepoType, Status, Subproject
-from repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
-from getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
-from zipcode import doZipRepoCodeForSubproject, doZipRepoCodeForGerritSubproject
-from uploadws import doUploadWSForSubproject
-from uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
-from runagents import doRunAgentsForSubproject
-from getspdx import doGetSPDXForSubproject
-from parsespdx import doParseSPDXForSubproject, doCreateCombinedSLMJSONForProject
-from createreports import doCreateReportForProject, doCreateReportForSubproject
-from findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject, doMakeDraftFindingsIfNoneForProject, doMakeFinalFindingsForProject
-from approving import doApprove
-from uploadspdx import doUploadSPDXForSubproject
-from uploadreport import doUploadReportsForSubproject, doUploadReportsForProject
-from tickets import doFileTicketsForSubproject
+from .config import saveConfig, updateProjectStatusToSubprojectMin, isInThisCycle
+from .datatypes import ProjectRepoType, Status, Subproject
+from .repolisting import doRepoListingForProject, doRepoListingForGerritProject, doRepoListingForSubproject
+from .getcode import doGetRepoCodeForSubproject, doGetRepoCodeForGerritSubproject
+from .zipcode import doZipRepoCodeForSubproject, doZipRepoCodeForGerritSubproject
+from .uploadws import doUploadWSForSubproject
+from .uploadcode import doUploadCodeForProject, doUploadCodeForSubproject
+from .runagents import doRunAgentsForSubproject
+from .getspdx import doGetSPDXForSubproject
+from .parsespdx import doParseSPDXForSubproject, doCreateCombinedSLMJSONForProject
+from .createreports import doCreateReportForProject, doCreateReportForSubproject
+from .findings import doMakeDraftFindingsIfNoneForSubproject, doMakeFinalFindingsForSubproject, doMakeDraftFindingsIfNoneForProject, doMakeFinalFindingsForProject
+from .approving import doApprove
+from .uploadspdx import doUploadSPDXForSubproject
+from .uploadreport import doUploadReportsForSubproject, doUploadReportsForProject
+from .tickets import doFileTicketsForSubproject
 
 def doNextThing(scaffold_home, cfg, fossologyServer, prj_only, sp_only):
     for prj in cfg._projects.values():

@@ -3,10 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import sys
 
-from datatypes import Status
-from manualws import wsAgentForSubproject
-from ws.wscfg import isWSEnabled
+from .datatypes import Status
+from .manualws import wsAgentForSubproject
+from .ws.wscfg import isWSEnabled
 
 def doUploadWSForSubproject(cfg, prj, sp):
     # make sure the subproject has not already had its code uploaded to WS

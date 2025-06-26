@@ -1,17 +1,18 @@
 # Copyright The Linux Foundation
 # SPDX-License-Identifier: Apache-2.0
 
-import os
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill
 from collections import OrderedDict
-import openpyxl
+import os
 
-from datatypes import SLMLicense
+from ..datatypes import SLMLicense
 
 ##### Main xlsx reporting functions
 ##### External usage shouldn't require calling anything except these
 
 def makeXlsx(categories):
-    wb = openpyxl.Workbook()
+    wb = Workbook()
 
     # look for "No license found" category, and if one exists, annotate it
     for cat in categories:
@@ -46,8 +47,8 @@ def _generateSummarySheet(wb, categories):
     ws.column_dimensions['C'].width = 10
 
     # create font styles
-    fontBold = openpyxl.styles.Font(size=16, bold=True)
-    fontNormal = openpyxl.styles.Font(size=14)
+    fontBold = Font(size=16, bold=True)
+    fontNormal = Font(size=14)
     alignNormal = openpyxl.styles.Alignment(wrap_text=True)
 
     # create headers
@@ -85,7 +86,7 @@ def _generateSummarySheet(wb, categories):
 
 def _generateCategorySheets(wb, categories):
     # create font styles
-    fontBold = openpyxl.styles.Font(size=16, bold=True)
+    fontBold = Font(size=16, bold=True)
 
     for cat in categories:
         # skip category if it has no files
@@ -106,7 +107,7 @@ def _generateCategorySheets(wb, categories):
 
 def _generateFileListings(wb, categories):
     # create font styles
-    fontNormal = openpyxl.styles.Font(size=14)
+    fontNormal = Font(size=14)
     alignNormal = openpyxl.styles.Alignment(wrap_text=True)
 
     for cat in categories:

@@ -11,12 +11,12 @@ from spdx_tools.spdx import document_utils, spdx_element_utils
 from spdx_tools.spdx.model import RelationshipType, Package, File
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 
-from manualsbom import runManualSbomAgent
-from sbomagent import installNpm
-from config import loadConfig
-from datatypes import Status, ProjectRepoType
+from scaffold.manualsbom import runManualSbomAgent
+from scaffold.sbomagent import installNpm
+from scaffold.config import loadConfig
+from scaffold.datatypes import Status, ProjectRepoType
 from spdx_tools.spdx.parser.parse_anything import parse_file
-from spdx.spdxutil import mergeSpdxDocs
+from scaffold.spdx.spdxutil import mergeSpdxDocs
 
 ANALYSIS_FILE_FRAGMENT = "sp1-2023-07"
 ANALYSIS_FILE_NAME = ANALYSIS_FILE_FRAGMENT + "-09.zip"
@@ -34,9 +34,10 @@ GITHUB_ORG = 'lfscanning'
 TEST_SBOM_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testsbom.json")
 TEST_FOSSOLOGY_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testfossology.spdx")
 
-'''
-Tests sbom manual agent commands
-'''
+def is_npm_available():
+    return shutil.which("npm") is not None
+
+@unittest.skipIf(not is_npm_available(), "npm is not available in PATH")
 class TestSbom(unittest.TestCase):
 
     def setUp(self):
@@ -49,7 +50,7 @@ class TestSbom(unittest.TestCase):
         # setup the git repo
         self.repoName = f"spdx-{TEST_PROJECT_NAME}"
         self.project_repo_dir = os.path.join(self.repo_dir, self.repoName)
-        self.git_url = f"git@github.com:{GITHUB_ORG}/{self.repoName}.git"
+        self.git_url = f"https://github.com/{GITHUB_ORG}/{self.repoName}.git"
         git.Git(self.repo_dir).clone(self.git_url, depth=1)
         self._cleanGitClone(self.project_repo_dir)
         self.trivy_env_set = 'TRIVY_EXEC_PATH' in os.environ
@@ -148,6 +149,45 @@ class TestSbom(unittest.TestCase):
         self.assertTrue(os.path.isfile(reportfile))
         # TODO: Check if the file is committed and pushed to the repo
         
+    def test_sbom_copyright(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")       
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._zippath = self.temp_dir.name
+        cfg._storepath = self.scaffold_home_dir
+        cfg._spdx_github_org = GITHUB_ORG
+        cfg._web_server = "lfscanning.org"
+        cfg._web_server_use_scp = False
+        cfg._web_reports_path = os.path.join(self.temp_dir.name, 'outputreports')
+        prj = cfg._projects[TEST_PROJECT_NAME]
+        prj._name = TEST_PROJECT_NAME
+        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
+        sp._name = TEST_SUBPROJECT_NAME
+        sp._repos = [self.repoName]
+        sp._repotype = ProjectRepoType.GITHUB
+        sp._github_org = GITHUB_ORG
+        sp._github_ziporg = GITHUB_ORG
+        sp._github_branch = ""
+        sp._status = Status.ZIPPEDCODE
+        sp._code_path = TEST_SCAFFOLD_CODE
+        sp._code_pulled = "2024-08-21"
+        sp._code_anyfiles = True
+        sp._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
+        sp._copyright = "Copyright (c) 2025 The Linux Foundation"
+
+        result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
+        self.assertTrue(result)
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.json")
+        self.assertTrue(os.path.isfile(uploadedfile))
+
+        # Check for copyright in SPDX file
+        sbom = parse_file(uploadedfile)
+        describes = None
+        for relationship in sbom.relationships:
+            if relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == 'SPDXRef-DOCUMENT':
+                describes = document_utils.get_element_from_spdx_id(sbom, relationship.related_spdx_element_id)
+        self.assertIsNotNone(describes)
+        self.assertEqual(describes.copyright_text, "Copyright (c) 2025 The Linux Foundation")
+
     def test_npm_install(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)

@@ -4,13 +4,15 @@
 
 import json
 import os
+import sys
 from pathlib import Path
 from shutil import copyfile
 from datetime import date
 
-import yaml
+from .datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, SLMCategoryConfig, SLMLicenseConfig, SLMPolicy, Status, Subproject, TicketType, WSSecret
+from . import datefuncs
 
-from datatypes import Config, Finding, JiraSecret, MatchText, Priority, Project, ProjectRepoType, Secrets, SLMCategoryConfig, SLMLicenseConfig, SLMPolicy, Status, Subproject, TicketType, WSSecret
+import yaml
 
 def getConfigFilename(scaffoldHome, month):
     return os.path.join(scaffoldHome, month, "config.json")
@@ -124,8 +126,11 @@ def updateFossologyToken(token, expiration, secrets_file_name = ".scaffold-secre
 
 
 # parses secrets file
-def loadSecrets(secrets_file_name = ".scaffold-secrets.json"):
-    secretsFile = os.path.join(Path.home(), secrets_file_name)
+def loadSecrets(secrets_file_name = ".scaffold-secrets.json", scaffoldHome=None):
+    if scaffoldHome:
+        secretsFile = os.path.join(scaffoldHome, secrets_file_name)
+    else:
+        secretsFile = os.path.join(Path.home(), secrets_file_name)
     try:
         with open(secretsFile, 'r') as f:
             js = json.load(f)
@@ -276,7 +281,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
             cfg._fossology_job_spec = config_dict.get('fossologyJobSpec', defaultJobSpec)
 
             # load secrets
-            cfg._secrets = loadSecrets(secrets_file_name)
+            cfg._secrets = loadSecrets(secrets_file_name, scaffoldHome=scaffoldHome)
 
             # if we get here, main config is at least valid
             cfg._ok = True
@@ -354,6 +359,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 print(f"Project {prj_name} and subproject {sp_name} both have cycles specified; invalid")
                                 prj._ok = False
                                 sp._ok = False
+                            sp._copyright = sp_dict.get('copyright', "")
                             # get subproject status
                             status_str = sp_dict.get('status', '')
                             if status_str == '':
@@ -443,6 +449,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 print(f"Project {prj_name} and subproject {sp_name} both have cycles specified; invalid")
                                 prj._ok = False
                                 sp._ok = False
+                            sp._copyright = sp_dict.get('copyright', "")
 
                             # get subproject status
                             status_str = sp_dict.get('status', '')
@@ -524,6 +531,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 print(f"Project {prj_name} and subproject {sp_name} both have cycles specified; invalid")
                                 prj._ok = False
                                 sp._ok = False
+                            sp._copyright = sp_dict.get('copyright', "")
 
                             # get subproject status
                             status_str = sp_dict.get('status', '')
@@ -858,6 +866,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos-ignore": sorted(o._github_repos_ignore),
                     }
                 }
+                if o._copyright != "":
+                    js["copyright"] = o._copyright
                 if o._github_branch != "":
                     js["github"]["branch"] = o._github_branch
                 if ws_section != {}:
@@ -894,6 +904,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos": sorted(o._repos),
                     }
                 }
+                if o._copyright != "":
+                    js["copyright"] = o._copyright
                 if ws_section != {}:
                     js["ws"] = ws_section
                 if o._cycle != 99:
@@ -926,6 +938,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                         "repos": sorted(o._repos),
                     }
                 }
+                if o._copyright != "":
+                    js["copyright"] = o._copyright
                 if ws_section != {}:
                     js["ws"] = ws_section
                 if o._cycle != 99:

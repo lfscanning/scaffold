@@ -4,10 +4,11 @@
 
 import os
 import time
+import sys
 from pathlib import Path
 from fossology.obj import Upload
 
-from datatypes import Status, ProjectRepoType
+from .datatypes import Status, ProjectRepoType
 
 
 TIME_BETWEEN_RETRIES = 10  # seconds

@@ -2,8 +2,8 @@
 # SPDX-FileType: SOURCE
 # SPDX-License-Identifier: Apache-2.0
 
-from datatypes import Status
-from datefuncs import getTextYM
+from .datatypes import Status
+from .datefuncs import getTextYM
 
 def printEmail(cfg, prj_only="", sp_only=""):
     if prj_only == "":

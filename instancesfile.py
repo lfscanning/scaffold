@@ -4,7 +4,7 @@
 
 import json
 
-from datatypes import Instance, InstanceSet
+from .datatypes import Instance, InstanceSet
 
 def loadInstances(instancesFilename):
     try:

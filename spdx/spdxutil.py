@@ -25,8 +25,8 @@ from spdx_tools.spdx.writer.write_anything import write_file
 from spdx_tools.common.spdx_licensing import spdx_licensing as tools_python_licensing
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
-from datatypes import ProjectRepoType
-from slmjson import loadSLMCategories
+from ..datatypes import ProjectRepoType
+from ..slmjson import loadSLMCategories
 import re
 import os
 import json
@@ -247,6 +247,8 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     describes.license_declared = subprojectDeclaredLicense
     describes.license_concluded = subprojectConcludedLicense
     describes.supplier = Actor(actor_type = ActorType.ORGANIZATION, name = 'Linux Foundation Project ' + prj._name)
+    if sp._copyright != "":
+        describes.copyright_text = sp._copyright
     
     # Add a level under root for each of the repos
     repo_packages = {}
@@ -359,12 +361,15 @@ def fix_license(lic, extracted_licensing_info, licensing):
         unknown_keys = licensing.unknown_license_keys(lic)
         keys = licensing.license_keys(lic)
         unparsed_lic = str(lic)
+        # If the entire license is just NOASSERTION or NONE, do not replace
+        if unparsed_lic.strip() in ("NOASSERTION", "NONE"):
+            return lic
         for unknown_key in unknown_keys:
             # see if the unknown key is part of a WITH statement - we must replace these first
             # so that the second search for the pattern will just find the individual occurences
             withs = re.findall(f'([^ ]+) WITH ({re.escape(unknown_key)})', unparsed_lic)
             for w in withs:
-                with_extracted_id = re.sub(r'[^0-9a-zA-Z\.\-]+', '-', w[0]) + '-LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-\+]+', '-', w[1])
+                with_extracted_id = re.sub(r'[^0-9a-zA-Z.]+', '-', w[0]) + '-LicenseRef-' + re.sub(r'[^0-9a-zA-Z.]+', '-', w[1])
                 if not with_extracted_id.startswith('LicenseRef-'):
                     with_extracted_id = 'LicenseRef-' + with_extracted_id
                 with_id_found = False
@@ -381,7 +386,7 @@ def fix_license(lic, extracted_licensing_info, licensing):
             if unknown_key.startswith('LicenseRef-'):
                 extracted_id = unknown_key
             else:
-                extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', unknown_key)
+                extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z.]+', '-', unknown_key)
             extracted_id_found = False
             for existing in extracted_licensing_info:
                 if existing.license_id.lower() == extracted_id.lower():
@@ -409,7 +414,8 @@ def fix_license(lic, extracted_licensing_info, licensing):
                 if not extracted_id_found:
                     extracted_licensing_info.append(ExtractedLicensingInfo(license_id = key, extracted_text = key, \
                                                                            comment = 'This license text represents a LicenseRef generated from one of the scanning tools - the text can be found in the referenced tool'))
-        if none_found:
+        # Only replace NONE/NOASSERTION with LicenseRef-* if they are part of a compound expression
+        if none_found and "NONE" not in unparsed_lic.strip():
             unparsed_lic = re.sub(r'(^|\(|\s)(NONE)($|\s|\))', r'\1LicenseRef-NONE\3', unparsed_lic)
             extracted_id_found = False
             for existing in extracted_licensing_info:
@@ -419,15 +425,15 @@ def fix_license(lic, extracted_licensing_info, licensing):
             if not extracted_id_found:
                 extracted_licensing_info.append(ExtractedLicensingInfo(license_id = 'LicenseRef-NONE', extracted_text = 'This component contains no license', \
                                                                        comment = 'This license text represents a NONE license found alongside other licenses in a license expression.'))
-        if noassert_found:
+        if noassert_found and "NOASSERTION" not in unparsed_lic.strip():
             unparsed_lic = re.sub(r'(^|\(|\s)(NOASSERTION)($|\s|\))', r'\1LicenseRef-NOASSERTION\3', unparsed_lic)
-        extracted_id_found = False
-        for existing in extracted_licensing_info:
-            if existing.license_id == 'LicenseRef-NOASSERTION':
-                extracted_id_found = True
-                break
-        if not extracted_id_found:
-            extracted_licensing_info.append(ExtractedLicensingInfo(license_id = 'LicenseRef-NOASSERTION', extracted_text = 'This component contains no assertion license', \
+            extracted_id_found = False
+            for existing in extracted_licensing_info:
+                if existing.license_id == 'LicenseRef-NOASSERTION':
+                    extracted_id_found = True
+                    break
+            if not extracted_id_found:
+                extracted_licensing_info.append(ExtractedLicensingInfo(license_id = 'LicenseRef-NOASSERTION', extracted_text = 'This component contains no assertion license', \
                                                                    comment = 'This license text represents a NOASSERTION on a license component found within the scope of this license expression.'))
         return licensing.parse(unparsed_lic)
         
@@ -472,7 +478,7 @@ def _licenseStringToExpression(license_string, extracted_licensing_info, licensi
         else:
             return str(fix_license(lic, extracted_licensing_info, licensing))
     except:
-        extracted_id = re.sub(r'[^0-9a-zA-Z\.\-]+', '-', license_string)
+        extracted_id = re.sub(r'[^0-9a-zA-Z.]+', '-', license_string)
         if not extracted_id.startswith("LicenseRef-"):
             extracted_id = "LicenseRef-" + extracted_id
         extracted_id_found = False

@@ -3,12 +3,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import sys
+from pathlib import Path
 
 # from fossdriver.tasks import CreateFolder, Upload, Scanners, Copyright, BulkTextMatch, SPDXRDF, ImportRDF
 
-from datatypes import Status
+from .datatypes import Status
 
-def doTransfer(scaffold_home, cfg, prj_name, old_server, new_server):
+def doTransfer(oldConfig, newConfig, old_server, new_server, prj_only, sp_only):
     raise RuntimeError("The transfer feature has not been upgraded to fossology python")
     if prj_name == "":
         print(f"Error: `transfer` command requires specifying only one project")

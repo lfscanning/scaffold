@@ -5,9 +5,9 @@ import unittest
 import os
 import tempfile
 import shutil
-import spdx.spdxutil as spdxutil
-import spdx.xlsx as xlsx
-from config import loadConfig
+import scaffold.spdx.spdxutil as spdxutil
+import scaffold.spdx.xlsx as xlsx
+from scaffold.config import loadConfig
 from spdx_tools.spdx.model.package import Package
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import PackagePurpose
@@ -128,6 +128,14 @@ class TestSpdxUtil(unittest.TestCase):
         os.makedirs(self.report_path)
         self.report_json_path = os.path.join(self.report_path, "materialx-2024-08-21.json")
         shutil.copy(TEST_MATERIALX_REPORT_JSON, self.report_json_path)
+        secrets_file_path = os.path.join(self.scaffold_home_dir, SECRET_FILE_NAME)
+        with open(secrets_file_path, "w") as f:
+            f.write("""{
+	"default_github_oauth": "githubOATHkey",
+	"fossology_server": "http://localhost:8081/repo",
+	"fossology_username": "fossy",
+	"fossology_password": "fossy"
+}""")
         
 
     def tearDown(self):

@@ -8,9 +8,9 @@ import os
 
 from jinja2 import Template
 
-from datatypes import Instance, Priority, Status, InstanceSet
-from datefuncs import getYMStr, parseYM, priorMonth
-from instancesfile import loadInstances, saveInstances
+from .datatypes import Instance, Priority, Status, InstanceSet
+from .datefuncs import getYMStr, parseYM, priorMonth
+from .instancesfile import loadInstances, saveInstances
 
 # Helper for calculating findings instances and review categories
 # Call with spName == "COMBINED" for combined report (should only

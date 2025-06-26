@@ -14,19 +14,19 @@ from fossology import fossology_token, Fossology
 from fossology.obj import TokenScope
 
 
-from config import loadConfig, saveBackupConfig, saveConfig, isInThisCycle, updateFossologyToken
-import datefuncs
-from runners import doNextThing
-from manualws import runManualWSAgent
-from manualsbom import runManualSbomAgent
-from clearing import doCleared
-from newmonth import copyToNextMonth
-from approving import doApprove
-from emailing import printEmail, printAllLinks, printReportLinks
-from delivering import doDelivered
-from metrics import getMetrics, printMetrics
-from metricsfile import saveMetrics
-from transfer import doTransfer
+from .config import loadConfig, saveBackupConfig, saveConfig, isInThisCycle, updateFossologyToken
+from . import datefuncs
+from .runners import doNextThing
+from .manualws import runManualWSAgent
+from .manualsbom import runManualSbomAgent
+from .clearing import doCleared
+from .newmonth import copyToNextMonth
+from .approving import doApprove
+from .emailing import printEmail, printAllLinks, printReportLinks
+from .delivering import doDelivered
+from .metrics import getMetrics, printMetrics
+from .metricsfile import saveMetrics
+from .transfer import doTransfer
 from datetime import datetime
 from secrets import token_urlsafe
 

@@ -2,9 +2,11 @@
 # SPDX-FileType: SOURCE
 # SPDX-License-Identifier: Apache-2.0
 
-from datatypes import ProjectRepoType, Status, Subproject
-from github import getGithubRepoList
-from gerrit import getGerritRepoDict, getGerritRepoList
+import sys
+
+from .datatypes import ProjectRepoType, Status, Subproject
+from .github import getGithubRepoList
+from .gerrit import getGerritRepoDict, getGerritRepoList
 
 # Runner for START in GitHub
 def doRepoListingForSubproject(cfg, prj, sp):
