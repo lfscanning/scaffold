@@ -146,7 +146,8 @@
 						"artwork",
 						"tsc"
 					]
-				}
+				},
+				"copyright": "Copyright (c) 2024 Example Corp"
 			}
 		}
 	}

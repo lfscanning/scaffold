@@ -413,28 +413,7 @@ def fix_license(lic, extracted_licensing_info, licensing):
                         break
                 if not extracted_id_found:
                     extracted_licensing_info.append(ExtractedLicensingInfo(license_id = key, extracted_text = key, \
-                                                                           comment = 'This license text represents a LicenseRef generated from one of the scanning tools - the text can be found in the referenced tool'))
-        # Only replace NONE/NOASSERTION with LicenseRef-* if they are part of a compound expression
-        if none_found and "NONE" not in unparsed_lic.strip():
-            unparsed_lic = re.sub(r'(^|\(|\s)(NONE)($|\s|\))', r'\1LicenseRef-NONE\3', unparsed_lic)
-            extracted_id_found = False
-            for existing in extracted_licensing_info:
-                if existing.license_id == 'LicenseRef-NONE':
-                    extracted_id_found = True
-                    break
-            if not extracted_id_found:
-                extracted_licensing_info.append(ExtractedLicensingInfo(license_id = 'LicenseRef-NONE', extracted_text = 'This component contains no license', \
-                                                                       comment = 'This license text represents a NONE license found alongside other licenses in a license expression.'))
-        if noassert_found and "NOASSERTION" not in unparsed_lic.strip():
-            unparsed_lic = re.sub(r'(^|\(|\s)(NOASSERTION)($|\s|\))', r'\1LicenseRef-NOASSERTION\3', unparsed_lic)
-            extracted_id_found = False
-            for existing in extracted_licensing_info:
-                if existing.license_id == 'LicenseRef-NOASSERTION':
-                    extracted_id_found = True
-                    break
-            if not extracted_id_found:
-                extracted_licensing_info.append(ExtractedLicensingInfo(license_id = 'LicenseRef-NOASSERTION', extracted_text = 'This component contains no assertion license', \
-                                                                   comment = 'This license text represents a NOASSERTION on a license component found within the scope of this license expression.'))
+                                                                           comment = 'This license text represents a LicenseRef generated from one of the scanning tools - the text can be found in the referenced tool')
         return licensing.parse(unparsed_lic)
         
 def fix_download_location(spdx_element):

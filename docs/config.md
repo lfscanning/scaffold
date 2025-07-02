@@ -125,6 +125,7 @@ Within the subproject's object are the following fields:
 * `slm`: an object storing data relating to the subproject's SPDX files and any detected licenses that need to be added to the applicable policy's categories
 * `web`: an object storing data relating to where the HTML and XLSX reports are uploaded
 * `code`: an object storing data relating to code that has been pulled from the repos
+* `copyright`: (optional) A string specifying the copyright notice for the subproject SBOM entry. If present, this will be included in the generated SBOM.
 
 There is also a property with the same name as the parent project's `type`, with different sub-fields depending on the project's `type` value (FIXME: details to be added).
 
