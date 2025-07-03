@@ -4,9 +4,9 @@
 
 import os
 import zipfile
-import util
+from . import util
 
-from datatypes import ProjectRepoType, Status
+from .datatypes import ProjectRepoType, Status
 
 # Runner for GOTCODE in GITHUB and GITHUB_SHARED
 def doZipRepoCodeForSubproject(cfg, prj, sp):

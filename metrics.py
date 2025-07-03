@@ -3,10 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+import sys
 
-from datatypes import Metrics, Priority, Status
-from instancesfile import loadInstances
-from metricsfile import loadMetrics
+from .datatypes import Metrics, Priority, Status
+from .instancesfile import loadInstances
+from .metricsfile import loadMetrics
 
 def printMetrics(metricsFilename):
     # collect counts of subprojects, repos and files

@@ -5,7 +5,7 @@ import os
 from subprocess import run, PIPE
 import sys
 
-import ws.wscfg
+from . import wscfg
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -20,13 +20,13 @@ def runUnifiedAgent(cfg, prj, sp):
         return False
 
     # get environment, including necessary values
-    env = ws.wscfg.getWSEnv(cfg, prj, sp)
+    env = wscfg.getWSEnv(cfg, prj, sp)
     env["WS_WSS_URL"] = cfg._ws_server_url + "/agent"
-    org_token = ws.wscfg.getWSOrgToken(cfg, prj, sp)
+    org_token = wscfg.getWSOrgToken(cfg, prj, sp)
     #env["WS_API_KEY"] = org_token
-    product_name = ws.wscfg.getWSProductName(cfg, prj, sp)
+    product_name = wscfg.getWSProductName(cfg, prj, sp)
     env["WS_PRODUCTNAME"] = product_name
-    project_name = ws.wscfg.getWSProjectName(cfg, prj, sp)
+    project_name = wscfg.getWSProjectName(cfg, prj, sp)
     env["WS_PROJECTNAME"] = project_name
 
     cmd = ["java", "-jar", cfg._ws_unified_agent_jar_path,

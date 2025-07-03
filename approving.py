@@ -2,8 +2,8 @@
 # SPDX-FileType: SOURCE
 # SPDX-License-Identifier: Apache-2.0
 
-from datatypes import Status
-from config import updateProjectStatusToSubprojectMin
+from .datatypes import Status
+from .config import updateProjectStatusToSubprojectMin
 
 def doApprove(scaffold_home, cfg, prj_only="", sp_only=""):
     if prj_only == "":

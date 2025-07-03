@@ -5,10 +5,11 @@
 import os
 import shutil
 import zipfile
+from subprocess import run, PIPE
 
 from git import Repo
 
-from datatypes import Status
+from .datatypes import Status
 
 MAX_FILE_SIZE = 50 * 1000000 # Maximum file size to push to GitHub - 50MB
 def doUploadSPDXForSubproject(cfg, prj, sp):

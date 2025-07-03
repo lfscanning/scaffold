@@ -4,11 +4,11 @@
 
 from datetime import datetime
 import os
-import util
+from . import util
 
 import git
 
-from datatypes import ProjectRepoType, Status
+from .datatypes import ProjectRepoType, Status
 
 # Runner for GOTLISTING in GITHUB and GITHUB_SHARED
 def doGetRepoCodeForSubproject(cfg, prj, sp):
@@ -32,7 +32,7 @@ def doGetRepoCodeForSubproject(cfg, prj, sp):
 
     # clone each repo and remove its .git directory
     for repo in sp._repos:
-        git_url = f"git@github.com:{org}/{repo}.git"
+        git_url = f"https://github.com/{org}/{repo}.git"
         dotgit_path = os.path.join(ziporg_path, repo, ".git")
         if sp._github_branch != "":
             print(f"{prj._name}/{sp._name}: cloning {git_url} branch {sp._github_branch}")

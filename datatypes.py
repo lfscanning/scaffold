@@ -319,6 +319,8 @@ class Subproject:
         self._web_xlsx_url = ""
         self._web_sbom_url = ""
 
+        self._copyright = ""
+
     def resetNewMonth(self):
         self._status = Status.START
 

@@ -2,9 +2,9 @@
 # SPDX-FileType: SOURCE
 # SPDX-License-Identifier: Apache-2.0
 
-import sbomagent
+from . import sbomagent
 
-from datatypes import Status
+from .datatypes import Status
 
 # run sbom, either through manual trigger or runner
 def sbomAgentForSubproject(cfg, prj, sp):
