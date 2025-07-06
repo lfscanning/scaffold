@@ -5,9 +5,9 @@ import unittest
 import os
 import tempfile
 import shutil
-import spdx.spdxutil as spdxutil
-import spdx.xlsx as xlsx
-from config import loadConfig
+import scaffold.spdx.spdxutil as spdxutil
+import scaffold.spdx.xlsx as xlsx
+from scaffold.config import loadConfig
 from spdx_tools.spdx.model.package import Package
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import PackagePurpose

@@ -2,14 +2,15 @@ import unittest
 import os
 import tempfile
 import shutil
-from scaffold import fossologySetup
-from config import loadSecrets, loadConfig
-from uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
-from datatypes import Status, ProjectRepoType
-from runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
-from getspdx import doGetSPDXForSubproject
-from newmonth import copyToNextMonth
-from getcode import doGetRepoCodeForSubproject
+from scaffold.scaffold import fossologySetup
+from scaffold.config import loadSecrets, loadConfig
+from scaffold.uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
+from scaffold.datatypes import Status, ProjectRepoType
+from scaffold.runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
+from scaffold.getspdx import doGetSPDXForSubproject
+from scaffold.newmonth import copyToNextMonth
+from scaffold.getcode import doGetRepoCodeForSubproject
+from scaffold.ws import wscfg
 
 UPLOAD_FILE_FRAGMENT = "sp1-2023-07"
 UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"

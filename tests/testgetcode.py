@@ -3,10 +3,10 @@ import os
 import tempfile
 import shutil
 from datetime import datetime
-from getcode import doGetRepoCodeForSubproject
-from config import loadConfig, saveConfig
-from datatypes import Status, ProjectRepoType
-from zipcode import doZipRepoCodeForSubproject
+from scaffold.getcode import doGetRepoCodeForSubproject
+from scaffold.config import loadConfig, saveConfig
+from scaffold.datatypes import Status, ProjectRepoType
+from scaffold.zipcode import doZipRepoCodeForSubproject
 
 UPLOAD_FILE_FRAGMENT = "sp1-2023-07"
 UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"
