@@ -11,12 +11,12 @@ from spdx_tools.spdx import document_utils, spdx_element_utils
 from spdx_tools.spdx.model import RelationshipType, Package, File
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 
-from manualsbom import runManualSbomAgent
-from sbomagent import installNpm
-from config import loadConfig
-from datatypes import Status, ProjectRepoType
+from scaffold.manualsbom import runManualSbomAgent
+from scaffold.sbomagent import installNpm
+from scaffold.config import loadConfig
+from scaffold.datatypes import Status, ProjectRepoType
 from spdx_tools.spdx.parser.parse_anything import parse_file
-from spdx.spdxutil import mergeSpdxDocs
+from scaffold.spdx.spdxutil import mergeSpdxDocs
 
 ANALYSIS_FILE_FRAGMENT = "sp1-2023-07"
 ANALYSIS_FILE_NAME = ANALYSIS_FILE_FRAGMENT + "-09.zip"
