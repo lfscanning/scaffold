@@ -2,18 +2,18 @@ import unittest
 import os
 import tempfile
 import shutil
-from scaffold import fossologySetup
-from config import loadSecrets, loadConfig
-from uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
-from datatypes import Status, ProjectRepoType
-from runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
-from getspdx import doGetSPDXForSubproject
-from newmonth import copyToNextMonth
-from getcode import doGetRepoCodeForSubproject
+from scaffold.config import loadSecrets, loadConfig
+from scaffold.uploadcode import doUploadCodeForSubproject, doUploadCodeForProject
+from scaffold.datatypes import Status, ProjectRepoType
+from scaffold.runagents import getUploadFolder, doRunAgentsForSubproject, getUpload, uploadExists
+from scaffold.getspdx import doGetSPDXForSubproject
+from scaffold.newmonth import copyToNextMonth
+from scaffold.main import fossologySetup
+from scaffold.getcode import doGetRepoCodeForSubproject
 
 UPLOAD_FILE_FRAGMENT = "sp1-2023-07"
 UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"
-SECRET_FILE_NAME = ".test-scaffold-secrets.json"
+SECRET_FILE_NAME = os.path.join(os.path.dirname(__file__), "testresources", ".test-scaffold-secrets.json")
 TEST_SCAFFOLD_CODE = os.path.join(os.path.dirname(__file__), "testresources", UPLOAD_FILE_NAME)
 TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "scaffoldhome")
 TEST_MONTH = "2023-07"

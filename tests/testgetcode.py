@@ -3,14 +3,14 @@ import os
 import tempfile
 import shutil
 from datetime import datetime
-from getcode import doGetRepoCodeForSubproject
-from config import loadConfig, saveConfig
-from datatypes import Status, ProjectRepoType
-from zipcode import doZipRepoCodeForSubproject
+from scaffold.getcode import doGetRepoCodeForSubproject
+from scaffold.config import loadConfig, saveConfig
+from scaffold.datatypes import Status, ProjectRepoType
+from scaffold.zipcode import doZipRepoCodeForSubproject
 
 UPLOAD_FILE_FRAGMENT = "sp1-2023-07"
 UPLOAD_FILE_NAME = UPLOAD_FILE_FRAGMENT + "-09.zip"
-SECRET_FILE_NAME = ".test-scaffold-secrets.json"
+SECRET_FILE_NAME = os.path.join(os.path.dirname(__file__), "testresources", ".test-scaffold-secrets.json")
 TEST_SCAFFOLD_CODE = os.path.join(os.path.dirname(__file__), "testresources", UPLOAD_FILE_NAME)
 TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "scaffoldhome")
 TEST_MONTH = "2023-07"
@@ -28,6 +28,8 @@ class TestGetCode(unittest.TestCase):
         self.scaffold_home_dir = os.path.join(self.temp_dir.name, "scaffold")
         shutil.copytree(TEST_SCAFFOLD_HOME, self.scaffold_home_dir)
         self.config_month_dir = os.path.join(self.scaffold_home_dir, TEST_MONTH)
+        # Disable SSH strict host key checking for Git
+        os.system('git config --global core.sshCommand "ssh -o StrictHostKeyChecking=no"')
 
     def tearDown(self):
         self.temp_dir.cleanup()

@@ -25,7 +25,7 @@ from spdx_tools.spdx.writer.write_anything import write_file
 from spdx_tools.common.spdx_licensing import spdx_licensing as tools_python_licensing
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
-from datatypes import ProjectRepoType
+from scaffold.datatypes import ProjectRepoType
 from scaffold.slmjson import loadSLMCategories
 import re
 import os
@@ -356,6 +356,9 @@ def fix_license(lic, extracted_licensing_info, licensing):
     elif lic == SpdxNoAssertion():
         return lic
     else:
+        # Special case for NOASSERTION in license expressions
+        if str(lic) == 'NOASSERTION' or 'NOASSERTION' in licensing.license_keys(lic):
+            return lic
         unknown_keys = licensing.unknown_license_keys(lic)
         keys = licensing.license_keys(lic)
         unparsed_lic = str(lic)
@@ -378,10 +381,12 @@ def fix_license(lic, extracted_licensing_info, licensing):
                                     comment = 'This license text represents a WITH statement found in licensing metadata - the actual text is not known'))
                 unparsed_lic = re.sub(f'{re.escape(w[0])} WITH {re.escape(w[1])}', with_extracted_id, unparsed_lic)
             # Now we can handle the IDs not found in the WITH statements
+            # Handle plus variants by treating them as the same license
+            base_unknown_key = unknown_key.replace('+', '-')
             if unknown_key.startswith('LicenseRef-'):
                 extracted_id = unknown_key
             else:
-                extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', unknown_key)
+                extracted_id = 'LicenseRef-' + re.sub(r'[^0-9a-zA-Z\.\-]+', '-', base_unknown_key)
             extracted_id_found = False
             for existing in extracted_licensing_info:
                 if existing.license_id.lower() == extracted_id.lower():

@@ -7,7 +7,7 @@ import tempfile
 import shutil
 import spdx.spdxutil as spdxutil
 import spdx.xlsx as xlsx
-from config import loadConfig
+from scaffold.config import loadConfig
 from spdx_tools.spdx.model.package import Package
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import PackagePurpose
@@ -27,7 +27,7 @@ MATERIALX_CONFIG_FILENAME = "test-materialx-conf.json"
 MATERIALX_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "testresources", MATERIALX_CONFIG_FILENAME)
 MATERIALX_TRIVY_FILENAME = "MaterialX-2024-08-21-trivy-spdx.json"
 MATERIALX_TRIVY_PATH = os.path.join(os.path.dirname(__file__), "testresources", MATERIALX_TRIVY_FILENAME)
-SECRET_FILE_NAME = ".test-scaffold-secrets.json"
+SECRET_FILE_NAME = os.path.join(os.path.dirname(__file__), "testresources", ".test-scaffold-secrets.json")
 SPDX_TOOLS_JAVA_FILENAME = "spdx-tools-java-git-license-spdx.json"
 SPDX_TOOLS_JAVA_PATH = os.path.join(os.path.dirname(__file__), "testresources", SPDX_TOOLS_JAVA_FILENAME)
 TEST_MONTH = '2024-08'
