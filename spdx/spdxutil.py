@@ -26,7 +26,7 @@ from spdx_tools.common.spdx_licensing import spdx_licensing as tools_python_lice
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
 from datatypes import ProjectRepoType
-from slmjson import loadSLMCategories
+from scaffold.slmjson import loadSLMCategories
 import re
 import os
 import json

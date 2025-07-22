@@ -6,8 +6,8 @@ import os
 from pathlib import Path
 
 from datatypes import Status
-from slmjson import loadSLMCategories
-from slm.xlsx import makeXlsx, saveXlsx
+from scaffold.slmjson import loadSLMCategories
+from scaffold.slm.xlsx import makeXlsx, saveXlsx
 
 def doCreateReportForSubproject(cfg, prj, sp):
     # make sure we're at the right stage

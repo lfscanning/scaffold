@@ -5,9 +5,9 @@
 import os
 
 from datatypes import SLMCategory, SLMFile, SLMLicense, Status
-from slmjson import loadSLMCategories, saveSLMCategories
-from slm.tvReader import TVReader
-from slm.tvParser import TVParser
+from scaffold.slmjson import loadSLMCategories, saveSLMCategories
+from scaffold.slm.tvReader import TVReader
+from scaffold.slm.tvParser import TVParser
 
 MD5_EMPTY_FILE = "d41d8cd98f00b204e9800998ecf8427e"
 
