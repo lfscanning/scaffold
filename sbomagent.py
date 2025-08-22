@@ -94,7 +94,7 @@ errors:
         cdsbom_cmd = [cfg._cdsbom_exec_path, "-out", str(result), str(parlay_result)]
         cp = run(cdsbom_cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if cp.returncode != 0:
-            print(f"""{prj._name}/{sp._name}: cdsbom failed with error code {cp.returncode}:
+            print(f"""{prj._name}/{sp._name}: WARNING: cdsbom skipped due to failure with error code {cp.returncode}:
 ----------
 output:
 {cp.stdout}
@@ -103,7 +103,8 @@ errors:
 {cp.stderr}
 ----------
 """)
-            return False
+            result = parlay_result
+            # skip cdsbom - reference issue 175
         spdx.spdxutil.fixLicenseExpressions(result)
         try:
             spdxDocument = spdx.spdxutil.parseFile(result)
