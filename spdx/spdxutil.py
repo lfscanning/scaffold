@@ -357,7 +357,6 @@ def fix_license(lic, extracted_licensing_info, licensing):
         return lic
     else:
         unknown_keys = licensing.unknown_license_keys(lic)
-        keys = licensing.license_keys(lic)
         unparsed_lic = str(lic)
         for unknown_key in unknown_keys:
             # see if the unknown key is part of a WITH statement - we must replace these first
@@ -392,43 +391,6 @@ def fix_license(lic, extracted_licensing_info, licensing):
                 extracted_licensing_info.append(ExtractedLicensingInfo(license_id = extracted_id, extracted_text = unknown_key, \
                                     comment = 'This license text represents a string found in licensing metadata - the actual text is not known'))
             unparsed_lic = re.sub(r'(?<!LicenseRef-)' + re.escape(unknown_key), extracted_id, unparsed_lic)
-        none_found = False
-        noassert_found = False
-        for key in keys:
-            # add any missing extracted licensing infos and replace any NONE and NOASSERTIONS
-            if key == "NONE":
-                none_found = True
-            elif key == "NOASSERTION":
-                noassert_found = True
-            if not key in unknown_keys and key.startswith('LicenseRef-'):
-                extracted_id_found = False
-                for existing in extracted_licensing_info:
-                    if existing.license_id.lower() == key.lower():
-                        extracted_id_found = True
-                        break
-                if not extracted_id_found:
-                    extracted_licensing_info.append(ExtractedLicensingInfo(license_id = key, extracted_text = key, \
-                                                                           comment = 'This license text represents a LicenseRef generated from one of the scanning tools - the text can be found in the referenced tool'))
-        if none_found:
-            unparsed_lic = re.sub(r'(^|\(|\s)(NONE)($|\s|\))', r'\1LicenseRef-NONE\3', unparsed_lic)
-            extracted_id_found = False
-            for existing in extracted_licensing_info:
-                if existing.license_id == 'LicenseRef-NONE':
-                    extracted_id_found = True
-                    break
-            if not extracted_id_found:
-                extracted_licensing_info.append(ExtractedLicensingInfo(license_id = 'LicenseRef-NONE', extracted_text = 'This component contains no license', \
-                                                                       comment = 'This license text represents a NONE license found alongside other licenses in a license expression.'))
-        if noassert_found:
-            unparsed_lic = re.sub(r'(^|\(|\s)(NOASSERTION)($|\s|\))', r'\1LicenseRef-NOASSERTION\3', unparsed_lic)
-        extracted_id_found = False
-        for existing in extracted_licensing_info:
-            if existing.license_id == 'LicenseRef-NOASSERTION':
-                extracted_id_found = True
-                break
-        if not extracted_id_found:
-            extracted_licensing_info.append(ExtractedLicensingInfo(license_id = 'LicenseRef-NOASSERTION', extracted_text = 'This component contains no assertion license', \
-                                                                   comment = 'This license text represents a NOASSERTION on a license component found within the scope of this license expression.'))
         return licensing.parse(unparsed_lic)
         
 def fix_download_location(spdx_element):
