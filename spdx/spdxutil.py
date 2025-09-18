@@ -253,6 +253,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     for repo in sp._code_repos.keys():
         name = repo
         fileAnalyzed = False
+        gerrit = sp._repotype == ProjectRepoType.GERRIT
         if sp._repotype == ProjectRepoType.GITHUB:
             locator = 'pkg:github/' + sp._github_org + '/' + repo + '@' + sp._code_repos[repo]
             purl = ExternalPackageRef(category=ExternalPackageRefCategory.PACKAGE_MANAGER, reference_type='purl', locator=locator)
@@ -265,7 +266,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             # https://github.com/lfscanning/scaffold/archive/7ef25b63f44cb3a68cd60a3c26532e13853917a2.zip
             download_location = 'https://github.com/' + prj._github_shared_org + '/' + repo + '/archive/' + sp._code_repos[repo] + '.zip'
             external_references = [purl]
-        # else if sp._repotype == ProjectRepoType.GERRIT:
+        # else if gerrit:
             # https://gerrit.onap.org/r/aai/aai-common
             # git clone "https://gerrit.onap.org/r/aai"
         else:
@@ -276,7 +277,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         supplier = Actor(actor_type = ActorType.ORGANIZATION, name = 'Linux Foundation Project ' + prj._name)
         source_info = 'The source this package was part of the LF Scanning configuration for the project ' + prj._name
         comment = 'This package was added to the Trivy analysis for the ' + name + ' by the Scaffold tool SBOM augmentation'
-        repo_packages[repo] = Package(spdx_id = spdx_id, name = repo, download_location = download_location, version = version, supplier = supplier, \
+        repo_packages[repo] = Package(spdx_id = spdx_id, name = repo.replace("/", "-"), download_location = download_location, version = version, supplier = supplier, \
                                         files_analyzed = False, source_info = source_info, license_concluded = subprojectConcludedLicense, \
                                         license_declared = subprojectDeclaredLicense, comment = comment, external_references = external_references, \
                                         primary_package_purpose = PackagePurpose.SOURCE)
@@ -411,9 +412,9 @@ def findRepoName(element, repos):
     if element == None:
         return None
     for repo in repos:
-        if element.name.startswith(repo + "/"):
+        if element.name.startswith(f"{repo.replace("/","-")}/"):
             return repo
-        if hasattr(element, 'source_info') and hasattr(element.source_info, 'startswith') and element.source_info.startswith("package found in: "+repo+"/"):
+        if hasattr(element, 'source_info') and hasattr(element.source_info, 'startswith') and element.source_info.startswith(f"package found in: {repo.replace("/","-")}/"):
             return repo
     return None
 
