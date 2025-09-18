@@ -27,6 +27,10 @@ MATERIALX_CONFIG_FILENAME = "test-materialx-conf.json"
 MATERIALX_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "testresources", MATERIALX_CONFIG_FILENAME)
 MATERIALX_TRIVY_FILENAME = "MaterialX-2024-08-21-trivy-spdx.json"
 MATERIALX_TRIVY_PATH = os.path.join(os.path.dirname(__file__), "testresources", MATERIALX_TRIVY_FILENAME)
+ONAP_AAI_CONFIG_FILENAME = "test-onap-aai-conf.json"
+ONAP_AAI_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "testresources", ONAP_AAI_CONFIG_FILENAME)
+ONAP_AAI_CDSBOM_FILENAME = "onap-aai-cdsbom-spdx.json"
+ONAP_AAI_CDSBOM_PATH = os.path.join(os.path.dirname(__file__), "testresources", ONAP_AAI_CDSBOM_FILENAME)
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
 SPDX_TOOLS_JAVA_FILENAME = "spdx-tools-java-git-license-spdx.json"
 SPDX_TOOLS_JAVA_PATH = os.path.join(os.path.dirname(__file__), "testresources", SPDX_TOOLS_JAVA_FILENAME)
@@ -115,6 +119,8 @@ class TestSpdxUtil(unittest.TestCase):
         shutil.copy(TEST_LARGE_SPDX_PATH, self.large_json_path)
         self.materialx_trivy_path = os.path.join(self.temp_dir.name, MATERIALX_TRIVY_FILENAME)
         shutil.copy(MATERIALX_TRIVY_PATH, self.materialx_trivy_path)
+        self.onap_aai_cdsbom_path = os.path.join(self.temp_dir.name, ONAP_AAI_CDSBOM_FILENAME)
+        shutil.copy(ONAP_AAI_CDSBOM_PATH, self.onap_aai_cdsbom_path)
         self.scaffold_home_dir = os.path.join(self.temp_dir.name, "scaffold")
         os.mkdir(self.scaffold_home_dir)
         os.mkdir(os.path.join(self.scaffold_home_dir, 'spdxrepos'))
@@ -122,6 +128,8 @@ class TestSpdxUtil(unittest.TestCase):
         os.mkdir(self.config_dir)
         self.materialx_config_path = os.path.join(self.config_dir, MATERIALX_CONFIG_FILENAME)
         shutil.copy(MATERIALX_CONFIG_PATH, self.materialx_config_path)
+        self.onap_aai_config_path = os.path.join(self.config_dir, ONAP_AAI_CONFIG_FILENAME)
+        shutil.copy(ONAP_AAI_CONFIG_PATH, self.onap_aai_config_path)
         self.spdx_tools_java_path = os.path.join(self.temp_dir.name, SPDX_TOOLS_JAVA_FILENAME)
         shutil.copy(SPDX_TOOLS_JAVA_PATH, self.spdx_tools_java_path)
         self.report_path = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", "aswf")
@@ -328,6 +336,15 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertEqual(sp._code_repos["MaterialX"], fixed_pkg.version)
         self.assertEqual('Linux Foundation Project ' + prj._name, fixed_pkg.supplier.name)
     
+    def testOnapRegression(self):
+        self.maxDiff = None
+        spdx_document = spdxutil.parseFile(self.onap_aai_cdsbom_path)
+        cfg = loadConfig(self.onap_aai_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._storepath = str(self.scaffold_home_dir)
+        prj = cfg._projects['onap']
+        sp = prj._subprojects['aai']
+        self.assertTrue(spdxutil.augmentTrivyDocument(spdx_document, cfg, prj, sp))
+
     def testFixTrivyDocument(self):
         self.maxDiff = None
         spdx_document = spdxutil.parseFile(self.materialx_trivy_path)
