@@ -412,7 +412,7 @@ def findRepoName(element, repos):
     if element == None:
         return None
     for repo in repos:
-        if element.name.startswith(f"{repo.replace("/","-")}/"):
+        if element.name.startswith(f"{repo.replace('/','-')}/"):
             return repo
         if hasattr(element, 'source_info') and hasattr(element.source_info, 'startswith') and element.source_info.startswith(f"package found in: {repo.replace("/","-")}/"):
             return repo
