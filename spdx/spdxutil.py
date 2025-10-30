@@ -7,6 +7,7 @@ import uuid
 # Utility class to support merging / fixing up SPDX documents
 
 from license_expression import get_spdx_licensing, LicenseSymbol
+from spdx_python_model.bindings.v3_0_1 import JSONLDDeserializer, SHACLObjectSet, JSONLDSerializer
 from spdx_tools.spdx.model.package import Package
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import ExternalPackageRefCategory
@@ -25,6 +26,7 @@ from spdx_tools.spdx.writer.write_anything import write_file
 from spdx_tools.common.spdx_licensing import spdx_licensing as tools_python_licensing
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
+from spdx_python_model import v3_0_1 as spdx_3_0
 from datatypes import ProjectRepoType
 from slmjson import loadSLMCategories
 import re
@@ -487,3 +489,56 @@ def _copyRepoFromFossology(sbom, fossology_sbom, repo_name):
         if re.fullmatch(f".+/{repo_name}/.+", file.name):
             sbom.files.append(file)
             sbom.relationships.append(Relationship(repoPackage.spdx_id, RelationshipType.CONTAINS, file.spdx_id))
+
+def fixSpdxV3File(spdxV3File):
+    objectset = SHACLObjectSet()
+    with open(spdxV3File, 'r') as spdxfile:
+        JSONLDDeserializer().read(spdxfile, objectset)
+    for doc in objectset.foreach_type("SpdxDocument"):
+        doc_id = doc.spdxId
+        i = doc_id.rfind("#")
+        if i < 0:
+            i = doc_id.rfind("/")
+        if i < 0:
+            i = len(doc_id)
+        id_prefix = doc_id[0:i+1]
+        # Insert SBOM between document and package
+        found_sbom = False
+        last_root = None
+        for rootElement in doc.rootElement:
+            if rootElement in objectset.foreach_type("software_Sbom"):
+                found_sbom = True
+                break
+            last_root = rootElement
+        if not found_sbom and last_root:
+            sbom = spdx_3_0.software_Sbom()
+            sbom.spdxId = id_prefix + "sbom"
+            sbom.rootElement = [last_root]
+            for element in doc.element:
+                sbom.element.append(element)
+            sbom.element.append(last_root)
+            sbom.software_sbomType.append(spdx_3_0.software_SbomType.source)
+            sbom.creationInfo = doc.creationInfo
+            # remove the old root element - rootELement.remove does not seem to work, so we'll create a new array
+            new_roots = []
+            for rootElement in doc.rootElement:
+                if rootElement != last_root:
+                    new_roots.append(rootElement)
+            new_roots.append(sbom)
+            doc.rootElement = new_roots
+        # Remove the describes relationship
+        describes_relationships = []
+        for relationship in objectset.foreach_type("Relationship"):
+            if relationship.relationshipType == spdx_3_0.RelationshipType.describes:
+                describes_relationships.append(relationship)
+        for relationship in describes_relationships:
+            objectset.objects.remove(relationship)
+    # write back the file
+    with open(spdxV3File, 'wb') as spdxfile:
+        JSONLDSerializer().write(objectset, spdxfile)
+    # pretty print
+    json_data = None
+    with open(spdxV3File, 'r') as spdxfile:
+        json_data = json.load(spdxfile)
+    with open(spdxV3File, 'w') as spdxfile:
+        json.dump(json_data, spdxfile, indent=4)

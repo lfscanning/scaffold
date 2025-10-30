@@ -20,7 +20,7 @@ alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 
 ### Sbom
 
-To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/), [parlay](https://github.com/snyk/parlay) and [cdsbom](https://github.com/jeffmendoza/cdsbom) must be installed on the local machine.
+To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/), [parlay](https://github.com/snyk/parlay), [cdsbom](https://github.com/jeffmendoza/cdsbom) and [tools-java](https://github.com/spdx/tools-java) must be installed on the local machine.
 
 The current version of Trivy and Parlay requires Go version 1.22.X installed on the target machine.
 
@@ -55,6 +55,17 @@ The location of the cdsbom command needs to be added to the config file and/or a
 In addition [NPM](https://www.npmjs.com/) must be installed.
 
 The location of the NPM command needs to be added to the config file or as an environment variable `NPM_EXEC_PATH`.
+
+To install tools-java:
+
+A JVM must already be installed on the system.
+
+```shell
+cd ~/spdx-java
+curl -o tools-java.jar https://repo1.maven.org/maven2/org/spdx/tools-java/[VERSION]/tools-java-[VERSION]-jar-with-dependencies.jar
+```
+
+where `[VERSION]` is the latest version of tools-java.
 
 ## Configuration
 

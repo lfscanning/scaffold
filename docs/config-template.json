@@ -13,6 +13,10 @@
         "webReportsUrl": "reports",
         "wsServerUrl": "https://saas.whitesourcesoftware.com",
         "wsUnifiedAgentJarPath": "/home/USER/scaffold/wss-unified-agent.jar",
+		"trivyExecPath": "/home/USER/go/bin/trivy",
+		"npmExecPath": "/home/USER/.nvm/versions/node/v16.20.2/bin/npm",
+		"parlayExecPath": "/home/USER/go/bin/cdsbom",
+		"toolsJavaPath": "/home/USER/spdx-java/tools-java.jar",
         "wsDefaultEnv": {
             "PATH": "/home/USER/.virtualenvs/ws/bin:/home/USER/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
             "WS_CHECKPOLICIES": "false",

@@ -6,3 +6,4 @@ pyyaml
 Jinja2
 fossology==2.1.0
 spdx-tools==0.8.3
+spdx-python-model

@@ -211,6 +211,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
             cfg._npm_exec_path = config_dict.get('npmExecPath', os.environ['NPM_EXEC_PATH'] if 'NPM_EXEC_PATH' in os.environ else "")
             cfg._parlay_exec_path = config_dict.get('parlayExecPath', os.environ['PARLAY_EXEC_PATH'] if 'PARLAY_EXEC_PATH' in os.environ else "")
             cfg._cdsbom_exec_path = config_dict.get('cdsbomExecPath', os.environ['CDSBOM_EXEC_PATH'] if 'CDSBOM_EXEC_PATH' in os.environ else "")
+            cfg._tools_java_path = config_dict.get('toolsJavaPath', os.environ['TOOLS_JAVA_PATH'] if 'TOOLS_JAVA_PATH' in os.environ else "")
             cfg._zippath = config_dict.get('zippath', cfg._storepath)
             cfg._spdx_github_org = config_dict.get('spdxGithubOrg', "")
             if cfg._spdx_github_org == "":
