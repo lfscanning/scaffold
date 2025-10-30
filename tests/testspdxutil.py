@@ -5,6 +5,9 @@ import unittest
 import os
 import tempfile
 import shutil
+
+from spdx_python_model.bindings.v3_0_1 import SHACLObjectSet, JSONLDDeserializer
+
 import spdx.spdxutil as spdxutil
 import spdx.xlsx as xlsx
 from config import loadConfig
@@ -16,6 +19,7 @@ from spdx_tools.spdx.model.relationship import RelationshipType
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 import spdx_tools.spdx.document_utils as document_utils
 import spdx_tools.spdx.spdx_element_utils as spdx_element_utils
+from spdx_python_model import v3_0_1 as spdx_3_0
 from license_expression import LicenseSymbol
 import json
 
@@ -37,6 +41,8 @@ SPDX_TOOLS_JAVA_PATH = os.path.join(os.path.dirname(__file__), "testresources", 
 TEST_MONTH = '2024-08'
 TEST_MATERIALX_REPORT_JSON_FILE_NAME = "materialx-2024-08-21.json"
 TEST_MATERIALX_REPORT_JSON = os.path.join(os.path.dirname(__file__), "testresources", TEST_MATERIALX_REPORT_JSON_FILE_NAME)
+TEST_SPDXV3_FILE_NAME = "spdx.jsonld"
+TEST_SPDXV3_FILE = os.path.join(os.path.dirname(__file__), "testresources", TEST_SPDXV3_FILE_NAME)
 
 TEST_PACKAGES = {
     "pom.xml" : {
@@ -407,7 +413,25 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertTrue(found_lf)
         errors = validate_full_spdx_document(spdx_document)
         self.assertFalse(errors)
-        
+
+    def testFixSpdxV3File(self):
+        testFilePath = os.path.join(self.temp_dir.name, TEST_SPDXV3_FILE_NAME)
+        shutil.copy(TEST_SPDXV3_FILE, testFilePath)
+        spdxutil.fixSpdxV3File(testFilePath)
+        objectset = SHACLObjectSet()
+        with open(testFilePath, 'r') as spdxfile:
+            JSONLDDeserializer().read(spdxfile, objectset)
+        # check for SBOM
+        for doc in objectset.foreach_type("SpdxDocument"):
+            found_sbom = False
+            for root in doc.rootElement:
+                if root in objectset.foreach_type("software_Sbom"):
+                    found_sbom = True
+                    self.assertTrue(root.rootElement)
+        # Make sure there is no document describes
+        for relationship in objectset.foreach_type("Relationship"):
+            self.assertNotEqual(relationship.relationshipType, spdx_3_0.RelationshipType.describes)
+
 if __name__ == '__main__':
     unittest.main()
         

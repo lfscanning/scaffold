@@ -115,25 +115,45 @@ errors:
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
         fossologySpdxPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
+        mergedSbomV3FileName = None
         if os.path.exists(fossologySpdxPath):
             fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
             mergedSbom = spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
             mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx.json"
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
+            mergedSbomV3FileName = f"{prj._name}-{sp._name}-merged-spdx.jsonld"
+            uploadMergedSbomV3File = os.path.join(tempdir, mergedSbomV3FileName)
+            convertToV3(uploadMergedSbomFile, uploadMergedSbomV3File, cfg, prj, sp)
+            if os.path.exists(uploadMergedSbomV3File):
+                spdx.spdxutil.fixSpdxV3File(uploadMergedSbomV3File)
         else:
             print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
             mergedSbomFileName = None
-        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Creating SPDX 3 document")
+        uploadSpdxV3FileName = f"{prj._name}-{sp._name}-spdx.jsonld"
+        uploadSpdxV3File = os.path.join(tempdir, uploadSpdxV3FileName)
+        convertToV3(uploadSpdxFile, uploadSpdxV3File, cfg, prj, sp)
+        if os.path.exists(uploadSpdxV3File):
+            spdx.spdxutil.fixSpdxV3File(uploadSpdxV3File)
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
         if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxFileName):
             print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
             return False
+        if os.path.exists(uploadSpdxV3File):
+            if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxV3FileName):
+                print(f"{prj._name}/{sp._name}: unable to upload SPDX V3 dependencies file")
+                return False
         if mergedSbomFileName:
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomFileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX file")
+                return False
+        if mergedSbomV3FileName:
+            if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomV3FileName):
+                print(f"{prj._name}/{sp._name}: unable to upload merged SPDX V3 file")
                 return False
         workbook = spdx.xlsx.makeXlsx(spdxDocument)
         workbookFilePath = os.path.join(tempdir, f"{prj._name}-{sp._name}-dependencies.xlsx")
@@ -163,4 +183,18 @@ def installNpm(sourceDir, cfg, prj, sp):
         cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, cwd=npm_dir)
         if cp.returncode != 0:
             print(f"{prj._name}/{sp._name}: NPM install failed for {npm_dir} with exit code {cp.returncode}.")
-    
+
+
+def convertToV3(spdxv2File, spdxv3File, cfg, prj, sp):
+    cmd = ["java", "-jar", cfg._tools_java_path, "Convert", str(spdxv2File), str(spdxv3File), "JSON", "JSONLD"]
+    cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+    if cp.returncode != 0:
+        print(f"""{prj._name}/{sp._name}: WARNING: unable to convert {spdxv2File} to SPDX V3 due to {cp.returncode}:
+----------
+output:
+{cp.stdout}
+----------
+errors:
+{cp.stderr}
+----------
+""")

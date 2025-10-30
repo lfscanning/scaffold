@@ -18,7 +18,9 @@ The JSON file has the following fields:
   * `whitesource`: Optional whitesource server authentication information
   * `github_oauth`: Optional project specific GitHub OAuth token
   
-You also need to set an environment variables `TRIVY_EXEC_PATH` (set to the Trivy executable), `NPM_EXEC_PATH` (set to the NPM executable), and `PARLAY_EXEC_PATH` (set to the Parlay executable) - otherwise the Trivy tests will fail.
+You also need to set an environment variables `TRIVY_EXEC_PATH` (set to the Trivy executable), 
+`NPM_EXEC_PATH` (set to the NPM executable), `PARLAY_EXEC_PATH` (set to the Parlay executable),
+`TOOLS_JAVA_PATH` (set to the SPDX tools jar file path), `CDSBOM_EXEC_PATH` (set to the cdsbom executable), - otherwise the SBOM tests will fail.
 
 ## Running Tests
 

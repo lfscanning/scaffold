@@ -33,6 +33,10 @@ TEST_SUBPROJECT_NAME2 = "sp2"
 GITHUB_ORG = 'lfscanning'
 TEST_SBOM_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testsbom.json")
 TEST_FOSSOLOGY_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testfossology.spdx")
+FOSSOLOGY_TEST_MONTH = "2024-09"
+FOSSOLOGY_TEST_PROJECT = "lfenergy"
+FOSSOLOGY_TEST_SUBPROJECT = "flexmeasures"
+FOSSOLOGY_TEST_CODE_PULLED = "2024-08-21"
 
 '''
 Tests sbom manual agent commands
@@ -46,6 +50,10 @@ class TestSbom(unittest.TestCase):
         self.config_month_dir = os.path.join(self.scaffold_home_dir, TEST_MONTH)
         self.repo_dir = os.path.join(self.scaffold_home_dir, "spdxrepos")
         os.mkdir(self.repo_dir)
+        self.fossology_test_dir_path = os.path.join(self.repo_dir, FOSSOLOGY_TEST_PROJECT, FOSSOLOGY_TEST_SUBPROJECT, FOSSOLOGY_TEST_MONTH);
+        os.makedirs(self.fossology_test_dir_path)
+        self.fossology_file_path = os.path.join(self.fossology_test_dir_path, f"{FOSSOLOGY_TEST_SUBPROJECT}-{FOSSOLOGY_TEST_CODE_PULLED}.spdx")
+        shutil.copyfile(TEST_FOSSOLOGY_FILE, self.fossology_file_path)
         # setup the git repo
         self.repoName = f"spdx-{TEST_PROJECT_NAME}"
         self.project_repo_dir = os.path.join(self.repo_dir, self.repoName)
@@ -65,6 +73,9 @@ class TestSbom(unittest.TestCase):
         self.cdsbom_env_set = 'CDSBOM_EXEC_PATH' in os.environ
         if not self.cdsbom_env_set:
             os.environ['CDSBOM_EXEC_PATH'] = 'cdsbom' # default
+        self.tools_java_env_set = 'TOOLS_JAVA_PATH' in os.environ
+        if not self.tools_java_env_set:
+            os.environ['TOOLS_JAVA_PATH'] = '~/tools-java.jar' # default
         with zipfile.ZipFile(SIMPLE_NPM_ZIP, mode='r') as zip:
             zip.extractall(self.temp_dir.name)
         self.node_modules_path = os.path.join(self.npm_path, 'node_modules')
@@ -114,6 +125,8 @@ class TestSbom(unittest.TestCase):
             del os.environ['PARLAY_EXEC_PATH']
         if not self.cdsbom_env_set:
             del os.environ['CDSBOM_EXEC_PATH']
+        if not self.tools_java_env_set:
+            del os.environ['TOOLS_JAVA_PATH']
             
 
     def test_sbom(self):
@@ -136,7 +149,7 @@ class TestSbom(unittest.TestCase):
         sp._github_branch = ""
         sp._status = Status.ZIPPEDCODE
         sp._code_path = TEST_SCAFFOLD_CODE
-        sp._code_pulled = "2024-08-21"
+        sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
         sp._code_anyfiles = True
         sp._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
         
@@ -146,6 +159,8 @@ class TestSbom(unittest.TestCase):
         self.assertTrue(os.path.isfile(uploadedfile))
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.jsonld")
+        self.assertTrue(os.path.isfile(spdxv3file))
         # TODO: Check if the file is committed and pushed to the repo
         
     def test_npm_install(self):
@@ -205,9 +220,11 @@ class TestSbom(unittest.TestCase):
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
         uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{prj._name}-{sp2._name}-spdx.json")
-        self.assertTrue(os.path.isfile(uploadedfile))
+        self.assertTrue(os.path.isfile(uploadedfile2))
         reportfile2 = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp2._name}-dependencies.xlsx")
-        self.assertTrue(os.path.isfile(reportfile))
+        self.assertTrue(os.path.isfile(reportfile2))
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.jsonld")
+        self.assertTrue(os.path.isfile(spdxv3file))
 
     def test_sbom_config(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")       
@@ -249,11 +266,14 @@ class TestSbom(unittest.TestCase):
     def test_merged_sbom(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        cfg._month = "2024-09"
+        cfg._month = FOSSOLOGY_TEST_MONTH
         prj = cfg._projects[TEST_PROJECT_NAME]
-        prj._name = "lfenergy"
+        prj._name = FOSSOLOGY_TEST_PROJECT
         sp = prj._subprojects[TEST_SUBPROJECT_NAME]
-        sp._name = "flexmeasures"
+        sp._name = FOSSOLOGY_TEST_SUBPROJECT
+        cfg._storepath = self.scaffold_home_dir
+        sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
+
         sbom = parse_file(TEST_SBOM_FILE)
         fossology = parse_file(TEST_FOSSOLOGY_FILE)
         result = mergeSpdxDocs(fossology, sbom, cfg, prj, sp)

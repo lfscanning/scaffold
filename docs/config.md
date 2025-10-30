@@ -68,9 +68,11 @@ Edit that config.json's contents to configure for your setup. The following prov
 * `webServer`: domain name for the web server where reports will be uploaded
 * `webServerUsername`: user name of account on web server, used for SCP connections - required only if `webServerUseScp=true`
 * `fossologyJobSpec`: Options used for the FOSSOlogy analysis.  The options roughly follow the options on the jobs/schedule agent menu in the FOSSOlogy UI.
-* `trivyExecPath`: Path to the Trivy executable
-* `npmExecPath`: Path to the NPM executable
-* `parlayExecPath`: Path to the Parlay executable
+* `trivyExecPath`: Path to the Trivy executable.  This can be overridden with the `TRIVY_EXEC_PATH` environment variable
+* `npmExecPath`: Path to the NPM executable.  This can be overridden with the `NPM_EXEC_PATH` environment variable
+* `parlayExecPath`: Path to the Parlay executable.  This can be overridden with the `PARLAY_EXEC_PATH` environment variable
+* `cdsbomExecPath`: Path to the cdsbom executable.  This can be overridden with the `CDSBOM_EXEC_PATH` environment variable
+* `toolsJavaPath`: Path to the SPDX tool-java JAR file.  This can be overridden with the `TOOLS_JAVA_PATH` environment variable
 
 There are also several values prefixed by `ws`. These are currently required to be present, but are not used unless one or more projects are configured to upload scan findings to WhiteSource (FIXME: details to be added).
 
