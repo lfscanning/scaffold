@@ -35,6 +35,10 @@ ONAP_AAI_CONFIG_FILENAME = "test-onap-aai-conf.json"
 ONAP_AAI_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "testresources", ONAP_AAI_CONFIG_FILENAME)
 ONAP_AAI_CDSBOM_FILENAME = "onap-aai-cdsbom-spdx.json"
 ONAP_AAI_CDSBOM_PATH = os.path.join(os.path.dirname(__file__), "testresources", ONAP_AAI_CDSBOM_FILENAME)
+OMP_TESSIA_PROJECT_CONFIG_FILENAME = "test-omp-tessia-project-conf.json"
+OMP_TESSIA_PROJECT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "testresources", OMP_TESSIA_PROJECT_CONFIG_FILENAME)
+OMP_TESSIA_PROJECT_CDSBOM_FILENAME = "omp-tessia-project-cdsbom-spdx.json"
+OMP_TESSIA_PROJECT_CDSBOM_PATH = os.path.join(os.path.dirname(__file__), "testresources", OMP_TESSIA_PROJECT_CDSBOM_FILENAME)
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
 SPDX_TOOLS_JAVA_FILENAME = "spdx-tools-java-git-license-spdx.json"
 SPDX_TOOLS_JAVA_PATH = os.path.join(os.path.dirname(__file__), "testresources", SPDX_TOOLS_JAVA_FILENAME)
@@ -127,6 +131,8 @@ class TestSpdxUtil(unittest.TestCase):
         shutil.copy(MATERIALX_TRIVY_PATH, self.materialx_trivy_path)
         self.onap_aai_cdsbom_path = os.path.join(self.temp_dir.name, ONAP_AAI_CDSBOM_FILENAME)
         shutil.copy(ONAP_AAI_CDSBOM_PATH, self.onap_aai_cdsbom_path)
+        self.omp_tessia_project_cdsbom_path = os.path.join(self.temp_dir.name, OMP_TESSIA_PROJECT_CDSBOM_FILENAME)
+        shutil.copy(OMP_TESSIA_PROJECT_CDSBOM_PATH, self.omp_tessia_project_cdsbom_path)
         self.scaffold_home_dir = os.path.join(self.temp_dir.name, "scaffold")
         os.mkdir(self.scaffold_home_dir)
         os.mkdir(os.path.join(self.scaffold_home_dir, 'spdxrepos'))
@@ -136,6 +142,8 @@ class TestSpdxUtil(unittest.TestCase):
         shutil.copy(MATERIALX_CONFIG_PATH, self.materialx_config_path)
         self.onap_aai_config_path = os.path.join(self.config_dir, ONAP_AAI_CONFIG_FILENAME)
         shutil.copy(ONAP_AAI_CONFIG_PATH, self.onap_aai_config_path)
+        self.omp_tessia_project_config_path = os.path.join(self.config_dir, OMP_TESSIA_PROJECT_CONFIG_FILENAME)
+        shutil.copy(OMP_TESSIA_PROJECT_CONFIG_PATH, self.omp_tessia_project_config_path)
         self.spdx_tools_java_path = os.path.join(self.temp_dir.name, SPDX_TOOLS_JAVA_FILENAME)
         shutil.copy(SPDX_TOOLS_JAVA_PATH, self.spdx_tools_java_path)
         self.report_path = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", "aswf")
@@ -413,6 +421,15 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertTrue(found_lf)
         errors = validate_full_spdx_document(spdx_document)
         self.assertFalse(errors)
+
+    def testOmpRegression(self):
+        self.maxDiff = None
+        spdx_document = spdxutil.parseFile(self.omp_tessia_project_cdsbom_path)
+        cfg = loadConfig(self.omp_tessia_project_config_path, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._storepath = str(self.scaffold_home_dir)
+        prj = cfg._projects['omp']
+        sp = prj._subprojects['tessia-project']
+        self.assertTrue(spdxutil.augmentTrivyDocument(spdx_document, cfg, prj, sp))
 
     def testFixSpdxV3File(self):
         testFilePath = os.path.join(self.temp_dir.name, TEST_SPDXV3_FILE_NAME)

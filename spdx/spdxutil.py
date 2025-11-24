@@ -321,7 +321,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
     # Change attribution text to annotations
     for spdx_element in spdx_document.files:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
-        if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
+        if not hasattr(spdx_element, 'license_declared') or spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
             spdx_element.license_declared = spdx_element.license_concluded
         else:
             spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
@@ -329,7 +329,7 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
         fix_attribution_text(spdx_element, spdx_document.annotations, spdx_document.creation_info.created)
     for spdx_element in spdx_document.snippets:
         spdx_element.license_concluded = fix_license(spdx_element.license_concluded, spdx_document.extracted_licensing_info, licensing)
-        if spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
+        if not hasattr(spdx_element, 'license_declared') or spdx_element.license_declared == SpdxNone() or spdx_element.license_declared == SpdxNoAssertion():
             spdx_element.license_declared = spdx_element.license_concluded
         else:
             spdx_element.license_declared = fix_license(spdx_element.license_declared, spdx_document.extracted_licensing_info, licensing)
@@ -397,14 +397,15 @@ def fix_license(lic, extracted_licensing_info, licensing):
         return licensing.parse(unparsed_lic)
         
 def fix_download_location(spdx_element):
-    if spdx_element.download_location == SpdxNone():
+    if not hasattr(spdx_element, 'download_location') or spdx_element.download_location == SpdxNone():
         spdx_element.download_location = SpdxNoAssertion()
         
 def fix_attribution_text(spdx_element, annotations, date):
-    for attribution in spdx_element.attribution_texts:
-        annotations.append(Annotation(spdx_id = spdx_element.spdx_id, annotation_type = AnnotationType.OTHER, \
-                            annotator = Actor(actor_type = ActorType.TOOL, name='Trivy'), annotation_date = date, \
-                            annotation_comment = attribution))
+    if hasattr(spdx_element, 'attribution_texts'):
+        for attribution in spdx_element.attribution_texts:
+            annotations.append(Annotation(spdx_id = spdx_element.spdx_id, annotation_type = AnnotationType.OTHER, \
+                                annotator = Actor(actor_type = ActorType.TOOL, name='Trivy'), annotation_date = date, \
+                                annotation_comment = attribution))
     spdx_element.attribution_texts = []
     
 def toSpdxRef(identifier):
