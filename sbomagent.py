@@ -119,10 +119,10 @@ errors:
         if os.path.exists(fossologySpdxPath):
             fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
             mergedSbom = spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
-            mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx.json"
+            mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx-v2.json"
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
-            mergedSbomV3FileName = f"{prj._name}-{sp._name}-merged-spdx.jsonld"
+            mergedSbomV3FileName = f"{prj._name}-{sp._name}-merged-spdx-v3.json"
             uploadMergedSbomV3File = os.path.join(tempdir, mergedSbomV3FileName)
             convertToV3(uploadMergedSbomFile, uploadMergedSbomV3File, cfg, prj, sp)
             if os.path.exists(uploadMergedSbomV3File):
@@ -130,11 +130,11 @@ errors:
         else:
             print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
             mergedSbomFileName = None
-        uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx.json"
+        uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx-v2.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Creating SPDX 3 document")
-        uploadSpdxV3FileName = f"{prj._name}-{sp._name}-spdx.jsonld"
+        uploadSpdxV3FileName = f"{prj._name}-{sp._name}-spdx-v3.json"
         uploadSpdxV3File = os.path.join(tempdir, uploadSpdxV3FileName)
         convertToV3(uploadSpdxFile, uploadSpdxV3File, cfg, prj, sp)
         if os.path.exists(uploadSpdxV3File):

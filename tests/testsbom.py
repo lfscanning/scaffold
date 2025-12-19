@@ -155,11 +155,11 @@ class TestSbom(unittest.TestCase):
         
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.json")
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v2.json")
         self.assertTrue(os.path.isfile(uploadedfile))
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
-        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.jsonld")
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v3.json")
         self.assertTrue(os.path.isfile(spdxv3file))
         # TODO: Check if the file is committed and pushed to the repo
         
@@ -215,15 +215,15 @@ class TestSbom(unittest.TestCase):
 
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, "")
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.json")
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v2.json")
         self.assertTrue(os.path.isfile(uploadedfile))
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
-        uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{prj._name}-{sp2._name}-spdx.json")
+        uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{prj._name}-{sp2._name}-spdx-v2.json")
         self.assertTrue(os.path.isfile(uploadedfile2))
         reportfile2 = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp2._name}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile2))
-        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx.jsonld")
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v3.json")
         self.assertTrue(os.path.isfile(spdxv3file))
 
     def test_sbom_config(self):
