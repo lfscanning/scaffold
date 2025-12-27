@@ -10,6 +10,10 @@ from gerrit import getGerritRepoDict, getGerritRepoList
 def doRepoListingForSubproject(cfg, prj, sp):
     allrepos = getGithubRepoList(cfg._secrets._gitoauth.get(prj._name), sp._github_org)
 
+    if allrepos is None:
+        print(f"{prj._name}/{sp._name}: Repositories for the subproject could not be listed - check repository configuration")
+        return False
+
     # first, figure out what repos need to be added
     for r in allrepos:
         if r not in sp._repos and r not in sp._github_repos_ignore and r not in sp._github_repos_pending:
@@ -54,6 +58,9 @@ def doRepoListingForProject(cfg, prj):
         # collect all real repos currently on GitHub
         allrealrepos = getGithubRepoList(cfg._secrets._gitoauth.get(prj._name), prj._github_shared_org)
 
+        if allrealrepos is None:
+            print(f"{prj._name}: Repositories for the project could not be listed - check repository configuration")
+            return False
         # first, figure out what repos need to be added
         for r in allrealrepos:
             config_sp = allcfgrepos.get(r, "")
