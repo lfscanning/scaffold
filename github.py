@@ -18,7 +18,10 @@ def getOrgJSONData(gh_oauth_token, org, page):
         r2 = requests.get(user_url, headers={"Authorization": f"token {gh_oauth_token}"})
         if r2.status_code == 200:
             return r2.json()
-        print(f"Error: Got invalid status code {r.status_code} from {url}, and {r2.status_code} from {user_url}")
+        elif r2.status_code == 404:
+            print(f"WARNING: GitHub User or Organization '{org}' no longer exists.  Recommend updating config file")
+        else:
+            print(f"Error: Got invalid status code {r.status_code} from {url}, and {r2.status_code} from {user_url}")
         return None
 
     # else just fail
@@ -34,19 +37,25 @@ def parseOrgJSONData(rj):
     repos.sort()
     return repos
 
+'''
+Returns a list of all repos for a given org.  If the org does not exist, None is returned
+'''
 def getGithubRepoList(gh_oauth_token, org):
     repos = []
-    stillSomeRepos = True
     page = 1
-    while stillSomeRepos:
+
+    while True:
         rj = getOrgJSONData(gh_oauth_token, org, page)
+
+        if rj is None:
+            return None if page == 1 else repos
+
         gotRepos = parseOrgJSONData(rj)
-        if len(gotRepos) <= 0:
-            stillSomeRepos = False
+
+        if not gotRepos:
             break
-        else:
-            for r in gotRepos:
-                repos.append(r)
-            page += 1
+
+        repos.extend(gotRepos)
+        page += 1
 
     return repos
