@@ -12,7 +12,7 @@ from spdx_tools.spdx.model import RelationshipType, Package, File
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 
 from manualsbom import runManualSbomAgent
-from sbomagent import installNpm
+from sbomagent import installNpm, mergeSourceAndSbom
 from config import loadConfig
 from datatypes import Status, ProjectRepoType
 from spdx_tools.spdx.parser.parse_anything import parse_file
@@ -33,6 +33,7 @@ TEST_SUBPROJECT_NAME2 = "sp2"
 GITHUB_ORG = 'lfscanning'
 TEST_SBOM_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testsbom.json")
 TEST_FOSSOLOGY_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testfossology.spdx")
+TEST_FOSSOLOGY_FILE_ZIP = os.path.join(os.path.dirname(__file__), "testresources", "testfossology.spdx.zip")
 FOSSOLOGY_TEST_MONTH = "2024-09"
 FOSSOLOGY_TEST_PROJECT = "lfenergy"
 FOSSOLOGY_TEST_SUBPROJECT = "flexmeasures"
@@ -50,10 +51,8 @@ class TestSbom(unittest.TestCase):
         self.config_month_dir = os.path.join(self.scaffold_home_dir, TEST_MONTH)
         self.repo_dir = os.path.join(self.scaffold_home_dir, "spdxrepos")
         os.mkdir(self.repo_dir)
-        self.fossology_test_dir_path = os.path.join(self.repo_dir, FOSSOLOGY_TEST_PROJECT, FOSSOLOGY_TEST_SUBPROJECT, FOSSOLOGY_TEST_MONTH);
+        self.fossology_test_dir_path = os.path.join(self.repo_dir, f"spdx-{FOSSOLOGY_TEST_PROJECT}", FOSSOLOGY_TEST_SUBPROJECT, FOSSOLOGY_TEST_MONTH);
         os.makedirs(self.fossology_test_dir_path)
-        self.fossology_file_path = os.path.join(self.fossology_test_dir_path, f"{FOSSOLOGY_TEST_SUBPROJECT}-{FOSSOLOGY_TEST_CODE_PULLED}.spdx")
-        shutil.copyfile(TEST_FOSSOLOGY_FILE, self.fossology_file_path)
         # setup the git repo
         self.repoName = f"spdx-{TEST_PROJECT_NAME}"
         self.project_repo_dir = os.path.join(self.repo_dir, self.repoName)
@@ -273,10 +272,78 @@ class TestSbom(unittest.TestCase):
         sp._name = FOSSOLOGY_TEST_SUBPROJECT
         cfg._storepath = self.scaffold_home_dir
         sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
-
+        fossology_file_path = os.path.join(self.fossology_test_dir_path, f"{FOSSOLOGY_TEST_SUBPROJECT}-{FOSSOLOGY_TEST_CODE_PULLED}.spdx")
+        shutil.copyfile(TEST_FOSSOLOGY_FILE, fossology_file_path)
         sbom = parse_file(TEST_SBOM_FILE)
-        fossology = parse_file(TEST_FOSSOLOGY_FILE)
-        result = mergeSpdxDocs(fossology, sbom, cfg, prj, sp)
+        try:
+            with tempfile.TemporaryDirectory() as localtemp:
+                result = mergeSourceAndSbom(cfg, prj, sp, localtemp, sbom)
+        finally:
+            os.remove(fossology_file_path)
+        self.assertIsNotNone(result)
+        describes = None
+        # Check root describes
+        for relationship in result.relationships:
+            if relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == 'SPDXRef-DOCUMENT':
+                describes = document_utils.get_element_from_spdx_id(result, relationship.related_spdx_element_id)
+        self.assertIsNotNone(describes)
+        self.assertEqual(describes.name, "lfenergy.flexmeasures", "Wrong document describes")
+        # Check creation Info
+        self.assertTrue(result.creation_info.document_namespace.startswith("https://github.com/lfscanning/spdx-lfenergy/flexmeasures/2024-09/"))
+        foundToolScaffold = False
+        foundToolFossology = False
+        foundToolTrivy = False
+        foundLfCreator = False
+        for creator in result.creation_info.creators:
+            if creator.name.startswith("Scaffold"):
+                foundToolScaffold = True
+            if creator.name.startswith("trivy"):
+                foundToolTrivy = True
+            if creator.name.startswith("Linux Foundation"):
+                foundLfCreator = True
+            if creator.name.startswith("fossology"):
+                foundToolFossology = True
+        self.assertTrue(foundToolScaffold)
+        self.assertTrue(foundToolFossology)
+        self.assertTrue(foundToolTrivy)
+        self.assertTrue(foundLfCreator)
+        # Check source files merged
+        # Check dependencies merged
+        for relationship in result.relationships:
+            if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == describes.spdx_id:
+                foundDepRelationship = False
+                foundSourceRelationship = False
+                for repoRelationship in result.relationships:
+                    if repoRelationship.relationship_type == RelationshipType.CONTAINS and repoRelationship.spdx_element_id == relationship.related_spdx_element_id:
+                        if spdx_element_utils.get_element_type_from_spdx_id(repoRelationship.related_spdx_element_id, result) == Package:
+                            foundDepRelationship = True
+                        if spdx_element_utils.get_element_type_from_spdx_id(repoRelationship.related_spdx_element_id, result) == File:
+                            foundSourceRelationship = True
+                if relationship.related_spdx_element_id == "SPDXRef-lfenergy-flexmeasures-flexmeasures":
+                    self.assertTrue(foundDepRelationship)
+                    # Note that other repos don't contain dependencies
+                self.assertTrue(foundSourceRelationship)
+        validation = validate_full_spdx_document(result)
+        self.assertTrue(not validation)
+
+    def test_merged_sbom_zip(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._month = FOSSOLOGY_TEST_MONTH
+        prj = cfg._projects[TEST_PROJECT_NAME]
+        prj._name = FOSSOLOGY_TEST_PROJECT
+        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
+        sp._name = FOSSOLOGY_TEST_SUBPROJECT
+        cfg._storepath = self.scaffold_home_dir
+        sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
+        fossology_file_path_zip = os.path.join(self.fossology_test_dir_path, f"{FOSSOLOGY_TEST_SUBPROJECT}-{FOSSOLOGY_TEST_CODE_PULLED}.spdx.zip")
+        shutil.copyfile(TEST_FOSSOLOGY_FILE_ZIP, fossology_file_path_zip)
+        sbom = parse_file(TEST_SBOM_FILE)
+        try:
+            with tempfile.TemporaryDirectory() as localtemp:
+                result = mergeSourceAndSbom(cfg, prj, sp, localtemp, sbom)
+        finally:
+            os.remove(fossology_file_path_zip)
         self.assertIsNotNone(result)
         describes = None
         # Check root describes
