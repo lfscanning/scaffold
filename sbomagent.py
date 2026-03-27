@@ -114,11 +114,8 @@ errors:
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Augmenting SPDX document")
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
-        fossologySpdxPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
-        mergedSbomV3FileName = None
-        if os.path.exists(fossologySpdxPath):
-            fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
-            mergedSbom = spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
+        mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
+        if mergedSbom:
             mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx-v2.json"
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
@@ -130,6 +127,7 @@ errors:
         else:
             print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
             mergedSbomFileName = None
+            mergedSbomV3FileName = None
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx-v2.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
@@ -167,6 +165,19 @@ errors:
             print(f"Web version of dependency report available at: {sp._web_sbom_url}")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: SBOM successfully run")
         return True
+def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
+    fossologySpdxZipPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx.zip")
+    if os.path.exists(fossologySpdxZipPath):
+        fossologySpdxPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.spdx")
+        with zipfile.ZipFile(fossologySpdxZipPath, 'r') as zip:
+            zip.extractall(tempdir)
+    else:
+        fossologySpdxPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
+    if os.path.exists(fossologySpdxPath):
+        fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
+        return spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
+    else:
+        return None
 
 def installNpm(sourceDir, cfg, prj, sp):
     npm_dirs = []
