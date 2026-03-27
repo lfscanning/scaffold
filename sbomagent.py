@@ -21,6 +21,7 @@ from spdx_tools.spdx.parser.error import SPDXParsingError
 trivyDebug = False
 parlayDebug = False
 cdsbomDebug = False
+mergeDebug = False
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -117,7 +118,10 @@ errors:
         mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
         if mergedSbom:
             mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx-v2.json"
-            uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
+            if mergeDebug:
+                uploadMergedSbomFile = os.path.join(Path.home(), mergedSbomFileName)
+            else:
+                uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
             mergedSbomV3FileName = f"{prj._name}-{sp._name}-merged-spdx-v3.json"
             uploadMergedSbomV3File = os.path.join(tempdir, mergedSbomV3FileName)
