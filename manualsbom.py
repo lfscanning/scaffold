@@ -36,7 +36,7 @@ def runManualSbomAgent(cfg, prj_only="", sp_only=""):
                     did_something = True
                 else:
                     print(f"##### {prj._name}/{sp._name}: SBOM creation failed")
-            except:
-                print(f"##### {prj._name}/{sp._name}: Exception creating SBOM")
+            except Exception as e:
+                print(f"##### {prj._name}/{sp._name}: Exception creating SBOM", type(e).__name__, "–", e)
     return did_something
 
