@@ -149,14 +149,20 @@ errors:
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxV3FileName):
                 print(f"{prj._name}/{sp._name}: unable to upload SPDX V3 dependencies file")
                 return False
-        if mergedSbomFileName:
+        else:
+            print(f"{prj._name}/{sp._name}: no SPDX V3 file to upload")
+        if mergedSbomFileName and os.path.exists(mergedSbomFileName):
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomFileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX file")
                 return False
-        if mergedSbomV3FileName:
+        else:
+            print(f"{prj._name}/{sp._name}: no merged SBOM file to upload")
+        if mergedSbomV3FileName and os.path.exists(mergedSbomV3FileName):
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomV3FileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX V3 file")
                 return False
+        else:
+            print(f"{prj._name}/{sp._name}: no merged SPDX V3 SBOM file to upload")
         workbook = spdx.xlsx.makeXlsx(spdxDocument)
         workbookFilePath = os.path.join(tempdir, f"{prj._name}-{sp._name}-dependencies.xlsx")
         spdx.xlsx.saveXlsx(workbook, workbookFilePath)
@@ -169,17 +175,25 @@ errors:
             print(f"Web version of dependency report available at: {sp._web_sbom_url}")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: SBOM successfully run")
         return True
+
 def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
     fossologySpdxZipPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx.zip")
     if os.path.exists(fossologySpdxZipPath):
-        fossologySpdxPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.spdx")
+        fossologySpdxTagPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.spdx")
         with zipfile.ZipFile(fossologySpdxZipPath, 'r') as zip:
             zip.extractall(tempdir)
     else:
-        fossologySpdxPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
-    if os.path.exists(fossologySpdxPath):
-        fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
-        return spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
+        fossologySpdxTagPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
+    if os.path.exists(fossologySpdxTagPath):
+        # Convert to JSON using the Java utility - refererence https://github.com/lfscanning/scaffold/issues/201
+        fossologySpdxPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.json")
+        convertSpdxFile(fossologySpdxTagPath, fossologySpdxPath, cfg, prj, sp, "TAG", "JSON")
+        if os.path.exists(fossologySpdxPath):
+            fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
+            return spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
+        else:
+            print(f"{prj._name}/{sp._name}: WARNING: No converted FOSSOlogy JSON file")
+            return None
     else:
         return None
 
@@ -199,12 +213,14 @@ def installNpm(sourceDir, cfg, prj, sp):
         if cp.returncode != 0:
             print(f"{prj._name}/{sp._name}: NPM install failed for {npm_dir} with exit code {cp.returncode}.")
 
-
 def convertToV3(spdxv2File, spdxv3File, cfg, prj, sp):
-    cmd = ["java", "-jar", cfg._tools_java_path, "Convert", str(spdxv2File), str(spdxv3File), "JSON", "JSONLD"]
+    convertSpdxFile(spdxv2File, spdxv3File, cfg, prj, sp, "JSON", "JSONLD")
+
+def convertSpdxFile(fromFile, toFile, cfg, prj, sp, fromType, toType):
+    cmd = ["java", "-jar", cfg._tools_java_path, "Convert", str(fromFile), str(toFile), fromType, toType]
     cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     if cp.returncode != 0:
-        print(f"""{prj._name}/{sp._name}: WARNING: unable to convert {spdxv2File} to SPDX V3 due to {cp.returncode}:
+        print(f"""{prj._name}/{sp._name}: WARNING: unable to convert {fromFile} to SPDX V3 due to {cp.returncode}:
 ----------
 output:
 {cp.stdout}
@@ -213,3 +229,5 @@ errors:
 {cp.stderr}
 ----------
 """)
+        if toFile and Path(toFile).is_file():
+            os.remove(toFile)  # clean up failed conversion

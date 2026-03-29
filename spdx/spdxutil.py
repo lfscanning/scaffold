@@ -454,6 +454,7 @@ def _licenseStringToExpression(license_string, extracted_licensing_info, licensi
 def mergeSpdxDocs(fossology_sbom, dependency_sbom, cfg, prj, sp):
     result = copy.deepcopy(dependency_sbom)
     # NOTE: We are assuming there are no conflicts between SPDX IDs in the two SBOMs due to the way they are generated
+    added_file_spdxids = set()
     _addFossologyCreationInfo(result, fossology_sbom, prj, sp, cfg._month)
     _addFossologyExtractedLicenses(result, fossology_sbom)
     root = None
@@ -463,10 +464,10 @@ def mergeSpdxDocs(fossology_sbom, dependency_sbom, cfg, prj, sp):
     if not root:
         return result
     projectName = root.name
-    for relationship in result.relationships:
+    for relationship in dependency_sbom.relationships:
         if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == root.spdx_id:
             # Top level repository names
-            _copyRepoFromFossology(result, fossology_sbom, relationship.related_spdx_element_id[9+len(projectName):])
+            _copyRepoFromFossology(result, fossology_sbom, relationship.related_spdx_element_id[9+len(projectName):], added_file_spdxids)
     return result
 
 def _addFossologyCreationInfo(sbom, fossology_sbom, prj, sp, date):
@@ -478,7 +479,7 @@ def _addFossologyExtractedLicenses(sbom, fossology_sbom):
     for extracedlicense in fossology_sbom.extracted_licensing_info:
         sbom.extracted_licensing_info.append(extracedlicense)
 
-def _copyRepoFromFossology(sbom, fossology_sbom, repo_name):
+def _copyRepoFromFossology(sbom, fossology_sbom, repo_name, added_file_spdxids):
     repoPackage = None
     for pkg in sbom.packages:
         if re.fullmatch(f"SPDXRef-.+{repo_name}$", pkg.spdx_id):
@@ -487,8 +488,12 @@ def _copyRepoFromFossology(sbom, fossology_sbom, repo_name):
     assert repoPackage, f"No repository package found for {repo_name}"
     repoPackage.files_analyzed = True
     for file in fossology_sbom.files:
-        if re.fullmatch(f".+/{repo_name}/.+", file.name):
-            sbom.files.append(file)
+        if re.fullmatch(f"^[^/]+/{repo_name}/.+", file.name):
+            if not file.spdx_id in added_file_spdxids:
+                sbom.files.append(file)
+                added_file_spdxids.add(file.spdx_id)
+            else:
+                print(f"warning: already added fossology file ID {file.spdx_id}")
             sbom.relationships.append(Relationship(repoPackage.spdx_id, RelationshipType.CONTAINS, file.spdx_id))
 
 def fixSpdxV3File(spdxV3File):

@@ -4,6 +4,8 @@ import os
 import tempfile
 import shutil
 import time
+from datetime import datetime
+
 import git
 import zipfile
 
@@ -14,8 +16,9 @@ from spdx_tools.spdx.validation.document_validator import validate_full_spdx_doc
 from manualsbom import runManualSbomAgent
 from sbomagent import installNpm, mergeSourceAndSbom
 from config import loadConfig
-from datatypes import Status, ProjectRepoType
+from datatypes import Status, ProjectRepoType, Project, Subproject
 from spdx_tools.spdx.parser.parse_anything import parse_file
+
 from spdx.spdxutil import mergeSpdxDocs
 
 ANALYSIS_FILE_FRAGMENT = "sp1-2023-07"
@@ -38,7 +41,9 @@ FOSSOLOGY_TEST_MONTH = "2024-09"
 FOSSOLOGY_TEST_PROJECT = "lfenergy"
 FOSSOLOGY_TEST_SUBPROJECT = "flexmeasures"
 FOSSOLOGY_TEST_CODE_PULLED = "2024-08-21"
-
+LARGE_SBOM_ZIP_FILE  = os.path.join(os.path.dirname(__file__), "testresources", "large-sbom.zip")
+LARGE_FOSSOLOGY_SBOM_FILENAME = "large-fossology-sbom.json"
+LARGE_DEPENDENCY_SBOM_FILENAME = "large-dependency-sbom.json"
 '''
 Tests sbom manual agent commands
 '''
@@ -51,7 +56,7 @@ class TestSbom(unittest.TestCase):
         self.config_month_dir = os.path.join(self.scaffold_home_dir, TEST_MONTH)
         self.repo_dir = os.path.join(self.scaffold_home_dir, "spdxrepos")
         os.mkdir(self.repo_dir)
-        self.fossology_test_dir_path = os.path.join(self.repo_dir, f"spdx-{FOSSOLOGY_TEST_PROJECT}", FOSSOLOGY_TEST_SUBPROJECT, FOSSOLOGY_TEST_MONTH);
+        self.fossology_test_dir_path = os.path.join(self.repo_dir, f"spdx-{FOSSOLOGY_TEST_PROJECT}", FOSSOLOGY_TEST_SUBPROJECT, FOSSOLOGY_TEST_MONTH)
         os.makedirs(self.fossology_test_dir_path)
         # setup the git repo
         self.repoName = f"spdx-{TEST_PROJECT_NAME}"
@@ -325,6 +330,31 @@ class TestSbom(unittest.TestCase):
                 self.assertTrue(foundSourceRelationship)
         validation = validate_full_spdx_document(result)
         self.assertTrue(not validation)
+
+    def test_merge_large_sbom(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._month = "2026-02"
+        prj = Project()
+        sp = Subproject()
+        prj._name = "cncf-3"
+        sp._name = "kubeflow"
+        with tempfile.TemporaryDirectory() as localtemp:
+            with zipfile.ZipFile(LARGE_SBOM_ZIP_FILE, 'r') as zip:
+                zip.extractall(localtemp)
+            print(f"Parsing FOSSOlogy SBOM {datetime.now()}")
+            large_fossology_sbom = parse_file(os.path.join(localtemp, LARGE_FOSSOLOGY_SBOM_FILENAME))
+            print(f"Parsing dependency SBOM {datetime.now()}")
+            large_dependency_sbom = parse_file(os.path.join(localtemp, LARGE_DEPENDENCY_SBOM_FILENAME))
+            print(f"Merging SBOM {datetime.now()}")
+            result = mergeSpdxDocs(large_fossology_sbom, large_dependency_sbom, cfg, prj, sp)
+            print(f"SBOM Merged {datetime.now()}")
+            # Check root describes
+            for relationship in result.relationships:
+                if relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == 'SPDXRef-DOCUMENT':
+                    describes = document_utils.get_element_from_spdx_id(result, relationship.related_spdx_element_id)
+            self.assertIsNotNone(describes)
+            self.assertEqual(describes.name, "cncf-3.kubeflow", "Wrong document describes")
 
     def test_merged_sbom_zip(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
