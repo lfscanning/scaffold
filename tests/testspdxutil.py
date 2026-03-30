@@ -184,7 +184,7 @@ class TestSpdxUtil(unittest.TestCase):
                     "SPDXID": "SPDXRef-Application-c6a6689e7f3b0f3b",
                     "downloadLocation": "NONE",
                     "filesAnalyzed": False,
-                    "licenseConcluded": "Apache-2.0 OR EPL-2.0",
+                    "licenseConcluded": "Apache-2.0 OR EPL-2.0 AND NOASSERTION",
                     "licenseDeclared": badLicenseStr,
                 }
             ]
@@ -199,6 +199,44 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertTrue(declaredResult.startswith('LicenseRef-'))
         self.assertEqual(result['hasExtractedLicensingInfos'][0]['licenseId'], declaredResult)
         self.assertEqual(result['hasExtractedLicensingInfos'][0]['extractedText'], badLicenseStr)
+
+    def testFixLicenseExpressionsNoAssertion(self):
+        spdxJson = {
+            "spdxVersion": "SPDX-2.3",
+            "dataLicense": "CC0-1.0",
+            "SPDXID": "SPDXRef-DOCUMENT",
+            "name": "c:/opendaylight-2025-02-05/yangtools",
+            "documentNamespace": "http://aquasecurity.github.io/trivy/filesystem/c:/opendaylight-2025-02-05/yangtools-940cad00-18db-4979-8c7c-2ab59c62d70c",
+            "creationInfo": {
+                "creators": [
+                    "Organization: aquasecurity",
+                    "Tool: trivy-dev"
+                ],
+                "created": "2025-02-11T04:23:13Z"
+            },
+            "packages": [
+                {
+                    "name": "artifacts/pom.xml",
+                    "SPDXID": "SPDXRef-Application-c6a6689e7f3b0f3b",
+                    "downloadLocation": "NONE",
+                    "filesAnalyzed": False,
+                    "licenseConcluded": "Apache-2.0 OR EPL-2.0 AND NOASSERTION",
+                    "licenseDeclared": "NOASSERTION",
+                }
+            ]
+        }
+        jsonFileName = os.path.join(self.temp_dir.name, "spdx-noassertion.json")
+        with open(jsonFileName, "w") as jsonFile:
+            json.dump(spdxJson, jsonFile)
+        spdxutil.fixLicenseExpressions(jsonFileName)
+        with open(jsonFileName, "r") as jsonFile:
+            result = json.load(jsonFile)
+        declaredResult = result['packages'][0]['licenseDeclared']
+        self.assertEqual(declaredResult, "NOASSERTION")
+        concludedResule = result['packages'][0]['licenseConcluded']
+        self.assertEqual(concludedResule, "Apache-2.0 OR EPL-2.0 AND LicenseRef-NOASSERTION")
+        self.assertEqual(result['hasExtractedLicensingInfos'][0]['licenseId'], "LicenseRef-NOASSERTION")
+        self.assertTrue("could not be found" in result['hasExtractedLicensingInfos'][0]['extractedText'])
 
     def testFixLicenseExpressionsLicenseRef(self):
         licenseRefStr = "LicenseRef-something"
@@ -292,6 +330,7 @@ class TestSpdxUtil(unittest.TestCase):
         self.assertEqual(3, len(extracted_licensing_info))
         found_declared = False
         found_concluded = False
+        found_noassertion = False
         for extracted in extracted_licensing_info:
             if 'some-random-concluded-id' in extracted.extracted_text:
                 found_concluded = True
