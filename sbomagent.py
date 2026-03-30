@@ -21,7 +21,6 @@ from spdx_tools.spdx.parser.error import SPDXParsingError
 trivyDebug = False
 parlayDebug = False
 cdsbomDebug = False
-mergeDebug = False
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -114,24 +113,6 @@ errors:
             return False
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Augmenting SPDX document")
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
-        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
-        mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
-        if mergedSbom:
-            mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx-v2.json"
-            if mergeDebug:
-                uploadMergedSbomFile = os.path.join(Path.home(), mergedSbomFileName)
-            else:
-                uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
-            spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
-            mergedSbomV3FileName = f"{prj._name}-{sp._name}-merged-spdx-v3.json"
-            uploadMergedSbomV3File = os.path.join(tempdir, mergedSbomV3FileName)
-            convertToV3(uploadMergedSbomFile, uploadMergedSbomV3File, cfg, prj, sp)
-            if os.path.exists(uploadMergedSbomV3File):
-                spdx.spdxutil.fixSpdxV3File(uploadMergedSbomV3File)
-        else:
-            print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
-            mergedSbomFileName = None
-            mergedSbomV3FileName = None
         uploadSpdxFileName = f"{prj._name}-{sp._name}-spdx-v2.json"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
@@ -141,25 +122,47 @@ errors:
         convertToV3(uploadSpdxFile, uploadSpdxV3File, cfg, prj, sp)
         if os.path.exists(uploadSpdxV3File):
             spdx.spdxutil.fixSpdxV3File(uploadSpdxV3File)
+
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
+        mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
+        if mergedSbom:
+            mergedSbomFileName = f"{prj._name}-{sp._name}-merged-spdx-v2.json"
+            uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
+            spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
+            mergedSbomV3FileName = f"{prj._name}-{sp._name}-merged-spdx-v3.json"
+            uploadMergedSbomV3File = os.path.join(tempdir, mergedSbomV3FileName)
+            convertToV3(uploadMergedSbomFile, uploadMergedSbomV3File, cfg, prj, sp)
+            if os.path.exists(uploadMergedSbomV3File):
+                spdx.spdxutil.fixSpdxV3File(uploadMergedSbomV3File)
+        else:
+            print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
+            uploadMergedSbomFile = None
+            uploadMergedSbomV3File = None
+
+        # Upload the documents
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
         if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxFileName):
             print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
             return False
-        if os.path.exists(uploadSpdxV3File):
+        if uploadSpdxV3File and os.path.exists(uploadSpdxV3File):
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxV3FileName):
                 print(f"{prj._name}/{sp._name}: unable to upload SPDX V3 dependencies file")
                 return False
         else:
             print(f"{prj._name}/{sp._name}: no SPDX V3 file to upload")
-        if mergedSbomFileName and os.path.exists(mergedSbomFileName):
+            print(f"Filename: {uploadSpdxV3File}")
+            print(f"V2 SPDX filename: {uploadSpdxFile}")
+        if uploadMergedSbomFile and os.path.exists(uploadMergedSbomFile):
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomFileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX file")
+                print(f"Filename: {uploadMergedSbomFile}")
                 return False
         else:
             print(f"{prj._name}/{sp._name}: no merged SBOM file to upload")
-        if mergedSbomV3FileName and os.path.exists(mergedSbomV3FileName):
+        if uploadMergedSbomV3File and os.path.exists(uploadMergedSbomV3File):
             if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomV3FileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX V3 file")
+                print(f"Filename: {uploadMergedSbomV3File}")
                 return False
         else:
             print(f"{prj._name}/{sp._name}: no merged SPDX V3 SBOM file to upload")
