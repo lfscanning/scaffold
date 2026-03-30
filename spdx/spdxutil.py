@@ -128,6 +128,7 @@ def fixLicenseExpressions(fileName):
     extractedLicenseText = {}
     licensing = getLicensing()
     _fix_license_expressions(spdxJson, extractedLicenseText, licensing)
+    _replace_nossertion_in_expressions(spdxJson, extractedLicenseText, licensing)
     if extractedLicenseText:
         if 'hasExtractedLicensingInfos' in spdxJson:
             extracted = spdxJson['hasExtractedLicensingInfos']
@@ -138,6 +139,25 @@ def fixLicenseExpressions(fileName):
             extracted.append(lic)
     with open(fileName, 'w', encoding='utf-8') as file:
         json.dump(spdxJson, file)
+
+def _replace_nossertion_in_expressions(elementJson, extractedLicenseText, licensing):
+    if isinstance(elementJson, dict):
+        found_no_assertion = False
+        for key, value in elementJson.items():
+            if key == "licenseConcluded" or key == "licenseDeclared":
+                if len(licensing.license_symbols(value)) > 1 and "NOASSERTION" in value:
+                    found_no_assertion = True
+                    elementJson[key] = value.replace("NOASSERTION", "LicenseRef-NOASSERTION")
+            else:
+                _replace_nossertion_in_expressions(value, extractedLicenseText, licensing)
+        if found_no_assertion and not "LicenseRef-NOASSERTION" in extractedLicenseText:
+            extractedLicenseText["LicenseRef-NOASSERTION"] = {
+                "licenseId": "LicenseRef-NOASSERTION",
+                "extractedText": "This license represents a situation where a license for a component could not be found or concluded"
+            }
+    elif isinstance(elementJson, list):
+        for value in elementJson:
+            _replace_nossertion_in_expressions(value, extractedLicenseText, licensing)
 
 def _fix_license_expressions(elementJson, extractedLicenseText, licensing):
     if isinstance(elementJson, dict):
