@@ -193,8 +193,12 @@
                         <td>
                             {% if fd.files != [] %}
                             <div id="filelist{{ loop.index }}" class="fileshidden">
-                                {% for filename in fd.files %}
-                                {{ filename }}<br />
+                                {% for display in fd.fileDisplayInfo %}
+                                {% if display.haslink %}
+                                <a href="{{ display.link }}">{{ display.filename }}</a><br />
+                                {% else %}
+                                {{ display.filename }}<br />
+                                {% endif %}
                                 {% endfor %}
                             </div>
                             {% elif fd.subprojects != [] %}
