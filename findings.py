@@ -405,6 +405,7 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
             "description": finding._text,
             "numFiles": len(inst._files),
             "files": inst._files,
+            "fileDisplayInfo": filesToFileDisplayInfoSp(inst._files, sp),
             "subprojects": inst._subprojects,
         }
         findingData.append(fd)
@@ -439,6 +440,94 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
         print(f"{prj._name}/{sp._name}: FINAL findings written to {htmlFilename}")
 
     return htmlPath, reviewReportWrittenPath
+
+# Convert the filename from FOSSology to a display filename with optional URL link for a subproject
+def filesToFileDisplayInfoSp(files, sp):
+    displayInfo = []
+    repoToLink = {}
+    if hasattr(sp, "_github_org") and sp._github_org:
+        haslink = True
+        githuborg = sp._github_org
+        if hasattr(sp, "_github_branch"):
+            githubbranch = sp._github_branch
+        else:
+            githubbranch = ""
+        for repoName, commit in sp._code_repos.items():
+            url = f"https://github.com/{githuborg}/{repoName}/blob"
+            if commit:
+                url += f"/{commit}/"
+            elif githubbranch:
+                url += f"/{githubbranch}/"
+            else:
+                url += "/HEAD/"
+            repoToLink[repoName] = url
+    else:
+        haslink = False
+    for file in files:
+        _, _, repoandfile = file.partition("/")
+        repoName, _, filename = repoandfile.partition("/")
+        if repoName in repoToLink:
+            url = repoToLink[repoName] + filename
+        elif haslink:
+            if githubbranch:
+                url = f"https://github.com/{githuborg}/{repoName}/blob/{githubbranch}/{filename}"
+            else:
+                url = f"https://github.com/{githuborg}/{repoName}/blob/HEAD/{filename}"
+        else:
+            url = ''
+        fileDisplayInfo = {
+            "filename": repoandfile,
+            "haslink": haslink,
+            "link": url
+        }
+        displayInfo.append(fileDisplayInfo)
+    return displayInfo
+
+
+    # Convert the filename from FOSSology to a display filename with optional URL link for a project
+def filesToFileDisplayInfoPrj(files, prj):
+    displayInfo = []
+    repoToLink = {}
+    ambiguousRepositories = []
+    for sp in prj._subprojects.values():
+        if hasattr(sp, "_github_org") and sp._github_org:
+            githuborg = sp._github_org
+            if hasattr(sp, "_github_branch"):
+                githubbranch = sp._github_branch
+            else:
+                githubbranch = ""
+            for repoName, commit in sp._code_repos.items():
+                if repoName in repoToLink:
+                    if not repoName in ambiguousRepositories:
+                        ambiguousRepositories.append(repoName)
+                url = f"https://github.com/{githuborg}/{repoName}/blob"
+                if commit:
+                    url += f"/{commit}/"
+                elif githubbranch:
+                    url += f"/{githubbranch}/"
+                else:
+                    url += "/HEAD/"
+                repoToLink[repoName] = url
+    for file in files:
+        _, _, repoandfile = file.partition("/")
+        repoName, _, filename = repoandfile.partition("/")
+        if repoName in ambiguousRepositories:
+            print(f"{prj._name}: Ambiguous repository {repoName} for file {file}.  No link will be generated")
+            link = ''
+            haslink = False
+        elif repoName in repoToLink:
+            url = repoToLink[repoName] + filename
+            haslink = True
+        else:
+            url = ''
+            haslink = False
+        fileDisplayInfo = {
+            "filename": repoandfile,
+            "haslink": haslink,
+            "link": url
+        }
+        displayInfo.append(fileDisplayInfo)
+    return displayInfo
 
 # Helper for creating project findings document, whether draft or final
 # Returns path to findings report (or "" if not written) and path to
@@ -504,6 +593,7 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
             "description": finding._text,
             "numFiles": len(inst._files),
             "files": inst._files,
+            "fileDisplayInfo": filesToFileDisplayInfoPrj(inst._files, prj),
             "numSubprojects": len(inst._subprojects),
             "subprojects": inst._subprojects,
         }
