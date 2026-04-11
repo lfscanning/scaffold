@@ -1,0 +1,18 @@
+---
+  findings:
+    - id: 1
+      priority: high
+      matches-path:
+        - sp1
+      matches-license:
+        - GPL-2.0
+      text: >
+        These files are under the GPL-2.0 license (a strong copyleft license) which conflicts with the project license, as well as CNCF licensing policies.  These files must be removed from your repos.
+    - id: 2
+      priority: high
+      matches-path:
+        - sp2
+      matches-license:
+        - GPL-2.0
+      text: >
+        These files are under the GPL-2.0 license (a strong copyleft license) which conflicts with the project license, as well as CNCF licensing policies.  These files must be removed from your repos.

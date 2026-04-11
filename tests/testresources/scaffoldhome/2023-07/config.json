@@ -257,6 +257,26 @@
 						"tsc"
 					]
 				}
+			},
+			"sp2": {
+				"status": "START",
+				"slm": {
+					"policy": "apache"
+				},
+				"code": {},
+				"web": {},
+				"github": {
+					"org": "sp1-project",
+					"ziporg": "sp1",
+					"repos": [
+						"sp1-code",
+						"sp1-plugins"
+					],
+					"repos-ignore": [
+						"artwork",
+						"tsc"
+					]
+				}
 			}
 		}
 	}
