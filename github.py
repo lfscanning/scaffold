@@ -28,20 +28,27 @@ def getOrgJSONData(gh_oauth_token, org, page):
     print(f"Error: Got invalid status code {r.status_code} from {url}")
     return None
 
+# Returns a dictionary of repository names to repository details
 def parseOrgJSONData(rj):
-    repos = []
+    repos = {}
     for repo in rj:
         repo_name = repo.get("name", None)
-        #repo_url = repo.get("html_url", None)
-        repos.append(repo_name)
-    repos.sort()
+        if repo_name:
+            repos[repo_name] = {
+                    'name': repo_name,
+                    'full_name': repo.get("full_name", ""),
+                    'private': repo.get("private", False),
+                    'html_url': repo.get("html_url", ""),
+                    'license': repo.get('license', {}),
+                    'archived': repo.get('archived', False)
+                }
     return repos
 
 '''
 Returns a list of all repos for a given org.  If the org does not exist, None is returned
 '''
 def getGithubRepoList(gh_oauth_token, org):
-    repos = []
+    repos = {}
     page = 1
 
     while True:
@@ -55,7 +62,7 @@ def getGithubRepoList(gh_oauth_token, org):
         if not gotRepos:
             break
 
-        repos.extend(gotRepos)
+        repos.update(gotRepos)
         page += 1
 
-    return repos
+    return dict(sorted(repos.items()))

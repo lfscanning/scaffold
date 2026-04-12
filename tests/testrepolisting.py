@@ -12,6 +12,8 @@ TEST_MONTH = "2023-07"
 TEST_NEXT_MONTH = "2023-08"
 TEST_MONTH_DIR = os.path.join(TEST_SCAFFOLD_HOME, TEST_MONTH)
 GITHUB_ORG = 'lfscanning'
+ARCHIVED_LFSCANNING_REPO = 'TEST-Archived'
+ARCHIVED_LFSCANNING_REPO2 = 'TEST-Archived-2'
 EXISTING_LFSCANNING_REPOS = ['scaffold', 'spdx-TEST-DEPENDENCIES', 'spdx-o-ran']
 IGNORED_OTHER_LFSCANNING_REPOS = ['spdx-omp', 'spdx-OWF', 'spdx-lfenergy']
 LFSCANNING_REPOS_NOT_IN_CONFIG = ['spdx-lfai', 'spdx-cncf']
@@ -45,9 +47,14 @@ class MyTestCase(unittest.TestCase):
         sp = prj._subprojects[subProjectName]
         sp._name = subProjectName
         sp._repos = EXISTING_LFSCANNING_REPOS
+        sp._repos.append(ARCHIVED_LFSCANNING_REPO)
         self.assertFalse(doRepoListingForProject(cfg,prj))
         self.assertTrue(set(EXISTING_LFSCANNING_REPOS).issubset(sp._repos))
         self.assertFalse(repoToRemove in sp._repos)
+        self.assertFalse(ARCHIVED_LFSCANNING_REPO in sp._repos)
+        self.assertTrue(ARCHIVED_LFSCANNING_REPO in prj._github_shared_repos_ignore)
+        self.assertFalse(ARCHIVED_LFSCANNING_REPO2 in sp._repos)
+        self.assertTrue(ARCHIVED_LFSCANNING_REPO2 in prj._github_shared_repos_ignore)
         self.assertTrue(set(LFSCANNING_REPOS_NOT_IN_CONFIG).issubset(prj._github_shared_repos_pending))
         self.assertTrue(set(EXISTING_LFSCANNING_REPOS).isdisjoint(prj._github_shared_repos_pending))
         self.assertTrue(set(IGNORED_OTHER_LFSCANNING_REPOS).isdisjoint(prj._github_shared_repos_pending))
@@ -87,6 +94,7 @@ class MyTestCase(unittest.TestCase):
         sp = prj._subprojects[subProjectName]
         sp._name = subProjectName
         sp._repos = EXISTING_LFSCANNING_REPOS
+        sp._repos.append(ARCHIVED_LFSCANNING_REPO)
         sp._repos.append(repoToRemove)
         sp._github_repos_ignore = IGNORED_OTHER_LFSCANNING_REPOS
         sp._github_repos_ignore.append(ignoreToRemove)
@@ -98,6 +106,10 @@ class MyTestCase(unittest.TestCase):
         self.assertFalse(doRepoListingForSubproject(cfg,prj,sp))
         self.assertTrue(set(EXISTING_LFSCANNING_REPOS).issubset(sp._repos))
         self.assertFalse(repoToRemove in sp._repos)
+        self.assertFalse(ARCHIVED_LFSCANNING_REPO in sp._repos)
+        self.assertTrue(ARCHIVED_LFSCANNING_REPO in sp._github_repos_ignore)
+        self.assertFalse(ARCHIVED_LFSCANNING_REPO2 in sp._repos)
+        self.assertTrue(ARCHIVED_LFSCANNING_REPO2 in sp._github_repos_ignore)
         self.assertTrue(set(LFSCANNING_REPOS_NOT_IN_CONFIG).issubset(sp._github_repos_pending))
         self.assertTrue(set(EXISTING_LFSCANNING_REPOS).isdisjoint(sp._github_repos_pending))
         self.assertTrue(set(IGNORED_OTHER_LFSCANNING_REPOS).isdisjoint(sp._github_repos_pending))
