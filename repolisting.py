@@ -17,17 +17,25 @@ def doRepoListingForSubproject(cfg, prj, sp):
     # first, figure out what repos need to be added
     for r in allrepos:
         if r not in sp._repos and r not in sp._github_repos_ignore and r not in sp._github_repos_pending:
-            sp._github_repos_pending.append(r)
-            print(f"{prj._name}/{sp._name}: new pending repo: {r}")
+            if not allrepos[r]['archived']:
+                sp._github_repos_pending.append(r)
+                print(f"{prj._name}/{sp._name}: new pending repo: {r}")
+            else:
+                sp._github_repos_ignore.append(r)
+                print(f"{prj._name}/{sp._name}: archived repo added to repos-ignore: {r}")
 
     # then, figure out what repos need to be removed
     repos_to_remove = []
     for r in sp._repos:
         if r not in allrepos:
             repos_to_remove.append(r)
+            print(f"{prj._name}/{sp._name}: removed {r} from repos")
+        elif allrepos[r]['archived']:
+            repos_to_remove.append(r)
+            sp._github_repos_ignore.append(r)
+            print(f"{prj._name}/{sp._name}: moved archived repo {r} from repos to repos-ignore")
     for r in repos_to_remove:
         sp._repos.remove(r)
-        print(f"{prj._name}/{sp._name}: removed {r} from repos")
 
     repos_ignore_to_remove = []
     for r in sp._github_repos_ignore:
@@ -65,8 +73,12 @@ def doRepoListingForProject(cfg, prj):
         for r in allrealrepos:
             config_sp = allcfgrepos.get(r, "")
             if config_sp == "" and r not in prj._github_shared_repos_ignore and r not in prj._github_shared_repos_pending:
-                prj._github_shared_repos_pending.append(r)
-                print(f"{prj._name}: new pending repo: {r}")
+                if not allrealrepos[r]['archived']:
+                    prj._github_shared_repos_pending.append(r)
+                    print(f"{prj._name}: new pending repo: {r}")
+                else:
+                    prj._github_shared_repos_ignore.append(r)
+                    print(f"{prj._name}: archived repo added to repos-ignore: {r}")
 
         # then, figure out what repos need to be removed
         for sp_name, sp in prj._subprojects.items():
@@ -74,9 +86,13 @@ def doRepoListingForProject(cfg, prj):
             for r in sp._repos:
                 if r not in allrealrepos:
                     repos_to_remove.append(r)
+                    print(f"{prj._name}/{sp._name}: removed {r} from repos")
+                elif allrealrepos[r]['archived']:
+                    repos_to_remove.append(r)
+                    prj._github_shared_repos_ignore.append(r)
+                    print(f"{prj._name}/{sp._name}: moved archived repo {r} from repos to repos-ignore")
             for r in repos_to_remove:
                 sp._repos.remove(r)
-                print(f"{prj._name}/{sp._name}: removed {r} from repos")
 
         repos_ignore_to_remove = []
         for r in prj._github_shared_repos_ignore:
