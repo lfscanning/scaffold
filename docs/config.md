@@ -128,7 +128,25 @@ Within the subproject's object are the following fields:
 * `web`: an object storing data relating to where the HTML and XLSX reports are uploaded
 * `code`: an object storing data relating to code that has been pulled from the repos
 
-There is also a property with the same name as the parent project's `type`, with different sub-fields depending on the project's `type` value (FIXME: details to be added).
+If the project type is `github`, then it will also contain a `github` property with the following fields:
+* `org`: the GitHub org identifier
+* `ziporg`: the name of the zip file to store the repo contents (typically the same value as `org`)
+* `repos-ignore`: array of repos that should _not_ be assigned to any subproject.
+* `repos-pending`: array of repos that were detected and need to be either assigned to a subproject or added to `repos-ignore`. 
+
+If the project's `type` is `github-shared`, then it will also contain a `github-shared` property with the following fields:
+* `org`: the GitHub org identifier
+* `repos-ignore`: array of repos that should _not_ be assigned to any subproject.
+* `repos-pending`: array of repos that were detected and need to be either assigned to a subproject or added to `repos-ignore`.
+
+If the project's `type` is `gerrit`, then it will also contain a `gerrit` property with the following fields:
+* `apiurl`: the URL to the project's Gerrit API endpoint
+* `subproject-config`:
+  * `"one"` means that all repos will be combined into exactly one subproject.
+  * `"auto"` means that scaffold will automatically create and remove subprojects, based on the hierarchy within the Gerrit repos.
+  * `"manual"` means that the user will need to create and remove subprojects manually.
+* `repos-ignore`: array of repos that should _not_ be assigned to any subproject.
+* `repos-pending`: array of repos that were detected and need to be either assigned to a subproject or added to `repos-ignore`.
 
 ### Create a .scaffold-secrets.json
 
