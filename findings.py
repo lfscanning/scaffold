@@ -410,9 +410,14 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
         }
         findingData.append(fd)
 
+    if sp._github_org:
+        orgLink = f'https://github.com/{sp._github_org}'
+    else:
+        orgLink = None
     renderData = {
         "prjName": prj._name,
         "spName": sp._name,
+        "orgLink": orgLink,
         "codeDate": sp._code_pulled,
         "repoData": repoData,
         "findingData": findingData,

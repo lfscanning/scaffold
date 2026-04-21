@@ -140,7 +140,7 @@
                 <h1>License Scan report</h1>
                 <div>
                     Project: <strong>{{ prjName }}</strong><br />
-                    Subproject: <strong>{{ spName }}</strong><br />
+                    Subproject: <strong>{{ spName }}</strong> {% if orgLink %} (<a href="{{orgLink}}">{{orgLink}}</a>) {% endif %}  <br />
                     Snapshot on: <strong>{{ codeDate }}</strong> 
                         <span class="showlink" onclick="toggleRepo(this)">(show repos)</span><br />
                     <div id="repolist" class="reposhidden">
