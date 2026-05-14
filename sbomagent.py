@@ -125,11 +125,15 @@ errors:
             uploadSpdxV3File = os.path.join(tempdir, uploadSpdxV3FileName)
         try:
             convertToV3(uploadSpdxFile, uploadSpdxV3File, cfg, prj, sp)
+            if spdxV3Debug:
+                shutil.copy(uploadSpdxV3File, os.path.join(Path.home(), f"{prj._name}-{sp._name}-spdx-v3-before-fix.json"))
             if os.path.exists(uploadSpdxV3File):
                 spdx.spdxutil.fixSpdxV3File(uploadSpdxV3File)
         except Exception as e:
             print(f"{prj._name}/{sp._name}: error converting dependency SBOM to SPDX V3")
             print(f"Detailed exception message: {e}")
+            if Path(uploadSpdxV3File).is_file():
+                os.remove(uploadSpdxV3File)
 
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
         mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
@@ -145,10 +149,14 @@ errors:
             try:
                 convertToV3(uploadMergedSbomFile, uploadMergedSbomV3File, cfg, prj, sp)
                 if os.path.exists(uploadMergedSbomV3File):
+                    if spdxV3Debug:
+                        shutil.copy(uploadMergedSbomV3File, os.path.join(Path.home(), f"{prj._name}-{sp._name}-merged-spdx-v3-before-fix.json"))
                     spdx.spdxutil.fixSpdxV3File(uploadMergedSbomV3File)
             except Exception as e:
                 print(f"{prj._name}/{sp._name}: error converting merged SBOM to SPDX V3")
                 print(f"Detailed exception message: {e}")
+                if Path(uploadMergedSbomV3File).is_file():
+                    os.remove(uploadMergedSbomV3File)
         else:
             print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
             uploadMergedSbomFile = None
@@ -160,7 +168,7 @@ errors:
             print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
             return False
         if uploadSpdxV3File and os.path.exists(uploadSpdxV3File):
-            if not doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadSpdxV3FileName):
+            if not doUploadFileForSubproject(cfg, prj, sp, Path.home() if spdxV3Debug else tempdir, uploadSpdxV3FileName):
                 print(f"{prj._name}/{sp._name}: unable to upload SPDX V3 dependencies file")
                 return False
         else:
@@ -175,7 +183,7 @@ errors:
         else:
             print(f"{prj._name}/{sp._name}: no merged SBOM file to upload")
         if uploadMergedSbomV3File and os.path.exists(uploadMergedSbomV3File):
-            if not doUploadFileForSubproject(cfg, prj, sp, tempdir, mergedSbomV3FileName):
+            if not doUploadFileForSubproject(cfg, prj, sp, Path.home() if spdxV3Debug else tempdir, mergedSbomV3FileName):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX V3 file")
                 print(f"Filename: {uploadMergedSbomV3File}")
                 return False
