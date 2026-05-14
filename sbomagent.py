@@ -21,6 +21,7 @@ from spdx_tools.spdx.parser.error import SPDXParsingError
 trivyDebug = False
 parlayDebug = False
 cdsbomDebug = False
+spdxV3Debug = False
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -118,10 +119,17 @@ errors:
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Creating SPDX 3 document")
         uploadSpdxV3FileName = f"{prj._name}-{sp._name}-spdx-v3.json"
-        uploadSpdxV3File = os.path.join(tempdir, uploadSpdxV3FileName)
-        convertToV3(uploadSpdxFile, uploadSpdxV3File, cfg, prj, sp)
-        if os.path.exists(uploadSpdxV3File):
-            spdx.spdxutil.fixSpdxV3File(uploadSpdxV3File)
+        if spdxV3Debug:
+            uploadSpdxV3File = os.path.join(Path.home(), uploadSpdxV3FileName)
+        else:
+            uploadSpdxV3File = os.path.join(tempdir, uploadSpdxV3FileName)
+        try:
+            convertToV3(uploadSpdxFile, uploadSpdxV3File, cfg, prj, sp)
+            if os.path.exists(uploadSpdxV3File):
+                spdx.spdxutil.fixSpdxV3File(uploadSpdxV3File)
+        except Exception as e:
+            print(f"{prj._name}/{sp._name}: error converting dependency SBOM to SPDX V3")
+            print(f"Detailed exception message: {e}")
 
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
         mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
@@ -130,10 +138,17 @@ errors:
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
             mergedSbomV3FileName = f"{prj._name}-{sp._name}-merged-spdx-v3.json"
-            uploadMergedSbomV3File = os.path.join(tempdir, mergedSbomV3FileName)
-            convertToV3(uploadMergedSbomFile, uploadMergedSbomV3File, cfg, prj, sp)
-            if os.path.exists(uploadMergedSbomV3File):
-                spdx.spdxutil.fixSpdxV3File(uploadMergedSbomV3File)
+            if spdxV3Debug:
+                uploadMergedSbomV3File = os.path.join(Path.home(), mergedSbomV3FileName)
+            else:
+                uploadMergedSbomV3File = os.path.join(tempdir, mergedSbomV3FileName)
+            try:
+                convertToV3(uploadMergedSbomFile, uploadMergedSbomV3File, cfg, prj, sp)
+                if os.path.exists(uploadMergedSbomV3File):
+                    spdx.spdxutil.fixSpdxV3File(uploadMergedSbomV3File)
+            except Exception as e:
+                print(f"{prj._name}/{sp._name}: error converting merged SBOM to SPDX V3")
+                print(f"Detailed exception message: {e}")
         else:
             print(f"{prj._name}/{sp._name}: Fossology SPDX file not found - skipping merge")
             uploadMergedSbomFile = None
