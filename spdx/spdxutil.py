@@ -516,10 +516,41 @@ def _copyRepoFromFossology(sbom, fossology_sbom, repo_name, added_file_spdxids):
                 print(f"warning: already added fossology file ID {file.spdx_id}")
             sbom.relationships.append(Relationship(repoPackage.spdx_id, RelationshipType.CONTAINS, file.spdx_id))
 
+def replaceInvalidLicenseWithExpression(jsonSpdx):
+    elementsToAdd = []
+    idIndex = 1
+    for element in jsonSpdx["@graph"]:
+        if element.get("type") == "Relationship":
+            tos = element.get("to")
+            for i in range(0, len(tos)):
+                to = tos[i]
+                if isinstance(to, dict) and to.get("type") == "simplelicensing_InvalidLicenseExpression":
+                    # replace with a simple expressions
+                    newElementId = element["spdxId"] + "_added_lic_" + str(idIndex)
+                    idIndex = idIndex + 1
+                    newElement = {
+                        "type" : "simplelicensing_LicenseExpression",
+                        "comment" : to.get("simplelicensing_SimpleLicensing.invalidLicenseMessage"),
+                        "spdxId" : newElementId,
+                        "creationInfo" : element.get("creationInfo"),
+                        "simplelicensing_licenseExpression" : to.get("simplelicensing_licenseExpression")
+                    }
+                    elementsToAdd.append(newElement)
+                    tos[i] = newElementId
+        elif element.get("type") == "simplelicensing_InvalidLicenseExpression":
+            # replace with a simple expressions
+            element["type"] = "simplelicensing_LicenseExpression"
+            element["comment"] = element["simplelicensing_SimpleLicensing_invalidLicenseMessage"]
+            del element["simplelicensing_SimpleLicensing_invalidLicenseMessage"]
+    for elementToAdd in elementsToAdd:
+        jsonSpdx["@graph"].append(elementToAdd)
+
 def fixSpdxV3File(spdxV3File):
+    with open(spdxV3File, 'r') as file:
+        jsonSpdx = json.load(file)
+    replaceInvalidLicenseWithExpression(jsonSpdx)
     objectset = SHACLObjectSet()
-    with open(spdxV3File, 'r') as spdxfile:
-        JSONLDDeserializer().read(spdxfile, objectset)
+    JSONLDDeserializer().deserialize_data(jsonSpdx, objectset)
     for doc in objectset.foreach_type("SpdxDocument"):
         doc_id = doc.spdxId
         i = doc_id.rfind("#")

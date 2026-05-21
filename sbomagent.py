@@ -243,6 +243,8 @@ def convertToV3(spdxv2File, spdxv3File, cfg, prj, sp):
     convertSpdxFile(spdxv2File, spdxv3File, cfg, prj, sp, "JSON", "JSONLD")
 
 def convertSpdxFile(fromFile, toFile, cfg, prj, sp, fromType, toType):
+    if Path(toFile).is_file():
+        os.remove(toFile)
     cmd = ["java", "-jar", cfg._tools_java_path, "Convert", str(fromFile), str(toFile), fromType, toType]
     cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     if cp.returncode != 0:
