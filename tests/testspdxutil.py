@@ -47,6 +47,8 @@ TEST_MATERIALX_REPORT_JSON_FILE_NAME = "materialx-2024-08-21.json"
 TEST_MATERIALX_REPORT_JSON = os.path.join(os.path.dirname(__file__), "testresources", TEST_MATERIALX_REPORT_JSON_FILE_NAME)
 TEST_SPDXV3_FILE_NAME = "spdx.jsonld"
 TEST_SPDXV3_FILE = os.path.join(os.path.dirname(__file__), "testresources", TEST_SPDXV3_FILE_NAME)
+TEST_SPDXV3_BAD_LICENSE_FILE_NAME = "test-bad-license-spdx-v3.json"
+TEST_SPDXV3_BAD_LICENSE_FILE = os.path.join(os.path.dirname(__file__), "testresources", TEST_SPDXV3_BAD_LICENSE_FILE_NAME)
 
 TEST_PACKAGES = {
     "pom.xml" : {
@@ -488,6 +490,19 @@ class TestSpdxUtil(unittest.TestCase):
         for relationship in objectset.foreach_type("Relationship"):
             self.assertNotEqual(relationship.relationshipType, spdx_3_0.RelationshipType.describes)
 
+    def testRegressionBadLicenseFixSpdxV3File(self):
+        testFilePath = os.path.join(self.temp_dir.name, TEST_SPDXV3_BAD_LICENSE_FILE_NAME)
+        shutil.copy(TEST_SPDXV3_BAD_LICENSE_FILE, testFilePath)
+        spdxutil.fixSpdxV3File(testFilePath)
+        objectset = SHACLObjectSet()
+        with open(testFilePath, 'r') as spdxfile:
+            JSONLDDeserializer().read(spdxfile, objectset)
+        found = False
+        for invalid in objectset.foreach_type("simplelicensing_LicenseExpression"):
+            if invalid.simplelicensing_licenseExpression == "389-exception":
+                found = True
+                self.assertTrue(invalid.comment.startswith("Unexpected listed license exception"))
+        self.assertTrue(found)
 if __name__ == '__main__':
     unittest.main()
         
