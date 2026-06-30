@@ -420,6 +420,56 @@ class TestSbom(unittest.TestCase):
         validation = validate_full_spdx_document(result)
         self.assertTrue(not validation)
 
+    def test_private_sbom_config(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        self.assertFalse(cfg._projects["prj1"]._sbom_private)
+        self.assertFalse(cfg._projects["prj1"]._subprojects["sp1"]._sbom_private)
+        self.assertTrue(cfg._projects["prj-private-sbom"]._sbom_private)
+        self.assertFalse(cfg._projects["prj-private-sbom"]._subprojects["sp-public-sbom"]._sbom_private)
+        self.assertTrue(cfg._projects["prj-private-sbom"]._subprojects["sp-default-sbom"]._sbom_private)
+
+    def test_private_sbom(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        cfg._zippath = self.temp_dir.name
+        cfg._storepath = self.scaffold_home_dir
+        cfg._spdx_github_org = GITHUB_ORG
+        cfg._web_server = "lfscanning.org"
+        cfg._web_server_use_scp = False
+        cfg._web_reports_path = os.path.join(self.temp_dir.name, 'outputreports')
+        prj = cfg._projects[TEST_PROJECT_NAME]
+        prj._name = TEST_PROJECT_NAME
+        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
+        sp._name = TEST_SUBPROJECT_NAME
+        sp._repos = [self.repoName]
+        sp._repotype = ProjectRepoType.GITHUB
+        sp._github_org = GITHUB_ORG
+        sp._github_ziporg = GITHUB_ORG
+        sp._github_branch = ""
+        sp._status = Status.ZIPPEDCODE
+        sp._code_path = TEST_SCAFFOLD_CODE
+        sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
+        sp._code_anyfiles = True
+        sp._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
+        sp._sbom_private = True
+
+        result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
+        self.assertTrue(result)
+        uploadedfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-spdx-v2.json")
+        self.assertTrue(os.path.isfile(uploadedfile))
+        gitfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v2.json")
+        self.assertFalse(os.path.isfile(gitfile))
+        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        self.assertTrue(os.path.isfile(reportfile))
+        spdxv3gitFile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v3.json")
+        self.assertFalse(os.path.isfile(spdxv3gitFile))
+        spdxv3file = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-spdx-v3.json")
+        self.assertTrue(os.path.isfile(spdxv3file))
+        self.assertTrue("-spdx-v3.json" in sp._web_sbom_spdxv3)
+        self.assertTrue("-spdx-v2.json" in sp._web_sbom_spdxv2)
+        # TODO: Test merged SBOM
+
 if __name__ == '__main__':
     unittest.main()
         
