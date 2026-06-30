@@ -66,6 +66,7 @@
     "projects": {
 	"prj1": {
 		"type": "github",
+		"sbom-private": false,
 		"slm": {
 			"policies": {
 				"apache": {
@@ -134,6 +135,7 @@
 		"subprojects": {
 			"sp1": {
 				"status": "START",
+				"sbom-private": false,
 				"slm": {
 					"policy": "apache"
 				},

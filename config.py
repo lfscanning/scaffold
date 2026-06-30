@@ -293,6 +293,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                 prj = Project()
                 prj._name = prj_name
                 prj._ok = True
+                prj._sbom_private = prj_dict.get('sbom-private', False)
                 if not prj_name in cfg._secrets._gitoauth:
                 # Update the secrets for any missing project data
                     cfg._secrets._gitoauth[prj_name] = cfg._secrets._default_oauth
@@ -348,6 +349,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                             sp = Subproject()
                             sp._name = sp_name
                             sp._repotype = ProjectRepoType.GERRIT
+                            sp._sbom_private = sp_dict.get('sbom-private', prj._sbom_private)
                             sp._ok = True
 
                             sp._cycle = sp_dict.get('cycle', 99)
@@ -382,11 +384,20 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 sp._web_html_url = ""
                                 sp._web_xlsx_url = ""
                                 sp._web_sbom_url = ""
+                                sp._web_sbom_spdxv3 = ""
+                                sp._web_sbom_spdxv2 = ""
+                                sp._web_sbom_spdxv3_merged = ""
+                                sp._web_sbom_spdxv2_merged = ""
+
                             else:
                                 sp._web_uuid = web_dict.get('uuid', "")
                                 sp._web_html_url = web_dict.get('htmlurl', "")
                                 sp._web_xlsx_url = web_dict.get('xlsxurl', "")
                                 sp._web_sbom_url = web_dict.get('sbomurl', "")
+                                sp._web_sbom_spdxv3 = web_dict.get('spdxv3', "")
+                                sp._web_sbom_spdxv2 = web_dict.get('spdxv2', "")
+                                sp._web_sbom_spdxv3_merged = web_dict.get('spdxv3merged', "")
+                                sp._web_sbom_spdxv2_merged = web_dict.get('spdxv2merged', "")
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -438,6 +449,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                             sp._name = sp_name
                             sp._repotype = ProjectRepoType.GITHUB_SHARED
                             sp._ok = True
+                            sp._sbom_private = sp_dict.get('sbom-private', prj._sbom_private)
 
                             sp._cycle = sp_dict.get('cycle', 99)
                             if prj._cycle != 99 and sp._cycle != 99:
@@ -472,11 +484,19 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 sp._web_html_url = ""
                                 sp._web_xlsx_url = ""
                                 sp._web_sbom_url = ""
+                                sp._web_sbom_spdxv3 = ""
+                                sp._web_sbom_spdxv2 = ""
+                                sp._web_sbom_spdxv3_merged = ""
+                                sp._web_sbom_spdxv2_merged = ""
                             else:
                                 sp._web_uuid = web_dict.get('uuid', "")
                                 sp._web_html_url = web_dict.get('htmlurl', "")
                                 sp._web_xlsx_url = web_dict.get('xlsxurl', "")
                                 sp._web_sbom_url = web_dict.get('sbomurl', "")
+                                sp._web_sbom_spdxv3 = web_dict.get('spdxv3', "")
+                                sp._web_sbom_spdxv2 = web_dict.get('spdxv2', "")
+                                sp._web_sbom_spdxv3_merged = web_dict.get('spdxv3merged', "")
+                                sp._web_sbom_spdxv2_merged = web_dict.get('spdxv2merged', "")
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -519,6 +539,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                             sp._name = sp_name
                             sp._repotype = ProjectRepoType.GITHUB
                             sp._ok = True
+                            sp._sbom_private = sp_dict.get('sbom-private', prj._sbom_private)
 
                             sp._cycle = sp_dict.get('cycle', 99)
                             if prj._cycle != 99 and sp._cycle != 99:
@@ -553,11 +574,19 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                                 sp._web_html_url = ""
                                 sp._web_xlsx_url = ""
                                 sp._web_sbom_url = ""
+                                sp._web_sbom_spdxv3 = ""
+                                sp._web_sbom_spdxv2 = ""
+                                sp._web_sbom_spdxv3_merged = ""
+                                sp._web_sbom_spdxv2_merged = ""
                             else:
                                 sp._web_uuid = web_dict.get('uuid', "")
                                 sp._web_html_url = web_dict.get('htmlurl', "")
                                 sp._web_xlsx_url = web_dict.get('xlsxurl', "")
                                 sp._web_sbom_url = web_dict.get('sbomurl', "")
+                                sp._web_sbom_spdxv3 = web_dict.get('spdxv3', "")
+                                sp._web_sbom_spdxv2 = web_dict.get('spdxv2', "")
+                                sp._web_sbom_spdxv3_merged = web_dict.get('spdxv3merged', "")
+                                sp._web_sbom_spdxv2_merged = web_dict.get('spdxv2merged', "")
 
                             # now load SLM subproject data
                             parseSubprojectSLMConfig(sp_dict, prj, sp)
@@ -879,6 +908,14 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["web"]["xlsxurl"] = o._web_xlsx_url
                 if o._web_uuid != "":
                     js["web"]["uuid"] = o._web_uuid
+                if o._web_sbom_spdxv3 != "":
+                    js["web"]["spdxv3"] = o._web_sbom_spdxv3
+                if o._web_sbom_spdxv2 != "":
+                    js["web"]["spdxv2"] = o._web_sbom_spdxv2
+                if o._web_sbom_spdxv3 != "":
+                    js["web"]["spdxv3merged"] = o._web_sbom_spdxv3_merged
+                if o._web_sbom_spdxv2 != "":
+                    js["web"]["spdxv2merged"] = o._web_sbom_spdxv2_merged
                 if len(o._github_repos_pending) > 0:
                     js["github"]["repos-pending"] = sorted(o._github_repos_pending)
                 return js
@@ -911,6 +948,14 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["web"]["sbomurl"] = o._web_sbom_url
                 if o._web_xlsx_url != "":
                     js["web"]["xlsxurl"] = o._web_xlsx_url
+                if o._web_sbom_spdxv3 != "":
+                    js["web"]["spdxv3"] = o._web_sbom_spdxv3
+                if o._web_sbom_spdxv2 != "":
+                    js["web"]["spdxv2"] = o._web_sbom_spdxv2
+                if o._web_sbom_spdxv3 != "":
+                    js["web"]["spdxv3merged"] = o._web_sbom_spdxv3_merged
+                if o._web_sbom_spdxv2 != "":
+                    js["web"]["spdxv2merged"] = o._web_sbom_spdxv2_merged
                 if o._web_uuid != "":
                     js["web"]["uuid"] = o._web_uuid
                 return js
@@ -943,6 +988,14 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["web"]["sbomurl"] = o._web_sbom_url
                 if o._web_xlsx_url != "":
                     js["web"]["xlsxurl"] = o._web_xlsx_url
+                if o._web_sbom_spdxv3 != "":
+                    js["web"]["spdxv3"] = o._web_sbom_spdxv3
+                if o._web_sbom_spdxv2 != "":
+                    js["web"]["spdxv2"] = o._web_sbom_spdxv2
+                if o._web_sbom_spdxv3 != "":
+                    js["web"]["spdxv3merged"] = o._web_sbom_spdxv3_merged
+                if o._web_sbom_spdxv2 != "":
+                    js["web"]["spdxv2merged"] = o._web_sbom_spdxv2_merged
                 if o._web_uuid != "":
                     js["web"]["uuid"] = o._web_uuid
                 return js

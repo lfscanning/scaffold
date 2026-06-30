@@ -9,33 +9,37 @@ from shutil import copyfile
 
 from datatypes import Status
 
-# Upload ony the SBOMs
-def doUploadSBOMReportsForSubproject(cfg, prj, sp):
+# Upload a single file ending with the suffix
+# returns the URL for the file - None if there was an error
+def doUploadSingleReportForSubproject(cfg, prj, sp, suffix):
     # make sure we're at the right stage
     if not (sp._status.value >= Status.ZIPPEDCODE.value and sp._status != Status.STOPPED):
         print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE or higher")
         return False
 
-    # pick random uuid
-    web_uuid = str(uuid.uuid4())
-    sp._web_uuid = web_uuid
+    if sp._web_uuid != "":
+        web_uuid = sp._web_uuid
+    else:
+        # pick random uuid
+        web_uuid = str(uuid.uuid4())
+        sp._web_uuid = web_uuid
 
     # determine source and dest filenames
     srcReportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
-    srcSbomXlsx = f"{prj._name}-{sp._name}-dependencies.xlsx"
-    srcSbomPath = os.path.join(srcReportFolder, srcSbomXlsx)
+    srcReportFileName = f"{prj._name}-{sp._name}-{suffix}"
+    srcReportFilePath = os.path.join(srcReportFolder, srcReportFileName)
 
     dstReportFolder = os.path.join(cfg._web_reports_path, prj._name)
-    dstSbomFilename = f"{prj._name}-{sp._name}-{web_uuid}-dependencies.xlsx"
-    dstSbomPath = os.path.join(dstReportFolder, dstSbomFilename)
+    dstReportFilename = f"{prj._name}-{sp._name}-{web_uuid}-{suffix}"
+    dstReportFilePath = os.path.join(dstReportFolder, dstReportFilename)
 
     # copy HTML report to server, if it exists (e.g., if there were any findings)
-    if os.path.exists(srcSbomPath):
+    if os.path.exists(srcReportFilePath):
         if cfg._web_server_use_scp:
-            cmd = ["scp", srcSbomPath, f"{cfg._web_server_username}@{cfg._web_server}:{dstSbomPath}"]
+            cmd = ["scp", srcReportFilePath, f"{cfg._web_server_username}@{cfg._web_server}:{dstReportFilePath}"]
             cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
             if cp.returncode != 0:
-                print(f"""{prj._name}/{sp._name}: scp of SBOM dependency report failed with error code {cp.returncode}:
+                print(f"""{prj._name}/{sp._name}: scp of report file {srcReportFileName} failed with error code {cp.returncode}:
 ----------
 output:
 {cp.stdout}
@@ -44,30 +48,32 @@ errors:
 {cp.stderr}
 ----------
 """)
-                return False
+                return None
             else:
-                print(f"{prj._name}/{sp._name}: uploaded SBOM dependency report")
-                sp._web_sbom_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstSbomFilename}"
+                print(f"{prj._name}/{sp._name}: uploaded report file {srcReportFileName}")
+                return f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstReportFilename}"
         else:
-            os.makedirs(os.path.dirname(dstSbomPath), exist_ok=True)
-            copyfile(srcSbomPath, dstSbomPath)
-            print(f"{prj._name}/{sp._name}: uploaded SBOM dependency report")
-            sp._web_sbom_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstSbomFilename}"
+            os.makedirs(os.path.dirname(dstReportFilePath), exist_ok=True)
+            copyfile(srcReportFilePath, dstReportFilePath)
+            print(f"{prj._name}/{sp._name}: uploaded report file {srcReportFileName}")
+            return f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstReportFilename}"
     else:
         # no HTML file b/c no findings
-        print(f"{prj._name}/{sp._name}: no SBOM dependency report on disk, skipping")
-    return True
+        print(f"{prj._name}/{sp._name}: no report file {srcReportFileName} on disk, skipping")
+    return None
 
-# Runner for UPLOADEDSPDX for subproject
 def doUploadReportsForSubproject(cfg, prj, sp):
     # make sure we're at the right stage
     if sp._status != Status.UPLOADEDSPDX:
         print(f"{prj._name}/{sp._name}: status is {sp._status}, won't upload findings reports")
         return False
 
-    # pick random uuid
-    web_uuid = str(uuid.uuid4())
-    sp._web_uuid = web_uuid
+    if sp._web_uuid != "":
+        web_uuid = sp._web_uuid
+    else:
+        # pick random uuid
+        web_uuid = str(uuid.uuid4())
+        sp._web_uuid = web_uuid
 
     # determine source and dest filenames
     srcReportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
