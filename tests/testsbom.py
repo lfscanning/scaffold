@@ -420,14 +420,14 @@ class TestSbom(unittest.TestCase):
         validation = validate_full_spdx_document(result)
         self.assertTrue(not validation)
 
-    def test_private_sbom_config(self):
+    def test_private_reports_config(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
         cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        self.assertFalse(cfg._projects["prj1"]._sbom_private)
-        self.assertFalse(cfg._projects["prj1"]._subprojects["sp1"]._sbom_private)
-        self.assertTrue(cfg._projects["prj-private-sbom"]._sbom_private)
-        self.assertFalse(cfg._projects["prj-private-sbom"]._subprojects["sp-public-sbom"]._sbom_private)
-        self.assertTrue(cfg._projects["prj-private-sbom"]._subprojects["sp-default-sbom"]._sbom_private)
+        self.assertFalse(cfg._projects["prj1"]._reports_private)
+        self.assertFalse(cfg._projects["prj1"]._subprojects["sp1"]._reports_private)
+        self.assertTrue(cfg._projects["prj-private-sbom"]._reports_private)
+        self.assertFalse(cfg._projects["prj-private-sbom"]._subprojects["sp-public-sbom"]._reports_private)
+        self.assertTrue(cfg._projects["prj-private-sbom"]._subprojects["sp-default-sbom"]._reports_private)
 
     def test_private_sbom(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
@@ -452,7 +452,7 @@ class TestSbom(unittest.TestCase):
         sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
         sp._code_anyfiles = True
         sp._code_repos = {self.repoName: "153a803c46181319fd782ef8426ff58a2e885d82"}
-        sp._sbom_private = True
+        sp._reports_private = True
 
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)

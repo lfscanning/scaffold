@@ -282,7 +282,7 @@
 	},
 		"prj-private-sbom": {
 			"type": "github",
-			"sbom-private": true,
+			"reports-private": true,
 			"slm": {
 				"policies": {
 					"apache": {
@@ -371,7 +371,7 @@
 				},
 				"sp-public-sbom": {
 					"status": "START",
-					"sbom-private": false,
+					"reports-private": false,
 					"slm": {
 						"policy": "apache"
 					},

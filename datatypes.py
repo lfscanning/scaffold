@@ -213,7 +213,7 @@ class Project:
         self._name = ""
         self._repotype = ProjectRepoType.UNKNOWN
         self._status = Status.UNKNOWN
-        self._sbom_private = False
+        self._reports_private = False
 
         self._subprojects = {}
 
@@ -280,7 +280,7 @@ class Subproject:
         self._name = ""
         self._repotype = ProjectRepoType.UNKNOWN
         self._status = Status.UNKNOWN
-        self._sbom_private = False
+        self._reports_private = False
         self._repos = []
         # mapping of repo name to list of directories to delete
         self._repo_dirs_delete = {}
@@ -324,6 +324,7 @@ class Subproject:
         self._web_sbom_spdxv3 = ""
         self._web_sbom_spdxv2_merged = ""
         self._web_sbom_spdxv3_merged = ""
+        self._web_spdx = ""
 
     def resetNewMonth(self):
         self._status = Status.START
@@ -348,6 +349,7 @@ class Subproject:
         self._web_sbom_spdxv3 = ""
         self._web_sbom_spdxv2_merged = ""
         self._web_sbom_spdxv3_merged = ""
+        self._web_spdx = ""
 
 
 class JiraSecret:

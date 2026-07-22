@@ -219,7 +219,7 @@ errors:
 
 def uploadSbomForSubproject(cfg, prj, sp, sourceFolder, suffix):
     sourceFileName = f"{prj._name}-{sp._name}-{suffix}"
-    if sp._sbom_private:
+    if sp._reports_private:
         reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
         if not os.path.exists(reportFolder):
             os.makedirs(reportFolder)

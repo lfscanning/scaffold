@@ -293,7 +293,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                 prj = Project()
                 prj._name = prj_name
                 prj._ok = True
-                prj._sbom_private = prj_dict.get('sbom-private', False)
+                prj._reports_private = prj_dict.get('reports-private', False)
                 if not prj_name in cfg._secrets._gitoauth:
                 # Update the secrets for any missing project data
                     cfg._secrets._gitoauth[prj_name] = cfg._secrets._default_oauth
@@ -349,7 +349,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                             sp = Subproject()
                             sp._name = sp_name
                             sp._repotype = ProjectRepoType.GERRIT
-                            sp._sbom_private = sp_dict.get('sbom-private', prj._sbom_private)
+                            sp._reports_private = sp_dict.get('reports-private', prj._reports_private)
                             sp._ok = True
 
                             sp._cycle = sp_dict.get('cycle', 99)
@@ -449,7 +449,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                             sp._name = sp_name
                             sp._repotype = ProjectRepoType.GITHUB_SHARED
                             sp._ok = True
-                            sp._sbom_private = sp_dict.get('sbom-private', prj._sbom_private)
+                            sp._reports_private = sp_dict.get('reports-private', prj._reports_private)
 
                             sp._cycle = sp_dict.get('cycle', 99)
                             if prj._cycle != 99 and sp._cycle != 99:
@@ -539,7 +539,7 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
                             sp._name = sp_name
                             sp._repotype = ProjectRepoType.GITHUB
                             sp._ok = True
-                            sp._sbom_private = sp_dict.get('sbom-private', prj._sbom_private)
+                            sp._reports_private = sp_dict.get('reports-private', prj._reports_private)
 
                             sp._cycle = sp_dict.get('cycle', 99)
                             if prj._cycle != 99 and sp._cycle != 99:
