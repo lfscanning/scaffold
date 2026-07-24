@@ -15,25 +15,14 @@ from datetime import datetime
 from pathlib import Path
 
 import uploadreport
-from uploadspdx import doUploadFileForSubproject
+import uploadspdx
+from uploadspdx import doUploadToGitForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
 trivyDebug = False
 parlayDebug = False
 cdsbomDebug = False
 spdxV3Debug = False
-
-UPLOAD_SPDX_SUFFIX = "spdx-v2.json"
-UPLOAD_SPDX_V3_SUFFIX = "spdx-v3.json"
-MERGED_SBOM_SUFFIX = "merged-spdx-v2.json"
-MERGED_SBOM_V3_SUFFIX = "merged-spdx-v3.json"
-
-SUFFIX_TO_ATTRIBUTE_MAP = {
-    UPLOAD_SPDX_SUFFIX : "_web_sbom_spdxv2",
-    UPLOAD_SPDX_V3_SUFFIX : "_web_sbom_spdxv3",
-    MERGED_SBOM_SUFFIX : "_web_sbom_spdxv2_merged",
-    MERGED_SBOM_V3_SUFFIX : "_web_sbom_spdxv3_merged"
-}
 
 def runUnifiedAgent(cfg, prj, sp):
     # make sure that the code to upload actually exists!
@@ -126,11 +115,11 @@ errors:
             return False
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Augmenting SPDX document")
         spdx.spdxutil.augmentTrivyDocument(spdxDocument, cfg, prj, sp)
-        uploadSpdxFileName = f"{prj._name}-{sp._name}-{UPLOAD_SPDX_SUFFIX}"
+        uploadSpdxFileName = f"{sp._name}-{sp._code_pulled}-{uploadspdx.UPLOAD_SPDX_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
         uploadSpdxFile = os.path.join(tempdir, uploadSpdxFileName)
         spdx.spdxutil.writeFile(spdxDocument, uploadSpdxFile)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Creating SPDX 3 document")
-        uploadSpdxV3FileName = f"{prj._name}-{sp._name}-{UPLOAD_SPDX_V3_SUFFIX}"
+        uploadSpdxV3FileName = f"{sp._name}-{sp._code_pulled}-{uploadspdx.UPLOAD_SPDX_V3_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
         if spdxV3Debug:
             uploadSpdxV3File = os.path.join(Path.home(), uploadSpdxV3FileName)
         else:
@@ -150,10 +139,10 @@ errors:
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
         mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
         if mergedSbom:
-            mergedSbomFileName = f"{prj._name}-{sp._name}-{MERGED_SBOM_SUFFIX}"
+            mergedSbomFileName = f"{prj._name}-{sp._name}-{uploadspdx.MERGED_SBOM_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
-            mergedSbomV3FileName = f"{prj._name}-{sp._name}-{MERGED_SBOM_V3_SUFFIX}"
+            mergedSbomV3FileName = f"{prj._name}-{sp._name}-{uploadspdx.MERGED_SBOM_V3_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
             if spdxV3Debug:
                 uploadMergedSbomV3File = os.path.join(Path.home(), mergedSbomV3FileName)
             else:
@@ -176,11 +165,11 @@ errors:
 
         # Upload the documents
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Uploading SBOMs")
-        if not uploadSbomForSubproject(cfg, prj, sp, tempdir, UPLOAD_SPDX_SUFFIX):
+        if not uploadspdx.doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadspdx.UPLOAD_SPDX_SUFFIX, uploadspdx.JSON_EXTENSION):
             print(f"{prj._name}/{sp._name}: unable to upload SPDX dependencies file")
             return False
         if uploadSpdxV3File and os.path.exists(uploadSpdxV3File):
-            if not uploadSbomForSubproject(cfg, prj, sp, Path.home() if spdxV3Debug else tempdir, UPLOAD_SPDX_V3_SUFFIX):
+            if not uploadspdx.doUploadFileForSubproject(cfg, prj, sp, Path.home() if spdxV3Debug else tempdir, uploadspdx.UPLOAD_SPDX_V3_SUFFIX, uploadspdx.JSON_EXTENSION):
                 print(f"{prj._name}/{sp._name}: unable to upload SPDX V3 dependencies file")
                 return False
         else:
@@ -188,57 +177,35 @@ errors:
             print(f"Filename: {uploadSpdxV3File}")
             print(f"V2 SPDX filename: {uploadSpdxFile}")
         if uploadMergedSbomFile and os.path.exists(uploadMergedSbomFile):
-            if not uploadSbomForSubproject(cfg, prj, sp, tempdir, MERGED_SBOM_SUFFIX):
+            if not uploadspdx.doUploadFileForSubproject(cfg, prj, sp, tempdir, uploadspdx.MERGED_SBOM_SUFFIX, uploadspdx.JSON_EXTENSION):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX file")
                 print(f"Filename: {uploadMergedSbomFile}")
                 return False
         else:
             print(f"{prj._name}/{sp._name}: no merged SBOM file to upload")
         if uploadMergedSbomV3File and os.path.exists(uploadMergedSbomV3File):
-            if not uploadSbomForSubproject(cfg, prj, sp, Path.home() if spdxV3Debug else tempdir, MERGED_SBOM_V3_SUFFIX):
+            if not uploadspdx.doUploadFileForSubproject(cfg, prj, sp, Path.home() if spdxV3Debug else tempdir, uploadspdx.MERGED_SBOM_V3_SUFFIX, uploadspdx.JSON_EXTENSION):
                 print(f"{prj._name}/{sp._name}: unable to upload merged SPDX V3 file")
                 print(f"Filename: {uploadMergedSbomV3File}")
                 return False
         else:
             print(f"{prj._name}/{sp._name}: no merged SPDX V3 SBOM file to upload")
         workbook = spdx.xlsx.makeXlsx(spdxDocument)
-        workbookSuffix = "dependencies.xlsx"
-        workbookFilePath = os.path.join(tempdir, f"{prj._name}-{sp._name}-{workbookSuffix}")
+        workbookSuffix = "dependencies"
+        workbookExtension = "xlsx"
+        workbookFilePath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}-{workbookSuffix}.{workbookExtension}")
         spdx.xlsx.saveXlsx(workbook, workbookFilePath)
         reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
         if not os.path.exists(reportFolder):
             os.makedirs(reportFolder)
-        reportFilePath = os.path.join(reportFolder, f"{prj._name}-{sp._name}-{workbookSuffix}");
+        reportFilePath = os.path.join(reportFolder, f"{sp._name}-{sp._code_pulled}-{workbookSuffix}.{workbookExtension}");
         shutil.copy(workbookFilePath, reportFilePath)
-        webSbomUrl = uploadreport.doUploadSingleReportForSubproject(cfg, prj, sp, workbookSuffix)
+        webSbomUrl = uploadreport.doUploadSingleReportForSubproject(cfg, prj, sp, workbookSuffix, workbookExtension)
         if webSbomUrl:
             sp._web_sbom_url = webSbomUrl
             print(f"Web version of dependency report available at: {sp._web_sbom_url}")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: SBOM successfully run")
         return True
-
-def uploadSbomForSubproject(cfg, prj, sp, sourceFolder, suffix):
-    sourceFileName = f"{prj._name}-{sp._name}-{suffix}"
-    if sp._reports_private:
-        reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
-        if not os.path.exists(reportFolder):
-            os.makedirs(reportFolder)
-        reportFilePath = os.path.join(reportFolder, f"{prj._name}-{sp._name}-{suffix}");
-        sourceFilePath = os.path.join(sourceFolder, sourceFileName)
-        shutil.copy(sourceFilePath, reportFilePath)
-        webUrl = uploadreport.doUploadSingleReportForSubproject(cfg, prj, sp, suffix)
-        if webUrl:
-            if not suffix in SUFFIX_TO_ATTRIBUTE_MAP:
-                print(f"Unidentified SBOM file suffix {suffix}.  Could not upload report file.")
-                return False
-            setattr(sp, SUFFIX_TO_ATTRIBUTE_MAP[suffix], webUrl)
-            print(f"Web version of SBOM file {sourceFileName} available at: {webUrl}")
-            return True
-        else:
-            print(f"Unable to upload report SBOM file {sourceFileName} to report server")
-            return False
-    else:
-        return doUploadFileForSubproject(cfg, prj, sp, sourceFolder, sourceFileName)
 
 def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
     fossologySpdxZipPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx.zip")

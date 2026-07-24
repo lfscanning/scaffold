@@ -11,36 +11,76 @@ from git import Repo
 from datatypes import Status
 from uploadreport import doUploadSingleReportForSubproject
 
+UPLOAD_SPDX_SUFFIX = "spdx-v2"
+JSON_EXTENSION = "json"
+SPDX_EXTENSION = "spdx"
+UPLOAD_SPDX_V3_SUFFIX = "spdx-v3"
+MERGED_SBOM_SUFFIX = "merged-spdx-v2"
+MERGED_SBOM_V3_SUFFIX = "merged-spdx-v3"
+
+SUFFIX_TO_ATTRIBUTE_MAP = {
+    UPLOAD_SPDX_SUFFIX : "_web_sbom_spdxv2",
+    UPLOAD_SPDX_V3_SUFFIX : "_web_sbom_spdxv3",
+    MERGED_SBOM_SUFFIX : "_web_sbom_spdxv2_merged",
+    MERGED_SBOM_V3_SUFFIX : "_web_sbom_spdxv3_merged"
+}
+
 MAX_FILE_SIZE = 50 * 1000000 # Maximum file size to push to GitHub - 50MB
 def doUploadSPDXForSubproject(cfg, prj, sp):
     srcFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
-    srcFilename = f"{sp._name}-{sp._code_pulled}.spdx"
-    if sp._reports_private:
-        if doCopyToReportsFolder(cfg, prj, sp, srcFolder, srcFilename):
-            sp._status = Status.UPLOADEDSPDX
-            return True
-        else:
-            return False
+    if doUploadFileForSubproject(cfg, prj, sp, srcFolder, "", "spdx"):
+        sp._status = Status.UPLOADEDSPDX
+        return True
     else:
-        if doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
-            sp._status = Status.UPLOADEDSPDX
-            return True
-        else:
-            return False
+        return False
 
-def doCopyToReportsFolder(cfg, prj, sp, srcFolder, srcFilename):
+# Upload a file into Git or Reports folder depending on reports_private config
+# Zips large files if needed
+def doUploadFileForSubproject(cfg, prj, sp, sourceFolder, suffix, extension):
+    if sp._reports_private:
+        return doCopyToReportsFolder(cfg, prj, sp, sourceFolder, suffix, extension)
+    else:
+        return doUploadToGitForSubproject(cfg, prj, sp, sourceFolder, suffix, extension)
+
+def doCopyToReportsFolder(cfg, prj, sp, srcFolder, suffix, extension):
+    srcFilename = f"{sp._name}-{sp._code_pulled}-{suffix}.{extension}" if suffix else f"{sp._name}-{sp._code_pulled}.{extension}"
     reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
-    reportPath = os.path.join(reportFolder, srcFilename)
-    sourcePath = os.path.join(srcFolder, srcFilename)
-    # create report directory for project if it doesn't already exist
     if not os.path.exists(reportFolder):
         os.makedirs(reportFolder)
-    shutil.copy(sourcePath, reportPath)
-    return True
+    sourcePath = os.path.join(srcFolder, srcFilename)
+    needToZip = os.path.getsize(sourcePath) > MAX_FILE_SIZE
+    reportPath = os.path.join(reportFolder, srcFilename + ".zip") if needToZip else os.path.join(reportFolder, srcFilename)
+    # create report directory for project if it doesn't already exist
+    # copy or zip the file
+    if needToZip:
+        with zipfile.ZipFile(reportPath, 'w', compression=zipfile.ZIP_DEFLATED) as zf:
+            zf.write(sourcePath, srcFilename)
+    else:
+        shutil.copy(sourcePath, reportPath)
+    webUrl = doUploadSingleReportForSubproject(cfg, prj, sp, suffix, f"{extension}.zip" if needToZip else extension)
+    if webUrl:
+        if extension == SPDX_EXTENSION:
+            sp._web_spdx = webUrl
+            print(f"Web version of SPDX file {srcFilename} available at: {webUrl}")
+            return True
+        elif extension == JSON_EXTENSION:
+            if not suffix in SUFFIX_TO_ATTRIBUTE_MAP:
+                print(f"Unidentified SBOM file suffix {suffix}.  Could not upload report file.")
+                return False
+            setattr(sp, SUFFIX_TO_ATTRIBUTE_MAP[suffix], webUrl)
+            print(f"Web version of SBOM file {srcFilename} available at: {webUrl}")
+            return True
+        else:
+            print(f"Unidentified SBOM file extension {extension}.  Could not upload report file.")
+            return False
+    else:
+        # Unable to upload teh file
+        return False
 
 
-def doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
+def doUploadToGitForSubproject(cfg, prj, sp, srcFolder, suffix, extension):
     # get path to this project's local SPDX repo
+    srcFilename = f"{sp._name}-{sp._code_pulled}-{suffix}.{extension}" if suffix else f"{sp._name}-{sp._code_pulled}.{extension}"
     repoName = f"spdx-{prj._name}"
     repoPath = os.path.join(cfg._storepath, "spdxrepos", repoName)
 

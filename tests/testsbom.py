@@ -159,11 +159,11 @@ class TestSbom(unittest.TestCase):
         
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v2.json")
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
         self.assertTrue(os.path.isfile(uploadedfile))
-        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
-        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v3.json")
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
         self.assertTrue(os.path.isfile(spdxv3file))
         # TODO: Check if the file is committed and pushed to the repo
         
@@ -219,15 +219,15 @@ class TestSbom(unittest.TestCase):
 
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, "")
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v2.json")
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
         self.assertTrue(os.path.isfile(uploadedfile))
-        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
-        uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{prj._name}-{sp2._name}-spdx-v2.json")
+        uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{sp2._name}-{sp._code_pulled}-spdx-v2.json")
         self.assertTrue(os.path.isfile(uploadedfile2))
-        reportfile2 = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp2._name}-dependencies.xlsx")
+        reportfile2 = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp2._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile2))
-        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v3.json")
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
         self.assertTrue(os.path.isfile(spdxv3file))
 
     def test_sbom_config(self):
@@ -456,18 +456,18 @@ class TestSbom(unittest.TestCase):
 
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-spdx-v2.json")
+        uploadedfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
         self.assertTrue(os.path.isfile(uploadedfile))
-        gitfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v2.json")
+        gitfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
         self.assertFalse(os.path.isfile(gitfile))
-        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-dependencies.xlsx")
+        reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
-        spdxv3gitFile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{prj._name}-{sp._name}-spdx-v3.json")
+        spdxv3gitFile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
         self.assertFalse(os.path.isfile(spdxv3gitFile))
-        spdxv3file = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{prj._name}-{sp._name}-spdx-v3.json")
+        spdxv3file = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
         self.assertTrue(os.path.isfile(spdxv3file))
-        self.assertTrue("-spdx-v3.json" in sp._web_sbom_spdxv3)
-        self.assertTrue("-spdx-v2.json" in sp._web_sbom_spdxv2)
+        self.assertTrue("-spdx-v3" in sp._web_sbom_spdxv3)
+        self.assertTrue("-spdx-v2" in sp._web_sbom_spdxv2)
         # TODO: Test merged SBOM
 
 if __name__ == '__main__':
