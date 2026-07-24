@@ -9,16 +9,35 @@ import zipfile
 from git import Repo
 
 from datatypes import Status
+from uploadreport import doUploadSingleReportForSubproject
 
 MAX_FILE_SIZE = 50 * 1000000 # Maximum file size to push to GitHub - 50MB
 def doUploadSPDXForSubproject(cfg, prj, sp):
     srcFolder = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name)
     srcFilename = f"{sp._name}-{sp._code_pulled}.spdx"
-    if doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
-        sp._status = Status.UPLOADEDSPDX
-        return True
+    if sp._reports_private:
+        if doCopyToReportsFolder(cfg, prj, sp, srcFolder, srcFilename):
+            sp._status = Status.UPLOADEDSPDX
+            return True
+        else:
+            return False
     else:
-        return False
+        if doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
+            sp._status = Status.UPLOADEDSPDX
+            return True
+        else:
+            return False
+
+def doCopyToReportsFolder(cfg, prj, sp, srcFolder, srcFilename):
+    reportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
+    reportPath = os.path.join(reportFolder, srcFilename)
+    sourcePath = os.path.join(srcFolder, srcFilename)
+    # create report directory for project if it doesn't already exist
+    if not os.path.exists(reportFolder):
+        os.makedirs(reportFolder)
+    shutil.copy(sourcePath, reportPath)
+    return True
+
 
 def doUploadFileForSubproject(cfg, prj, sp, srcFolder, srcFilename):
     # get path to this project's local SPDX repo
