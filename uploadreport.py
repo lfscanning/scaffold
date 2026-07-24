@@ -11,7 +11,7 @@ from datatypes import Status
 
 # Upload a single file ending with the suffix
 # returns the URL for the file - None if there was an error
-def doUploadSingleReportForSubproject(cfg, prj, sp, suffix):
+def doUploadSingleReportForSubproject(cfg, prj, sp, suffix, extension):
     # make sure we're at the right stage
     if not (sp._status.value >= Status.ZIPPEDCODE.value and sp._status != Status.STOPPED):
         print(f"{prj._name}/{sp._name}: skipping, status is {sp._status.name}, expected ZIPPEDCODE or higher")
@@ -26,11 +26,11 @@ def doUploadSingleReportForSubproject(cfg, prj, sp, suffix):
 
     # determine source and dest filenames
     srcReportFolder = os.path.join(cfg._storepath, cfg._month, "report", prj._name)
-    srcReportFileName = f"{prj._name}-{sp._name}-{suffix}"
+    srcReportFileName = f"{sp._name}-{sp._code_pulled}{'-' + suffix if suffix else ''}.{extension}"
     srcReportFilePath = os.path.join(srcReportFolder, srcReportFileName)
 
     dstReportFolder = os.path.join(cfg._web_reports_path, prj._name)
-    dstReportFilename = f"{prj._name}-{sp._name}-{web_uuid}-{suffix}"
+    dstReportFilename = f"{sp._name}-{sp._code_pulled}{'-' + suffix if suffix else ''}-{web_uuid}.{extension}"
     dstReportFilePath = os.path.join(dstReportFolder, dstReportFilename)
 
     # copy HTML report to server, if it exists (e.g., if there were any findings)
@@ -140,6 +140,7 @@ errors:
         print(f"{prj._name}/{sp._name}: uploaded XLSX report")
         sp._web_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
 
+
     # success!
     sp._status = Status.UPLOADEDREPORTS
     
@@ -147,7 +148,7 @@ errors:
     # status to reflect the min of its subprojects
     return True
 
-# Runner for UPLOADEDSPDX for overall project (where combined report)
+# Runner for UPLOADREPORTS for overall project (where combined report)
 def doUploadReportsForProject(cfg, prj):
     # make sure we're at the right stage
     if prj._status != Status.UPLOADEDSPDX:

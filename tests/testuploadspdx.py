@@ -1,5 +1,7 @@
 import filecmp
 import time
+import zipfile
+from pathlib import Path
 
 import git
 import os
@@ -8,6 +10,7 @@ import tempfile
 import unittest
 from config import loadConfig
 from uploadspdx import doUploadSPDXForSubproject
+from datatypes import Status
 
 GITHUB_ORG = 'lfscanning'
 SECRET_FILE_NAME = ".test-scaffold-secrets.json"
@@ -17,6 +20,8 @@ SUBPROJECT_NAME = 'sp1'
 PROJECT_NAME = 'TEST-DEPENDENCIES'
 CODE_PULLED = TEST_MONTH + '-10'
 TEST_SPDX_FILE = os.path.join(os.path.dirname(__file__), "testresources", "testfossology.spdx")
+LARGE_SPDX_FILE  = os.path.join(os.path.dirname(__file__), "testresources", "large-spdx.zip")
+LARGE_SPDX_FILE_NAME = "testfossology.spdx"
 
 class MyTestCase(unittest.TestCase):
 
@@ -87,10 +92,45 @@ class MyTestCase(unittest.TestCase):
         sp._name = SUBPROJECT_NAME
         sp._code_pulled = CODE_PULLED
         sp._reports_private = True
+        sp._status = Status.GOTSPDX
         cfg._storepath = self.scaffold_home_dir
+        cfg._web_server = "lfscanning.org"
+        cfg._web_server_use_scp = False
+        cfg._web_reports_path = os.path.join(self.temp_dir.name, 'outputreports')
         self.assertTrue(doUploadSPDXForSubproject(cfg, prj, sp))
         report_spdx_file_path = os.path.join(self.reports_dir, PROJECT_NAME, self.spdx_file_name)
         self.assertTrue(filecmp.cmp(self.spdx_file_path, report_spdx_file_path, shallow=False))
+        web_report_file_path = os.path.join(cfg._web_reports_path, PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-{sp._web_uuid}.spdx")
+        self.assertTrue(filecmp.cmp(self.spdx_file_path, web_report_file_path, shallow=False))
+        self.assertEqual(sp._web_spdx, f"https://{cfg._web_server}/{cfg._web_reports_url}/{PROJECT_NAME}/{sp._name}-{sp._code_pulled}-{sp._web_uuid}.spdx")
+
+    def test_large_private_sbom(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        prj = cfg._projects[PROJECT_NAME]
+        prj._name = PROJECT_NAME
+        sp = prj._subprojects[SUBPROJECT_NAME]
+        sp._name = SUBPROJECT_NAME
+        sp._code_pulled = CODE_PULLED
+        sp._reports_private = True
+        sp._status = Status.GOTSPDX
+        cfg._storepath = self.scaffold_home_dir
+        cfg._web_server = "lfscanning.org"
+        cfg._web_server_use_scp = False
+        cfg._web_reports_path = os.path.join(self.temp_dir.name, 'outputreports')
+        # Replace the small SBOM with the large SBOM
+        with zipfile.ZipFile(LARGE_SPDX_FILE, 'r') as zipr:
+            zipr.extractall(self.spdx_dir_path)
+        zipped_file = os.path.join(self.spdx_dir_path, LARGE_SPDX_FILE_NAME)
+        Path(self.spdx_file_path).unlink()
+        Path(zipped_file).rename(self.spdx_file_path)
+        self.assertTrue(doUploadSPDXForSubproject(cfg, prj, sp))
+        report_spdx_file_path = os.path.join(self.reports_dir, PROJECT_NAME, self.spdx_file_name + ".zip")
+        self.assertTrue(Path(report_spdx_file_path).is_file())
+        web_report_file_path = os.path.join(cfg._web_reports_path, PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-{sp._web_uuid}.spdx.zip")
+        self.assertTrue(Path(web_report_file_path).is_file())
+        self.assertEqual(sp._web_spdx, f"https://{cfg._web_server}/{cfg._web_reports_url}/{PROJECT_NAME}/{sp._name}-{sp._code_pulled}-{sp._web_uuid}.spdx.zip")
+
 
     def test_public_sbom(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
@@ -101,9 +141,31 @@ class MyTestCase(unittest.TestCase):
         sp._name = SUBPROJECT_NAME
         sp._code_pulled = CODE_PULLED
         sp._reports_private = False
+        sp._status = Status.GOTSPDX
         cfg._storepath = self.scaffold_home_dir
         cfg._spdx_github_org = GITHUB_ORG
         self.assertTrue(doUploadSPDXForSubproject(cfg, prj, sp))
         repo_spdx_file_path = os.path.join(self.repo_dir, self.repoName, SUBPROJECT_NAME, TEST_MONTH, self.spdx_file_name)
         self.assertTrue(filecmp.cmp(self.spdx_file_path, repo_spdx_file_path, shallow=False))
-        pass
+
+    def test_large_public_sbom(self):
+        cfg_file = os.path.join(self.config_month_dir, "config.json")
+        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
+        prj = cfg._projects[PROJECT_NAME]
+        prj._name = PROJECT_NAME
+        sp = prj._subprojects[SUBPROJECT_NAME]
+        sp._name = SUBPROJECT_NAME
+        sp._code_pulled = CODE_PULLED
+        sp._reports_private = False
+        sp._status = Status.GOTSPDX
+        cfg._storepath = self.scaffold_home_dir
+        cfg._spdx_github_org = GITHUB_ORG
+        # Replace the small SBOM with the large SBOM
+        with zipfile.ZipFile(LARGE_SPDX_FILE, 'r') as zipr:
+            zipr.extractall(self.spdx_dir_path)
+        zipped_file = os.path.join(self.spdx_dir_path, LARGE_SPDX_FILE_NAME)
+        Path(self.spdx_file_path).unlink()
+        Path(zipped_file).rename(self.spdx_file_path)
+        self.assertTrue(doUploadSPDXForSubproject(cfg, prj, sp))
+        repo_spdx_file_path = os.path.join(self.repo_dir, self.repoName, SUBPROJECT_NAME, TEST_MONTH, self.spdx_file_name + ".zip")
+        self.assertTrue(Path(repo_spdx_file_path).is_file())
