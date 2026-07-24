@@ -174,7 +174,7 @@ def doNextThingForSubproject(scaffold_home, cfg, fossologyServer, prj, sp):
         # create final draft of findings report for subproject
         return doMakeFinalFindingsForSubproject(cfg, prj, sp)
     elif status == Status.MADEFINALFINDINGS:
-        # upload SPDX file to GitHub org
+        # upload SPDX file to GitHub org or reports folder if private
         return doUploadSPDXForSubproject(cfg, prj, sp)
     elif status == Status.UPLOADEDSPDX:
         # upload findings report to unique URL
