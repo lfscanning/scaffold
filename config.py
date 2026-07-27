@@ -796,6 +796,9 @@ class ConfigJSONEncoder(json.JSONEncoder):
             if o._cycle != 99:
                 retval["cycle"] = o._cycle
 
+            if o._reports_private:
+                retval["reports-private"] = True
+
             # build ticket data, if any
             if o._ticket_type == TicketType.JIRA:
                 retval["ticket-type"] = "jira"
@@ -900,6 +903,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["ws"] = ws_section
                 if o._cycle != 99:
                     js["cycle"] = o._cycle
+                if o._reports_private:
+                    js["reports-private"] = True
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
@@ -986,6 +991,8 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     js["ws"] = ws_section
                 if o._cycle != 99:
                     js["cycle"] = o._cycle
+                if o._reports_private:
+                    js["reports-private"] = True
                 if o._code_pulled != "":
                     js["code"]["pulled"] = o._code_pulled
                 if o._code_path != "":
