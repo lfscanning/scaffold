@@ -102,7 +102,7 @@ def printAllLinksForSubproject(cfg, prj, sp):
     print(f"{prj._name}/{sp._name}, code pulled {sp._code_pulled}")
     print(f"  - report:      {sp._web_html_url}")
     print(f"  - xlsx:        {sp._web_xlsx_url}")
-    print(f"  - sbom-dep-v2: {sp.web_sbom_spdxv2}")
+    print(f"  - sbom-dep-v2: {sp._web_sbom_spdxv2}")
     if sp._reports_private:
         print(f"  - spdx:       {sp._web_spdx}")
     else:
@@ -110,12 +110,12 @@ def printAllLinksForSubproject(cfg, prj, sp):
     if sp._web_sbom_url:
         print(f"  - sbom xlsx:   {sp._web_sbom_url}")
         if sp._reports_private:
-            print(f"  - sbom-dep-v2: {sp.web_sbom_spdxv2}")
-            print(f"  - sbom-dep-v3: {sp.web_sbom_spdxv3}")
+            print(f"  - sbom-dep-v2: {sp._web_sbom_spdxv2}")
+            print(f"  - sbom-dep-v3: {sp._web_sbom_spdxv3}")
             if sp._web_sbom_spdxv2_merged != "":
-                print(f"  - sbom-mrg-v2: {sp.web_sbom_spdxv2_merged}")
+                print(f"  - sbom-mrg-v2: {sp._web_sbom_spdxv2_merged}")
             if sp._web_sbom_spdxv3_merged != "":
-                print(f"  - sbom-mrg-v3: {sp.web_sbom_spdxv3_merged}")
+                print(f"  - sbom-mrg-v3: {sp._web_sbom_spdxv3_merged}")
         else:
             print(f"  - sbom json:   https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}")
     print(f"")
