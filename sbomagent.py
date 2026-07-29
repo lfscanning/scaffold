@@ -139,10 +139,10 @@ errors:
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Merging SPDX documents")
         mergedSbom = mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument)
         if mergedSbom:
-            mergedSbomFileName = f"{prj._name}-{sp._name}-{uploadspdx.MERGED_SBOM_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
+            mergedSbomFileName = f"{sp._name}-{sp._code_pulled}-{uploadspdx.MERGED_SBOM_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
             uploadMergedSbomFile = os.path.join(tempdir, mergedSbomFileName)
             spdx.spdxutil.writeFile(mergedSbom, uploadMergedSbomFile)
-            mergedSbomV3FileName = f"{prj._name}-{sp._name}-{uploadspdx.MERGED_SBOM_V3_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
+            mergedSbomV3FileName = f"{sp._name}-{sp._code_pulled}-{uploadspdx.MERGED_SBOM_V3_SUFFIX}.{uploadspdx.JSON_EXTENSION}"
             if spdxV3Debug:
                 uploadMergedSbomV3File = os.path.join(Path.home(), mergedSbomV3FileName)
             else:
@@ -208,13 +208,19 @@ errors:
         return True
 
 def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
-    fossologySpdxZipPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx.zip")
+    if sp._reports_private:
+        fossologySpdxZipPath = os.path.join(cfg._storepath, cfg._month, "report", prj._name, f"{sp._name}-{sp._code_pulled}.spdx.zip")
+    else:
+        fossologySpdxZipPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx.zip")
     if os.path.exists(fossologySpdxZipPath):
         fossologySpdxTagPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.spdx")
         with zipfile.ZipFile(fossologySpdxZipPath, 'r') as zip:
             zip.extractall(tempdir)
     else:
-        fossologySpdxTagPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
+        if sp._reports_private:
+            fossologySpdxTagPath = os.path.join(cfg._storepath, cfg._month, "report", prj._name, f"{sp._name}-{sp._code_pulled}.spdx")
+        else:
+            fossologySpdxTagPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
     if os.path.exists(fossologySpdxTagPath):
         # Convert to JSON using the Java utility - refererence https://github.com/lfscanning/scaffold/issues/201
         fossologySpdxPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.json")
