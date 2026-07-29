@@ -102,7 +102,6 @@ def printAllLinksForSubproject(cfg, prj, sp):
     print(f"{prj._name}/{sp._name}, code pulled {sp._code_pulled}")
     print(f"  - report:      {sp._web_html_url}")
     print(f"  - xlsx:        {sp._web_xlsx_url}")
-    print(f"  - sbom-dep-v2: {sp._web_sbom_spdxv2}")
     if sp._reports_private:
         print(f"  - spdx:       {sp._web_spdx}")
     else:
