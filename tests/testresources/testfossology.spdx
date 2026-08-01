@@ -93,7 +93,7 @@ FileChecksum: SHA256: de0e614ebd778ddfecdbd5f31a25efeec316f6b8088bcac33dc141dc92
 FileChecksum: MD5: 01386f8950bc2d4dc1906280f1a85a16
 LicenseConcluded: Apache-2.0
 LicenseInfoInFile: Apache-2.0
-LicenseInfoInFile: LicenseRef-fossology-GPL
+LicenseInfoInFile: LicenseRef-fossology_GPL
 FileCopyrightText: NOASSERTION
 
 ##File
@@ -6997,7 +6997,7 @@ FileCopyrightText: NOASSERTION
 ## License Information
 ##-------------------------
 
-LicenseID: LicenseRef-fossology-GPL
+LicenseID: LicenseRef-fossology_GPL
 LicenseName: GNU General Public License
 ExtractedText: <text> GPL is referenced without a version number. Please look up GPL in the License Admin to view the different versions. </text>
 

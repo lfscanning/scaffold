@@ -599,3 +599,32 @@ def fixSpdxV3File(spdxV3File):
         json_data = json.load(spdxfile)
     with open(spdxV3File, 'w') as spdxfile:
         json.dump(json_data, spdxfile, indent=4)
+
+def fixSpdxTagValue(sourceFilePath, destFilePath):
+    try:
+        with open(sourceFilePath, 'r') as source:
+            try:
+                with open(destFilePath, 'w') as dest:
+                    for line in source:
+                        if 'LicenseRef-' in line:
+                            line = _fixLicenseRefs(line)
+                        dest.write(line)
+            except FileNotFoundError:
+                print(f"Unable to create fixed SPDX file at {destFilePath} - directory does not exist")
+                return False
+            except PermissionError:
+                print(f"Unable to create fixed SPDX file at {destFilePath} - permissions violation")
+                return False
+    except FileNotFoundError:
+        print(f"SPDX tag-value file not found at {sourceFilePath}")
+        return False
+    return True
+
+def _fixLicenseRefs(line):
+    for refIter in re.finditer(r"(^|\s|>)(LicenseRef-(.+?))($|\s|<)", line):
+        ref = refIter.group(2)
+        fixedRef = re.sub(r'[^0-9a-zA-Z\.\-]+', '-', ref)
+        if fixedRef != ref:
+            line = re.sub(re.escape(ref), fixedRef, line)
+    return line
+

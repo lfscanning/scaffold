@@ -8,6 +8,7 @@ import shutil
 
 from spdx_python_model.bindings.v3_0_1 import SHACLObjectSet, JSONLDDeserializer
 
+import spdx.spdxutil
 import spdx.spdxutil as spdxutil
 import spdx.xlsx as xlsx
 from config import loadConfig
@@ -503,6 +504,34 @@ class TestSpdxUtil(unittest.TestCase):
                 found = True
                 self.assertTrue(invalid.comment.startswith("Unexpected listed license exception"))
         self.assertTrue(found)
+
+    def testFixTagValue(self):
+        testFilePath = os.path.join(self.temp_dir.name, "BadSpdx.spdx")
+        resultFilePath = os.path.join(self.temp_dir.name, "GoodSpdx.spdx")
+        badSpdxStrings = [
+            "# this is just a comment\n",
+            "LicenseConcluded: LicenseRef-test_invalid\n",
+            "LicenseRef-testinvalid+\n",
+            "LicenseConcluded: <beginText>LicenseRef-test$invalid WITH LicenseRef-test_invalid+\n",
+            "LicenseConcluded: LicenseRef-test_invalid AND LicenseRef-test-valid\n",
+            "LicenseConcluded: LicenseRef-test_invalid<endText>\n",
+            "LicenseConcluded: LicenseRef-valid-License-ref\n"
+        ]
+        goodSpdxStrings = [
+            "# this is just a comment\n",
+            "LicenseConcluded: LicenseRef-test-invalid\n",
+            "LicenseRef-testinvalid-\n",
+            "LicenseConcluded: <beginText>LicenseRef-test-invalid WITH LicenseRef-test-invalid-\n",
+            "LicenseConcluded: LicenseRef-test-invalid AND LicenseRef-test-valid\n",
+            "LicenseConcluded: LicenseRef-test-invalid<endText>\n",
+            "LicenseConcluded: LicenseRef-valid-License-ref\n"
+        ]
+        with open(testFilePath, 'w') as f:
+            f.writelines(badSpdxStrings)
+        spdx.spdxutil.fixSpdxTagValue(testFilePath, resultFilePath)
+        with open(resultFilePath, 'r') as f:
+            result = f.readlines()
+        self.assertEqual(goodSpdxStrings, result)
 if __name__ == '__main__':
     unittest.main()
         
