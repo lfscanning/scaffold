@@ -222,9 +222,13 @@ def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
         else:
             fossologySpdxTagPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
     if os.path.exists(fossologySpdxTagPath):
+        fixedFossologySpdxTagPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}-fixed.spdx")
+        if not spdx.spdxutil.fixSpdxTagValue(fossologySpdxTagPath, fixedFossologySpdxTagPath):
+            print(f"{prj._name}/{sp._name}: WARNING: Unable to fix SPDX tag/value file")
+            return None
         # Convert to JSON using the Java utility - refererence https://github.com/lfscanning/scaffold/issues/201
         fossologySpdxPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.json")
-        convertSpdxFile(fossologySpdxTagPath, fossologySpdxPath, cfg, prj, sp, "TAG", "JSON")
+        convertSpdxFile(fixedFossologySpdxTagPath, fossologySpdxPath, cfg, prj, sp, "TAG", "JSON")
         if os.path.exists(fossologySpdxPath):
             fossologySbom = spdx.spdxutil.parseFile(fossologySpdxPath)
             return spdx.spdxutil.mergeSpdxDocs(fossologySbom, spdxDocument, cfg, prj, sp)
@@ -259,7 +263,7 @@ def convertSpdxFile(fromFile, toFile, cfg, prj, sp, fromType, toType):
     cmd = ["java", "-jar", cfg._tools_java_path, "Convert", str(fromFile), str(toFile), fromType, toType]
     cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     if cp.returncode != 0:
-        print(f"""{prj._name}/{sp._name}: WARNING: unable to convert {fromFile} to SPDX V3 due to {cp.returncode}:
+        print(f"""{prj._name}/{sp._name}: WARNING: unable to convert {fromFile} to {toFile} due to {cp.returncode}:
 ----------
 output:
 {cp.stdout}
