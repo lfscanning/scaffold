@@ -107,6 +107,7 @@ def printAllLinksForSubproject(cfg, prj, sp):
     else:
         print(f"  - spdx:        https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}")
     if sp._web_sbom_url:
+        print(f"  - dependencies:{sp._dependencies_html_url}")
         print(f"  - sbom xlsx:   {sp._web_sbom_url}")
         if sp._reports_private:
             print(f"  - sbom-dep-v2: {sp._web_sbom_spdxv2}")

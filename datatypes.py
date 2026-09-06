@@ -320,6 +320,7 @@ class Subproject:
         self._web_html_url = ""
         self._web_xlsx_url = ""
         self._web_sbom_url = ""
+        self._dependencies_html_url = ""
         self._web_sbom_spdxv2 = ""
         self._web_sbom_spdxv3 = ""
         self._web_sbom_spdxv2_merged = ""

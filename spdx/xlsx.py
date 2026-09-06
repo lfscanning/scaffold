@@ -83,7 +83,7 @@ def _generateDependenciesSheet(wb, spdxDocument):
     pkgRelationships = {}
     for pkg in spdxDocument.packages:
         unrecordedPackages[pkg.spdx_id] = pkg
-        pkgRelationships[pkg.spdx_id] = [];
+        pkgRelationships[pkg.spdx_id] = []
     docRelationships = []
     for relationship in spdxDocument.relationships:
         if relationship.spdx_element_id == spdxDocument.creation_info.spdx_id:
