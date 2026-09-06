@@ -10,6 +10,7 @@ import zipfile
 import tempfile
 import spdx.spdxutil
 import spdx.xlsx
+import spdx.dependencyhtml
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -202,8 +203,18 @@ errors:
         shutil.copy(workbookFilePath, reportFilePath)
         webSbomUrl = uploadreport.doUploadSingleReportForSubproject(cfg, prj, sp, workbookSuffix, workbookExtension)
         if webSbomUrl:
-            sp._web_sbom_url = webSbomUrl
-            print(f"Web version of dependency report available at: {sp._web_sbom_url}")
+            sp._web_sbom_url: bool | str = webSbomUrl
+            print(f"Excel dependency report available at: {sp._web_sbom_url}")
+        dependenciesHtmlSuffix = "dependencies"
+        htmlExtension = "html"
+        dependenciesHtml = spdx.dependencyhtml.makeHtml(spdxDocument, prj, sp)
+        dependenciesHtmlFilePath = os.path.join(reportFolder, f"{sp._name}-{sp._code_pulled}-{dependenciesHtmlSuffix}.{htmlExtension}")
+        with open(dependenciesHtmlFilePath, "w") as report_f:
+            report_f.write(dependenciesHtml)
+        dependenciesHtmlUrl = uploadreport.doUploadSingleReportForSubproject(cfg, prj, sp, dependenciesHtmlSuffix, htmlExtension)
+        if dependenciesHtmlUrl:
+            sp._dependencies_html_url = dependenciesHtmlUrl
+            print(f"Web version of dependency report available at: {sp._dependencies_html_url}")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: SBOM successfully run")
         return True
 
