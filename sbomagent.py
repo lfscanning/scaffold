@@ -17,7 +17,6 @@ from pathlib import Path
 
 import uploadreport
 import uploadspdx
-from uploadspdx import doUploadToGitForSubproject
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
 trivyDebug = False
