@@ -18,6 +18,7 @@ from sbomagent import installNpm, mergeSourceAndSbom
 from config import loadConfig
 from datatypes import Status, ProjectRepoType, Project, Subproject
 from spdx_tools.spdx.parser.parse_anything import parse_file
+from uploadspdx import UPLOAD_SPDX_SUFFIX, UPLOAD_SPDX_V3_SUFFIX, MERGED_SBOM_SUFFIX, MERGED_SBOM_V3_SUFFIX
 
 from spdx.spdxutil import mergeSpdxDocs
 
@@ -159,13 +160,13 @@ class TestSbom(unittest.TestCase):
         
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_SUFFIX}.json")
         self.assertTrue(os.path.isfile(uploadedfile))
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
         reportUploadFile = os.path.join(self.temp_dir.name, cfg._web_reports_path, TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies-{sp._web_uuid}.xlsx")
         self.assertTrue(os.path.isfile(reportUploadFile))
-        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_V3_SUFFIX}.json")
         self.assertTrue(os.path.isfile(spdxv3file))
         dependenciesHtmlFile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.html")
         self.assertTrue(os.path.isfile(dependenciesHtmlFile))
@@ -225,19 +226,19 @@ class TestSbom(unittest.TestCase):
 
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, "")
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
+        uploadedfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_SUFFIX}.json")
         self.assertTrue(os.path.isfile(uploadedfile))
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
         reportUploadFile = os.path.join(self.temp_dir.name, cfg._web_reports_path, TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies-{sp._web_uuid}.xlsx")
         self.assertTrue(os.path.isfile(reportUploadFile))
-        uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{sp2._name}-{sp._code_pulled}-spdx-v2.json")
+        uploadedfile2 = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME2, TEST_MONTH, f"{sp2._name}-{sp._code_pulled}-{UPLOAD_SPDX_SUFFIX}.json")
         self.assertTrue(os.path.isfile(uploadedfile2))
         reportfile2 = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp2._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile2))
         reportUploadFile2 = os.path.join(self.temp_dir.name, cfg._web_reports_path, TEST_PROJECT_NAME, f"{sp2._name}-{sp2._code_pulled}-dependencies-{sp2._web_uuid}.xlsx")
         self.assertTrue(os.path.isfile(reportUploadFile2))
-        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
+        spdxv3file = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_V3_SUFFIX}.json")
         self.assertTrue(os.path.isfile(spdxv3file))
         dependenciesHtmlFile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.html")
         self.assertTrue(os.path.isfile(dependenciesHtmlFile))
@@ -470,24 +471,24 @@ class TestSbom(unittest.TestCase):
 
         result = runManualSbomAgent(cfg, TEST_PROJECT_NAME, TEST_SUBPROJECT_NAME)
         self.assertTrue(result)
-        uploadedfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
+        uploadedfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_SUFFIX}.json")
         self.assertTrue(os.path.isfile(uploadedfile))
-        gitfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v2.json")
+        gitfile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_SUFFIX}.json")
         self.assertFalse(os.path.isfile(gitfile))
         reportfile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.xlsx")
         self.assertTrue(os.path.isfile(reportfile))
         reportUploadFile = os.path.join(self.temp_dir.name, cfg._web_reports_path, TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies-{sp._web_uuid}.xlsx")
         self.assertTrue(os.path.isfile(reportUploadFile))
-        spdxv3gitFile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
+        spdxv3gitFile = os.path.join(self.project_repo_dir, TEST_SUBPROJECT_NAME, TEST_MONTH, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_V3_SUFFIX}.json")
         self.assertFalse(os.path.isfile(spdxv3gitFile))
-        spdxv3file = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-spdx-v3.json")
+        spdxv3file = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-{UPLOAD_SPDX_V3_SUFFIX}.json")
         self.assertTrue(os.path.isfile(spdxv3file))
         dependenciesHtmlFile = os.path.join(self.scaffold_home_dir, TEST_MONTH, "report", TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies.html")
         self.assertTrue(os.path.isfile(dependenciesHtmlFile))
         dependenciesHtmlUploadFile = os.path.join(self.temp_dir.name, cfg._web_reports_path, TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies-{sp._web_uuid}.html")
         self.assertTrue(os.path.isfile(dependenciesHtmlUploadFile))
-        self.assertTrue("-spdx-v3" in sp._web_sbom_spdxv3)
-        self.assertTrue("-spdx-v2" in sp._web_sbom_spdxv2)
+        self.assertTrue(f"-{UPLOAD_SPDX_V3_SUFFIX}" in sp._web_sbom_spdxv3)
+        self.assertTrue(f"-{UPLOAD_SPDX_SUFFIX}" in sp._web_sbom_spdxv2)
         # TODO: Test merged SBOM
 
 if __name__ == '__main__':

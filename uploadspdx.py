@@ -11,12 +11,12 @@ from git import Repo
 from datatypes import Status
 from uploadreport import doUploadSingleReportForSubproject
 
-UPLOAD_SPDX_SUFFIX = "spdx-v2"
+UPLOAD_SPDX_SUFFIX = "deps.spdx2"
 JSON_EXTENSION = "json"
 SPDX_EXTENSION = "spdx"
-UPLOAD_SPDX_V3_SUFFIX = "spdx-v3"
-MERGED_SBOM_SUFFIX = "merged-spdx-v2"
-MERGED_SBOM_V3_SUFFIX = "merged-spdx-v3"
+UPLOAD_SPDX_V3_SUFFIX = "deps.spdx3"
+MERGED_SBOM_SUFFIX = "merged.spdx2"
+MERGED_SBOM_V3_SUFFIX = "merged.spdx3"
 
 SUFFIX_TO_ATTRIBUTE_MAP = {
     UPLOAD_SPDX_SUFFIX : "_web_sbom_spdxv2",
