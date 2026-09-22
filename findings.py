@@ -414,10 +414,15 @@ def makeFindingsForSubproject(cfg, prj, sp, isDraft, includeReview=True):
         orgLink = f'https://github.com/{sp._github_org}'
     else:
         orgLink = None
+    if sp._dependencies_html_url:
+        dependencyReportLink = sp._dependencies_html_url
+    else:
+        dependencyReportLink = None
     renderData = {
         "prjName": prj._name,
         "spName": sp._name,
         "orgLink": orgLink,
+        "dependencyReportLink": dependencyReportLink,
         "codeDate": sp._code_pulled,
         "repoData": repoData,
         "findingData": findingData,
