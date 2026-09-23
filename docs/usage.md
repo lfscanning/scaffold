@@ -63,6 +63,7 @@ Assuming that no errors are encountered, a typical workflow of the scanning proc
   * If any key findings are not currently reported but should be called out, the user edits the `findings-project1.yaml` file to add an entry for the finding
   * After making the desired changes, the user manually deletes the HTML report and then restarts with the same `run` command to regenerate the reports
 * After confirming that all desired key findings are shown on the HTML report, the user runs: `> sc 2021-09 approve project1 subproject4`
+* The SBOM reports are created with the command `> sc 2021-09 sbom project1 subproject4`
 * The user continues the scaffold process by running `> sc 2021-09 run project1 subproject4`
   * scaffold finalizes the HTML report
   * scaffold adds the SPDX file to the spdx-project1 repo, commits it and pushes it up to GitHub
