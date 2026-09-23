@@ -64,7 +64,7 @@ def upload_file(fossologyServer, folder, file):
         description = f"Authorization error uploading {file}"
         raise Exception(description)
     else:
-        description = "Error uploading {file}"
+        description = f"Error uploading {file} - response status code {response.status_code}"
         raise Exception(description)
     return True
 
