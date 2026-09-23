@@ -105,7 +105,7 @@ def printAllLinksForSubproject(cfg, prj, sp):
     if sp._reports_private:
         print(f"  - spdx:        {sp._web_spdx}")
     else:
-        print(f"  - spdx:        https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}")
+        print(f"  - spdx:        https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/main/{sp._name}/{cfg._month}")
     if sp._web_sbom_url:
         print(f"  - dependencies:{sp._dependencies_html_url}")
         print(f"  - sbom xlsx:   {sp._web_sbom_url}")
@@ -117,7 +117,7 @@ def printAllLinksForSubproject(cfg, prj, sp):
             if sp._web_sbom_spdxv3_merged != "":
                 print(f"  - sbom-mrg-v3: {sp._web_sbom_spdxv3_merged}")
         else:
-            print(f"  - sbom json:   https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/master/{sp._name}/{cfg._month}")
+            print(f"  - sbom json:   https://github.com/{cfg._spdx_github_org}/{spdxRepoName}/tree/main/{sp._name}/{cfg._month}")
     print(f"")
 
 def printReportLinks(cfg, prj_only="", sp_only=""):
