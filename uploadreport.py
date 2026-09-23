@@ -220,8 +220,8 @@ errors:
             print(f"{prj._name}: uploaded XLSX report")
             prj._web_combined_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
     else:
-        os.makedirs(os.path.dirname(dstHtmlPath), exist_ok=True)
-        copyfile(srcHtmlPath, dstHtmlPath)
+        os.makedirs(os.path.dirname(dstXlsxPath), exist_ok=True)
+        copyfile(srcXlsxPath, dstXlsxPath)
         print(f"{prj._name}: uploaded XLSX report")
         prj._web_combined_xlsx_url = f"https://{cfg._web_server}/{cfg._web_reports_url}/{prj._name}/{dstXlsxFilename}"
     # success!
