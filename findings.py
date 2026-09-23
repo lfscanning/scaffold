@@ -565,7 +565,7 @@ def makeFindingsForProject(cfg, prj, isDraft, includeReview=True):
 
     # if there's already a file at the location, needs to be deleted before we will proceed
     if os.path.exists(htmlPath):
-        # print(f"{prj._name}: run 'approve' action to finalize or delete existing report to re-run")
+        print(f"{prj._name}: file {htmlPath} already exists - bailing")
         return "", ""
 
     # get analysis results

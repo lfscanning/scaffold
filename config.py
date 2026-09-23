@@ -836,6 +836,7 @@ class ConfigJSONEncoder(json.JSONEncoder):
 
             if o._repotype == ProjectRepoType.GITHUB:
                 retval["type"] = "github"
+                retval["status"] = o._status.name
                 retval["subprojects"] = o._subprojects
                 return retval
             elif o._repotype == ProjectRepoType.GERRIT:
