@@ -292,7 +292,9 @@ class TestSbom(unittest.TestCase):
         sp._name = FOSSOLOGY_TEST_SUBPROJECT
         cfg._storepath = self.scaffold_home_dir
         sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
-        fossology_file_path = os.path.join(self.fossology_test_dir_path, f"{FOSSOLOGY_TEST_SUBPROJECT}-{FOSSOLOGY_TEST_CODE_PULLED}.spdx")
+        fossology_dir_path = os.path.join(self.scaffold_home_dir, cfg._month, "spdx", prj._name)
+        os.makedirs(fossology_dir_path)
+        fossology_file_path = os.path.join(fossology_dir_path, f"{FOSSOLOGY_TEST_SUBPROJECT}-{FOSSOLOGY_TEST_CODE_PULLED}.spdx")
         shutil.copyfile(TEST_FOSSOLOGY_FILE, fossology_file_path)
         sbom = parse_file(TEST_SBOM_FILE)
         try:
@@ -370,70 +372,6 @@ class TestSbom(unittest.TestCase):
                     describes = document_utils.get_element_from_spdx_id(result, relationship.related_spdx_element_id)
             self.assertIsNotNone(describes)
             self.assertEqual(describes.name, "cncf-3.kubeflow", "Wrong document describes")
-
-    def test_merged_sbom_zip(self):
-        cfg_file = os.path.join(self.config_month_dir, "config.json")
-        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        cfg._month = FOSSOLOGY_TEST_MONTH
-        prj = cfg._projects[TEST_PROJECT_NAME]
-        prj._name = FOSSOLOGY_TEST_PROJECT
-        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
-        sp._name = FOSSOLOGY_TEST_SUBPROJECT
-        cfg._storepath = self.scaffold_home_dir
-        sp._code_pulled = FOSSOLOGY_TEST_CODE_PULLED
-        fossology_file_path_zip = os.path.join(self.fossology_test_dir_path, f"{FOSSOLOGY_TEST_SUBPROJECT}-{FOSSOLOGY_TEST_CODE_PULLED}.spdx.zip")
-        shutil.copyfile(TEST_FOSSOLOGY_FILE_ZIP, fossology_file_path_zip)
-        sbom = parse_file(TEST_SBOM_FILE)
-        try:
-            with tempfile.TemporaryDirectory() as localtemp:
-                result = mergeSourceAndSbom(cfg, prj, sp, localtemp, sbom)
-        finally:
-            os.remove(fossology_file_path_zip)
-        self.assertIsNotNone(result)
-        describes = None
-        # Check root describes
-        for relationship in result.relationships:
-            if relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == 'SPDXRef-DOCUMENT':
-                describes = document_utils.get_element_from_spdx_id(result, relationship.related_spdx_element_id)
-        self.assertIsNotNone(describes)
-        self.assertEqual(describes.name, "lfenergy.flexmeasures", "Wrong document describes")
-        # Check creation Info
-        self.assertTrue(result.creation_info.document_namespace.startswith("https://github.com/lfscanning/spdx-lfenergy/flexmeasures/2024-09/"))
-        foundToolScaffold = False
-        foundToolFossology = False
-        foundToolTrivy = False
-        foundLfCreator = False
-        for creator in result.creation_info.creators:
-            if creator.name.startswith("Scaffold"):
-                foundToolScaffold = True
-            if creator.name.startswith("trivy"):
-                foundToolTrivy = True
-            if creator.name.startswith("Linux Foundation"):
-                foundLfCreator = True
-            if creator.name.startswith("fossology"):
-                foundToolFossology = True
-        self.assertTrue(foundToolScaffold)
-        self.assertTrue(foundToolFossology)
-        self.assertTrue(foundToolTrivy)
-        self.assertTrue(foundLfCreator)
-        # Check source files merged
-        # Check dependencies merged
-        for relationship in result.relationships:
-            if relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == describes.spdx_id:
-                foundDepRelationship = False
-                foundSourceRelationship = False
-                for repoRelationship in result.relationships:
-                    if repoRelationship.relationship_type == RelationshipType.CONTAINS and repoRelationship.spdx_element_id == relationship.related_spdx_element_id:
-                        if spdx_element_utils.get_element_type_from_spdx_id(repoRelationship.related_spdx_element_id, result) == Package:
-                            foundDepRelationship = True
-                        if spdx_element_utils.get_element_type_from_spdx_id(repoRelationship.related_spdx_element_id, result) == File:
-                            foundSourceRelationship = True
-                if relationship.related_spdx_element_id == "SPDXRef-lfenergy-flexmeasures-flexmeasures":
-                    self.assertTrue(foundDepRelationship)
-                    # Note that other repos don't contain dependencies
-                self.assertTrue(foundSourceRelationship)
-        validation = validate_full_spdx_document(result)
-        self.assertTrue(not validation)
 
     def test_private_reports_config(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")

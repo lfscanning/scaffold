@@ -218,19 +218,7 @@ errors:
         return True
 
 def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
-    if sp._reports_private:
-        fossologySpdxZipPath = os.path.join(cfg._storepath, cfg._month, "report", prj._name, f"{sp._name}-{sp._code_pulled}.spdx.zip")
-    else:
-        fossologySpdxZipPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx.zip")
-    if os.path.exists(fossologySpdxZipPath):
-        fossologySpdxTagPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}.spdx")
-        with zipfile.ZipFile(fossologySpdxZipPath, 'r') as zip:
-            zip.extractall(tempdir)
-    else:
-        if sp._reports_private:
-            fossologySpdxTagPath = os.path.join(cfg._storepath, cfg._month, "report", prj._name, f"{sp._name}-{sp._code_pulled}.spdx")
-        else:
-            fossologySpdxTagPath = os.path.join(cfg._storepath, "spdxrepos", f"spdx-{prj._name}", f"{sp._name}", f"{cfg._month}", f"{sp._name}-{sp._code_pulled}.spdx")
+    fossologySpdxTagPath = os.path.join(cfg._storepath, cfg._month, "spdx", prj._name, f"{sp._name}-{sp._code_pulled}.spdx")
     if os.path.exists(fossologySpdxTagPath):
         fixedFossologySpdxTagPath = os.path.join(tempdir, f"{sp._name}-{sp._code_pulled}-fixed.spdx")
         if not spdx.spdxutil.fixSpdxTagValue(fossologySpdxTagPath, fixedFossologySpdxTagPath):
