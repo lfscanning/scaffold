@@ -183,7 +183,8 @@ def run_job(
     cmd = [*gradle, job.task, "--write-locks"]
     for script in init_scripts:
         cmd += ["--init-script", str(script)]
-    cmd += ["--console=plain", "--quiet", *extra_args]
+    # --no-daemon: don't leave a Gradle daemon idling after we're done (they linger for hours)
+    cmd += ["--console=plain", "--quiet", "--no-daemon", *extra_args]
     try:
         proc = subprocess.run(
             cmd, cwd=job.build_root, capture_output=True, text=True, timeout=timeout,

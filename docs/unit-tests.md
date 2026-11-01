@@ -21,6 +21,7 @@ The JSON file has the following fields:
 You also need to set an environment variables `TRIVY_EXEC_PATH` (set to the Trivy executable), 
 `NPM_EXEC_PATH` (set to the NPM executable), `PARLAY_EXEC_PATH` (set to the Parlay executable),
 `TOOLS_JAVA_PATH` (set to the SPDX tools jar file path), `CDSBOM_EXEC_PATH` (set to the cdsbom executable), - otherwise the SBOM tests will fail.
+`GRADLE_EXEC_PATH` (set to the Gradle executable)
 
 ## Running Tests
 

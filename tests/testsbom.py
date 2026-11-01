@@ -4,7 +4,11 @@ import os
 import tempfile
 import shutil
 import time
+import contextlib
+import io
 from datetime import datetime
+from types import SimpleNamespace
+from unittest import mock
 
 import git
 import zipfile
@@ -14,7 +18,8 @@ from spdx_tools.spdx.model import RelationshipType, Package, File
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 
 from manualsbom import runManualSbomAgent
-from sbomagent import installNpm, mergeSourceAndSbom
+import gradle_lockfiles
+from sbomagent import installNpm, mergeSourceAndSbom, generateGradleLockFiles
 from config import loadConfig
 from datatypes import Status, ProjectRepoType, Project, Subproject
 from spdx_tools.spdx.parser.parse_anything import parse_file
@@ -28,6 +33,9 @@ SECRET_FILE_NAME = ".test-scaffold-secrets.json"
 TEST_SCAFFOLD_CODE = os.path.join(os.path.dirname(__file__), "testresources", ANALYSIS_FILE_NAME)
 TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "scaffoldhome")
 SIMPLE_NPM_ZIP = os.path.join(os.path.dirname(__file__), "testresources", "simplenpm.zip")
+SIMPLE_GRADLE_ZIP = os.path.join(os.path.dirname(__file__), "testresources", "simplegradle.zip")
+GRADLE_EXEC_PATH = os.environ.get('GRADLE_EXEC_PATH', 'gradle')  # default
+requires_gradle = unittest.skipUnless(shutil.which(GRADLE_EXEC_PATH), f"Gradle not found at '{GRADLE_EXEC_PATH}' - set GRADLE_EXEC_PATH to run this test")
 TEST_MONTH = "2023-07"
 TEST_NEXT_MONTH = "2023-08"
 TEST_MONTH_DIR = os.path.join(TEST_SCAFFOLD_HOME, TEST_MONTH)
@@ -428,6 +436,109 @@ class TestSbom(unittest.TestCase):
         self.assertTrue(f"-{UPLOAD_SPDX_V3_SUFFIX}" in sp._web_sbom_spdxv3)
         self.assertTrue(f"-{UPLOAD_SPDX_SUFFIX}" in sp._web_sbom_spdxv2)
         # TODO: Test merged SBOM
+
+'''
+Tests the generation of missing Gradle lock files
+
+These have their own light setup rather than extending TestSbom, whose setUp clones (and whose tearDown pushes to)
+a GitHub repo.  generateGradleLockFiles only uses cfg._zippath and cfg._gradle_exec_path, so a simple stand-in
+config is enough.
+
+testresources/simplegradle.zip is a small build with a root project plus "app" and "lib" projects.  Its one
+dependency comes from a repository inside the zip, so the tests need no network access.  The build does not
+configure dependency locking, and the "lib" project already contains a lock file.
+'''
+class TestGradleLockfiles(unittest.TestCase):
+
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp_dir.cleanup)
+        with zipfile.ZipFile(SIMPLE_GRADLE_ZIP, mode='r') as zip:
+            zip.extractall(self.temp_dir.name)
+        self.gradle_path = os.path.join(self.temp_dir.name, 'simplegradle')
+        self.root_lockfile = os.path.join(self.gradle_path, 'gradle.lockfile')
+        self.app_lockfile = os.path.join(self.gradle_path, 'app', 'gradle.lockfile')
+        self.lib_lockfile = os.path.join(self.gradle_path, 'lib', 'gradle.lockfile')
+        self.gradle_cache_dir = os.path.join(self.temp_dir.name, 'gradlecache')
+        self.cfg = SimpleNamespace(_zippath=self.temp_dir.name, _gradle_exec_path=GRADLE_EXEC_PATH)
+        self.prj = Project()
+        self.prj._name = TEST_PROJECT_NAME
+        self.sp = Subproject()
+        self.sp._name = TEST_SUBPROJECT_NAME
+        # Normally an extra init script downloads the Foojay toolchain resolver plugin from the Gradle plugin
+        # portal.  The test build doesn't need a JDK download, so replace it with a no-op to stay offline.
+        patcher = mock.patch.object(gradle_lockfiles, "INIT_SCRIPT_TOOLCHAINS", "// Foojay disabled for tests\n")
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def _read(self, path):
+        with open(path, 'rb') as f:
+            return f.read()
+
+    def _snapshot(self):
+        # The content of every file except lock files and Gradle's own working directories
+        snapshot = {}
+        for dirpath, dirs, files in os.walk(self.gradle_path):
+            dirs[:] = [d for d in dirs if d not in ('.gradle', 'build')]
+            for fileName in files:
+                if fileName != 'gradle.lockfile':
+                    path = os.path.join(dirpath, fileName)
+                    snapshot[path] = self._read(path)
+        return snapshot
+
+    @requires_gradle
+    def test_generate_lockfiles(self):
+        lib_lockfile_before = self._read(self.lib_lockfile)
+        snapshot_before = self._snapshot()
+        self.assertFalse(os.path.exists(self.app_lockfile))
+        generateGradleLockFiles(self.gradle_path, self.cfg, self.prj, self.sp)
+        # The missing lock file is created and locks the dependency
+        self.assertTrue(os.path.isfile(self.app_lockfile))
+        self.assertIn('org.example:testlib:1.0.0=', self._read(self.app_lockfile).decode())
+        # The lock file that was already there is left alone
+        self.assertEqual(lib_lockfile_before, self._read(self.lib_lockfile))
+        # The root project applies no plugins so it has nothing to lock and Gradle writes no file for it
+        self.assertFalse(os.path.exists(self.root_lockfile))
+        # The build itself is never modified, even though it doesn't configure locking
+        self.assertEqual(snapshot_before, self._snapshot())
+        # Gradle used its own cache directory under cfg._zippath
+        self.assertTrue(os.path.isdir(self.gradle_cache_dir))
+
+    @requires_gradle
+    def test_generate_lockfiles_result(self):
+        messages = []
+        env = {'GRADLE_USER_HOME': self.gradle_cache_dir}
+        # A dry run reports what is missing without running Gradle
+        result = gradle_lockfiles.generate_lockfiles(self.gradle_path, dry_run=True, log=messages.append)
+        self.assertEqual(3, result.projects)
+        self.assertEqual(1, result.already_present)
+        self.assertEqual(2, result.missing)
+        self.assertEqual(0, result.created)
+        self.assertFalse(os.path.exists(self.app_lockfile))
+        self.assertFalse(os.path.exists(self.gradle_cache_dir))
+        # The real run creates the lock file for "app".  Nothing is created for the root project (see above).
+        result = gradle_lockfiles.generate_lockfiles(self.gradle_path, gradle_exe=GRADLE_EXEC_PATH, env=env, log=messages.append)
+        self.assertEqual(1, result.created)
+        self.assertEqual(1, result.no_lockfile)
+        self.assertEqual(0, result.failed)
+        self.assertTrue(os.path.isfile(self.app_lockfile))
+        # Running again doesn't touch the lock file that now exists
+        app_lockfile_before = self._read(self.app_lockfile)
+        result = gradle_lockfiles.generate_lockfiles(self.gradle_path, gradle_exe=GRADLE_EXEC_PATH, env=env, log=messages.append)
+        self.assertEqual(2, result.already_present)
+        self.assertEqual(0, result.created)
+        self.assertEqual(app_lockfile_before, self._read(self.app_lockfile))
+
+    def test_gradle_failure_is_not_fatal(self):
+        # Like installNpm, a failure is reported but doesn't stop the SBOM run.  The test project has no gradlew,
+        # so the Gradle from the config is used - point it at one that doesn't exist.
+        self.cfg._gradle_exec_path = os.path.join(self.temp_dir.name, 'no-such-gradle')
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            generateGradleLockFiles(self.gradle_path, self.cfg, self.prj, self.sp)  # must not raise
+        self.assertFalse(os.path.exists(self.app_lockfile))
+        self.assertIn('could not start Gradle', output.getvalue())
+        self.assertIn(f"{TEST_PROJECT_NAME}/{TEST_SUBPROJECT_NAME}: Gradle lock file generation incomplete", output.getvalue())
 
 if __name__ == '__main__':
     unittest.main()
