@@ -165,7 +165,7 @@ Note: this command should be used with caution and only run after verifying no o
   * Must not be `STOPPED`
 * Details:
   * Runs the trivy application with the following options:
-    * `--scanners license,vuln`
+    * `--scanners license`
 	* `--format spdx-json`
   * Runs parlay application with the `ecosystems enrich` command
   * Uploads the resultant SPDX JSON file to the lfscanning repo spdx-[project-name]

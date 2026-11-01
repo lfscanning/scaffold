@@ -20,7 +20,7 @@ alias sc='python /INSTALL-LOCATION/scaffold/scaffold.py'
 
 ### Sbom
 
-To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/), [parlay](https://github.com/snyk/parlay), [cdsbom](https://github.com/jeffmendoza/cdsbom) and [tools-java](https://github.com/spdx/tools-java) must be installed on the local machine.
+To use the `sbom` command, [trivy](https://aquasecurity.github.io/trivy), [NPM](https://www.npmjs.com/), [Go](https://go.dev/), [parlay](https://github.com/snyk/parlay), [cdsbom](https://github.com/jeffmendoza/cdsbom), [Gradle](https://gradle.org/) and [tools-java](https://github.com/spdx/tools-java) must be installed on the local machine.
 
 The current version of Trivy and Parlay requires Go version 1.22.X installed on the target machine.
 
@@ -66,6 +66,22 @@ curl -o tools-java.jar https://repo1.maven.org/maven2/org/spdx/tools-java/[VERSI
 ```
 
 where `[VERSION]` is the latest version of tools-java.
+
+For Gradle to run properly, JVM version 25 should be installed.
+
+```shell
+sudo apt update
+sudo add-apt-repository universe
+sudo apt update
+sudo apt install openjdk-25-jdk -y
+```
+
+Use apt to install Gradle:
+
+```shell
+sudo apt update
+sudo apt install gradle -y
+```
 
 ## Configuration
 

@@ -15,6 +15,7 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
+import gradle_lockfiles
 import uploadreport
 import uploadspdx
 from spdx_tools.spdx.parser.error import SPDXParsingError
@@ -44,6 +45,8 @@ def runUnifiedAgent(cfg, prj, sp):
             zip.extractall(analysisdir)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for NPM projects to install")
         installNpm(analysisdir, cfg, prj, sp)
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for Gradle projects to lock")
+        generateGradleLockFiles(analysisdir, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
         if trivyDebug:
             trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "840m", "--debug", "--scanners", "license", "--format", "spdx-json", analysisdir]
@@ -251,6 +254,24 @@ def installNpm(sourceDir, cfg, prj, sp):
         cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, cwd=npm_dir)
         if cp.returncode != 0:
             print(f"{prj._name}/{sp._name}: NPM install failed for {npm_dir} with exit code {cp.returncode}.")
+
+def generateGradleLockFiles(sourceDir, cfg, prj, sp):
+    # Create gradle.lockfile for Gradle projects that don't have one so that Trivy can see
+    # their resolved dependencies. Like installNpm, failures are reported but never stop the run.
+    label = f"{prj._name}/{sp._name}"
+    cachedir = os.path.join(cfg._zippath, "gradlecache")
+    try:
+        result = gradle_lockfiles.generate_lockfiles(
+            Path(sourceDir),
+            gradle_exe=getattr(cfg, "_gradle_exec_path", None),  # used only when a project has no gradlew
+            env={"GRADLE_USER_HOME": cachedir},
+            log=lambda msg: print(f"{label}: {msg}"),
+        )
+    except Exception as e:
+        print(f"{label}: Gradle lock file generation failed unexpectedly: {e}")
+        return
+    if not result.ok:
+        print(f"{label}: Gradle lock file generation incomplete: {result.failed} failed, {result.no_lockfile} produced no file.")
 
 def convertToV3(spdxv2File, spdxv3File, cfg, prj, sp):
     convertSpdxFile(spdxv2File, spdxv3File, cfg, prj, sp, "JSON", "JSONLD")
