@@ -295,6 +295,8 @@ def augmentTrivyDocument(spdx_document, cfg, prj, sp):
             download_location = SpdxNoAssertion()
             external_references = []
         version = sp._code_repos[repo]
+        if not version:
+            print(f"{prj._name}/{sp._name}: Version is empty for the package augmentation")
         spdx_id = toSpdxRef(prj._name + "-" + sp._name + '-' + repo)
         supplier = Actor(actor_type = ActorType.ORGANIZATION, name = 'Linux Foundation Project ' + prj._name)
         source_info = 'The source this package was part of the LF Scanning configuration for the project ' + prj._name
