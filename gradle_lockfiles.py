@@ -57,6 +57,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable, Mapping
@@ -155,19 +156,53 @@ def find_build_root(project: Path) -> Path:
     return project
 
 
-def find_gradle(build_root: Path, fallback: str | None = None) -> list[str] | None:
-    """Prefer the project's wrapper (searching upward), then `fallback`, then `gradle` on PATH."""
+WRAPPER_JAR = Path("gradle") / "wrapper" / "gradle-wrapper.jar"
+WRAPPER_MAIN_CLASS = "org/gradle/wrapper/GradleWrapperMain.class"
+
+
+def wrapper_is_usable(wrapper: Path) -> bool:
+    """True if the gradle-wrapper.jar beside this gradlew script is a real wrapper jar.
+
+    When the jar is missing (gitignored, or left out of a source archive) or isn't a real jar (a Git LFS
+    pointer, a truncated file), gradlew fails with "Could not find or load main class
+    org.gradle.wrapper.GradleWrapperMain" - or "Unable to access jarfile" with newer scripts.
+    """
+    try:
+        with zipfile.ZipFile(wrapper.parent / WRAPPER_JAR) as jar:
+            return WRAPPER_MAIN_CLASS in jar.namelist()
+    except (OSError, zipfile.BadZipFile):
+        return False
+
+
+def find_gradle(
+    build_root: Path,
+    fallback: str | None = None,
+    log: Callable[[str], None] = print,
+) -> list[str] | None:
+    """Prefer the project's wrapper (searching upward), then `fallback`, then `gradle` on PATH.
+
+    A wrapper whose jar is missing or invalid can't run, so it is skipped in favour of the other two.
+    """
     wrapper_name = "gradlew.bat" if os.name == "nt" else "gradlew"
+    unusable: Path | None = None
     for d in (build_root, *build_root.parents):
         wrapper = d / wrapper_name
         if wrapper.is_file():
-            if os.name != "nt" and not os.access(wrapper, os.X_OK):
-                return ["sh", str(wrapper)]
-            return [str(wrapper)]
-    if fallback:
-        return [str(fallback)]
-    system = shutil.which("gradle")
-    return [system] if system else None
+            if wrapper_is_usable(wrapper):
+                if os.name != "nt" and not os.access(wrapper, os.X_OK):
+                    return ["sh", str(wrapper)]
+                return [str(wrapper)]
+            unusable = wrapper
+            break
+    exe = fallback or shutil.which("gradle")
+    if unusable:
+        why = (f"    NOTE: {unusable} can't run because {unusable.parent / WRAPPER_JAR} is missing or not a "
+               "valid wrapper jar (left out of the source, or a Git LFS pointer?).")
+        if exe:
+            log(f"{why}\n          Using {exe} instead - it may be a different Gradle version than the project expects.")
+        else:
+            log(f"{why}\n          No other Gradle is available: set cfg._gradle_exec_path or put gradle on PATH.")
+    return [str(exe)] if exe else None
 
 
 def run_job(
@@ -226,20 +261,30 @@ def generate_lockfiles(
     foojay_version: str = DEFAULT_FOOJAY_VERSION,
     dependency_verification: str | None = None,
     gradle_exe: str | None = None,
+    java_home: str | None = None,
     env: Mapping[str, str] | None = None,
     log: Callable[[str], None] = print,
 ) -> Result:
     """Generate every missing lock file under `root` and return what happened.
 
     gradle_exe  Gradle executable to use when a project has no gradlew.
+    java_home   JDK to run Gradle on (sets JAVA_HOME for the runs). Needed when the default JDK is
+                too new for the Gradle version a project uses, e.g. "Unsupported class file major
+                version 69" means JDK 25 with a Gradle older than 9.1. JDK 17 runs Gradle 7.3 - 9.x.
+                This is the JDK Gradle itself runs on, not the toolchain JDK the build asks for.
     env         Extra environment variables for Gradle (e.g. GRADLE_USER_HOME).
     log         Called with each line of progress output.
     """
     root = Path(root).resolve()
     if not root.is_dir():
         raise NotADirectoryError(str(root))
+    if java_home and not (Path(java_home) / "bin").is_dir():
+        raise NotADirectoryError(f"java_home {java_home} does not look like a JDK (no bin directory)")
     gradle_args = list(gradle_args)
-    run_env = {**os.environ, **env} if env else None
+    run_env = {**os.environ, **(env or {})} if (env or java_home) else None
+    if java_home:
+        run_env["JAVA_HOME"] = str(java_home)
+        log(f"Running Gradle with JAVA_HOME={java_home}")
 
     result = Result()
     projects = find_projects(root, excludes)
@@ -297,10 +342,10 @@ def generate_lockfiles(
             rel = job.lockfile.relative_to(root)
             log(f"[{i}/{len(jobs)}] {rel}")
             if job.build_root not in gradle_cache:
-                gradle_cache[job.build_root] = find_gradle(job.build_root, gradle_exe)
+                gradle_cache[job.build_root] = find_gradle(job.build_root, gradle_exe, log)
             gradle = gradle_cache[job.build_root]
             if gradle is None:
-                log("    FAILED: no gradlew found in or above the build root, and no `gradle` on PATH")
+                log("    FAILED: no usable Gradle: no working gradlew in or above the build root, and no `gradle` on PATH")
                 result.failed += 1
                 continue
 
@@ -358,6 +403,10 @@ def main(argv: list[str] | None = None) -> int:
                              "gradle/verification-metadata.xml (the temporary Foojay plugin isn't in it)")
     parser.add_argument("--foojay-version", default=DEFAULT_FOOJAY_VERSION, metavar="VERSION",
                         help="version of org.gradle.toolchains:foojay-resolver to use")
+    parser.add_argument("--java-home", default=None, metavar="PATH",
+                        help="JDK to run Gradle on (sets JAVA_HOME). Use when the default JDK is too new for a "
+                             "project's Gradle, e.g. 'Unsupported class file major version 69'. JDK 17 runs "
+                             "Gradle 7.3 through 9.x")
     parser.add_argument("--timeout", type=int, default=900, help="seconds allowed per Gradle run")
     parser.add_argument("--gradle-arg", action="append", default=[], metavar="ARG",
                         help="extra argument for Gradle, use '=' form: --gradle-arg=--offline (repeatable)")
@@ -368,8 +417,13 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {root} is not a directory", file=sys.stderr)
         return 2
 
+    if args.java_home and not (Path(args.java_home) / "bin").is_dir():
+        print(f"error: --java-home {args.java_home} does not look like a JDK (no bin directory)", file=sys.stderr)
+        return 2
+
     result = generate_lockfiles(
         root,
+        java_home=args.java_home,
         dry_run=args.dry_run,
         buildscript=args.buildscript,
         excludes=args.exclude,
