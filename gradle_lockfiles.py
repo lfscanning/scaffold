@@ -205,6 +205,24 @@ def find_gradle(
     return [str(exe)] if exe else None
 
 
+def failure_excerpt(output: str, max_lines: int = 60) -> list[str]:
+    """The part of Gradle's output worth showing: all of it if short, else the failure report onwards."""
+    lines = output.strip().splitlines()
+    if len(lines) <= max_lines:
+        return lines
+    start = next(
+        (i for i, line in enumerate(lines) if line.startswith("FAILURE:") or "What went wrong" in line),
+        len(lines) - max_lines,
+    )
+    shown = lines[start:start + max_lines]
+    omitted_after = len(lines) - start - len(shown)
+    result = [f"... ({start} earlier lines omitted)"] if start else []
+    result += shown
+    if omitted_after > 0:
+        result.append(f"... ({omitted_after} more lines omitted)")
+    return result
+
+
 def run_job(
     job: Job,
     gradle: list[str],
@@ -233,10 +251,16 @@ def run_job(
         return "failed"
 
     if proc.returncode != 0:
-        tail = (proc.stderr or proc.stdout).strip().splitlines()[-15:]
+        output = "\n".join(s for s in (proc.stdout, proc.stderr) if s and s.strip())
         log(f"    FAILED (exit {proc.returncode}):")
-        for line in tail:
+        for line in failure_excerpt(output):
             log(f"      {line}")
+        if "has already been completed" in output:
+            log("    TIP: Gradle shows this message when an earlier error during initialization was lost, so "
+                "the real cause is not in the output above.\n"
+                f"         To find it, run this in {job.build_root} (without this script's init scripts):\n"
+                f"           {' '.join(gradle)} help --no-daemon --stacktrace\n"
+                "         If that works, retry this script with --no-toolchain-provisioning.")
         return "failed"
 
     if not job.lockfile.exists():
@@ -255,7 +279,7 @@ def generate_lockfiles(
     dry_run: bool = False,
     buildscript: bool = False,
     excludes: Iterable[str] = (),
-    timeout: int = 900,  # 15 minutes
+    timeout: int = 900, # 15 minutes
     gradle_args: Iterable[str] = (),
     toolchain_provisioning: bool = True,
     foojay_version: str = DEFAULT_FOOJAY_VERSION,
