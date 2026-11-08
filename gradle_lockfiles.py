@@ -44,7 +44,6 @@ From other Python code
     import gradle_lockfiles
     result = gradle_lockfiles.generate_lockfiles(Path("/some/dir"), log=print)
     if not result.ok: ...
-
 NOTE: This file was generated from Claude.ai Sonnet 5.5 Medium based on prompts from @goneall,
 reviewed and updated by @goneall
 """
@@ -53,6 +52,7 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -205,6 +205,48 @@ def find_gradle(
     return [str(exe)] if exe else None
 
 
+TOOLCHAIN_MIN_GRADLE = (7, 6)  # toolchain resolver plugins (and so jvm-toolchain-management) arrived in Gradle 7.6
+TOOLCHAIN_MIN_JAVA = 17        # the Foojay resolver plugin is compiled for Java 17
+
+
+def parse_gradle_version_output(text: str) -> tuple[tuple[int, int], int] | None:
+    """((Gradle major, minor), JVM major) from the output of `gradle --version`, or None."""
+    gradle = re.search(r"^Gradle (\d+)\.(\d+)", text, re.MULTILINE)
+    jvm = re.search(r"^(?:Launcher JVM|JVM):\s+(\d+)(?:\.(\d+))?", text, re.MULTILINE)
+    if not gradle or not jvm:
+        return None
+    # Java 8 and earlier report themselves as 1.8.0_xxx
+    jvm_major = int(jvm.group(2)) if jvm.group(1) == "1" and jvm.group(2) else int(jvm.group(1))
+    return (int(gradle.group(1)), int(gradle.group(2))), jvm_major
+
+
+def gradle_version_info(
+    gradle: list[str], build_root: Path, env: Mapping[str, str] | None, timeout: int
+) -> tuple[tuple[int, int], int] | None:
+    """Ask Gradle which version it is and which JVM it runs on, or None if that can't be worked out."""
+    try:
+        proc = subprocess.run(
+            [*gradle, "--version", "--console=plain"], cwd=build_root, capture_output=True, text=True,
+            timeout=timeout, stdin=subprocess.DEVNULL, env=env,
+        )
+    except (subprocess.TimeoutExpired, OSError):
+        return None
+    return parse_gradle_version_output(proc.stdout) if proc.returncode == 0 else None
+
+
+def toolchain_unsupported_reason(info: tuple[tuple[int, int], int] | None) -> str | None:
+    """Why the Foojay toolchain provisioning can't work with this Gradle/JVM, or None if it can (or is unknown)."""
+    if info is None:
+        return None
+    (major, minor), jvm = info
+    if (major, minor) < TOOLCHAIN_MIN_GRADLE:
+        return (f"Gradle {major}.{minor} is older than {TOOLCHAIN_MIN_GRADLE[0]}.{TOOLCHAIN_MIN_GRADLE[1]}, "
+                "which introduced toolchain resolver plugins")
+    if jvm < TOOLCHAIN_MIN_JAVA:
+        return f"Gradle is running on Java {jvm} but the Foojay plugin needs Java {TOOLCHAIN_MIN_JAVA}+ (see --java-home)"
+    return None
+
+
 def failure_excerpt(output: str, max_lines: int = 60) -> list[str]:
     """The part of Gradle's output worth showing: all of it if short, else the failure report onwards."""
     lines = output.strip().splitlines()
@@ -354,13 +396,9 @@ def generate_lockfiles(
         if buildscript:
             content += INIT_SCRIPT_BUILDSCRIPT
         init_script.write_text(content)
-        init_scripts = [init_script]
-        if toolchain_provisioning:
-            toolchain_script = Path(tmp) / "toolchain-provisioning.init.gradle"
-            toolchain_script.write_text(
-                INIT_SCRIPT_TOOLCHAINS.replace("@FOOJAY_VERSION@", foojay_version)
-            )
-            init_scripts.append(toolchain_script)
+        toolchain_script = Path(tmp) / "toolchain-provisioning.init.gradle"
+        toolchain_script.write_text(INIT_SCRIPT_TOOLCHAINS.replace("@FOOJAY_VERSION@", foojay_version))
+        toolchain_for: dict[Path, bool] = {}  # per build: is the toolchain script usable with its Gradle/JVM?
 
         for i, job in enumerate(jobs, 1):
             rel = job.lockfile.relative_to(root)
@@ -373,9 +411,20 @@ def generate_lockfiles(
                 result.failed += 1
                 continue
 
+            if job.build_root not in toolchain_for:
+                use = toolchain_provisioning
+                if use:
+                    reason = toolchain_unsupported_reason(gradle_version_info(gradle, job.build_root, run_env, timeout))
+                    if reason:
+                        use = False
+                        log(f"    NOTE: toolchain provisioning skipped for this build: {reason}.")
+                toolchain_for[job.build_root] = use
+            use_toolchain = toolchain_for[job.build_root]
+            init_scripts = [init_script, toolchain_script] if use_toolchain else [init_script]
+
             job_args = list(gradle_args)
             mode = dependency_verification
-            if (mode is None and toolchain_provisioning
+            if (mode is None and use_toolchain
                     and (job.build_root / "gradle" / "verification-metadata.xml").is_file()):
                 mode = "lenient"
                 if job.build_root not in notified_verification:
