@@ -247,6 +247,70 @@ def toolchain_unsupported_reason(info: tuple[tuple[int, int], int] | None) -> st
     return None
 
 
+# First Gradle version that can run on each Java version (from Gradle's compatibility matrix)
+JAVA_FIRST_GRADLE = {
+    8: (2, 0), 9: (4, 3), 10: (4, 7), 11: (5, 0), 12: (5, 4), 13: (6, 0), 14: (6, 3), 15: (6, 7),
+    16: (7, 0), 17: (7, 3), 18: (7, 5), 19: (7, 6), 20: (8, 3), 21: (8, 5), 22: (8, 8), 23: (8, 10),
+    24: (8, 14), 25: (9, 1),
+}
+GRADLE9_MIN_JAVA = 17  # Gradle 9 needs at least Java 17 to run
+
+
+def jdk_runs_gradle(java: int, gradle: tuple[int, int]) -> bool:
+    """True if Gradle (major, minor) can run on this Java major version. Java newer than the table: False."""
+    first = JAVA_FIRST_GRADLE.get(java)
+    if first is None or (gradle >= (9, 0) and java < GRADLE9_MIN_JAVA):
+        return False
+    return gradle >= first
+
+
+def choose_jdk(gradle: tuple[int, int], candidates: list[tuple[int, str]]) -> tuple[int, str] | None:
+    """The newest of the (java major, path) candidates that can run this Gradle version, or None.
+
+    Newest, because the reason to need a particular JDK is usually a plugin that needs it or newer."""
+    suitable = [c for c in candidates if jdk_runs_gradle(c[0], gradle)]
+    return max(suitable, key=lambda c: c[0]) if suitable else None
+
+
+def jdk_major_version(jdk: Path) -> int | None:
+    """Major Java version of a JDK directory, from its `release` file or else `java -version`."""
+    def major(text: str, pattern: str) -> int | None:
+        m = re.search(pattern, text, re.MULTILINE)
+        if not m:
+            return None
+        # Java 8 and earlier report themselves as 1.8.0_xxx
+        return int(m.group(2)) if m.group(1) == "1" and m.group(2) else int(m.group(1))
+
+    try:
+        found = major((jdk / "release").read_text(errors="ignore"), r'^JAVA_VERSION="?(\d+)(?:\.(\d+))?')
+        if found is not None:
+            return found
+    except OSError:
+        pass
+    java = jdk / "bin" / ("java.exe" if os.name == "nt" else "java")
+    try:
+        proc = subprocess.run([str(java), "-version"], capture_output=True, text=True, timeout=60,
+                              stdin=subprocess.DEVNULL)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    return major(proc.stderr or proc.stdout, r'version "(\d+)(?:\.(\d+))?')
+
+
+def wrapper_gradle_version(gradle: list[str]) -> tuple[int, int] | None:
+    """The Gradle version a project's wrapper downloads (from gradle-wrapper.properties), or None.
+
+    Read from the file because running the wrapper to ask can fail on the wrong JDK, which is what this is for."""
+    script = Path(gradle[-1])
+    if script.name not in ("gradlew", "gradlew.bat"):
+        return None
+    try:
+        text = (script.parent / "gradle" / "wrapper" / "gradle-wrapper.properties").read_text(errors="ignore")
+    except OSError:
+        return None
+    m = re.search(r"^distributionUrl\s*=.*?gradle-(\d+)\.(\d+)", text, re.MULTILINE)
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+
 def failure_excerpt(output: str, max_lines: int = 60) -> list[str]:
     """The part of Gradle's output worth showing: all of it if short, else the failure report onwards."""
     lines = output.strip().splitlines()
@@ -303,6 +367,10 @@ def run_job(
                 f"         To find it, run this in {job.build_root} (without this script's init scripts):\n"
                 f"           {' '.join(gradle)} help --no-daemon --stacktrace\n"
                 "         If that works, retry this script with --no-toolchain-provisioning.")
+        if "requires at least JVM runtime version" in output or "Unsupported class file major version" in output:
+            log("    TIP: the JDK Gradle runs on doesn't suit this build. Give the script several JDKs with --jdk "
+                "(repeatable; cfg._gradle_jdks in sbomagent.py) and it will use the newest one each build's Gradle "
+                "can run on, or force a single one with --java-home.")
         return "failed"
 
     if not job.lockfile.exists():
@@ -321,13 +389,14 @@ def generate_lockfiles(
     dry_run: bool = False,
     buildscript: bool = False,
     excludes: Iterable[str] = (),
-    timeout: int = 900, # 15 minutes
+    timeout: int = 900,
     gradle_args: Iterable[str] = (),
     toolchain_provisioning: bool = True,
     foojay_version: str = DEFAULT_FOOJAY_VERSION,
     dependency_verification: str | None = None,
     gradle_exe: str | None = None,
     java_home: str | None = None,
+    jdks: Iterable[str] = (),
     env: Mapping[str, str] | None = None,
     log: Callable[[str], None] = print,
 ) -> Result:
@@ -338,6 +407,10 @@ def generate_lockfiles(
                 too new for the Gradle version a project uses, e.g. "Unsupported class file major
                 version 69" means JDK 25 with a Gradle older than 9.1. JDK 17 runs Gradle 7.3 - 9.x.
                 This is the JDK Gradle itself runs on, not the toolchain JDK the build asks for.
+    jdks        Several JDKs to choose from. Each build's Gradle version is worked out and the newest JDK
+                that version can run on is used, so builds that need an old JDK and builds whose plugins
+                need a new one (e.g. "Dependency requires at least JVM runtime version 21") can be scanned
+                together. A build none of them suit runs on the default JDK. Ignored if java_home is set.
     env         Extra environment variables for Gradle (e.g. GRADLE_USER_HOME).
     log         Called with each line of progress output.
     """
@@ -351,6 +424,16 @@ def generate_lockfiles(
     if java_home:
         run_env["JAVA_HOME"] = str(java_home)
         log(f"Running Gradle with JAVA_HOME={java_home}")
+    candidates: list[tuple[int, str]] = []
+    for jdk in jdks:
+        if not (Path(jdk) / "bin").is_dir():
+            raise NotADirectoryError(f"jdk {jdk} does not look like a JDK (no bin directory)")
+        major = jdk_major_version(Path(jdk))
+        if major is None:
+            raise ValueError(f"could not work out the Java version of {jdk}")
+        candidates.append((major, str(jdk)))
+    if candidates and not java_home:
+        log("Choosing the JDK per build from: " + ", ".join(f"Java {m} ({p})" for m, p in sorted(candidates)))
 
     result = Result()
     projects = find_projects(root, excludes)
@@ -388,6 +471,7 @@ def generate_lockfiles(
         return result
 
     gradle_cache: dict[Path, list[str] | None] = {}
+    env_for: dict[Path, Mapping[str, str] | None] = {}  # per build: the environment (so JDK) to run Gradle with
     notified_verification: set[Path] = set()
 
     with tempfile.TemporaryDirectory(prefix="gradle-lock-init-") as tmp:
@@ -411,10 +495,30 @@ def generate_lockfiles(
                 result.failed += 1
                 continue
 
+            if job.build_root not in env_for:
+                env_for[job.build_root] = run_env
+                if candidates and not java_home:
+                    version = wrapper_gradle_version(gradle)
+                    if version is None:
+                        info = gradle_version_info(gradle, job.build_root, run_env, timeout)
+                        version = info[0] if info else None
+                    if version is None:
+                        log("    NOTE: couldn't tell which Gradle version this build uses; running it on the default JDK.")
+                    else:
+                        choice = choose_jdk(version, candidates)
+                        if choice:
+                            env_for[job.build_root] = {**(run_env if run_env is not None else os.environ),
+                                                       "JAVA_HOME": choice[1]}
+                            log(f"    NOTE: Gradle {version[0]}.{version[1]}: running it on Java {choice[0]} ({choice[1]}).")
+                        else:
+                            log(f"    NOTE: none of the given JDKs can run Gradle {version[0]}.{version[1]}; "
+                                "using the default JDK.")
+            build_env = env_for[job.build_root]
+
             if job.build_root not in toolchain_for:
                 use = toolchain_provisioning
                 if use:
-                    reason = toolchain_unsupported_reason(gradle_version_info(gradle, job.build_root, run_env, timeout))
+                    reason = toolchain_unsupported_reason(gradle_version_info(gradle, job.build_root, build_env, timeout))
                     if reason:
                         use = False
                         log(f"    NOTE: toolchain provisioning skipped for this build: {reason}.")
@@ -441,7 +545,7 @@ def generate_lockfiles(
                 job_args.append(f"--dependency-verification={mode}")
 
             log(f"    $ {' '.join(gradle)} {job.task} --write-locks  (in {job.build_root})")
-            outcome = run_job(job, gradle, init_scripts, job_args, timeout, run_env, log)
+            outcome = run_job(job, gradle, init_scripts, job_args, timeout, build_env, log)
             if outcome == "ok":
                 result.created += 1
             elif outcome == "no-lockfile":
@@ -480,6 +584,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="JDK to run Gradle on (sets JAVA_HOME). Use when the default JDK is too new for a "
                              "project's Gradle, e.g. 'Unsupported class file major version 69'. JDK 17 runs "
                              "Gradle 7.3 through 9.x")
+    parser.add_argument("--jdk", action="append", default=[], metavar="PATH",
+                        help="a JDK Gradle may run on (repeatable, e.g. --jdk <jdk17> --jdk <jdk21>). For each "
+                             "build the newest one its Gradle version can run on is used. Ignored if --java-home "
+                             "is given")
     parser.add_argument("--timeout", type=int, default=900, help="seconds allowed per Gradle run")
     parser.add_argument("--gradle-arg", action="append", default=[], metavar="ARG",
                         help="extra argument for Gradle, use '=' form: --gradle-arg=--offline (repeatable)")
@@ -494,9 +602,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: --java-home {args.java_home} does not look like a JDK (no bin directory)", file=sys.stderr)
         return 2
 
+    for jdk in args.jdk:
+        if not (Path(jdk) / "bin").is_dir() or jdk_major_version(Path(jdk)) is None:
+            print(f"error: --jdk {jdk} does not look like a JDK (no bin directory, or no readable Java version)",
+                  file=sys.stderr)
+            return 2
+
     result = generate_lockfiles(
         root,
         java_home=args.java_home,
+        jdks=args.jdk,
         dry_run=args.dry_run,
         buildscript=args.buildscript,
         excludes=args.exclude,

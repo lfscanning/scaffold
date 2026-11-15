@@ -242,7 +242,7 @@ def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
 def installNpm(sourceDir, cfg, prj, sp):
     npm_dirs = []
     for (root,dirs,files) in os.walk(sourceDir, topdown=True):
-        if 'package.json' in files and 'node_modeles/' not in root and 'node_modules' not in dirs:
+        if 'package.json' in files and 'node_modules/' not in root and 'node_modules' not in dirs:
             npm_dirs.append(root)
         if 'node_modules' in dirs:
             dirs.remove('node_modules')
@@ -264,6 +264,8 @@ def generateGradleLockFiles(sourceDir, cfg, prj, sp):
         result = gradle_lockfiles.generate_lockfiles(
             Path(sourceDir),
             gradle_exe=getattr(cfg, "_gradle_exec_path", None),  # used only when a project has no gradlew
+            java_home=None,  # we only want to use the jdks parameter, java_home will override jdks
+            jdks=getattr(cfg, "_gradle_jdks", None) or (),  # or several (e.g. JDK 17 + 21): the right one is picked per build
             env={"GRADLE_USER_HOME": cachedir},
             log=lambda msg: print(f"{label}: {msg}"),
         )

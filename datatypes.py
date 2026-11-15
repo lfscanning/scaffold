@@ -424,6 +424,8 @@ class Config:
         self._npm_exec_path = ""
         self._cdsbom_exec_path = ""
         self._tools_java_path = ""
+        self._gradle_exec_path = ""
+        self._gradle_jdks = ""
         self._projects = {}
         self._month = ""
         self._version = 0

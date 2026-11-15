@@ -207,11 +207,14 @@ def loadConfig(configFilename, scaffoldHome, secrets_file_name = '.scaffold-secr
             if cfg._storepath == "":
                 print(f'No valid storepath found in config section')
                 raise RuntimeError(f'No valid storepath found in config section')
-            cfg._trivy_exec_path = config_dict.get('trivyExecPath', os.environ['TRIVY_EXEC_PATH'] if 'TRIVY_EXEC_PATH' in os.environ else "")
-            cfg._npm_exec_path = config_dict.get('npmExecPath', os.environ['NPM_EXEC_PATH'] if 'NPM_EXEC_PATH' in os.environ else "")
-            cfg._parlay_exec_path = config_dict.get('parlayExecPath', os.environ['PARLAY_EXEC_PATH'] if 'PARLAY_EXEC_PATH' in os.environ else "")
-            cfg._cdsbom_exec_path = config_dict.get('cdsbomExecPath', os.environ['CDSBOM_EXEC_PATH'] if 'CDSBOM_EXEC_PATH' in os.environ else "")
-            cfg._tools_java_path = config_dict.get('toolsJavaPath', os.environ['TOOLS_JAVA_PATH'] if 'TOOLS_JAVA_PATH' in os.environ else "")
+            cfg._trivy_exec_path = os.environ['TRIVY_EXEC_PATH'] if 'TRIVY_EXEC_PATH' in os.environ else config_dict.get('trivyExecPath', "")
+            cfg._npm_exec_path = os.environ['NPM_EXEC_PATH'] if 'NPM_EXEC_PATH' in os.environ else config_dict.get('npmExecPath', "")
+            cfg._parlay_exec_path = os.environ['PARLAY_EXEC_PATH'] if 'PARLAY_EXEC_PATH' in os.environ else config_dict.get('parlayExecPath', "")
+            cfg._cdsbom_exec_path = os.environ['CDSBOM_EXEC_PATH'] if 'CDSBOM_EXEC_PATH' in os.environ else config_dict.get('cdsbomExecPath', "")
+            cfg._tools_java_path = os.environ['TOOLS_JAVA_PATH'] if 'TOOLS_JAVA_PATH' in os.environ else config_dict.get('toolsJavaPath', "")
+            cfg._gradle_exec_path = os.environ['GRADLE_EXEC_PATH'] if 'GRADLE_EXEC_PATH' in os.environ else config_dict.get('gradleExecPath', "")
+            gradle_jdk_str = os.environ['GRADLE_JDKS'] if 'GRADLE_JDKS' in os.environ else config_dict.get('gradleJdks', "")
+            cfg._gradle_jdks = [jdk.strip() for jdk in gradle_jdk_str.split(',')]
             cfg._zippath = config_dict.get('zippath', cfg._storepath)
             cfg._spdx_github_org = config_dict.get('spdxGithubOrg', "")
             if cfg._spdx_github_org == "":
@@ -792,6 +795,12 @@ class ConfigJSONEncoder(json.JSONEncoder):
                     "wsUnifiedAgentJarPath": o._ws_unified_agent_jar_path,
                     "wsDefaultEnv": o._ws_default_env,
                     "fossologyJobSpec": o._fossology_job_spec,
+                    "npmExecPath": o._npm_exec_path,
+                    "parlayExecPath": o._parlay_exec_path,
+                    "cdsbomExecPath": o._cdsbom_exec_path,
+                    "toolsJavaPath": o._tools_java_path,
+                    "gradleExecPath": o._gradle_exec_path,
+                    "gradleJdks": ",".join(o._gradle_jdks),
                 },
                 "projects": o._projects,
             }

@@ -33,6 +33,7 @@ go install ./cmd/trivy
 ```
 
 The location of the Trivy command needs to be added to the config file and/or as an environment variable `TRIVY_EXEC_PATH`.
+The environment variable takes precedence.
 
 To install Parlay:
 
@@ -43,6 +44,7 @@ go install .
 ```
 
 The location of the Parlay command needs to be added to the config file and/or as an environment variable `PARLAY_EXEC_PATH`.
+The environment variable takes precedence.
 
 To install cdsbom:
 ```shell
@@ -51,10 +53,12 @@ cd cdsbom
 go install .
 ```
 The location of the cdsbom command needs to be added to the config file and/or as an environment variable `CDSBOM_EXEC_PATH`.
+The environment variable takes precedence.
 
 In addition [NPM](https://www.npmjs.com/) must be installed.
 
 The location of the NPM command needs to be added to the config file or as an environment variable `NPM_EXEC_PATH`.
+The environment variable takes precedence.
 
 To install tools-java:
 
@@ -67,20 +71,32 @@ curl -o tools-java.jar https://repo1.maven.org/maven2/org/spdx/tools-java/[VERSI
 
 where `[VERSION]` is the latest version of tools-java.
 
-For Gradle to run properly, JVM version 25 should be installed.
+The location of the tools-java.jar file needs to be added to the config file or as an environment variable `TOOLS_JAVA_PATH`.
+The environment variable takes precedence.
 
-```shell
-sudo apt update
-sudo add-apt-repository universe
-sudo apt update
-sudo apt install openjdk-25-jdk -y
-```
+Gradle requires the installation of Gradle and multiple Java JDK versions.
 
 Use apt to install Gradle:
 
 ```shell
 sudo apt update
 sudo apt install gradle -y
+```
+
+The location of the default Gradle executable needs to be added to the config file or as an environment variable `GRADLE_EXEC_PATH`.
+The environment variable takes precedence.
+
+Different versions of Gradle require different JDK version.
+A comma separated string of JDK version locations needs to be added to the config file or as an environment variable `GRADLE_JDKS`.
+The environment variable takes precedence.
+
+Example installation of a JDK (version 17):
+
+```shell
+sudo apt update
+sudo add-apt-repository universe
+sudo apt update
+sudo apt install openjdk-17-jdk -y
 ```
 
 ## Configuration
