@@ -16,6 +16,7 @@ from datetime import datetime
 from pathlib import Path
 
 import gradle_lockfiles
+import npm_lockfiles
 import uploadreport
 import uploadspdx
 from spdx_tools.spdx.parser.error import SPDXParsingError
@@ -43,8 +44,8 @@ def runUnifiedAgent(cfg, prj, sp):
         os.mkdir(analysisdir)
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
-        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for NPM projects to install")
-        installNpm(analysisdir, cfg, prj, sp)
+        print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for NPM projects to lock")
+        generateNpmLockFiles(analysisdir, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for Gradle projects to lock")
         generateGradleLockFiles(analysisdir, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
@@ -239,21 +240,23 @@ def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
     else:
         return None
 
-def installNpm(sourceDir, cfg, prj, sp):
-    npm_dirs = []
-    for (root,dirs,files) in os.walk(sourceDir, topdown=True):
-        if 'package.json' in files and 'node_modules/' not in root and 'node_modules' not in dirs:
-            npm_dirs.append(root)
-        if 'node_modules' in dirs:
-            dirs.remove('node_modules')
-        if '.git' in dirs:
-            dirs.remove('.git')
+def generateNpmLockFiles(sourceDir, cfg, prj, sp):
+    # Create package-lock.json for NPM projects that don't have one so that Trivy can see
+    # their resolved dependencies. Like generateGradleLockFiles, failures are reported but never stop the run.
+    label = f"{prj._name}/{sp._name}"
     cachedir = os.path.join(cfg._zippath, "npmcache")
-    for npm_dir in npm_dirs:
-        cmd = [cfg._npm_exec_path, "install", "--production", "--cache", cachedir]
-        cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, cwd=npm_dir)
-        if cp.returncode != 0:
-            print(f"{prj._name}/{sp._name}: NPM install failed for {npm_dir} with exit code {cp.returncode}.")
+    try:
+        failed = npm_lockfiles.generate_npm_lockfiles(
+            sourceDir,
+            cfg._npm_exec_path,
+            cachedir,
+            log=lambda msg: print(f"{label}: {msg}"),
+        )
+    except Exception as e:
+        print(f"{label}: NPM lock file generation failed unexpectedly: {e}")
+        return
+    if failed:
+        print(f"{label}: NPM lock file generation incomplete: {failed} failed.")
 
 def generateGradleLockFiles(sourceDir, cfg, prj, sp):
     # Create gradle.lockfile for Gradle projects that don't have one so that Trivy can see

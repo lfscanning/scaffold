@@ -20,7 +20,7 @@ from spdx_tools.spdx.validation.document_validator import validate_full_spdx_doc
 
 from manualsbom import runManualSbomAgent
 import gradle_lockfiles
-from sbomagent import installNpm, mergeSourceAndSbom, generateGradleLockFiles
+from sbomagent import generateNpmLockFiles, mergeSourceAndSbom, generateGradleLockFiles
 from config import loadConfig
 from datatypes import Status, ProjectRepoType, Project, Subproject
 from spdx_tools.spdx.parser.parse_anything import parse_file
@@ -35,6 +35,8 @@ TEST_SCAFFOLD_CODE = os.path.join(os.path.dirname(__file__), "testresources", AN
 TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "scaffoldhome")
 SIMPLE_NPM_ZIP = os.path.join(os.path.dirname(__file__), "testresources", "simplenpm.zip")
 SIMPLE_GRADLE_ZIP = os.path.join(os.path.dirname(__file__), "testresources", "simplegradle.zip")
+NPM_EXEC_PATH = os.environ.get('NPM_EXEC_PATH', 'npm')  # default
+requires_npm = unittest.skipUnless(shutil.which(NPM_EXEC_PATH), f"NPM not found at '{NPM_EXEC_PATH}' - set NPM_EXEC_PATH to run this test")
 GRADLE_EXEC_PATH = os.environ.get('GRADLE_EXEC_PATH', 'gradle')  # default
 GRADLE_JDKS = os.environ.get('JAVA_JDK_DIR', 'java')
 requires_gradle = unittest.skipUnless(shutil.which(GRADLE_EXEC_PATH), f"Gradle not found at '{GRADLE_EXEC_PATH}' - set GRADLE_EXEC_PATH to run this test")
@@ -81,7 +83,6 @@ class TestSbom(unittest.TestCase):
         self.npm_env_set = 'NPM_EXEC_PATH' in os.environ
         if not self.npm_env_set:
             os.environ['NPM_EXEC_PATH'] = 'npm' # default
-        self.npm_path = os.path.join(self.temp_dir.name, 'simplenpm')
         self.parlay_env_set = 'PARLAY_EXEC_PATH' in os.environ
         if not self.parlay_env_set:
             os.environ['PARLAY_EXEC_PATH'] = 'parlay' # default
@@ -91,11 +92,7 @@ class TestSbom(unittest.TestCase):
         self.tools_java_env_set = 'TOOLS_JAVA_PATH' in os.environ
         if not self.tools_java_env_set:
             os.environ['TOOLS_JAVA_PATH'] = '~/tools-java.jar' # default
-        with zipfile.ZipFile(SIMPLE_NPM_ZIP, mode='r') as zip:
-            zip.extractall(self.temp_dir.name)
-        self.node_modules_path = os.path.join(self.npm_path, 'node_modules')
-        self.uuid_package_json_path = os.path.join(self.node_modules_path, 'uuid/package.json')
-        
+
     def _cleanGitClone(self, repo):
         if len(os.listdir(repo)) > 1:
             # the .git directory would be one - any added files would be > 1
@@ -183,19 +180,6 @@ class TestSbom(unittest.TestCase):
         dependenciesHtmlUploadFile = os.path.join(self.temp_dir.name, cfg._web_reports_path, TEST_PROJECT_NAME, f"{sp._name}-{sp._code_pulled}-dependencies-{sp._web_uuid}.html")
         self.assertTrue(os.path.isfile(dependenciesHtmlUploadFile))
         # TODO: Check if the file is committed and pushed to the repo
-        
-    def test_npm_install(self):
-        cfg_file = os.path.join(self.config_month_dir, "config.json")
-        cfg = loadConfig(cfg_file, self.scaffold_home_dir, SECRET_FILE_NAME)
-        cfg._zippath = self.temp_dir.name
-        prj = cfg._projects[TEST_PROJECT_NAME]
-        prj._name = TEST_PROJECT_NAME
-        sp = prj._subprojects[TEST_SUBPROJECT_NAME]
-        sp._name = TEST_SUBPROJECT_NAME
-        self.assertFalse(os.path.isdir(self.node_modules_path))
-        installNpm(self.npm_path, cfg, prj, sp)
-        self.assertTrue(os.path.isdir(self.node_modules_path))
-        self.assertTrue(os.path.isfile(self.uuid_package_json_path))
         
     def test_project(self):
         cfg_file = os.path.join(self.config_month_dir, "config.json")
@@ -440,6 +424,96 @@ class TestSbom(unittest.TestCase):
         # TODO: Test merged SBOM
 
 '''
+Tests the generation of missing NPM lock files
+
+Like TestGradleLockfiles, these have their own light setup rather than extending TestSbom.  generateNpmLockFiles only
+uses cfg._zippath and cfg._npm_exec_path, so a simple stand-in config is enough.
+
+testresources/simplenpm.zip is a small project with a package.json (depending on uuid) and no lock file.
+'''
+class TestNpmLockfiles(unittest.TestCase):
+
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp_dir.cleanup)
+        with zipfile.ZipFile(SIMPLE_NPM_ZIP, mode='r') as zip:
+            zip.extractall(self.temp_dir.name)
+        self.npm_path = os.path.join(self.temp_dir.name, 'simplenpm')
+        self.package_json_path = os.path.join(self.npm_path, 'package.json')
+        self.lockfile = os.path.join(self.npm_path, 'package-lock.json')
+        self.node_modules_path = os.path.join(self.npm_path, 'node_modules')
+        self.npm_cache_dir = os.path.join(self.temp_dir.name, 'npmcache')
+        self.cfg = SimpleNamespace(_zippath=self.temp_dir.name, _npm_exec_path=NPM_EXEC_PATH)
+        self.prj = Project()
+        self.prj._name = TEST_PROJECT_NAME
+        self.sp = Subproject()
+        self.sp._name = TEST_SUBPROJECT_NAME
+
+    def _read(self, path):
+        with open(path, 'rb') as f:
+            return f.read()
+
+    @requires_npm
+    def test_generate_lockfile(self):
+        self.assertFalse(os.path.exists(self.lockfile))
+        package_json_before = self._read(self.package_json_path)
+        generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)
+        # The lock file is created and locks the dependency...
+        self.assertTrue(os.path.isfile(self.lockfile))
+        self.assertIn('node_modules/uuid', self._read(self.lockfile).decode())
+        # ...but nothing is installed
+        self.assertFalse(os.path.exists(self.node_modules_path))
+        # The project's own package.json is not modified
+        self.assertEqual(package_json_before, self._read(self.package_json_path))
+        # NPM used its own cache directory under cfg._zippath
+        self.assertTrue(os.path.isdir(self.npm_cache_dir))
+
+    def test_existing_lockfile_is_left_alone(self):
+        # Point at an NPM that doesn't exist - if the project were processed it would be reported
+        self.cfg._npm_exec_path = os.path.join(self.temp_dir.name, 'no-such-npm')
+        existing = b'{"name": "simplenpm", "lockfileVersion": 3, "packages": {}}\n'
+        with open(self.lockfile, 'wb') as f:
+            f.write(existing)
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)
+        self.assertEqual('', output.getvalue())
+        self.assertEqual(existing, self._read(self.lockfile))
+        self.assertFalse(os.path.exists(self.node_modules_path))
+
+    def test_existing_shrinkwrap_is_left_alone(self):
+        self.cfg._npm_exec_path = os.path.join(self.temp_dir.name, 'no-such-npm')
+        with open(os.path.join(self.npm_path, 'npm-shrinkwrap.json'), 'w') as f:
+            f.write('{"name": "simplenpm", "lockfileVersion": 3, "packages": {}}\n')
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)
+        self.assertEqual('', output.getvalue())
+        self.assertFalse(os.path.exists(self.lockfile))
+
+    @requires_npm
+    def test_npm_failure_is_reported(self):
+        # A failure is reported, including NPM's own error output, but doesn't stop the SBOM run
+        with open(self.package_json_path, 'w') as f:
+            f.write('{ this is not valid json')
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)  # must not raise
+        self.assertFalse(os.path.exists(self.lockfile))
+        self.assertIn('NPM lock file generation failed for', output.getvalue())
+        self.assertIn('with exit code', output.getvalue())
+        self.assertIn('errors:', output.getvalue())
+        self.assertIn(f"{TEST_PROJECT_NAME}/{TEST_SUBPROJECT_NAME}: NPM lock file generation incomplete: 1 failed", output.getvalue())
+
+    def test_missing_npm_is_not_fatal(self):
+        self.cfg._npm_exec_path = os.path.join(self.temp_dir.name, 'no-such-npm')
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)  # must not raise
+        self.assertFalse(os.path.exists(self.lockfile))
+        self.assertIn(f"{TEST_PROJECT_NAME}/{TEST_SUBPROJECT_NAME}: NPM lock file generation failed unexpectedly", output.getvalue())
+
+'''
 Tests the generation of missing Gradle lock files
 
 These have their own light setup rather than extending TestSbom, whose setUp clones (and whose tearDown pushes to)
@@ -534,7 +608,7 @@ class TestGradleLockfiles(unittest.TestCase):
         self.assertEqual(app_lockfile_before, self._read(self.app_lockfile))
 
     def test_gradle_failure_is_not_fatal(self):
-        # Like installNpm, a failure is reported but doesn't stop the SBOM run.  The test project has no gradlew,
+        # Like generateNpmLockFiles, a failure is reported but doesn't stop the SBOM run.  The test project has no gradlew,
         # so the Gradle from the config is used - point it at one that doesn't exist.
         self.cfg._gradle_exec_path = os.path.join(self.temp_dir.name, 'no-such-gradle')
         output = io.StringIO()
