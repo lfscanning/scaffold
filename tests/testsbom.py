@@ -7,6 +7,7 @@ import time
 import contextlib
 import io
 from datetime import datetime
+from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
 
@@ -35,6 +36,7 @@ TEST_SCAFFOLD_HOME = os.path.join(os.path.dirname(__file__), "testresources", "s
 SIMPLE_NPM_ZIP = os.path.join(os.path.dirname(__file__), "testresources", "simplenpm.zip")
 SIMPLE_GRADLE_ZIP = os.path.join(os.path.dirname(__file__), "testresources", "simplegradle.zip")
 GRADLE_EXEC_PATH = os.environ.get('GRADLE_EXEC_PATH', 'gradle')  # default
+GRADLE_JDKS = os.environ.get('JAVA_JDK_DIR', 'java')
 requires_gradle = unittest.skipUnless(shutil.which(GRADLE_EXEC_PATH), f"Gradle not found at '{GRADLE_EXEC_PATH}' - set GRADLE_EXEC_PATH to run this test")
 TEST_MONTH = "2023-07"
 TEST_NEXT_MONTH = "2023-08"
@@ -460,7 +462,9 @@ class TestGradleLockfiles(unittest.TestCase):
         self.app_lockfile = os.path.join(self.gradle_path, 'app', 'gradle.lockfile')
         self.lib_lockfile = os.path.join(self.gradle_path, 'lib', 'gradle.lockfile')
         self.gradle_cache_dir = os.path.join(self.temp_dir.name, 'gradlecache')
-        self.cfg = SimpleNamespace(_zippath=self.temp_dir.name, _gradle_exec_path=GRADLE_EXEC_PATH)
+        gradle_jdks = [str(d.resolve()) for d in Path(GRADLE_JDKS).iterdir() if d.is_dir() and d.name.startswith("jdk-")]
+        self.cfg = SimpleNamespace(_zippath=self.temp_dir.name, _gradle_exec_path=GRADLE_EXEC_PATH,
+                                   _gradle_java_home=None, _gradle_jdks=gradle_jdks)
         self.prj = Project()
         self.prj._name = TEST_PROJECT_NAME
         self.sp = Subproject()
