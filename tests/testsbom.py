@@ -443,6 +443,11 @@ class TestNpmLockfiles(unittest.TestCase):
         self.lockfile = os.path.join(self.npm_path, 'package-lock.json')
         self.node_modules_path = os.path.join(self.npm_path, 'node_modules')
         self.npm_cache_dir = os.path.join(self.temp_dir.name, 'npmcache')
+        # The zip may contain a lock file; start every test from a project without one (this is only a temp copy)
+        for lockfile_name in ('package-lock.json', 'npm-shrinkwrap.json'):
+            lockfile_path = os.path.join(self.npm_path, lockfile_name)
+            if os.path.exists(lockfile_path):
+                os.remove(lockfile_path)
         self.cfg = SimpleNamespace(_zippath=self.temp_dir.name, _npm_exec_path=NPM_EXEC_PATH)
         self.prj = Project()
         self.prj._name = TEST_PROJECT_NAME
@@ -490,6 +495,39 @@ class TestNpmLockfiles(unittest.TestCase):
             generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)
         self.assertEqual('', output.getvalue())
         self.assertFalse(os.path.exists(self.lockfile))
+
+    def test_workspace_member_covered_by_root_lockfile(self):
+        # Members of a Yarn/pnpm/NPM workspace are locked by the lock file at the workspace root
+        self.cfg._npm_exec_path = os.path.join(self.temp_dir.name, 'no-such-npm')
+        for lockfile_name in ('yarn.lock', 'pnpm-lock.yaml', 'package-lock.json'):
+            with self.subTest(lockfile=lockfile_name):
+                root = os.path.join(self.temp_dir.name, 'workspace-' + lockfile_name)
+                member = os.path.join(root, 'packages', 'member')
+                os.makedirs(member)
+                with open(os.path.join(root, lockfile_name), 'w') as f:
+                    f.write('# lock file\n')
+                with open(os.path.join(root, 'package.json'), 'w') as f:
+                    f.write('{"name": "root", "workspaces": ["packages/*"]}')
+                with open(os.path.join(member, 'package.json'), 'w') as f:
+                    f.write('{"name": "member", "dependencies": {"other": "workspace:*"}}')
+                output = io.StringIO()
+                with contextlib.redirect_stdout(output):
+                    generateNpmLockFiles(root, self.cfg, self.prj, self.sp)
+                self.assertEqual('', output.getvalue())
+                self.assertFalse(os.path.exists(os.path.join(member, 'package-lock.json')))
+
+    def test_workspace_protocol_without_lockfile_is_skipped(self):
+        # npm can't resolve "workspace:*" - report that the project is skipped instead of failing
+        self.cfg._npm_exec_path = os.path.join(self.temp_dir.name, 'no-such-npm')
+        root = os.path.join(self.temp_dir.name, 'yarnproject')
+        os.makedirs(root)
+        with open(os.path.join(root, 'package.json'), 'w') as f:
+            f.write('{"name": "member", "dependencies": {"other": "workspace:*"}}')
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            generateNpmLockFiles(root, self.cfg, self.prj, self.sp)
+        self.assertIn('Skipping NPM lock file generation', output.getvalue())
+        self.assertNotIn('failed', output.getvalue())
 
     @requires_npm
     def test_npm_failure_is_reported(self):
