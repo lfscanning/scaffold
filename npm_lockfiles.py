@@ -40,12 +40,25 @@ def _uses_unsupported_protocol(package_json_path):
     return any(protocol in content for protocol in UNSUPPORTED_NPM_PROTOCOLS)
 
 
-def find_npm_projects_without_lockfile(source_dir, log=print):
+def _record_skip(skipped, source_dir, package_json, reason):
+    if skipped is not None:
+        skipped.append({
+            "ecosystem": "npm",
+            "file": os.path.relpath(package_json, source_dir),
+            "reason": reason,
+        })
+
+
+def find_npm_projects_without_lockfile(source_dir, log=print, skipped=None):
     """
     Return directories containing a package.json that npm can lock and that have no lock file.
-    A project is skipped if a lock file exists in its directory or in any parent directory
-    (workspace members are covered by the lock file at the workspace root), or if it uses
-    Yarn/pnpm-only dependency syntax such as "workspace:*" that npm can't process.
+    A project is left out if a lock file exists in its directory or in any parent directory
+    (workspace members are covered by the lock file at the workspace root); that is not reported.
+    A project is also left out if it uses Yarn/pnpm-only dependency syntax such as "workspace:*"
+    that npm can't process; that is reported as skipped.
+
+    If `skipped` is a list, one dict is appended to it for each project skipped for that reason:
+        {"ecosystem": "npm", "file": <package.json path relative to source_dir>, "reason": <why>}
     """
     npm_dirs = []
     locked_dirs = set()
@@ -54,10 +67,14 @@ def find_npm_projects_without_lockfile(source_dir, log=print):
             locked_dirs.add(os.path.normpath(root))
         if 'package.json' in files \
                 and 'node_modules/' not in root \
-                and 'node_modules' not in dirs \
-                and not _is_locked_by_ancestor(root, source_dir, locked_dirs):
-            if _uses_unsupported_protocol(os.path.join(root, 'package.json')):
-                log(f"Skipping NPM lock file generation for {root}: package.json uses Yarn/pnpm workspace syntax that npm can't resolve and no Yarn/pnpm lock file was found")
+                and 'node_modules' not in dirs:
+            package_json = os.path.join(root, 'package.json')
+            if _is_locked_by_ancestor(root, source_dir, locked_dirs):
+                pass  # already locked: nothing to do, and not reported as skipped
+            elif _uses_unsupported_protocol(package_json):
+                _record_skip(skipped, source_dir, package_json,
+                             "package.json uses Yarn/pnpm workspace syntax that npm can't resolve "
+                             "and no Yarn/pnpm lock file was found")
             else:
                 npm_dirs.append(root)
         if 'node_modules' in dirs:
@@ -67,17 +84,24 @@ def find_npm_projects_without_lockfile(source_dir, log=print):
     return npm_dirs
 
 
-def generate_npm_lockfiles(source_dir, npm_exe, cache_dir, log=print):
+def generate_npm_lockfiles(source_dir, npm_exe, cache_dir, log=print, errors=None, skipped=None):
     """
     Create package-lock.json for NPM projects that don't have a lock file so that Trivy can
     see their resolved dependencies. Only the lock file is produced: nothing is installed into
-    node_modules and no package scripts are run. Failures are reported (including npm's
-    stderr) but never stop the run.
+    node_modules and no package scripts are run. Failures never stop the run. Nothing is logged
+    for individual projects: failures and skips are collected in `errors` and `skipped`.
 
-    Returns the number of projects for which lock file generation failed.
+    If `errors` is a list, one dict is appended to it for each failure:
+        {"ecosystem": "npm", "file": <package.json path relative to source_dir>, "error": <message>}
+    If `skipped` is a list, one dict is appended to it for each skipped project:
+        {"ecosystem": "npm", "file": <package.json path relative to source_dir>, "reason": <why>}
+
+    Returns {"processed": <projects npm was run for>, "failed": <how many of those failed>}.
     """
     failed = 0
-    for npm_dir in find_npm_projects_without_lockfile(source_dir, log=log):
+    processed = 0
+    for npm_dir in find_npm_projects_without_lockfile(source_dir, log=log, skipped=skipped):
+        processed += 1
         cmd = [npm_exe, "install",
                "--package-lock-only",
                "--ignore-scripts",
@@ -86,18 +110,21 @@ def generate_npm_lockfiles(source_dir, npm_exe, cache_dir, log=print):
                "--no-fund",
                "--cache", cache_dir]
         cp = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True, cwd=npm_dir)
+        metadata_file = os.path.relpath(os.path.join(npm_dir, "package.json"), source_dir)
         if cp.returncode != 0:
             failed += 1
-            log(f"""NPM lock file generation failed for {npm_dir} with exit code {cp.returncode}:
-----------
-output:
-{cp.stdout}
-----------
-errors:
-{cp.stderr}
-----------
-""")
+            if errors is not None:
+                errors.append({
+                    "ecosystem": "npm",
+                    "file": metadata_file,
+                    "error": (cp.stderr or cp.stdout or "").strip() or f"npm exited with code {cp.returncode}",
+                })
         elif not any(os.path.exists(os.path.join(npm_dir, name)) for name in NPM_LOCKFILES):
             failed += 1
-            log(f"WARNING: NPM lock file generation succeeded for {npm_dir} but produced no lock file")
-    return failed
+            if errors is not None:
+                errors.append({
+                    "ecosystem": "npm",
+                    "file": metadata_file,
+                    "error": "npm succeeded but produced no lock file",
+                })
+    return {"processed": processed, "failed": failed}

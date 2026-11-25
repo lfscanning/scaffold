@@ -51,6 +51,7 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import json
 import os
 import re
 import shutil
@@ -58,7 +59,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Iterable, Mapping
 
@@ -127,6 +128,17 @@ class Result:
     created: int = 0           # lock files generated
     no_lockfile: int = 0       # Gradle succeeded but wrote no file
     failed: int = 0            # Gradle runs that failed
+    # One dict per failure: {"ecosystem": "gradle", "file": <build file relative to the scan root>,
+    # "task": <Gradle task>, "error": <message>}
+    errors: list = field(default_factory=list)
+    # Projects skipped for a reason worth reporting, same shape as the NPM skips. Projects whose lock file
+    # already exists are not reported (see already_present), so this is currently always empty for Gradle.
+    skipped: list = field(default_factory=list)
+
+    @property
+    def processed(self) -> int:
+        """Gradle runs attempted (whatever their outcome)."""
+        return self.created + self.no_lockfile + self.failed
 
     @property
     def ok(self) -> bool:
@@ -329,6 +341,14 @@ def failure_excerpt(output: str, max_lines: int = 60) -> list[str]:
     return result
 
 
+def find_build_file(project: Path) -> Path:
+    """The build.gradle(.kts) file of a project directory (falls back to the directory itself)."""
+    for name in BUILD_FILES:
+        if (project / name).is_file():
+            return project / name
+    return project
+
+
 def run_job(
     job: Job,
     gradle: list[str],
@@ -337,8 +357,26 @@ def run_job(
     timeout: int,
     env: Mapping[str, str] | None,
     log: Callable[[str], None],
+    errors: list | None = None,
+    root: Path | None = None,
 ) -> str:
-    """Run one Gradle invocation. Returns 'ok', 'no-lockfile', or 'failed'."""
+    """Run one Gradle invocation. Returns 'ok', 'no-lockfile', or 'failed'.
+
+    If `errors` is given, a dict describing each failure is appended to it. File paths are made
+    relative to `root` when it is given."""
+    def record(message: str) -> None:
+        if errors is None:
+            return
+        build_file = find_build_file(job.project)
+        if root is not None:
+            build_file = build_file.relative_to(root)
+        errors.append({
+            "ecosystem": "gradle",
+            "file": str(build_file),
+            "task": job.task,
+            "error": message,
+        })
+
     cmd = [*gradle, job.task, "--write-locks"]
     for script in init_scripts:
         cmd += ["--init-script", str(script)]
@@ -350,35 +388,33 @@ def run_job(
             stdin=subprocess.DEVNULL, env=env,
         )
     except subprocess.TimeoutExpired:
-        log(f"    FAILED: timed out after {timeout}s")
+        record(f"Gradle timed out after {timeout}s")
         return "failed"
     except OSError as exc:
-        log(f"    FAILED: could not start Gradle: {exc}")
+        record(f"Could not start Gradle: {exc}")
         return "failed"
 
     if proc.returncode != 0:
+        # Failures are not logged individually: the full output (plus any hint) goes into the error record.
         output = "\n".join(s for s in (proc.stdout, proc.stderr) if s and s.strip())
-        log(f"    FAILED (exit {proc.returncode}):")
-        for line in failure_excerpt(output):
-            log(f"      {line}")
+        message = output.strip() or f"Gradle exited with code {proc.returncode}"
         if "has already been completed" in output:
-            log("    TIP: Gradle shows this message when an earlier error during initialization was lost, so "
-                "the real cause is not in the output above.\n"
-                f"         To find it, run this in {job.build_root} (without this script's init scripts):\n"
-                f"           {' '.join(gradle)} help --no-daemon --stacktrace\n"
-                "         If that works, retry this script with --no-toolchain-provisioning.")
+            message += ("\n\nTIP: Gradle shows this message when an earlier error during initialization was lost, "
+                        "so the real cause is not in the output above. To find it, run this in "
+                        f"{job.build_root} (without this script's init scripts): "
+                        f"{' '.join(gradle)} help --no-daemon --stacktrace. "
+                        "If that works, retry with --no-toolchain-provisioning.")
         if "requires at least JVM runtime version" in output or "Unsupported class file major version" in output:
-            log("    TIP: the JDK Gradle runs on doesn't suit this build. Give the script several JDKs with --jdk "
-                "(repeatable; cfg._gradle_jdks in sbomagent.py) and it will use the newest one each build's Gradle "
-                "can run on, or force a single one with --java-home.")
+            message += ("\n\nTIP: the JDK Gradle runs on doesn't suit this build. Give the script several JDKs "
+                        "(cfg._gradle_jdks in sbomagent.py, or --jdk) and it will use the newest one each build's "
+                        "Gradle can run on, or force a single one with --java-home.")
+        record(message)
         return "failed"
 
     if not job.lockfile.exists():
-        log(
-            f"    WARNING: Gradle succeeded but {job.lockfile.name} was not created. "
-            "The project may have no resolvable dependencies to lock, or the project "
-            "path derived from its directory may not match settings.gradle."
-        )
+        record(f"Gradle succeeded but {job.lockfile.name} was not created. "
+               "The project may have no resolvable dependencies to lock, or the project "
+               "path derived from its directory may not match settings.gradle.")
         return "no-lockfile"
     return "ok"
 
@@ -453,16 +489,13 @@ def generate_lockfiles(
         for lock_name, task in wanted:
             lockfile = proj / lock_name
             if lockfile.exists():
-                result.already_present += 1
+                result.already_present += 1  # not reported as skipped
             else:
                 jobs.append(Job(proj, build_root, task, lockfile))
     result.missing = len(jobs)
 
-    log(f"Scanned {len(projects)} project(s) under {root}")
-    log(f"  lock files already present: {result.already_present}")
-    log(f"  missing lock files: {len(jobs)}")
-
     if not jobs:
+        log(f"Summary: 0 processed, 0 errors, {len(result.skipped)} skipped")
         return result
 
     if dry_run:
@@ -484,14 +517,17 @@ def generate_lockfiles(
         toolchain_script.write_text(INIT_SCRIPT_TOOLCHAINS.replace("@FOOJAY_VERSION@", foojay_version))
         toolchain_for: dict[Path, bool] = {}  # per build: is the toolchain script usable with its Gradle/JVM?
 
-        for i, job in enumerate(jobs, 1):
-            rel = job.lockfile.relative_to(root)
-            log(f"[{i}/{len(jobs)}] {rel}")
+        for job in jobs:
             if job.build_root not in gradle_cache:
                 gradle_cache[job.build_root] = find_gradle(job.build_root, gradle_exe, log)
             gradle = gradle_cache[job.build_root]
             if gradle is None:
-                log("    FAILED: no usable Gradle: no working gradlew in or above the build root, and no `gradle` on PATH")
+                result.errors.append({
+                    "ecosystem": "gradle",
+                    "file": str(find_build_file(job.project).relative_to(root)),
+                    "task": job.task,
+                    "error": "No usable Gradle: no working gradlew in or above the build root, and no `gradle` on PATH",
+                })
                 result.failed += 1
                 continue
 
@@ -544,8 +580,8 @@ def generate_lockfiles(
             if mode:
                 job_args.append(f"--dependency-verification={mode}")
 
-            log(f"    $ {' '.join(gradle)} {job.task} --write-locks  (in {job.build_root})")
-            outcome = run_job(job, gradle, init_scripts, job_args, timeout, build_env, log)
+            outcome = run_job(job, gradle, init_scripts, job_args, timeout, build_env, log,
+                              errors=result.errors, root=root)
             if outcome == "ok":
                 result.created += 1
             elif outcome == "no-lockfile":
@@ -553,10 +589,7 @@ def generate_lockfiles(
             else:
                 result.failed += 1
 
-    log(
-        f"Done: {result.created} created, {result.no_lockfile} produced no file, "
-        f"{result.failed} failed"
-    )
+    log(f"Summary: {result.processed} processed, {len(result.errors)} errors, {len(result.skipped)} skipped")
     return result
 
 
@@ -588,6 +621,9 @@ def main(argv: list[str] | None = None) -> int:
                         help="a JDK Gradle may run on (repeatable, e.g. --jdk <jdk17> --jdk <jdk21>). For each "
                              "build the newest one its Gradle version can run on is used. Ignored if --java-home "
                              "is given")
+    parser.add_argument("--errors-json", default=None, metavar="FILE",
+                        help="write the errors and skipped projects to this JSON file (they are not logged "
+                             "individually, only summarized)")
     parser.add_argument("--timeout", type=int, default=900, help="seconds allowed per Gradle run")
     parser.add_argument("--gradle-arg", action="append", default=[], metavar="ARG",
                         help="extra argument for Gradle, use '=' form: --gradle-arg=--offline (repeatable)")
@@ -621,6 +657,9 @@ def main(argv: list[str] | None = None) -> int:
         foojay_version=args.foojay_version,
         dependency_verification=args.dependency_verification,
     )
+    if args.errors_json:
+        with open(args.errors_json, "w", encoding="utf-8") as f:
+            json.dump({"errors": result.errors, "skipped": result.skipped}, f, indent=2)
     if args.dry_run:
         return 1 if result.missing else 0
     return 0 if result.ok else 1
