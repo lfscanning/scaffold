@@ -2,6 +2,7 @@
 # SPDX-FileType: SOURCE
 # SPDX-License-Identifier: Apache-2.0
 
+import json
 import os
 import pdb
 from subprocess import run, PIPE
@@ -45,9 +46,13 @@ def runUnifiedAgent(cfg, prj, sp):
         with zipfile.ZipFile(sp._code_path, mode='r') as zip:
             zip.extractall(analysisdir)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for NPM projects to lock")
-        generateNpmLockFiles(analysisdir, cfg, prj, sp)
+        npmResult = generateNpmLockFiles(analysisdir, cfg, prj, sp)
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Looking for Gradle projects to lock")
-        generateGradleLockFiles(analysisdir, cfg, prj, sp)
+        gradleResult = generateGradleLockFiles(analysisdir, cfg, prj, sp)
+        dependencyReport = makeDependencyReport([npmResult, gradleResult])
+        totals = dependencyReport["summary"]
+        print(f"{prj._name}/{sp._name}: Dependency collection summary: {totals['processed']} processed, "
+              f"{totals['errors']} errors, {totals['skipped']} skipped")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: Running Trivy")
         if trivyDebug:
             trivy_cmd = [cfg._trivy_exec_path, "fs", "--timeout", "840m", "--debug", "--scanners", "license", "--format", "spdx-json", analysisdir]
@@ -218,6 +223,15 @@ errors:
         if dependenciesHtmlUrl:
             sp._dependencies_html_url = dependenciesHtmlUrl
             print(f"Web version of dependency report available at: {sp._dependencies_html_url}")
+        if dependencyReport["errors"] or dependencyReport["skipped"]:
+            errorsSuffix = "dependency-errors"
+            errorsExtension = "json"
+            errorsFilePath = os.path.join(reportFolder, f"{sp._name}-{sp._code_pulled}-{errorsSuffix}.{errorsExtension}")
+            with open(errorsFilePath, "w", encoding="utf-8") as errors_f:
+                json.dump(dependencyReport, errors_f, indent=2)
+            errorsUrl = uploadreport.doUploadSingleReportForSubproject(cfg, prj, sp, errorsSuffix, errorsExtension)
+            if errorsUrl:
+                print(f"Dependency collection errors available at: {errorsUrl}")
         print(f"{prj._name}/{sp._name} [{datetime.now()}]: SBOM successfully run")
         return True
 
@@ -240,28 +254,52 @@ def mergeSourceAndSbom(cfg, prj, sp, tempdir, spdxDocument):
     else:
         return None
 
+def makeDependencyReport(results):
+    # Combine the per-ecosystem results into one report: a summary plus the individual errors and skips.
+    errors = [e for r in results for e in r["errors"]]
+    skipped = [s for r in results for s in r["skipped"]]
+    return {
+        "summary": {
+            "processed": sum(r["processed"] for r in results),
+            "errors": len(errors),
+            "skipped": len(skipped),
+            "by_ecosystem": {
+                r["ecosystem"]: {"processed": r["processed"], "errors": len(r["errors"]), "skipped": len(r["skipped"])}
+                for r in results
+            },
+        },
+        "errors": errors,
+        "skipped": skipped,
+    }
+
 def generateNpmLockFiles(sourceDir, cfg, prj, sp):
     # Create package-lock.json for NPM projects that don't have one so that Trivy can see
-    # their resolved dependencies. Like generateGradleLockFiles, failures are reported but never stop the run.
-    label = f"{prj._name}/{sp._name}"
+    # their resolved dependencies. Like generateGradleLockFiles, failures never stop the run.
+    # Individual errors and skips are not logged; they are returned for the dependency report.
+    # Returns {"ecosystem", "processed", "errors": [...], "skipped": [...]}.
     cachedir = os.path.join(cfg._zippath, "npmcache")
+    errors = []
+    skipped = []
+    processed = 0
     try:
-        failed = npm_lockfiles.generate_npm_lockfiles(
+        summary = npm_lockfiles.generate_npm_lockfiles(
             sourceDir,
             cfg._npm_exec_path,
             cachedir,
-            log=lambda msg: print(f"{label}: {msg}"),
+            errors=errors,
+            skipped=skipped,
         )
+        processed = summary["processed"]
     except Exception as e:
-        print(f"{label}: NPM lock file generation failed unexpectedly: {e}")
-        return
-    if failed:
-        print(f"{label}: NPM lock file generation incomplete: {failed} failed.")
+        errors.append({"ecosystem": "npm", "file": ".", "error": f"NPM lock file generation failed unexpectedly: {e}"})
+    return {"ecosystem": "npm", "processed": processed, "errors": errors, "skipped": skipped}
 
 def generateGradleLockFiles(sourceDir, cfg, prj, sp):
     # Create gradle.lockfile for Gradle projects that don't have one so that Trivy can see
     # their resolved dependencies. Like installNpm, failures are reported but never stop the run.
     label = f"{prj._name}/{sp._name}"
+    # Individual errors and skips are not logged; they are returned for the dependency report.
+    # Returns {"ecosystem", "processed", "errors": [...], "skipped": [...]}.
     cachedir = os.path.join(cfg._zippath, "gradlecache")
     try:
         result = gradle_lockfiles.generate_lockfiles(
@@ -273,10 +311,10 @@ def generateGradleLockFiles(sourceDir, cfg, prj, sp):
             log=lambda msg: print(f"{label}: {msg}"),
         )
     except Exception as e:
-        print(f"{label}: Gradle lock file generation failed unexpectedly: {e}")
-        return
-    if not result.ok:
-        print(f"{label}: Gradle lock file generation incomplete: {result.failed} failed, {result.no_lockfile} produced no file.")
+        return {"ecosystem": "gradle", "processed": 0, "skipped": [],
+                "errors": [{"ecosystem": "gradle", "file": ".",
+                            "error": f"Gradle lock file generation failed unexpectedly: {e}"}]}
+    return {"ecosystem": "gradle", "processed": result.processed, "errors": result.errors, "skipped": result.skipped}
 
 def convertToV3(spdxv2File, spdxv3File, cfg, prj, sp):
     convertSpdxFile(spdxv2File, spdxv3File, cfg, prj, sp, "JSON", "JSONLD")

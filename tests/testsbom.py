@@ -525,9 +525,9 @@ class TestNpmLockfiles(unittest.TestCase):
             f.write('{"name": "member", "dependencies": {"other": "workspace:*"}}')
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
-            generateNpmLockFiles(root, self.cfg, self.prj, self.sp)
-        self.assertIn('Skipping NPM lock file generation', output.getvalue())
-        self.assertNotIn('failed', output.getvalue())
+            result = generateNpmLockFiles(root, self.cfg, self.prj, self.sp)
+        self.assertEqual(0, len(result['errors']))
+        self.assertEqual(1, len(result['skipped']))
 
     @requires_npm
     def test_npm_failure_is_reported(self):
@@ -536,20 +536,20 @@ class TestNpmLockfiles(unittest.TestCase):
             f.write('{ this is not valid json')
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
-            generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)  # must not raise
+            result = generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)  # must not raise
         self.assertFalse(os.path.exists(self.lockfile))
-        self.assertIn('NPM lock file generation failed for', output.getvalue())
-        self.assertIn('with exit code', output.getvalue())
-        self.assertIn('errors:', output.getvalue())
-        self.assertIn(f"{TEST_PROJECT_NAME}/{TEST_SUBPROJECT_NAME}: NPM lock file generation incomplete: 1 failed", output.getvalue())
+        errors = result['errors']
+        num_errors = len(errors)
+        self.assertEqual(1, len(result['errors']))
+        self.assertIn('npm error code EJSONPARSE', result['errors'][0]['error'])
 
     def test_missing_npm_is_not_fatal(self):
         self.cfg._npm_exec_path = os.path.join(self.temp_dir.name, 'no-such-npm')
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
-            generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)  # must not raise
+            result = generateNpmLockFiles(self.npm_path, self.cfg, self.prj, self.sp)  # must not raise
         self.assertFalse(os.path.exists(self.lockfile))
-        self.assertIn(f"{TEST_PROJECT_NAME}/{TEST_SUBPROJECT_NAME}: NPM lock file generation failed unexpectedly", output.getvalue())
+        self.assertIn("NPM lock file generation failed unexpectedly", result['errors'][0]['error'])
 
 '''
 Tests the generation of missing Gradle lock files
@@ -649,12 +649,14 @@ class TestGradleLockfiles(unittest.TestCase):
         # Like generateNpmLockFiles, a failure is reported but doesn't stop the SBOM run.  The test project has no gradlew,
         # so the Gradle from the config is used - point it at one that doesn't exist.
         self.cfg._gradle_exec_path = os.path.join(self.temp_dir.name, 'no-such-gradle')
+
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
-            generateGradleLockFiles(self.gradle_path, self.cfg, self.prj, self.sp)  # must not raise
+            result = generateGradleLockFiles(self.gradle_path, self.cfg, self.prj, self.sp)  # must not raise
         self.assertFalse(os.path.exists(self.app_lockfile))
-        self.assertIn('could not start Gradle', output.getvalue())
-        self.assertIn(f"{TEST_PROJECT_NAME}/{TEST_SUBPROJECT_NAME}: Gradle lock file generation incomplete", output.getvalue())
+        self.assertEqual(2, len(result['errors']))
+        self.assertIn('ould not start Gradle', result['errors'][0]['error'])
+        self.assertIn('errors', output.getvalue())
 
 if __name__ == '__main__':
     unittest.main()
